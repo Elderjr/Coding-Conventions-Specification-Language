@@ -1,0 +1,17 @@
+rule:{
+    elements:{
+        a as AccessModifier{
+            type: Class{NameProperty{value = "Thread"}}
+        },
+        m: MethodAccess:{
+            namedElement: m as Method{
+                properties:{NameProperty{value = "run"}}
+            },
+        },
+        c as MethodCall{
+            from: a,
+            to: m
+        }
+    }
+}
+xpath

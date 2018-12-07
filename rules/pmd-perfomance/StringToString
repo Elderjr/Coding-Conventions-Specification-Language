@@ -1,0 +1,12 @@
+rule: {
+    element:{
+        MethodInvocation{
+            from: AccessModifier{
+                type: Class{properties: NameProperty{value="string"}}
+            }
+            to: MethodModifier{
+                namedElement: Method{proeperties: NameProperty{value = "toString"}}
+            }
+        }
+    }
+}

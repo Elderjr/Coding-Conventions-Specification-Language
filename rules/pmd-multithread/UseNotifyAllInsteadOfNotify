@@ -1,0 +1,8 @@
+rule:{
+    elements{
+        m as Method{
+            properties:NameProperty{value="notify"}
+        }
+    }
+}
+java

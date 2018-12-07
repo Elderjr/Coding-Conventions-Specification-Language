@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/codingConvention/src-gen" creationIcons="false"
+    editDirectory="/codingConvention.edit/src-gen" editorDirectory="/codingConvention.editor/src-gen"
+    modelPluginID="codingConvention" modelName="CodingConvention" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
+    copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>codingConvention.ecore</foreignModel>
+  <testsDirectory xsi:nil="true"/>
+  <genPackages prefix="CodingConvention" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#/">
+    <genClasses ecoreClass="codingConvention.ecore#//Rule">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//Rule/matchElements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//Rule/filters"/>
+    </genClasses>
+    <nestedGenPackages prefix="Filters" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//filters">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="codingConvention.ecore#//filters/FilterOperation">
+        <genEnumLiterals ecoreEnumLiteral="codingConvention.ecore#//filters/FilterOperation/AND"/>
+        <genEnumLiterals ecoreEnumLiteral="codingConvention.ecore#//filters/FilterOperation/OR"/>
+        <genEnumLiterals ecoreEnumLiteral="codingConvention.ecore#//filters/FilterOperation/IF"/>
+      </genEnums>
+      <genClasses ecoreClass="codingConvention.ecore#//filters/Filter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConvention.ecore#//filters/Filter/negated"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConvention.ecore#//filters/CompositeFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//filters/CompositeFilter/filters"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConvention.ecore#//filters/CompositeFilter/newAttribute"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConvention.ecore#//filters/AtomicFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConvention.ecore#//filters/AtomicFilter/target"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConvention.ecore#//filters/PropertyFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//filters/PropertyFilter/property"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConvention.ecore#//filters/TemplateFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConvention.ecore#//filters/TemplateFilter/template"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Elements" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements">
+      <genClasses ecoreClass="codingConvention.ecore#//elements/Element">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/Element/properties"/>
+      </genClasses>
+      <nestedGenPackages prefix="Properties" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements/properties">
+        <genClasses ecoreClass="codingConvention.ecore#//elements/properties/Property"/>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="NamedElements" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements/namedElements">
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Class">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Class/methods"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Class/attributes"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Class/subClasses"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Class/superClass"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Class/implements"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Method">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/returnType"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/parameter"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/subMethods"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/superMethod"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/throws"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/statements"/>
+        </genClasses>
+        <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/namedElements/NamedElement"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Field">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Field/type"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Parameter"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Exception"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Variable"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Interface">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Interface/subInterfaces"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Interface/interfaceeOpposite"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Constructor"/>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Statements" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements/statements">
+        <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/statements/Statement"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/MethodInvocation">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/MethodInvocation/from"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/MethodInvocation/to"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/MethodInvocation/arguments"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/MethodChaining">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/MethodChaining/invocations"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/AccessModifier">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/AccessModifier/element"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/AccessModifier/type"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/ExceptionHandling"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/Body">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/Body/statements"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/JavaExceptionHandling">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/JavaExceptionHandling/finallyClause"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/JavaExceptionHandling/catchClause"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/JavaExceptionHandling/tryClause"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/CatchClause">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/statements/CatchClause/exceptionHandled"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/FinallyClause"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/statements/TryClause"/>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Types" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements/types">
+        <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/types/DataType"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/types/ComplexType"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/types/PrimitiveType"/>
+      </nestedGenPackages>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Values" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//values">
+      <genClasses ecoreClass="codingConvention.ecore#//values/Value"/>
+      <genClasses ecoreClass="codingConvention.ecore#//values/ReferencedValue">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConvention.ecore#//values/ReferencedValue/type"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConvention.ecore#//values/LiteralValue">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConvention.ecore#//values/LiteralValue/type"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConvention.ecore#//values/LiteralValue/value"/>
+      </genClasses>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

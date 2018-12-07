@@ -1,0 +1,10 @@
+rule: {
+    elements: {
+        m as Method {
+            property: SyncronizedProperty
+        }
+    }
+}
+classification: exact
+xpath: true
+JavaClass: false

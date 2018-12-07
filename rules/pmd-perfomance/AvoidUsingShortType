@@ -1,0 +1,29 @@
+rule: {
+    elements: {
+        v as Variable,
+        m as Method
+    }
+    auxiliarElements:{
+        t as PrimitiveType{type = "short"}
+    },
+    filters:{
+        CompositeFilter{
+            operator = "OR",
+            filters:{
+                TemplateFilter{
+                    target: v,
+                    template: Variable{
+                        type: t
+                    }
+                },
+                TemplateFilter{
+                    target: m,
+                    template: Variable{
+                        type: t
+                    }
+                }
+            }
+        }
+    }
+}
+xpath

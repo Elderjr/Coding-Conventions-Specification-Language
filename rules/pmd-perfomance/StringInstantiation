@@ -1,0 +1,8 @@
+rule: {
+    element: {
+        c as ConstructorCall{
+            class: Class{properties: NameProperty{value = "String"}}
+        }
+    }
+}
+

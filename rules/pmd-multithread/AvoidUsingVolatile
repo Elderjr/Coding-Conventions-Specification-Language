@@ -1,0 +1,10 @@
+rule: {
+    elements:{
+        v as Variable{
+            properties: {VolatileProperty}
+        }
+    }
+}
+classification: exact
+xpath: true
+JavaClass: false

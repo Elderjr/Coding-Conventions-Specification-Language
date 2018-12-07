@@ -1,0 +1,38 @@
+rule: {
+    elements: {
+        contructor as Constructor
+    },
+    filters: {
+        CompositeFilter {
+            operator: "OR",
+            filters: {
+                TemplateFilter: {
+                    target: constructor,
+                    template: Constructor{
+                        returnType: Class{properties: NameProperty{value = "FileInputStream"}}
+                    }
+                },
+                TemplateFilter: {
+                    target: constructor,
+                    template: Constructor{
+                        returnType: Class{properties: NameProperty{value = "FileOutputStream"}}
+                    }
+                },
+                TemplateFilter: {
+                    target: constructor,
+                    template: Constructor{
+                        returnType: Class{properties: NameProperty{value = "FileReader"}}
+                    }
+                },
+                TemplateFilter: {
+                    target: constructor,
+                    template: Constructor{
+                        returnType: Class{properties: NameProperty{value = "FileWriter"}}
+                    }
+                }
+            }
+        }
+    }
+}
+xpath
+exact
