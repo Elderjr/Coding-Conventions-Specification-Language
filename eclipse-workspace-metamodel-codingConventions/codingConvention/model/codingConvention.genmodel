@@ -68,7 +68,9 @@
               ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/throws"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Method/statements"/>
         </genClasses>
-        <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/namedElements/NamedElement"/>
+        <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/namedElements/NamedElement">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConvention.ecore#//elements/namedElements/NamedElement/name"/>
+        </genClasses>
         <genClasses ecoreClass="codingConvention.ecore#//elements/namedElements/Field">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference codingConvention.ecore#//elements/namedElements/Field/type"/>
@@ -120,7 +122,9 @@
       <nestedGenPackages prefix="Types" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//elements/types">
         <genClasses image="false" ecoreClass="codingConvention.ecore#//elements/types/DataType"/>
         <genClasses ecoreClass="codingConvention.ecore#//elements/types/ComplexType"/>
-        <genClasses ecoreClass="codingConvention.ecore#//elements/types/PrimitiveType"/>
+        <genClasses ecoreClass="codingConvention.ecore#//elements/types/PrimitiveType">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConvention.ecore#//elements/types/PrimitiveType/type"/>
+        </genClasses>
       </nestedGenPackages>
     </nestedGenPackages>
     <nestedGenPackages prefix="Values" disposableProviderFactory="true" ecorePackage="codingConvention.ecore#//values">
