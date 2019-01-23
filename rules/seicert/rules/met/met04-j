@@ -1,0 +1,111 @@
+Rule: CompositeRule {
+    operator: "or",
+    rules: AtomicRule {  // hidden private
+      elements: {
+          superMethod: Method {
+              properties: Property {
+                  name: "private"
+              }
+          },
+          superClass: Class {
+              methods: superMethod
+          },
+          m: Method {},
+          c: Class {
+              methods: m
+          }
+      },
+      filters: {
+          CompositeFilter {
+              operator: "and",
+              filters: EqualsNamedFilter {
+                namedElements: superMethod, m
+              },
+              InheritsFilter {
+                  super: superClass,
+                  class: c
+              }
+          }
+      }
+    },
+    rules: AtomicRule { //hidden protected
+      elements: {
+          superMethod: Method {
+              properties: Property {
+                  name: "protected"
+              }
+          },
+          superClass: Class {
+              methods: superMethod
+          },
+          m: Method {},
+          c: Class {
+              methods: m
+          }
+      },
+      filters: {
+          CompositeFilter {
+              operator: "and",
+              filters: EqualsNamedFilter {
+                namedElements: superMethod, m
+              },
+              InheritsFilter {
+                  target: c
+                  super: superClass,
+              },
+              CompositeFilter {
+                  operator: "or",
+                  filters: PropertyFilter {
+                      target: m,
+                      properties: Property {
+                          name: "public"
+                      }
+                  },
+              }
+          }
+      }
+    },
+    rules: AtomicRule { //hidden package
+      elements: {
+          superMethod: Method {
+              properties: Property {
+                  name: "package"
+              }
+          },
+          superClass: Class {
+              methods: superMethod
+          },
+          m: Method {},
+          c: Class {
+              methods: m
+          }
+      },
+      filters: {
+          CompositeFilter {
+              operator: "and",
+              filters: EqualsNamedFilter {
+                namedElements: superMethod, m
+              },
+              InheritsFilter {
+                  target: c
+                  super: superClass,
+              },
+              CompositeFilter {
+                  operator: "or",
+                  filters: PropertyFilter {
+                      target: m,
+                      properties: Property {
+                          name: "public"
+                      }
+                  },
+                  PropertyFilter {
+                    target: m,
+                    properties: Property {
+                        name: "protected"
+                    }
+                  }
+              }
+          }
+      }
+    }
+}

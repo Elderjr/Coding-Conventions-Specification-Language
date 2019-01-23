@@ -1,0 +1,7 @@
+Rule: AtomicRule {
+    elements {
+        m: Method {
+            statements: AssertStatement
+        }
+    }
+}

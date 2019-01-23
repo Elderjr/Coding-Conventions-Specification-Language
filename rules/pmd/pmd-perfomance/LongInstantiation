@@ -1,0 +1,12 @@
+rule: AtomicRule{
+    AtomicRule{
+        elements: {
+            instanceCreation: InstanceCreation {
+                constructor: Constructor {
+                    name: "Long",
+                    params: LiteralValue{}
+                }
+            }
+        }
+    }
+}

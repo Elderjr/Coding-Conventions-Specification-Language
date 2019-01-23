@@ -1,0 +1,11 @@
+rule: AtomicRule{
+    elements: {
+        inv: MethodInvocation{
+            to: Method {
+                owner: Class {
+                    name: "ThreadGroup"
+                }
+            }
+        }
+    }
+}

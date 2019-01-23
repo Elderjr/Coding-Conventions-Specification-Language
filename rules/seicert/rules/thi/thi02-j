@@ -1,0 +1,9 @@
+rule: AtomicRule{
+    elements: {
+        inv: MethodInvocation{
+            to: Method {
+                name: "notify"
+            }
+        }
+    }
+}

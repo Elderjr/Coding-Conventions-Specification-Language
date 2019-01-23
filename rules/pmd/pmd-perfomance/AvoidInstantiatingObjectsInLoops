@@ -1,0 +1,7 @@
+rule: AtomicRule {
+    elements: {
+        loop: LoopStatement {
+            statements: InstanceCreation {}
+        }
+    }
+}

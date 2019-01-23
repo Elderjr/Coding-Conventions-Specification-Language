@@ -1,0 +1,43 @@
+Rule: CompositeRule {
+    operator: "or",
+    rules: AtomicRule{
+        elements {
+            c: Class {
+                properties: Property {
+                    name: "public"
+                }
+            }
+        },
+        filters: CompositeFilter {
+            operator: "or",
+            filters: PropertyFilter {
+                negated: true,
+                target: c,
+                properties: Property {
+                    name: "final"
+                }
+            },TemplateFilter {
+                negated: true,
+                target: c,
+                template: Class {
+                    methods: Method {
+                        name: "clone"
+                    }
+                }
+            }
+        }
+    },AtomicRule {
+        elements {
+            clone: Method {
+                name: "clone"
+            }
+        },
+        filters: PropertyFilter {
+            negated: true,
+            target: clone,
+            properties: Property {
+                name: "final"
+            }
+        }
+    }
+}

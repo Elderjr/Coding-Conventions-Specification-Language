@@ -1,0 +1,11 @@
+rule: AtomicRule{
+    elements: {
+        if: IfStatement {
+            statements: MethodInvocation {
+                to: Method {
+                    name: "wait"
+                }
+            }
+        }
+    }
+}

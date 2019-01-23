@@ -1,0 +1,23 @@
+rule: AtomicRule {
+    elements: {
+        str: LiteralValue {
+            type: PrimitiveType{
+                name: "string"
+            }
+        },
+        inv: MethodInvocation {
+            method: Method {
+                name: "indexOf"
+                owner: Class{
+                    name: String
+                }
+            },
+            params: str
+        }
+    },
+    filters: StringLengthFilter {
+        target: str,
+        operator: "=",
+        count: 1
+    }
+}

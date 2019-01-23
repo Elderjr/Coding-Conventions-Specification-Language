@@ -1,0 +1,16 @@
+rule: CompositeRule{
+    operator: "or",
+    rules: AtomicRule{
+        v: Variable {
+            type: PrimitiveType {
+                name: "short"
+            }
+        }
+    }, AtomicRule{
+        m: Method {
+            returnType: PrimitiveType {
+                name: "short"
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+Rule: AtomicRule {
+    elements {
+        v: Variable {
+            properties: Property{
+                name: "public"
+            }
+        }
+    },
+    filters {
+        PropertyFilter {
+            negated: true,
+            target: v,
+            properties: Property {
+                name: "final"
+            }
+        }
+    }
+}

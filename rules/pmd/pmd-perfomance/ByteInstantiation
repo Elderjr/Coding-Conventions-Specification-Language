@@ -1,0 +1,14 @@
+rule: CompositeRule{
+    operator: "or",
+    rules: AtomicRule{
+        elements: {
+            instanceCreation: InstanceCreation {
+                constructor: Constructor {
+                    name: "Byte",
+                    params: LiteralValue{}
+                }
+            }
+        }
+    } }
+    }
+}

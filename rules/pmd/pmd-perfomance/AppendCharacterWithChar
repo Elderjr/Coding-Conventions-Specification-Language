@@ -1,0 +1,20 @@
+rule: AtomicRule {
+    elements: {
+        str: LiteralValue {
+            type: PrimitiveType{
+                name: "string"
+            }
+        },
+        inv: MethodInvocation {
+            to: Method {
+                name: "append"
+            },
+            params: str
+        }
+    },
+    filters: StringLengthFilter {
+        target: str,
+        operator: "=",
+        count: 1
+    }
+}

@@ -1,0 +1,27 @@
+rule: CompositeRule{
+    operator: "or",
+    rules: AtomicRule{
+        elements: {
+            instanceCreation: InstanceCreation {
+                constructor: Constructor {
+                    name: "Boolean",
+                    params: LiteralValue{}
+                }
+            }
+        }
+    },AtomicRule{
+        elements: {
+            inv: MethodInvocation{
+                from: ComplexTypeAccess{
+                    type: Class {
+                        name: "Boolean"
+                    }
+                },
+                method: Method {
+                    name: "valueOf"
+                },
+                params: LiteralValue {}
+            }
+        }
+    }
+}

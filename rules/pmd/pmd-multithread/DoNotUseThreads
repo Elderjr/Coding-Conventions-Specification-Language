@@ -1,0 +1,21 @@
+rule: {
+    elements {
+        c: Class {}
+    }
+    filters {
+        CompositeFilter {
+            operator: "or",
+            filter: ExtendsFilter {
+                target: c
+                extends: Class {
+                    name: "Thread"
+                }
+            },ImplementsFilter {
+                target: c
+                implements: Interface {
+                    name: "Runnable"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+Rule: AtomicRule {
+    elements {
+        overridableMethod: Method{}
+        c: Class {
+            methods: m
+        },
+        clone: Method {
+            name: "clone"
+            statements: MethodInvocation {
+                to: overridableMethod
+            }
+        }
+    },
+    filters {
+        CompositerFilter {
+            operator: "and",
+            filters: PropertyFilter{
+                negated: true,
+                target: c, overridableMethod
+                properties: Property {
+                    name: "final"
+                }
+            },
+            PropertyFilter{
+                negated: true,
+                target: overridableMethod,
+                properties: PropertyFilter{
+                    negated: true,
+                    properties: Property {
+                        name: "private"
+                    }
+                }
+            }
+        }
+    }
+}

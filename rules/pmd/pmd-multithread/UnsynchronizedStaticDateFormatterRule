@@ -1,0 +1,23 @@
+rule: AtomicRule{
+    elements:{
+        inv: MethodInvocation {
+            to: Method {
+                name: "format",
+                owner: Class {
+                    name: "SimpleDateFormat"
+                }
+            }
+        },
+        m: Method {
+            statements: inv
+        }
+    },
+    filters: {
+        PropertyFilter {
+            target: m,
+            properties: Property {
+                name: "syncronized"
+            } 
+        }
+    }
+}

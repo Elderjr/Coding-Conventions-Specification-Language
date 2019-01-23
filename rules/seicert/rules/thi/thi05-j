@@ -1,0 +1,12 @@
+rule: AtomicRule{
+    elements: {
+        inv: MethodInvocation{
+            to: Method {
+                name: "stop"
+                owner: Class {
+                    name: "Thread"
+                }
+            }
+        }
+    }
+}

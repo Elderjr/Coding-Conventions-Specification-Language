@@ -1,0 +1,10 @@
+rule: {
+    elements: {
+       switch: SwitchStatement {}
+    },
+    filters: SwitchCounterFilter {
+        target: switch,
+        count: 2,
+        operator : "<="
+    }
+}
