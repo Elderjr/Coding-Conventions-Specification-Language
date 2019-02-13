@@ -1,0 +1,45 @@
+CompositeRule{
+    operator: "OR",
+    rules: [
+        AtomicRule{
+            elements: [
+                Method {
+                    statements: [
+                        MethodInvocation {
+                            elementAccessed: m as Method {}
+                        }
+                    ]
+                }
+            ],
+            filters:[
+                TemplateFilter{
+                    negated:true,
+                    target: m,
+                    template: Method{
+                        returnType: PrimitiveType{name:"void"}
+                    }
+                }
+            ]
+        },
+        AtomicRule{
+            elements: [
+                JClass {
+                    blocks: [Block{
+                        statements:[MethodInvocation {
+                            elementAccessed: m as Method {}
+                        }
+                    ]
+                }
+            ],
+            filters:[
+                TemplateFilter{
+                    negated:true,
+                    target: m,
+                    template: Method{
+                        returnType: PrimitiveType{name:"void"}
+                    }
+                }
+            ]
+        }
+    ]
+}

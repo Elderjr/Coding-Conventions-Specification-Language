@@ -1,0 +1,14 @@
+AtomicRule{
+    elements: [
+        for as JForEach{
+            variable: v as Variable{},
+        }
+    ],
+    filters: [
+        DepthSearch{
+            target: for,
+            search: VarAssignment {variable: v}
+        }
+    ]
+}
+    

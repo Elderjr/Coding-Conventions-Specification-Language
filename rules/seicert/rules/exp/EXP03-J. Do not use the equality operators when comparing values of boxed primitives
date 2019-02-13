@@ -1,0 +1,10 @@
+AtomicRule{
+    elements: [{
+        InfixExp{
+            operator:"==",
+            //também pode ser entre retornos de métodos ou combinação dos dois
+            left: VariableAccess{elementAccessed: Variable{type: ComplexType{}}},
+            right: VariableAccess{elementAccessed: Variable{type: ComplexType{}}}
+        }
+    }]
+}

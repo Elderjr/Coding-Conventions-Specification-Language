@@ -1,0 +1,10 @@
+AtomicRule: {
+    elements: [
+        MethodInvocations{
+            elementAccessed: Constructor {
+                name: "BigDecimal"
+                params: [LiteralValue{type:PrimitiveType{name:"float"}}]
+            }
+        }
+    ]
+}

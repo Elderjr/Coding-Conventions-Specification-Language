@@ -1,0 +1,18 @@
+AtomicRule {
+    elements: [
+        VarDeclaration{
+            variable: v as Variable {
+                type: PrimitiveType{name:"string"}                
+            },
+            assignment: Expression {}
+        },
+        MethodInvocation {
+            elementAccessed: m as Method{},
+            params: [v]
+        }
+    ],
+    filters: [EqualsNamedElementWithLiterals{
+        target: m,
+        names: ["executeQuery", "createStatement"]
+    }]
+}
