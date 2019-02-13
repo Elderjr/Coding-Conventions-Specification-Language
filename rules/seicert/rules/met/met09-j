@@ -1,19 +1,13 @@
-Rule: AtomicRule {
-    elements {
-        equals: Method{
-            name:"equals"
-        }
-        hashCode: Method{
-            name:"hashCode"
-        }
-        c: Class {
-            methods: equals
-        }
-    },
-    filters {
-        DefineMethodFilter{
-            target: c,
-            methods: hashCode
-        }
+AtomicRule {
+  elements {
+    c: JClass {
+      methods: Method {name: "equals"}
     }
+  },
+  filters {
+    DefineMethodFilter{
+        target: c,
+        methods: Method {name:"hashCode"}
+    }
+  }
 }

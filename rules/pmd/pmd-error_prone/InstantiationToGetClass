@@ -1,0 +1,10 @@
+AtomicRule {
+    elements: [
+        MethodInvocation {
+            from: MethodInvocation {
+                method: Constructor {}
+            },
+            elementAccessed: Method{name:"getClass"}
+        }
+    ]
+}

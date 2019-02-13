@@ -1,0 +1,13 @@
+AtomicRule{
+    elements:[
+        JFor {
+            initializers:[
+                VarDeclaration {
+                    variable: Variable{
+                        type: PrimitiveType{name:"float"}
+                    }
+                }
+            ]
+        }
+    ]
+}

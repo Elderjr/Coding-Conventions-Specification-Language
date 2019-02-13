@@ -1,0 +1,3 @@
+AtomicRule{
+    elements:[ControlFlow{conditional:LiteralValue{}}]
+}

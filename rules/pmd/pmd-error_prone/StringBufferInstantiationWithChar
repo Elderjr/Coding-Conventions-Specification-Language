@@ -1,0 +1,10 @@
+AtomicRule:{
+    elements: [
+        MethodInvocation{
+            elementAccessed: Construtor {
+                name: "StringBuffer"
+            }
+            params: [LiteralValue{type:PrimitiveType{name:"char"}}]
+        }
+    ]
+}

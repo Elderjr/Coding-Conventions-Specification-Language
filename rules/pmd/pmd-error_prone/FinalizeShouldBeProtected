@@ -1,0 +1,16 @@
+AtomicRule {
+    elements: [
+        m as Method {
+            name: "finalize"
+        }
+    ],
+    filters:[
+        PropertyFilter{
+            negated: true,
+            target: m,
+            properties: Property {
+                name: "protected"
+            }
+        }
+    ]
+}

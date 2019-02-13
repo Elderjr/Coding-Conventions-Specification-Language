@@ -1,0 +1,24 @@
+AtomicRule {
+    elements:[v as Variable{type: ComplexTyple{name: "Logger"}}],
+    filters: [
+        CompositeFilter {
+            operator: "OR",
+            filters: [
+                PropertyFilter {
+                    negated: true
+                    target: v,
+                    properties: Property {
+                        name: "static"
+                    }
+                },
+                PropertyFilter {
+                    negated: true
+                    target: v,
+                    properties: Property {
+                        name: "final"
+                    }
+                }
+            ]
+        }
+    ]
+}

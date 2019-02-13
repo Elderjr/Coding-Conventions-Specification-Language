@@ -1,0 +1,12 @@
+AtomicRule {
+    elements: [
+        v: Variable{},
+        c: ComplexType{fields: [v]}
+    ],
+    filters: {
+        EqualsNamedElement {
+            target: v,
+            elements: [c]
+        }
+    }
+}

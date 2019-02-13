@@ -1,0 +1,24 @@
+AtomicRule{
+    elements:[
+        CompositeExpression{
+            operator: "OR",
+            expressions: [
+                InfixExpression {
+                    left: v as Variable{},
+                    operator: "!=",
+                    right: LiteralValue{ value = "null" }
+                },
+                exp as Expression{}
+            ]
+
+        }
+    ],
+    filters: {
+        DepthSearchFilter {
+            target: exp,
+            search: VariableAccess {
+                variable: v
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+AtomicRule {
+    elements:[
+        m as Method {
+            name: "clone"
+        }
+    ],
+    filters: {
+        PropertyFilter {
+            negated: true,
+            target: m,
+            properties: Property{
+                name: "public"
+            }
+        }
+    }
+}

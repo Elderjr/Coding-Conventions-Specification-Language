@@ -1,0 +1,16 @@
+AtomicRule {
+    elements: [
+      c as ComplexType {
+          methods: [m as Method{name: "clone"}]
+      }  
+    ],
+    filters: {
+        TemplateFilter{
+            target: m,
+            negated: true,
+            template: Method {
+                returnType: c
+            }
+        }
+    }
+}

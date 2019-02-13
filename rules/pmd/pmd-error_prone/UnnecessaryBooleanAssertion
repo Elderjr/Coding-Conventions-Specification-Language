@@ -1,0 +1,8 @@
+AtomicRule{
+    elements:[
+        MethodInvocation{
+            method: Method{name: "assertTrue"}, 
+            params: [{LiteralValue{}]
+        }
+    ]
+}

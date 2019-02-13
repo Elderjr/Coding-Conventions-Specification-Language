@@ -1,0 +1,14 @@
+AtomicRule {
+    elements: [
+        JTryCatch{
+            catches: JCatchClause {
+                variable: v as Variable{},
+                statements: IfStatement{
+                    condition: InstanceOf {
+                        left: v
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+AtomicRule {
+    elements: [
+        VarAssignment{
+            assigment: l as LiteralValue {
+                type: PrimitiveType{name:"int"}
+            }
+        }
+    ],
+    filters: {
+        RegexLiteralValueFilter {
+            target: l,
+            regex: "0*"
+        }
+    }
+}

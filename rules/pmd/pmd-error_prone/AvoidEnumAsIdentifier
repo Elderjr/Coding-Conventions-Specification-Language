@@ -1,0 +1,9 @@
+AtomicRule {
+    elements: [v:Variable{}]
+    filters: {
+        EqualsNameWithLiteralFilter {
+            target: v,
+            equals: ["enum"]
+        }
+    }
+}

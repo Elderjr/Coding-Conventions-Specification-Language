@@ -1,0 +1,14 @@
+AtomicRule: {
+    elements: [
+        VarAssignment{
+            assignment: LiteralValue{value: "null"}
+        ]
+    ,
+    filters:[PropertyFilter{
+        negated: true,
+        target: b,
+        properties: [Property{
+            name: "static"
+        }]
+    }]
+}

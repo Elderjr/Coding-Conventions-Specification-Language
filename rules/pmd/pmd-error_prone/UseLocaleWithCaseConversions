@@ -1,0 +1,28 @@
+AtomicRule:{
+    elements: [
+        inv as MethodInvocation{
+            elementAccessed: m Method {}
+        }
+    ],
+    filters: [
+        CompositionFilter{
+            operator:"AND",
+            filters:[
+                EqualsNamedElementWithLiterals{
+                    target: [inv],
+                    names: ["toLowerCase", "toUpperCase"],
+                },
+                TemplateFilter{
+                    negated: true,
+                    target: inv,
+                    template: MethodInvocation {
+                        params: [VariableAccess {
+                            variable: Variable {
+                            type: "Locale"
+                        }]
+                    }
+                }
+            }
+        }
+    ]
+}

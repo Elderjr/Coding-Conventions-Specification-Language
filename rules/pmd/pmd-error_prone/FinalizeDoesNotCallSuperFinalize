@@ -1,0 +1,20 @@
+AtomicRule: [
+    elements:[
+        m as Method {
+            name: "finalize"
+        }
+    ],
+    filters:[
+        TemplateFilter{
+            negated: true,
+            target: m,
+            template: Method {
+                statements: [SuperMethodInvocation{
+                    elementAccessed: Method {
+                        name: "finalize"
+                    }
+                }]
+            }
+        }
+    ]
+]

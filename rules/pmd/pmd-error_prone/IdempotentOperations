@@ -1,0 +1,6 @@
+AtomicRule {
+    elements: [VarAssingment {
+        variable: v as Variable{},
+        assignment: v
+    }]
+}

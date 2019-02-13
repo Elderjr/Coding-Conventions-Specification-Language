@@ -1,0 +1,20 @@
+AtomicRule {
+    elements: [
+        JFor {
+            initializers: [
+                VarDeclaration{
+                    variable: v as Variable{}
+                }
+            ]
+            statements:[
+                JFor{
+                    updaters: [
+                        PostfixExp {
+                            operand: VariableAccess {variable: v}
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

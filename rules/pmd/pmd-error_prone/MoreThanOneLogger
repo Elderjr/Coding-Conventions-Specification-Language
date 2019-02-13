@@ -1,0 +1,14 @@
+AtomicRule {
+    elements: [
+        ComplexType {
+            fields: [
+                Variable {
+                    type: ComplexType{name: "Looger"}
+                },
+                Variable {
+                    type: ComplexType{name: "Looger"}
+                }
+            ]
+        }
+    ]
+}

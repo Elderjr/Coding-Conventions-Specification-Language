@@ -1,0 +1,12 @@
+AtomicRule {
+    elements:[{
+        InfixExp{
+            operator: "=="
+            right: VariableAccess{
+                variable: Variable{
+                    name:"NaN"
+                }
+            }
+        }
+    }]
+}

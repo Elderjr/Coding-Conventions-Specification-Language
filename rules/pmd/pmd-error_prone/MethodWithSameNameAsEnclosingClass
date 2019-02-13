@@ -1,0 +1,11 @@
+AtomicRule {
+    elements: [c as ComplexType {
+        methods: [m as Method {}]
+    }],
+    filters: [
+        EqualsNamedElementFilter{
+            target: c,
+            elements: [m]
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+AtomicRule {
+    elements: [if: IfStatement{}]
+    filters:[
+        CompositeFilter{
+            operator: "or",
+            filters:[
+                TemplateFilter: {
+                    target:if,
+                    template: IfStatement{left: LiteralValue{}}
+                },
+                TemplateFilter: {
+                    target:if,
+                    template: IfStatement{right: LiteralValue{}}
+                }
+            ]
+        }
+    ]
+}

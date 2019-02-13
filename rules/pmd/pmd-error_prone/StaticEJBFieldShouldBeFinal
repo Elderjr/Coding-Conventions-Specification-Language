@@ -1,0 +1,33 @@
+AtomicRule: {
+    elements: [
+        JClass {
+            implements:  JInterface{
+                name: "EJBLocalHome"
+            },
+            fields: [f as Variable{}]
+        }
+    ],
+    filters: [
+        PropertyFilter{
+            negated: true,
+            target: f,
+            properties: [ PropertyFilter{
+                name: "static"
+            }]
+        },
+        PropertyFilter{
+            negated: true,
+            target: f,
+            properties: [ PropertyFilter{
+                name: "private"
+            }]
+        },
+        PropertyFilter{
+            negated: true,
+            target: f,
+            properties: [ PropertyFilter{
+                name: "final"
+            }]
+        }
+    ]
+}

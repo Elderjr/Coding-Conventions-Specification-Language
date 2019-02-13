@@ -1,0 +1,8 @@
+AtomicRule {
+    elements: [{
+        MethodInvocation {
+            elementAccessed: Method{name: "equals"}.
+            params:[LiteralValue{value="null"}]
+        }
+    }]
+}

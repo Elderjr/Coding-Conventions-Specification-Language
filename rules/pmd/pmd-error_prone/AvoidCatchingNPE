@@ -1,0 +1,9 @@
+AtomicRule {
+    elements: [
+        JTryCatchBlock {
+            catches: JCatchClause {
+                exceptions: JClass{name: "NullPointerException"}
+            }
+        }
+    ]
+}

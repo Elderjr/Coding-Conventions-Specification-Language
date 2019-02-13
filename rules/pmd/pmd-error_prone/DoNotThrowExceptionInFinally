@@ -1,0 +1,7 @@
+AtomicRule {
+    elements:[
+        JTryCatch{
+            finallyStatements: ThrowStatement{}
+        }
+    ]
+}

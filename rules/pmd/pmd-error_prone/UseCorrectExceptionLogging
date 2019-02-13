@@ -1,0 +1,17 @@
+AtomicRule: {
+    elements: [
+        inv as MethodInvocation {
+            from: VariableAccess{variable:Variable{type: ComplexType{name: "Log"}}},
+            elementAccessed: Method{name: "error"}
+        }
+    ],
+    filter: [{
+        TemplateFilter{
+            exact: true,
+            target: inv,
+            template: MethodInvocation{
+                params: [VariableAccess{}]
+            }
+        }
+    }]
+}

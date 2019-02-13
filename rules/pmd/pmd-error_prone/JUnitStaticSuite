@@ -1,0 +1,33 @@
+AtomicRule {
+    elements:[
+        ComplexType {
+            superTypes: [ComplexType{
+                name: "TestCase"
+            }],
+            methods: [m as Method{
+                name: "suite"
+            }]
+        }
+    ],
+    filters:[
+        CompositeFilter {
+            operator:"OR",
+            filters: [
+                PropertyFilter {
+                    negated: true,
+                    target: m,
+                    properties: Property {
+                        name: "static"
+                    }
+                },
+                PropertyFilter {
+                    negated: true,
+                    target: m,
+                    properties: Property {
+                        name: "public"
+                    }
+                }
+            ]
+        }
+    ]
+}

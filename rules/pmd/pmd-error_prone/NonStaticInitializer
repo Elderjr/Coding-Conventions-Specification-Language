@@ -1,0 +1,12 @@
+AtomicRule: {
+    elements: [JClass{
+        blocks: [b as Block{}]
+    }],
+    filters:[PropertyFilter{
+        negated: true,
+        target: b,
+        properties: [Property{
+            name: "static"
+        }]
+    }]
+}
