@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel"
+            class="codingConvetionMetamodel.CodingConventionsMetamodelPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/elements"
+            class="codingConvetionMetamodel.elements.ElementsPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/elements/namedElements"
+            class="codingConvetionMetamodel.elements.namedElements.NamedElementsPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/elements/statements"
+            class="codingConvetionMetamodel.elements.statements.StatementsPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/elements/datatype"
+            class="codingConvetionMetamodel.elements.datatype.DatatypePackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/java"
+            class="codingConvetionMetamodel.java.JavaPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated codingConventionsMetamodel -->
+      <package
+            uri="http://www.example.org/codingConvetionMetamodel/filters"
+            class="codingConvetionMetamodel.filters.FiltersPackage"
+            genModel="model/codingConventionsMetamodel.genmodel"/>
+   </extension>
+
+</plugin>

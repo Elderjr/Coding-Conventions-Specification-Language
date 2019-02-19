@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="eclipse-workspace-metamodel-codingConventions/codingConvention.edit/src-gen"/>
-	<classpathentry kind="src" path="eclipse-workspace-metamodel-codingConventions/codingConvention.editor/src-gen"/>
-	<classpathentry kind="src" path="eclipse-workspace-metamodel-codingConventions/codingConvention/src-gen"/>
-	<classpathentry kind="src" path="eclipse-workspace-metamodel-codingConventions/Sample/src"/>
-	<classpathentry kind="output" path="eclipse-workspace-metamodel-codingConventions/Sample/bin"/>
-</classpath>
