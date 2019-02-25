@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/codingConventionsMetamodel/src-gen" creationIcons="false"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/codingConventionsMetamodel/src-gen" creationIcons="false"
     editDirectory="/codingConventionsMetamodel.edit/src-gen" editorDirectory="/codingConventionsMetamodel.editor/src-gen"
     modelPluginID="codingConventionsMetamodel" modelName="CodingConventionsMetamodel"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" codeFormatting="true"
@@ -8,5 +9,198 @@
   <foreignModel>codingConventionsMetamodel.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
   <genPackages prefix="CodingConventionsMetamodel" disposableProviderFactory="true"
-      ecorePackage="codingConventionsMetamodel.ecore#/"/>
+      ecorePackage="codingConventionsMetamodel.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="codingConventionsMetamodel.ecore#//LogicOperators">
+      <genEnumLiterals ecoreEnumLiteral="codingConventionsMetamodel.ecore#//LogicOperators/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="codingConventionsMetamodel.ecore#//LogicOperators/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="codingConventionsMetamodel.ecore#//LogicOperators/IF_THEN"/>
+      <genEnumLiterals ecoreEnumLiteral="codingConventionsMetamodel.ecore#//LogicOperators/ANY"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="codingConventionsMetamodel.ecore#//Rule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//Rule/negated"/>
+    </genClasses>
+    <genClasses ecoreClass="codingConventionsMetamodel.ecore#//CompositeRule">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//CompositeRule/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//CompositeRule/rule"/>
+    </genClasses>
+    <genClasses ecoreClass="codingConventionsMetamodel.ecore#//AtomicRule">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//AtomicRule/element"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//AtomicRule/filter"/>
+    </genClasses>
+    <genClasses ecoreClass="codingConventionsMetamodel.ecore#//JAnnotations">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//JAnnotations/name"/>
+    </genClasses>
+    <nestedGenPackages prefix="Elements" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//elements">
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/Element">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/Element/property"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/Property">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/Property/name"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/Property/value"/>
+      </genClasses>
+      <nestedGenPackages prefix="NamedElements" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//elements/namedElements">
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/namedElements/NamedElement">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/namedElements/NamedElement/name"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/namedElements/ComplexType">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/namedElements/ComplexType/fields"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/namedElements/ComplexType/superTypes"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/namedElements/Variable">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/namedElements/Variable/type"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/namedElements/Method">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/namedElements/Method/params"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/namedElements/Method/returnType"/>
+        </genClasses>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Statements" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//elements/statements">
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/Statement"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/NamedElementAccess">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/NamedElementAccess/from"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/VariableAccess"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/ComplexTypeAccess"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/MethodInvocation">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/MethodInvocation/arguments"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/Access">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/Access/elementAccessed"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/Access/from"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/LiteralValue">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/statements/LiteralValue/value"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/LiteralValue/type"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/Expression"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/CompositeExp">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/statements/CompositeExp/logicOperator"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/CompositeExp/expressions"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/AtomicExp">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/statements/AtomicExp/operator"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/ControlFlow">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/ControlFlow/conditional"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/VarAssignment">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/VarAssignment/variable"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/VarAssignment/assignment"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/BranchControl"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/LoopControl"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/Block">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/Block/statements"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/IfStatement">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/IfStatement/trueStatements"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/IfStatement/falseStatements"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/PrefixExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/PrefixExp/operand"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/InfixExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/InfixExp/left"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/InfixExp/right"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/PostfixExp">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/PostfixExp/operand"/>
+        </genClasses>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/SuperMethodInvocation"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/statements/VarDeclaration">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/VarDeclaration/variable"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//elements/statements/VarDeclaration/assignment"/>
+        </genClasses>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Datatype" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//elements/datatype">
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/datatype/DataType"/>
+        <genClasses ecoreClass="codingConventionsMetamodel.ecore#//elements/datatype/PrimitiveType">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//elements/datatype/PrimitiveType/name"/>
+        </genClasses>
+      </nestedGenPackages>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Java" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//java">
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JElement"/>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JClass">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JClass/nestedClasses"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JClass/implements"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JClass/blocks"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JInterface"/>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JMethod">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JMethod/throws"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JConstructor"/>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JTryCatch">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JTryCatch/try"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JTryCatch/catches"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JTryClause">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JTryClause/resources"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JCatchClause">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JCatchClause/exceptions"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JCatchClause/param"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/InstanceOf"/>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/ThrowStatement">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/ThrowStatement/throws"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JFor">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JFor/initializers"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//java/JFor/updaters"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//java/JReturnStatement"/>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Filters" disposableProviderFactory="true" ecorePackage="codingConventionsMetamodel.ecore#//filters">
+      <genClasses image="false" ecoreClass="codingConventionsMetamodel.ecore#//filters/Filter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/Filter/negated"/>
+      </genClasses>
+      <genClasses image="false" ecoreClass="codingConventionsMetamodel.ecore#//filters/AtomicFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/AtomicFilter/targets"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/CompositeFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/CompositeFilter/filters"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/CompositeFilter/operator"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/PropertyFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/PropertyFilter/properties"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/TemplateFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/TemplateFilter/template"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/TemplateFilter/exact"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/DefinesMethod">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/DefinesMethod/methods"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/EqualsNamedElement">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference codingConventionsMetamodel.ecore#//filters/EqualsNamedElement/elements"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/EqualsNamedElement/ignoreCase"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/RegexLiteralValueFilter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/RegexLiteralValueFilter/regex"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/CountBlockStatementsFilter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/CountBlockStatementsFilter/count"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/CountBlockStatementsFilter/operator"/>
+      </genClasses>
+      <genClasses ecoreClass="codingConventionsMetamodel.ecore#//filters/EqualsNamedElementWithLiterals">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/EqualsNamedElementWithLiterals/names"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute codingConventionsMetamodel.ecore#//filters/EqualsNamedElementWithLiterals/ignoreCase"/>
+      </genClasses>
+    </nestedGenPackages>
+  </genPackages>
 </genmodel:GenModel>

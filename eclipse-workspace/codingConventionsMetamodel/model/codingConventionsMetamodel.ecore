@@ -65,7 +65,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="VariableAccess" eSuperTypes="#//elements/statements/Access"/>
       <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeAccess" eSuperTypes="#//elements/statements/Access"/>
       <eClassifiers xsi:type="ecore:EClass" name="MethodInvocation" eSuperTypes="#//elements/statements/Access">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
@@ -91,7 +91,7 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="conditional" eType="#//elements/statements/Statement"
             containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="VarAssignment">
+      <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"
             containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
@@ -99,7 +99,7 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="BranchControl" eSuperTypes="#//elements/statements/ControlFlow"/>
       <eClassifiers xsi:type="ecore:EClass" name="LoopControl" eSuperTypes="#//elements/statements/ControlFlow"/>
-      <eClassifiers xsi:type="ecore:EClass" name="Block">
+      <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
       </eClassifiers>
@@ -124,6 +124,11 @@
             eType="#//elements/statements/Statement" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SuperMethodInvocation" eSuperTypes="#//elements/statements/MethodInvocation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//elements/statements/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
+            eType="#//elements/statements/Statement" containment="true"/>
+      </eClassifiers>
     </eSubpackages>
     <eSubpackages name="datatype" nsURI="http://www.example.org/codingConvetionMetamodel/elements/datatype"
         nsPrefix="datatype">
@@ -189,7 +194,7 @@
           eType="#//elements/Element"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CompositeFilter" eSuperTypes="#//filters/Filter">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="filter" lowerBound="1"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filters" lowerBound="1"
           upperBound="-1" eType="#//filters/Filter" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperators"/>
     </eClassifiers>
