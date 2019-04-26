@@ -1,0 +1,2 @@
+code::StorableUnit.allInstances()->select(e: code::StorableUnit | true and e.type.name='short'
+ and e.name='x')

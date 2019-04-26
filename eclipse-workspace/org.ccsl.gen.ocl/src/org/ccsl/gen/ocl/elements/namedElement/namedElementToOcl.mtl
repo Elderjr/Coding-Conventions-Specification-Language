@@ -1,0 +1,14 @@
+[comment encoding = UTF-8 /]
+[module namedElementToOcl('http://www.example.org/ccsl')]
+
+
+[template public elementToOcl(element: Element) ? (element.oclIsTypeOf(NamedElement)) post(trim())]
+[let namedElement: NamedElement = element.oclAsType(NamedElement)]
+code::CodeItem.allInstances()->select(e: code::AbstractCodeElement | 
+  (e.oclIsKindOf(code::InterfaceUnit) or e.oclIsKindOf(code::ClassUnit) or e.oclIsKindOf(code::MethodUnit) or e.oclIsKindOf(code::StorableUnit)) [namedElement.namedElementToOcl()/])
+[/let]
+[/template]
+
+[template public namedElementToOcl(namedElement: NamedElement)]
+[if namedElement.name.oclIsUndefined() = false] and e.name='[namedElement.name/]'[/if]
+[/template]

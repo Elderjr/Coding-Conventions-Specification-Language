@@ -1,0 +1,24 @@
+[comment encoding = UTF-8 /]
+[module mainGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::namedElement::namedElementToOcl /]
+[import org::ccsl::gen::ocl::elements::namedElement::variable::variableToOcl /]
+
+
+[template public main(mainContent : MainContent)]
+[comment @main/]
+[file ('ocl',false, 'UTF-8')]
+[mainContent.rule.ruleToOcl()/]
+[/file]
+[/template]
+
+[template public ruleToOcl(rule : Rule) ? (oclIsTypeOf(AtomicRule)) post(trim())]
+[let atomicRule: AtomicRule = rule.oclAsType(AtomicRule)]
+[for (element: Element | atomicRule.elements)]
+[element.elementToOcl()/]
+[/for]
+[/let]
+[/template]
+
+[template public ruleToOcl(rule : Rule) ? (oclIsTypeOf(CompositeRule)) post(trim())]
+### Composite Rule not yet supported ###
+[/template]

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.presentation.ccslModelWizardID"
+            name="%_UI_ccslModelWizard_label"
+            class="ccsl.presentation.ccslModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ccslModelFile.gif">
+         <description>%_UI_ccslModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.presentation.ccslEditorID"
+            name="%_UI_ccslEditor_label"
+            icon="icons/full/obj16/ccslModelFile.gif"
+            extensions="ccsl"
+            class="ccsl.presentation.ccslEditor"
+            contributorClass="ccsl.presentation.ccslActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.elements.presentation.ElementsModelWizardID"
+            name="%_UI_ElementsModelWizard_label"
+            class="ccsl.elements.presentation.ElementsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ElementsModelFile.gif">
+         <description>%_UI_ElementsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.elements.presentation.ElementsEditorID"
+            name="%_UI_ElementsEditor_label"
+            icon="icons/full/obj16/ElementsModelFile.gif"
+            extensions="elements"
+            class="ccsl.elements.presentation.ElementsEditor"
+            contributorClass="ccsl.elements.presentation.ElementsActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.elements.namedElements.presentation.NamedElementsModelWizardID"
+            name="%_UI_NamedElementsModelWizard_label"
+            class="ccsl.elements.namedElements.presentation.NamedElementsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/NamedElementsModelFile.gif">
+         <description>%_UI_NamedElementsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.elements.namedElements.presentation.NamedElementsEditorID"
+            name="%_UI_NamedElementsEditor_label"
+            icon="icons/full/obj16/NamedElementsModelFile.gif"
+            extensions="namedelements"
+            class="ccsl.elements.namedElements.presentation.NamedElementsEditor"
+            contributorClass="ccsl.elements.namedElements.presentation.NamedElementsActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.elements.statements.presentation.StatementsModelWizardID"
+            name="%_UI_StatementsModelWizard_label"
+            class="ccsl.elements.statements.presentation.StatementsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/StatementsModelFile.gif">
+         <description>%_UI_StatementsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.elements.statements.presentation.StatementsEditorID"
+            name="%_UI_StatementsEditor_label"
+            icon="icons/full/obj16/StatementsModelFile.gif"
+            extensions="statements"
+            class="ccsl.elements.statements.presentation.StatementsEditor"
+            contributorClass="ccsl.elements.statements.presentation.StatementsActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.elements.datatype.presentation.DatatypeModelWizardID"
+            name="%_UI_DatatypeModelWizard_label"
+            class="ccsl.elements.datatype.presentation.DatatypeModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/DatatypeModelFile.gif">
+         <description>%_UI_DatatypeModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.elements.datatype.presentation.DatatypeEditorID"
+            name="%_UI_DatatypeEditor_label"
+            icon="icons/full/obj16/DatatypeModelFile.gif"
+            extensions="datatype"
+            class="ccsl.elements.datatype.presentation.DatatypeEditor"
+            contributorClass="ccsl.elements.datatype.presentation.DatatypeActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.java.presentation.JavaModelWizardID"
+            name="%_UI_JavaModelWizard_label"
+            class="ccsl.java.presentation.JavaModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/JavaModelFile.gif">
+         <description>%_UI_JavaModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.java.presentation.JavaEditorID"
+            name="%_UI_JavaEditor_label"
+            icon="icons/full/obj16/JavaModelFile.gif"
+            extensions="java"
+            class="ccsl.java.presentation.JavaEditor"
+            contributorClass="ccsl.java.presentation.JavaActionBarContributor">
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ccsl -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="ccsl.filters.presentation.FiltersModelWizardID"
+            name="%_UI_FiltersModelWizard_label"
+            class="ccsl.filters.presentation.FiltersModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/FiltersModelFile.gif">
+         <description>%_UI_FiltersModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ccsl -->
+      <editor
+            id="ccsl.filters.presentation.FiltersEditorID"
+            name="%_UI_FiltersEditor_label"
+            icon="icons/full/obj16/FiltersModelFile.gif"
+            extensions="filters"
+            class="ccsl.filters.presentation.FiltersEditor"
+            contributorClass="ccsl.filters.presentation.FiltersActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

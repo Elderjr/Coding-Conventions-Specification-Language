@@ -45,3 +45,32 @@ Command-line arguments:  -product org.eclipse.platform.ide -data /home/elderjr/D
 !MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.saveStructuralFeatureInstanceModel', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
 !SUBENTRY 1 org.eclipse.ui 2 0 2019-02-19 18:24:37.098
 !MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.setStructuralFeatureInstanceResource', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SESSION 2019-04-26 11:16:33.488 -----------------------------------------------
+eclipse.buildId=4.7.3.M20180301-0715
+java.version=1.8.0_191
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=pt_BR
+Framework arguments:  -product org.eclipse.platform.ide
+Command-line arguments:  -product org.eclipse.platform.ide -data /home/elderjr/Documentos/git-repositories/Coding-Conventions-Specification-Language/eclipse-workspace/../runtime-EclipseApplication -dev file:/home/elderjr/Documentos/git-repositories/Coding-Conventions-Specification-Language/eclipse-workspace/.metadata/.plugins/org.eclipse.pde.core/Eclipse Application/dev.properties -os linux -ws gtk -arch x86_64 -consoleLog
+
+!ENTRY org.eclipse.ui 2 0 2019-04-26 11:16:41.104
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.104
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.custom.ui', id='org.eclipse.emf.facet.ui.loadCustomization', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.104
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.loadFacet', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.104
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.saveStructuralFeatureInstanceModel', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.104
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.setStructuralFeatureInstanceResource', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+
+!ENTRY org.eclipse.ui 2 0 2019-04-26 11:16:41.445
+!MESSAGE Warnings while parsing the commands from the 'org.eclipse.ui.commands' and 'org.eclipse.ui.actionDefinitions' extension points.
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.445
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.custom.ui', id='org.eclipse.emf.facet.ui.loadCustomization', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.446
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.loadFacet', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.446
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.saveStructuralFeatureInstanceModel', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
+!SUBENTRY 1 org.eclipse.ui 2 0 2019-04-26 11:16:41.446
+!MESSAGE Commands should really have a category: plug-in='org.eclipse.emf.facet.efacet.ui', id='org.eclipse.emf.facet.efacet.ui.setStructuralFeatureInstanceResource', categoryId='org.eclipse.emf.facet.widgets.table.command.category'
