@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link ccsl.elements.Element#getProperty <em>Property</em>}</li>
+ *   <li>{@link ccsl.elements.Element#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @see ccsl.elements.ElementsPackage#getElement()
@@ -24,19 +24,19 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Element extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Property</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
 	 * The list contents are of type {@link ccsl.elements.Property}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Property</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Property</em>' containment reference list.
-	 * @see ccsl.elements.ElementsPackage#getElement_Property()
+	 * @return the value of the '<em>Properties</em>' containment reference list.
+	 * @see ccsl.elements.ElementsPackage#getElement_Properties()
 	 * @model type="ccsl.elements.Property" containment="true"
 	 * @generated
 	 */
-	EList getProperty();
+	EList getProperties();
 
 } // Element

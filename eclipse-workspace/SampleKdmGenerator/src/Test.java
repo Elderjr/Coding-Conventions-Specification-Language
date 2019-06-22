@@ -1,7 +1,16 @@
 
+
 public class Test {
 
-	public void t() {
-		short x = 5;
-	}
+	 public int x = 5;
+	 private int y = 5;
+	 public void x() {
+		 
+	 }
+	 public void y() {
+		 
+	 }
+	 public void z() {
+		 
+	 }
 }

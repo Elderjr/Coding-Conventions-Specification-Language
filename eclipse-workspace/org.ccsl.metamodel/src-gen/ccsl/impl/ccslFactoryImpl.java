@@ -61,8 +61,6 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 			return createAtomicRule();
 		case ccslPackage.JANNOTATIONS:
 			return createJAnnotations();
-		case ccslPackage.MAIN_CONTENT:
-			return createMainContent();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -124,16 +122,6 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 	public JAnnotations createJAnnotations() {
 		JAnnotationsImpl jAnnotations = new JAnnotationsImpl();
 		return jAnnotations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public MainContent createMainContent() {
-		MainContentImpl mainContent = new MainContentImpl();
-		return mainContent;
 	}
 
 	/**

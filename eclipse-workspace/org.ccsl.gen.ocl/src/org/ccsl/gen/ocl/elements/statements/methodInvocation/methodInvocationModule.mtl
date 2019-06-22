@@ -1,0 +1,23 @@
+[comment encoding = UTF-8 /]
+[module methodInvocationModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule]
+[import org::ccsl::gen::ocl::elements::namedElement::method::methodModule /] 
+
+[template public selectQuery(element: Element) ? (element.oclIsTypeOf(MethodInvocation))]
+[let invocation : MethodInvocation = element.oclAsType(MethodInvocation)]
+java::MethodInvocation.allInstances()
+  ->select(inv: java::MethodInvocation | true 
+    [invocation.queryConditions(null, 'inv') /]
+)
+[/let]
+[/template]
+
+[template public queryConditions(element: Element, contextElement: Element, varName: String) ? (element.oclIsTypeOf(MethodInvocation))]
+[let invocation : MethodInvocation = element.oclAsType(MethodInvocation)]
+[invocation.methodInvocationQueryConditions(contextElement, varName)/] 
+[/let]
+[/template]
+
+[template public methodInvocationQueryConditions(methodInvocation: MethodInvocation, contextElement: Element, varName: String)]
+[methodInvocation.elementAccessed.queryConditions(methodInvocation, varName.concat('.method')) /]
+[/template]

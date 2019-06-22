@@ -60,7 +60,7 @@ public class JReturnStatementItemProvider extends JElementItemProvider {
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTY);
+			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTIES);
 		}
 		return childrenFeatures;
 	}
@@ -108,7 +108,7 @@ public class JReturnStatementItemProvider extends JElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(JReturnStatement.class)) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -125,7 +125,7 @@ public class JReturnStatementItemProvider extends JElementItemProvider {
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTY,
+		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTIES,
 				ElementsFactory.eINSTANCE.createProperty()));
 	}
 

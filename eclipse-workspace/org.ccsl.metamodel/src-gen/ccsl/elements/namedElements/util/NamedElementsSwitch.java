@@ -127,6 +127,26 @@ public class NamedElementsSwitch {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case NamedElementsPackage.CONSTRUCTOR: {
+			Constructor constructor = (Constructor) theEObject;
+			Object result = caseConstructor(constructor);
+			if (result == null)
+				result = caseMethod(constructor);
+			if (result == null)
+				result = caseNamedElement(constructor);
+			if (result == null)
+				result = caseElement(constructor);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case NamedElementsPackage.NAMESPACE: {
+			Namespace namespace = (Namespace) theEObject;
+			Object result = caseNamespace(namespace);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -189,6 +209,36 @@ public class NamedElementsSwitch {
 	 * @generated
 	 */
 	public Object caseMethod(Method object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constructor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constructor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public Object caseConstructor(Constructor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Namespace</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Namespace</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public Object caseNamespace(Namespace object) {
 		return null;
 	}
 

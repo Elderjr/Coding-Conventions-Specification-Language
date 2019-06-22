@@ -9,6 +9,7 @@ import ccsl.elements.namedElements.NamedElementsFactory;
 import ccsl.elements.namedElements.NamedElementsPackage;
 
 import ccsl.java.JInterface;
+import ccsl.java.JavaFactory;
 import ccsl.java.JavaPackage;
 
 import java.util.Collection;
@@ -98,8 +99,9 @@ public class JInterfaceItemProvider extends JElementItemProvider {
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTY);
+			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTIES);
 			childrenFeatures.add(NamedElementsPackage.Literals.COMPLEX_TYPE__FIELDS);
+			childrenFeatures.add(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS);
 		}
 		return childrenFeatures;
 	}
@@ -152,8 +154,9 @@ public class JInterfaceItemProvider extends JElementItemProvider {
 		case JavaPackage.JINTERFACE__NAME:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case JavaPackage.JINTERFACE__PROPERTY:
+		case JavaPackage.JINTERFACE__PROPERTIES:
 		case JavaPackage.JINTERFACE__FIELDS:
+		case JavaPackage.JINTERFACE__METHODS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -170,11 +173,23 @@ public class JInterfaceItemProvider extends JElementItemProvider {
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTY,
+		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTIES,
 				ElementsFactory.eINSTANCE.createProperty()));
 
 		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__FIELDS,
 				NamedElementsFactory.eINSTANCE.createVariable()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				JavaFactory.eINSTANCE.createJMethod()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				JavaFactory.eINSTANCE.createJConstructor()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				NamedElementsFactory.eINSTANCE.createMethod()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				NamedElementsFactory.eINSTANCE.createConstructor()));
 	}
 
 }

@@ -83,7 +83,7 @@ public class InstanceOfItemProvider extends JElementItemProvider {
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTY);
+			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTIES);
 			childrenFeatures.add(StatementsPackage.Literals.INFIX_EXP__LEFT);
 			childrenFeatures.add(StatementsPackage.Literals.INFIX_EXP__RIGHT);
 		}
@@ -138,7 +138,7 @@ public class InstanceOfItemProvider extends JElementItemProvider {
 		case JavaPackage.INSTANCE_OF__OPERATOR:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
-		case JavaPackage.INSTANCE_OF__PROPERTY:
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
 		case JavaPackage.INSTANCE_OF__LEFT:
 		case JavaPackage.INSTANCE_OF__RIGHT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -157,7 +157,7 @@ public class InstanceOfItemProvider extends JElementItemProvider {
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTY,
+		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTIES,
 				ElementsFactory.eINSTANCE.createProperty()));
 
 		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.INFIX_EXP__LEFT,

@@ -32,7 +32,7 @@ public interface AtomicFilter extends Filter {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Targets</em>' reference list.
 	 * @see ccsl.filters.FiltersPackage#getAtomicFilter_Targets()
-	 * @model type="ccsl.elements.Element"
+	 * @model type="ccsl.elements.Element" required="true"
 	 * @generated
 	 */
 	EList getTargets();

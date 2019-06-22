@@ -161,6 +161,50 @@ public class NamedElementsItemProviderAdapterFactory extends NamedElementsAdapte
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link ccsl.elements.namedElements.Constructor} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConstructorItemProvider constructorItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link ccsl.elements.namedElements.Constructor}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Adapter createConstructorAdapter() {
+		if (constructorItemProvider == null) {
+			constructorItemProvider = new ConstructorItemProvider(this);
+		}
+
+		return constructorItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link ccsl.elements.namedElements.Namespace} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NamespaceItemProvider namespaceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link ccsl.elements.namedElements.Namespace}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Adapter createNamespaceAdapter() {
+		if (namespaceItemProvider == null) {
+			namespaceItemProvider = new NamespaceItemProvider(this);
+		}
+
+		return namespaceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -264,6 +308,10 @@ public class NamedElementsItemProviderAdapterFactory extends NamedElementsAdapte
 			variableItemProvider.dispose();
 		if (methodItemProvider != null)
 			methodItemProvider.dispose();
+		if (constructorItemProvider != null)
+			constructorItemProvider.dispose();
+		if (namespaceItemProvider != null)
+			namespaceItemProvider.dispose();
 	}
 
 }

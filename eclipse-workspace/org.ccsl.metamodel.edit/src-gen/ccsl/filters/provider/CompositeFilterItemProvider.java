@@ -166,6 +166,9 @@ public class CompositeFilterItemProvider extends FilterItemProvider {
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.COMPOSITE_FILTER__FILTERS,
 				FiltersFactory.eINSTANCE.createEqualsNamedElementWithLiterals()));
+
+		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.COMPOSITE_FILTER__FILTERS,
+				FiltersFactory.eINSTANCE.createNamedElementRegexMatch()));
 	}
 
 }

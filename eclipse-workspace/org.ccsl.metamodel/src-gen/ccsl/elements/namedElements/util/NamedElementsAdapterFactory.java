@@ -85,6 +85,14 @@ public class NamedElementsAdapterFactory extends AdapterFactoryImpl {
 			return createMethodAdapter();
 		}
 
+		public Object caseConstructor(Constructor object) {
+			return createConstructorAdapter();
+		}
+
+		public Object caseNamespace(Namespace object) {
+			return createNamespaceAdapter();
+		}
+
 		public Object caseElement(Element object) {
 			return createElementAdapter();
 		}
@@ -163,6 +171,34 @@ public class NamedElementsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link ccsl.elements.namedElements.Constructor <em>Constructor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see ccsl.elements.namedElements.Constructor
+	 * @generated
+	 */
+	public Adapter createConstructorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link ccsl.elements.namedElements.Namespace <em>Namespace</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see ccsl.elements.namedElements.Namespace
+	 * @generated
+	 */
+	public Adapter createNamespaceAdapter() {
 		return null;
 	}
 

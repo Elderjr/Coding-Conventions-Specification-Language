@@ -250,13 +250,13 @@ public interface FiltersPackage extends EPackage {
 	int TEMPLATE_FILTER__TEMPLATE = ATOMIC_FILTER_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Exact</b></em>' attribute.
+	 * The feature id for the '<em><b>Exact Match</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEMPLATE_FILTER__EXACT = ATOMIC_FILTER_FEATURE_COUNT + 1;
+	int TEMPLATE_FILTER__EXACT_MATCH = ATOMIC_FILTER_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Template Filter</em>' class.
@@ -507,6 +507,52 @@ public interface FiltersPackage extends EPackage {
 	int EQUALS_NAMED_ELEMENT_WITH_LITERALS_FEATURE_COUNT = ATOMIC_FILTER_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link ccsl.filters.impl.NamedElementRegexMatchImpl <em>Named Element Regex Match</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see ccsl.filters.impl.NamedElementRegexMatchImpl
+	 * @see ccsl.filters.impl.FiltersPackageImpl#getNamedElementRegexMatch()
+	 * @generated
+	 */
+	int NAMED_ELEMENT_REGEX_MATCH = 10;
+
+	/**
+	 * The feature id for the '<em><b>Negated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_REGEX_MATCH__NEGATED = ATOMIC_FILTER__NEGATED;
+
+	/**
+	 * The feature id for the '<em><b>Targets</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_REGEX_MATCH__TARGETS = ATOMIC_FILTER__TARGETS;
+
+	/**
+	 * The feature id for the '<em><b>Regex</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_REGEX_MATCH__REGEX = ATOMIC_FILTER_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Named Element Regex Match</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_REGEX_MATCH_FEATURE_COUNT = ATOMIC_FILTER_FEATURE_COUNT + 1;
+
+	/**
 	 * Returns the meta object for class '{@link ccsl.filters.Filter <em>Filter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -623,15 +669,15 @@ public interface FiltersPackage extends EPackage {
 	EReference getTemplateFilter_Template();
 
 	/**
-	 * Returns the meta object for the attribute '{@link ccsl.filters.TemplateFilter#isExact <em>Exact</em>}'.
+	 * Returns the meta object for the attribute '{@link ccsl.filters.TemplateFilter#isExactMatch <em>Exact Match</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Exact</em>'.
-	 * @see ccsl.filters.TemplateFilter#isExact()
+	 * @return the meta object for the attribute '<em>Exact Match</em>'.
+	 * @see ccsl.filters.TemplateFilter#isExactMatch()
 	 * @see #getTemplateFilter()
 	 * @generated
 	 */
-	EAttribute getTemplateFilter_Exact();
+	EAttribute getTemplateFilter_ExactMatch();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.filters.DefinesMethod <em>Defines Method</em>}'.
@@ -772,6 +818,27 @@ public interface FiltersPackage extends EPackage {
 	EAttribute getEqualsNamedElementWithLiterals_IgnoreCase();
 
 	/**
+	 * Returns the meta object for class '{@link ccsl.filters.NamedElementRegexMatch <em>Named Element Regex Match</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Named Element Regex Match</em>'.
+	 * @see ccsl.filters.NamedElementRegexMatch
+	 * @generated
+	 */
+	EClass getNamedElementRegexMatch();
+
+	/**
+	 * Returns the meta object for the attribute '{@link ccsl.filters.NamedElementRegexMatch#getRegex <em>Regex</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Regex</em>'.
+	 * @see ccsl.filters.NamedElementRegexMatch#getRegex()
+	 * @see #getNamedElementRegexMatch()
+	 * @generated
+	 */
+	EAttribute getNamedElementRegexMatch_Regex();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -892,12 +959,12 @@ public interface FiltersPackage extends EPackage {
 		EReference TEMPLATE_FILTER__TEMPLATE = eINSTANCE.getTemplateFilter_Template();
 
 		/**
-		 * The meta object literal for the '<em><b>Exact</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Exact Match</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TEMPLATE_FILTER__EXACT = eINSTANCE.getTemplateFilter_Exact();
+		EAttribute TEMPLATE_FILTER__EXACT_MATCH = eINSTANCE.getTemplateFilter_ExactMatch();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.filters.impl.DefinesMethodImpl <em>Defines Method</em>}' class.
@@ -1013,6 +1080,24 @@ public interface FiltersPackage extends EPackage {
 		 */
 		EAttribute EQUALS_NAMED_ELEMENT_WITH_LITERALS__IGNORE_CASE = eINSTANCE
 				.getEqualsNamedElementWithLiterals_IgnoreCase();
+
+		/**
+		 * The meta object literal for the '{@link ccsl.filters.impl.NamedElementRegexMatchImpl <em>Named Element Regex Match</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see ccsl.filters.impl.NamedElementRegexMatchImpl
+		 * @see ccsl.filters.impl.FiltersPackageImpl#getNamedElementRegexMatch()
+		 * @generated
+		 */
+		EClass NAMED_ELEMENT_REGEX_MATCH = eINSTANCE.getNamedElementRegexMatch();
+
+		/**
+		 * The meta object literal for the '<em><b>Regex</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_ELEMENT_REGEX_MATCH__REGEX = eINSTANCE.getNamedElementRegexMatch_Regex();
 
 	}
 

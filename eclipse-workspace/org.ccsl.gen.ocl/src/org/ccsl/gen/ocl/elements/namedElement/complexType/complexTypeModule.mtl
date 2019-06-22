@@ -1,0 +1,48 @@
+[comment encoding = UTF-8 /]
+[module complexTypeModule('http://www.example.org/ccsl')/]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+[import org::ccsl::gen::ocl::elements::namedElement::namedElementModule /]
+[import org::ccsl::gen::ocl::services::elementIdentifierService::elementIndentifierService /]
+[comment 
+  These methods are generated automatically and should not be modified.
+  Such methods are defined in order to reuse the specific methods of this module by super metaclasses.   
+/]
+[template public defineSelectQuery(element: Element, filters: OrderedSet(AtomicFilter)) ? (element.oclIsTypeOf(ComplexType))]
+[element.oclAsType(ComplexType).defineSelectQueryComplexType(filters)/]
+[/template]
+
+[query public queryConditionComplexType(complexType: ComplexType, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+OrderedSet(String){
+  	complexType.defineFieldsQueryCondition(contextElement, varName, filters, exactMatch),
+	complexType.defineMethodsQueryCondition(contextElement, varName, filters, exactMatch)
+}
+->select(condition: String | condition.trim().size() > 0)
+->union(complexType.queryConditionNamedElement(contextElement, varName, filters, exactMatch))/]
+
+[template public defineQueryCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean) ? (element.oclIsTypeOf(ComplexType)) post(trim())]
+[for (condition: String | element.oclAsType(ComplexType).queryConditionComplexType(contextElement, varName, filters, exactMatch)) separator(' and \n')]
+[condition /][/for]
+[/template]
+
+
+[** 
+ * Defines the select statement for the ComplexType metaclass. For example: ClassDeclaration.allInstances()->select(c: ClassDeclaration ... ).
+ * The @param filters is an OrderedSet(AtomicFilter) of all Atomic Filters that will be applied in the generated select statment.
+*/]
+[template public defineSelectQueryComplexType(complexType: ComplexType, filters: OrderedSet(AtomicFilter))]
+java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+    [complexType.defineQueryCondition(null, 'class', filters, false) /]
+)->union(
+java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+    [complexType.defineQueryCondition(null, 'interface', filters, false) /]
+))
+[/template]
+
+[template private defineFieldsQueryCondition(complexType: ComplexType, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
+[if not complexType.fields->oclIsUndefined()][complexType.generateGenericMultivaluedAttributeCondition(contextElement, varName, filters, exactMatch, complexType.fields, 'bodyDeclarations', 'FieldDeclaration', complexType.generateValidName('class').concat('_fields'), complexType.generateValidName('class').concat('_fieldToSelect')) /][/if]
+[/template]
+
+
+[template private defineMethodsQueryCondition(complexType: ComplexType, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
+[if not complexType.methods->oclIsUndefined()][complexType.generateGenericMultivaluedAttributeCondition(contextElement, varName, filters, exactMatch, complexType.methods, 'bodyDeclarations', 'MethodDeclaration', complexType.generateValidName('class').concat('_methods'), complexType.generateValidName('class').concat('_methodToSelect')) /][/if]
+[/template]

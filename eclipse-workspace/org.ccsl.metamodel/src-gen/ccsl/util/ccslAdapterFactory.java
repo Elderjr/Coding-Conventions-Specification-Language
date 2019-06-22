@@ -81,10 +81,6 @@ public class ccslAdapterFactory extends AdapterFactoryImpl {
 			return createJAnnotationsAdapter();
 		}
 
-		public Object caseMainContent(MainContent object) {
-			return createMainContentAdapter();
-		}
-
 		public Object defaultCase(EObject object) {
 			return createEObjectAdapter();
 		}
@@ -155,20 +151,6 @@ public class ccslAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createJAnnotationsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link ccsl.MainContent <em>Main Content</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see ccsl.MainContent
-	 * @generated
-	 */
-	public Adapter createMainContentAdapter() {
 		return null;
 	}
 

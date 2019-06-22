@@ -6,7 +6,6 @@ import ccsl.AtomicRule;
 import ccsl.CompositeRule;
 import ccsl.JAnnotations;
 import ccsl.LogicOperators;
-import ccsl.MainContent;
 import ccsl.Rule;
 import ccsl.ccslFactory;
 import ccsl.ccslPackage;
@@ -79,13 +78,6 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * @generated
 	 */
 	private EClass jAnnotationsEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass mainContentEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -221,6 +213,24 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getRule_PrimitiveTypesReferences() {
+		return (EReference) ruleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRule_AuxiliaryElements() {
+		return (EReference) ruleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCompositeRule() {
 		return compositeRuleEClass;
 	}
@@ -257,7 +267,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAtomicRule_Elements() {
+	public EReference getAtomicRule_Scope() {
 		return (EReference) atomicRuleEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -286,33 +296,6 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 */
 	public EAttribute getJAnnotations_Name() {
 		return (EAttribute) jAnnotationsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getMainContent() {
-		return mainContentEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMainContent_Rule() {
-		return (EReference) mainContentEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getMainContent_PrimitiveTypesReferences() {
-		return (EReference) mainContentEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -355,21 +338,19 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 		// Create classes and their features
 		ruleEClass = createEClass(RULE);
 		createEAttribute(ruleEClass, RULE__NEGATED);
+		createEReference(ruleEClass, RULE__PRIMITIVE_TYPES_REFERENCES);
+		createEReference(ruleEClass, RULE__AUXILIARY_ELEMENTS);
 
 		compositeRuleEClass = createEClass(COMPOSITE_RULE);
 		createEAttribute(compositeRuleEClass, COMPOSITE_RULE__OPERATOR);
 		createEReference(compositeRuleEClass, COMPOSITE_RULE__RULE);
 
 		atomicRuleEClass = createEClass(ATOMIC_RULE);
-		createEReference(atomicRuleEClass, ATOMIC_RULE__ELEMENTS);
+		createEReference(atomicRuleEClass, ATOMIC_RULE__SCOPE);
 		createEReference(atomicRuleEClass, ATOMIC_RULE__FILTER);
 
 		jAnnotationsEClass = createEClass(JANNOTATIONS);
 		createEAttribute(jAnnotationsEClass, JANNOTATIONS__NAME);
-
-		mainContentEClass = createEClass(MAIN_CONTENT);
-		createEReference(mainContentEClass, MAIN_CONTENT__RULE);
-		createEReference(mainContentEClass, MAIN_CONTENT__PRIMITIVE_TYPES_REFERENCES);
 
 		// Create enums
 		logicOperatorsEEnum = createEEnum(LOGIC_OPERATORS);
@@ -423,6 +404,12 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 		initEClass(ruleEClass, Rule.class, "Rule", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRule_Negated(), theXMLTypePackage.getBoolean(), "negated", null, 0, 1, Rule.class,
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRule_PrimitiveTypesReferences(), theDatatypePackage.getPrimitiveType(), null,
+				"primitiveTypesReferences", null, 0, -1, Rule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRule_AuxiliaryElements(), theElementsPackage.getElement(), null, "auxiliaryElements", null, 0,
+				-1, Rule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(compositeRuleEClass, CompositeRule.class, "CompositeRule", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
@@ -435,7 +422,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 
 		initEClass(atomicRuleEClass, AtomicRule.class, "AtomicRule", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAtomicRule_Elements(), theElementsPackage.getElement(), null, "elements", null, 1, -1,
+		initEReference(getAtomicRule_Scope(), theElementsPackage.getElement(), null, "scope", null, 1, 1,
 				AtomicRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAtomicRule_Filter(), theFiltersPackage.getFilter(), null, "filter", null, 0, -1,
@@ -446,15 +433,6 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 				IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getJAnnotations_Name(), theXMLTypePackage.getString(), "name", null, 0, 1, JAnnotations.class,
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(mainContentEClass, MainContent.class, "MainContent", !IS_ABSTRACT, !IS_INTERFACE,
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMainContent_Rule(), this.getRule(), null, "rule", null, 1, 1, MainContent.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMainContent_PrimitiveTypesReferences(), theDatatypePackage.getPrimitiveType(), null,
-				"primitiveTypesReferences", null, 0, -1, MainContent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(logicOperatorsEEnum, LogicOperators.class, "LogicOperators");

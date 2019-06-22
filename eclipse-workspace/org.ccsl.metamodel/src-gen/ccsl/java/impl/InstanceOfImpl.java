@@ -38,7 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.java.impl.InstanceOfImpl#getProperty <em>Property</em>}</li>
+ *   <li>{@link ccsl.java.impl.InstanceOfImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link ccsl.java.impl.InstanceOfImpl#getOperator <em>Operator</em>}</li>
  *   <li>{@link ccsl.java.impl.InstanceOfImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link ccsl.java.impl.InstanceOfImpl#getRight <em>Right</em>}</li>
@@ -48,14 +48,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	/**
-	 * The cached value of the '{@link #getProperty() <em>Property</em>}' containment reference list.
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperty()
+	 * @see #getProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList property;
+	protected EList properties;
 
 	/**
 	 * The default value of the '{@link #getOperator() <em>Operator</em>}' attribute.
@@ -120,11 +120,11 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getProperty() {
-		if (property == null) {
-			property = new EObjectContainmentEList(Property.class, this, JavaPackage.INSTANCE_OF__PROPERTY);
+	public EList getProperties() {
+		if (properties == null) {
+			properties = new EObjectContainmentEList(Property.class, this, JavaPackage.INSTANCE_OF__PROPERTIES);
 		}
-		return property;
+		return properties;
 	}
 
 	/**
@@ -180,8 +180,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case JavaPackage.INSTANCE_OF__PROPERTY:
-			return ((InternalEList) getProperty()).basicRemove(otherEnd, msgs);
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
+			return ((InternalEList) getProperties()).basicRemove(otherEnd, msgs);
 		case JavaPackage.INSTANCE_OF__LEFT:
 			return ((InternalEList) getLeft()).basicRemove(otherEnd, msgs);
 		case JavaPackage.INSTANCE_OF__RIGHT:
@@ -197,8 +197,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case JavaPackage.INSTANCE_OF__PROPERTY:
-			return getProperty();
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
+			return getProperties();
 		case JavaPackage.INSTANCE_OF__OPERATOR:
 			return getOperator();
 		case JavaPackage.INSTANCE_OF__LEFT:
@@ -216,9 +216,9 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case JavaPackage.INSTANCE_OF__PROPERTY:
-			getProperty().clear();
-			getProperty().addAll((Collection) newValue);
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
+			getProperties().clear();
+			getProperties().addAll((Collection) newValue);
 			return;
 		case JavaPackage.INSTANCE_OF__OPERATOR:
 			setOperator((String) newValue);
@@ -242,8 +242,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case JavaPackage.INSTANCE_OF__PROPERTY:
-			getProperty().clear();
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
+			getProperties().clear();
 			return;
 		case JavaPackage.INSTANCE_OF__OPERATOR:
 			setOperator(OPERATOR_EDEFAULT);
@@ -265,8 +265,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case JavaPackage.INSTANCE_OF__PROPERTY:
-			return property != null && !property.isEmpty();
+		case JavaPackage.INSTANCE_OF__PROPERTIES:
+			return properties != null && !properties.isEmpty();
 		case JavaPackage.INSTANCE_OF__OPERATOR:
 			return OPERATOR_EDEFAULT == null ? operator != null : !OPERATOR_EDEFAULT.equals(operator);
 		case JavaPackage.INSTANCE_OF__LEFT:
@@ -285,8 +285,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (derivedFeatureID) {
-			case JavaPackage.INSTANCE_OF__PROPERTY:
-				return ElementsPackage.ELEMENT__PROPERTY;
+			case JavaPackage.INSTANCE_OF__PROPERTIES:
+				return ElementsPackage.ELEMENT__PROPERTIES;
 			default:
 				return -1;
 			}
@@ -332,8 +332,8 @@ public class InstanceOfImpl extends JElementImpl implements InstanceOf {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (baseFeatureID) {
-			case ElementsPackage.ELEMENT__PROPERTY:
-				return JavaPackage.INSTANCE_OF__PROPERTY;
+			case ElementsPackage.ELEMENT__PROPERTIES:
+				return JavaPackage.INSTANCE_OF__PROPERTIES;
 			default:
 				return -1;
 			}

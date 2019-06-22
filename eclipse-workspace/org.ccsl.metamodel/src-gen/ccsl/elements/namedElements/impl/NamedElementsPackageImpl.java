@@ -13,10 +13,12 @@ import ccsl.elements.datatype.impl.DatatypePackageImpl;
 import ccsl.elements.impl.ElementsPackageImpl;
 
 import ccsl.elements.namedElements.ComplexType;
+import ccsl.elements.namedElements.Constructor;
 import ccsl.elements.namedElements.Method;
 import ccsl.elements.namedElements.NamedElement;
 import ccsl.elements.namedElements.NamedElementsFactory;
 import ccsl.elements.namedElements.NamedElementsPackage;
+import ccsl.elements.namedElements.Namespace;
 import ccsl.elements.namedElements.Variable;
 
 import ccsl.elements.statements.StatementsPackage;
@@ -76,6 +78,20 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 	 * @generated
 	 */
 	private EClass methodEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass constructorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass namespaceEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -231,6 +247,15 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getComplexType_Methods() {
+		return (EReference) complexTypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getVariable() {
 		return variableEClass;
 	}
@@ -276,6 +301,33 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getConstructor() {
+		return constructorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNamespace() {
+		return namespaceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNamespace_GroupedElements() {
+		return (EReference) namespaceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public NamedElementsFactory getNamedElementsFactory() {
 		return (NamedElementsFactory) getEFactoryInstance();
 	}
@@ -306,6 +358,7 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 		complexTypeEClass = createEClass(COMPLEX_TYPE);
 		createEReference(complexTypeEClass, COMPLEX_TYPE__FIELDS);
 		createEReference(complexTypeEClass, COMPLEX_TYPE__SUPER_TYPES);
+		createEReference(complexTypeEClass, COMPLEX_TYPE__METHODS);
 
 		variableEClass = createEClass(VARIABLE);
 		createEReference(variableEClass, VARIABLE__TYPE);
@@ -313,6 +366,11 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 		methodEClass = createEClass(METHOD);
 		createEReference(methodEClass, METHOD__PARAMS);
 		createEReference(methodEClass, METHOD__RETURN_TYPE);
+
+		constructorEClass = createEClass(CONSTRUCTOR);
+
+		namespaceEClass = createEClass(NAMESPACE);
+		createEReference(namespaceEClass, NAMESPACE__GROUPED_ELEMENTS);
 	}
 
 	/**
@@ -353,6 +411,7 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 		complexTypeEClass.getESuperTypes().add(theDatatypePackage.getDataType());
 		variableEClass.getESuperTypes().add(this.getNamedElement());
 		methodEClass.getESuperTypes().add(this.getNamedElement());
+		constructorEClass.getESuperTypes().add(this.getMethod());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", !IS_ABSTRACT, !IS_INTERFACE,
@@ -368,6 +427,9 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 		initEReference(getComplexType_SuperTypes(), this.getComplexType(), null, "superTypes", null, 0, -1,
 				ComplexType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComplexType_Methods(), this.getMethod(), null, "methods", null, 0, -1, ComplexType.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(variableEClass, Variable.class, "Variable", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
@@ -381,6 +443,15 @@ public class NamedElementsPackageImpl extends EPackageImpl implements NamedEleme
 				IS_ORDERED);
 		initEReference(getMethod_ReturnType(), theDatatypePackage.getDataType(), null, "returnType", null, 0, -1,
 				Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(constructorEClass, Constructor.class, "Constructor", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(namespaceEClass, Namespace.class, "Namespace", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNamespace_GroupedElements(), this.getNamedElement(), null, "groupedElements", null, 0, -1,
+				Namespace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 

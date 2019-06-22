@@ -179,7 +179,7 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getElement_Property() {
+	public EReference getElement_Properties() {
 		return (EReference) elementEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -240,7 +240,7 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
 
 		// Create classes and their features
 		elementEClass = createEClass(ELEMENT);
-		createEReference(elementEClass, ELEMENT__PROPERTY);
+		createEReference(elementEClass, ELEMENT__PROPERTIES);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
@@ -290,7 +290,7 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(elementEClass, Element.class, "Element", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getElement_Property(), this.getProperty(), null, "property", null, 0, -1, Element.class,
+		initEReference(getElement_Properties(), this.getProperty(), null, "properties", null, 0, -1, Element.class,
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

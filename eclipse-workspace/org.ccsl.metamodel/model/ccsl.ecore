@@ -3,6 +3,10 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ccsl" nsURI="http://www.example.org/ccsl" nsPrefix="ccsl">
   <eClassifiers xsi:type="ecore:EClass" name="Rule" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primitiveTypesReferences"
+        upperBound="-1" eType="#//elements/datatype/PrimitiveType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auxiliaryElements" upperBound="-1"
+        eType="#//elements/Element" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeRule" eSuperTypes="#//Rule">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperators"/>
@@ -10,8 +14,8 @@
         eType="#//Rule" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicRule" eSuperTypes="#//Rule">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" lowerBound="1"
-        upperBound="-1" eType="#//elements/Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scope" lowerBound="1" eType="#//elements/Element"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="filter" upperBound="-1"
         eType="#//filters/Filter" containment="true"/>
   </eClassifiers>
@@ -24,15 +28,9 @@
     <eLiterals name="IF_THEN" value="2"/>
     <eLiterals name="ANY" value="3"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MainContent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="1" eType="#//Rule"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="primitiveTypesReferences"
-        upperBound="-1" eType="#//elements/datatype/PrimitiveType" containment="true"/>
-  </eClassifiers>
   <eSubpackages name="elements" nsURI="http://www.example.org/ccsl/elements" nsPrefix="elements">
     <eClassifiers xsi:type="ecore:EClass" name="Element">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="property" upperBound="-1"
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
           eType="#//elements/Property" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Property">
@@ -49,6 +47,8 @@
             eType="#//elements/namedElements/Variable" containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="superTypes" upperBound="-1"
             eType="#//elements/namedElements/ComplexType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+            eType="#//elements/namedElements/Method" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//elements/namedElements/NamedElement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/DataType"/>
@@ -58,6 +58,11 @@
             eType="#//elements/namedElements/Variable" containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" upperBound="-1"
             eType="#//elements/datatype/DataType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Constructor" eSuperTypes="#//elements/namedElements/Method"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Namespace">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="groupedElements" upperBound="-1"
+            eType="#//elements/namedElements/NamedElement" containment="true"/>
       </eClassifiers>
     </eSubpackages>
     <eSubpackages name="statements" nsURI="http://www.example.org/ccsl/elements/statements"
@@ -69,7 +74,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="VariableAccess" eSuperTypes="#//elements/statements/Access"/>
       <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeAccess" eSuperTypes="#//elements/statements/Access"/>
       <eClassifiers xsi:type="ecore:EClass" name="MethodInvocation" eSuperTypes="#//elements/statements/Access">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
@@ -195,8 +200,8 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="AtomicFilter" abstract="true" eSuperTypes="#//filters/Filter">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
-          eType="#//elements/Element"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targets" lowerBound="1"
+          upperBound="-1" eType="#//elements/Element"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CompositeFilter" eSuperTypes="#//filters/Filter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="filters" lowerBound="1"
@@ -210,7 +215,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="TemplateFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="template" lowerBound="1"
           eType="#//elements/Element" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="exact" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="exactMatch" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="DefinesMethod" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="methods" lowerBound="1"
@@ -233,6 +238,9 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="names" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreCase" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
           defaultValueLiteral="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElementRegexMatch" eSuperTypes="#//filters/AtomicFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

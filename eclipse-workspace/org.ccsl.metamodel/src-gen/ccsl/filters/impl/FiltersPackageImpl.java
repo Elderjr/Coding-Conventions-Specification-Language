@@ -29,6 +29,7 @@ import ccsl.filters.EqualsNamedElementWithLiterals;
 import ccsl.filters.Filter;
 import ccsl.filters.FiltersFactory;
 import ccsl.filters.FiltersPackage;
+import ccsl.filters.NamedElementRegexMatch;
 import ccsl.filters.PropertyFilter;
 import ccsl.filters.RegexLiteralValueFilter;
 import ccsl.filters.TemplateFilter;
@@ -124,6 +125,13 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 	 * @generated
 	 */
 	private EClass equalsNamedElementWithLiteralsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass namedElementRegexMatchEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -333,7 +341,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTemplateFilter_Exact() {
+	public EAttribute getTemplateFilter_ExactMatch() {
 		return (EAttribute) templateFilterEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -459,6 +467,24 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getNamedElementRegexMatch() {
+		return namedElementRegexMatchEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNamedElementRegexMatch_Regex() {
+		return (EAttribute) namedElementRegexMatchEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FiltersFactory getFiltersFactory() {
 		return (FiltersFactory) getEFactoryInstance();
 	}
@@ -498,7 +524,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 
 		templateFilterEClass = createEClass(TEMPLATE_FILTER);
 		createEReference(templateFilterEClass, TEMPLATE_FILTER__TEMPLATE);
-		createEAttribute(templateFilterEClass, TEMPLATE_FILTER__EXACT);
+		createEAttribute(templateFilterEClass, TEMPLATE_FILTER__EXACT_MATCH);
 
 		definesMethodEClass = createEClass(DEFINES_METHOD);
 		createEReference(definesMethodEClass, DEFINES_METHOD__METHODS);
@@ -517,6 +543,9 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 		equalsNamedElementWithLiteralsEClass = createEClass(EQUALS_NAMED_ELEMENT_WITH_LITERALS);
 		createEAttribute(equalsNamedElementWithLiteralsEClass, EQUALS_NAMED_ELEMENT_WITH_LITERALS__NAMES);
 		createEAttribute(equalsNamedElementWithLiteralsEClass, EQUALS_NAMED_ELEMENT_WITH_LITERALS__IGNORE_CASE);
+
+		namedElementRegexMatchEClass = createEClass(NAMED_ELEMENT_REGEX_MATCH);
+		createEAttribute(namedElementRegexMatchEClass, NAMED_ELEMENT_REGEX_MATCH__REGEX);
 	}
 
 	/**
@@ -561,6 +590,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 		equalsNamedElementEClass.getESuperTypes().add(this.getAtomicFilter());
 		regexLiteralValueFilterEClass.getESuperTypes().add(this.getAtomicFilter());
 		equalsNamedElementWithLiteralsEClass.getESuperTypes().add(this.getAtomicFilter());
+		namedElementRegexMatchEClass.getESuperTypes().add(this.getAtomicFilter());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(filterEClass, Filter.class, "Filter", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -569,7 +599,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 
 		initEClass(atomicFilterEClass, AtomicFilter.class, "AtomicFilter", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAtomicFilter_Targets(), theElementsPackage.getElement(), null, "targets", null, 0, -1,
+		initEReference(getAtomicFilter_Targets(), theElementsPackage.getElement(), null, "targets", null, 1, -1,
 				AtomicFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -593,7 +623,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 		initEReference(getTemplateFilter_Template(), theElementsPackage.getElement(), null, "template", null, 1, 1,
 				TemplateFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTemplateFilter_Exact(), theXMLTypePackage.getBoolean(), "exact", null, 0, 1,
+		initEAttribute(getTemplateFilter_ExactMatch(), theXMLTypePackage.getBoolean(), "exactMatch", null, 0, 1,
 				TemplateFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 
@@ -635,6 +665,12 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 		initEAttribute(getEqualsNamedElementWithLiterals_IgnoreCase(), theXMLTypePackage.getBoolean(), "ignoreCase",
 				"true", 0, 1, EqualsNamedElementWithLiterals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(namedElementRegexMatchEClass, NamedElementRegexMatch.class, "NamedElementRegexMatch", !IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNamedElementRegexMatch_Regex(), theXMLTypePackage.getString(), "regex", null, 0, 1,
+				NamedElementRegexMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //FiltersPackageImpl

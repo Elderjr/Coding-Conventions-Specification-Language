@@ -60,7 +60,7 @@ public class MethodInvocationItemProvider extends AccessItemProvider {
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS);
+			childrenFeatures.add(StatementsPackage.Literals.METHOD_INVOCATION__ARGS);
 		}
 		return childrenFeatures;
 	}
@@ -108,7 +108,7 @@ public class MethodInvocationItemProvider extends AccessItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MethodInvocation.class)) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -125,85 +125,85 @@ public class MethodInvocationItemProvider extends AccessItemProvider {
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createStatement()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createNamedElementAccess()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createAccess()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createVariableAccess()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createComplexTypeAccess()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createMethodInvocation()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createLiteralValue()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createExpression()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createCompositeExp()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createAtomicExp()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createControlFlow()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createVarAssignment()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createBranchControl()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createLoopControl()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createBlock()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createIfStatement()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createPrefixExp()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createInfixExp()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createPostfixExp()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createSuperMethodInvocation()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createVarDeclaration()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				StatementsFactory.eINSTANCE.createInstanceCreation()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				JavaFactory.eINSTANCE.createJTryClause()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				JavaFactory.eINSTANCE.createJCatchClause()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				JavaFactory.eINSTANCE.createInstanceOf()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				JavaFactory.eINSTANCE.createJFor()));
 
-		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGUMENTS,
+		newChildDescriptors.add(createChildParameter(StatementsPackage.Literals.METHOD_INVOCATION__ARGS,
 				JavaFactory.eINSTANCE.createJReturnStatement()));
 	}
 

@@ -28,21 +28,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.elements.impl.ElementImpl#getProperty <em>Property</em>}</li>
+ *   <li>{@link ccsl.elements.impl.ElementImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ElementImpl extends MinimalEObjectImpl.Container implements Element {
 	/**
-	 * The cached value of the '{@link #getProperty() <em>Property</em>}' containment reference list.
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperty()
+	 * @see #getProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList property;
+	protected EList properties;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -67,11 +67,11 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getProperty() {
-		if (property == null) {
-			property = new EObjectContainmentEList(Property.class, this, ElementsPackage.ELEMENT__PROPERTY);
+	public EList getProperties() {
+		if (properties == null) {
+			properties = new EObjectContainmentEList(Property.class, this, ElementsPackage.ELEMENT__PROPERTIES);
 		}
-		return property;
+		return properties;
 	}
 
 	/**
@@ -81,8 +81,8 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case ElementsPackage.ELEMENT__PROPERTY:
-			return ((InternalEList) getProperty()).basicRemove(otherEnd, msgs);
+		case ElementsPackage.ELEMENT__PROPERTIES:
+			return ((InternalEList) getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -94,8 +94,8 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ElementsPackage.ELEMENT__PROPERTY:
-			return getProperty();
+		case ElementsPackage.ELEMENT__PROPERTIES:
+			return getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -107,9 +107,9 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ElementsPackage.ELEMENT__PROPERTY:
-			getProperty().clear();
-			getProperty().addAll((Collection) newValue);
+		case ElementsPackage.ELEMENT__PROPERTIES:
+			getProperties().clear();
+			getProperties().addAll((Collection) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -122,8 +122,8 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ElementsPackage.ELEMENT__PROPERTY:
-			getProperty().clear();
+		case ElementsPackage.ELEMENT__PROPERTIES:
+			getProperties().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -136,8 +136,8 @@ public class ElementImpl extends MinimalEObjectImpl.Container implements Element
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ElementsPackage.ELEMENT__PROPERTY:
-			return property != null && !property.isEmpty();
+		case ElementsPackage.ELEMENT__PROPERTIES:
+			return properties != null && !properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link ccsl.elements.namedElements.ComplexType#getFields <em>Fields</em>}</li>
  *   <li>{@link ccsl.elements.namedElements.ComplexType#getSuperTypes <em>Super Types</em>}</li>
+ *   <li>{@link ccsl.elements.namedElements.ComplexType#getMethods <em>Methods</em>}</li>
  * </ul>
  *
  * @see ccsl.elements.namedElements.NamedElementsPackage#getComplexType()
@@ -55,5 +56,21 @@ public interface ComplexType extends NamedElement, DataType {
 	 * @generated
 	 */
 	EList getSuperTypes();
+
+	/**
+	 * Returns the value of the '<em><b>Methods</b></em>' containment reference list.
+	 * The list contents are of type {@link ccsl.elements.namedElements.Method}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Methods</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Methods</em>' containment reference list.
+	 * @see ccsl.elements.namedElements.NamedElementsPackage#getComplexType_Methods()
+	 * @model type="ccsl.elements.namedElements.Method" containment="true"
+	 * @generated
+	 */
+	EList getMethods();
 
 } // ComplexType

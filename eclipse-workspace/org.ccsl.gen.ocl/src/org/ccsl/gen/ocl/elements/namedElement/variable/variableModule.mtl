@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[module variableModule('http://www.example.org/ccsl') /]
+
+
+[query public queryConditionVariable(variable: Variable, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): OrderedSet(String) =
+OrderedSet(String){
+  	variable.defineQueryConditionVariableProperties(varName, variable.properties)
+}->select(condition: String | condition.trim().size() > 0)/]
+
+[template public defineQueryCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean) ? (element.oclIsTypeOf(Variable)) post(trim())]
+[for (condition: String | element.oclAsType(Variable).queryConditionVariable(contextElement, varName, filters, exactMatch)) separator('and')]
+[condition /]
+[/for]
+[/template]
+
+[template public defineQueryConditionProperties(element: Element, varName: String, properties: OrderedSet(Property)) ? (element.oclIsTypeOf(Variable)) post(trim())]
+[element.oclAsType(Variable).defineQueryConditionVariableProperties(varName, properties) /]
+[/template]
+
+[template public defineQueryConditionVariableProperties(variable: Variable, varName: String, properties: OrderedSet(Property)) post (trim())]
+[for (property: Property | properties) separator (' and ')]
+[if property.name = 'public'] [varName /].modifier.visibility = java::VisibilityKind::public
+[elseif property.name = 'private'] [varName /].modifier.visibility = java::VisibilityKind::private
+[elseif property.name = 'static'] [varName /].modifier.static
+[elseif property.name = 'final'] [varName /].modifier.inheritance = java::InheritanceKind::final
+[/if]
+[/for]
+[/template]

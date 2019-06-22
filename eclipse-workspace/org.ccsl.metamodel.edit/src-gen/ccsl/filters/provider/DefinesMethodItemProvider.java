@@ -131,6 +131,9 @@ public class DefinesMethodItemProvider extends AtomicFilterItemProvider {
 				NamedElementsFactory.eINSTANCE.createMethod()));
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.DEFINES_METHOD__METHODS,
+				NamedElementsFactory.eINSTANCE.createConstructor()));
+
+		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.DEFINES_METHOD__METHODS,
 				JavaFactory.eINSTANCE.createJMethod()));
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.DEFINES_METHOD__METHODS,

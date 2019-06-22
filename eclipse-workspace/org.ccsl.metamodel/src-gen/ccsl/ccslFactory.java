@@ -49,15 +49,6 @@ public interface ccslFactory extends EFactory {
 	JAnnotations createJAnnotations();
 
 	/**
-	 * Returns a new object of class '<em>Main Content</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Main Content</em>'.
-	 * @generated
-	 */
-	MainContent createMainContent();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

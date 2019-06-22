@@ -71,6 +71,8 @@ public class FiltersFactoryImpl extends EFactoryImpl implements FiltersFactory {
 			return createCountBlockStatementsFilter();
 		case FiltersPackage.EQUALS_NAMED_ELEMENT_WITH_LITERALS:
 			return createEqualsNamedElementWithLiterals();
+		case FiltersPackage.NAMED_ELEMENT_REGEX_MATCH:
+			return createNamedElementRegexMatch();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -154,6 +156,16 @@ public class FiltersFactoryImpl extends EFactoryImpl implements FiltersFactory {
 	public EqualsNamedElementWithLiterals createEqualsNamedElementWithLiterals() {
 		EqualsNamedElementWithLiteralsImpl equalsNamedElementWithLiterals = new EqualsNamedElementWithLiteralsImpl();
 		return equalsNamedElementWithLiterals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NamedElementRegexMatch createNamedElementRegexMatch() {
+		NamedElementRegexMatchImpl namedElementRegexMatch = new NamedElementRegexMatchImpl();
+		return namedElementRegexMatch;
 	}
 
 	/**

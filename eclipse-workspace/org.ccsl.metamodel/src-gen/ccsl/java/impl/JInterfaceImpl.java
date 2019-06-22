@@ -9,6 +9,7 @@ import ccsl.elements.Property;
 import ccsl.elements.datatype.DataType;
 
 import ccsl.elements.namedElements.ComplexType;
+import ccsl.elements.namedElements.Method;
 import ccsl.elements.namedElements.NamedElement;
 import ccsl.elements.namedElements.NamedElementsPackage;
 import ccsl.elements.namedElements.Variable;
@@ -40,24 +41,25 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.java.impl.JInterfaceImpl#getProperty <em>Property</em>}</li>
+ *   <li>{@link ccsl.java.impl.JInterfaceImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link ccsl.java.impl.JInterfaceImpl#getName <em>Name</em>}</li>
  *   <li>{@link ccsl.java.impl.JInterfaceImpl#getFields <em>Fields</em>}</li>
  *   <li>{@link ccsl.java.impl.JInterfaceImpl#getSuperTypes <em>Super Types</em>}</li>
+ *   <li>{@link ccsl.java.impl.JInterfaceImpl#getMethods <em>Methods</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class JInterfaceImpl extends JElementImpl implements JInterface {
 	/**
-	 * The cached value of the '{@link #getProperty() <em>Property</em>}' containment reference list.
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperty()
+	 * @see #getProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList property;
+	protected EList properties;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -100,6 +102,16 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	protected EList superTypes;
 
 	/**
+	 * The cached value of the '{@link #getMethods() <em>Methods</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMethods()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList methods;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -122,11 +134,11 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getProperty() {
-		if (property == null) {
-			property = new EObjectContainmentEList(Property.class, this, JavaPackage.JINTERFACE__PROPERTY);
+	public EList getProperties() {
+		if (properties == null) {
+			properties = new EObjectContainmentEList(Property.class, this, JavaPackage.JINTERFACE__PROPERTIES);
 		}
-		return property;
+		return properties;
 	}
 
 	/**
@@ -179,12 +191,26 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList getMethods() {
+		if (methods == null) {
+			methods = new EObjectContainmentEList(Method.class, this, JavaPackage.JINTERFACE__METHODS);
+		}
+		return methods;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case JavaPackage.JINTERFACE__PROPERTY:
-			return ((InternalEList) getProperty()).basicRemove(otherEnd, msgs);
+		case JavaPackage.JINTERFACE__PROPERTIES:
+			return ((InternalEList) getProperties()).basicRemove(otherEnd, msgs);
 		case JavaPackage.JINTERFACE__FIELDS:
 			return ((InternalEList) getFields()).basicRemove(otherEnd, msgs);
+		case JavaPackage.JINTERFACE__METHODS:
+			return ((InternalEList) getMethods()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -196,14 +222,16 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case JavaPackage.JINTERFACE__PROPERTY:
-			return getProperty();
+		case JavaPackage.JINTERFACE__PROPERTIES:
+			return getProperties();
 		case JavaPackage.JINTERFACE__NAME:
 			return getName();
 		case JavaPackage.JINTERFACE__FIELDS:
 			return getFields();
 		case JavaPackage.JINTERFACE__SUPER_TYPES:
 			return getSuperTypes();
+		case JavaPackage.JINTERFACE__METHODS:
+			return getMethods();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -215,9 +243,9 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case JavaPackage.JINTERFACE__PROPERTY:
-			getProperty().clear();
-			getProperty().addAll((Collection) newValue);
+		case JavaPackage.JINTERFACE__PROPERTIES:
+			getProperties().clear();
+			getProperties().addAll((Collection) newValue);
 			return;
 		case JavaPackage.JINTERFACE__NAME:
 			setName((String) newValue);
@@ -230,6 +258,10 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 			getSuperTypes().clear();
 			getSuperTypes().addAll((Collection) newValue);
 			return;
+		case JavaPackage.JINTERFACE__METHODS:
+			getMethods().clear();
+			getMethods().addAll((Collection) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -241,8 +273,8 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case JavaPackage.JINTERFACE__PROPERTY:
-			getProperty().clear();
+		case JavaPackage.JINTERFACE__PROPERTIES:
+			getProperties().clear();
 			return;
 		case JavaPackage.JINTERFACE__NAME:
 			setName(NAME_EDEFAULT);
@@ -252,6 +284,9 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 			return;
 		case JavaPackage.JINTERFACE__SUPER_TYPES:
 			getSuperTypes().clear();
+			return;
+		case JavaPackage.JINTERFACE__METHODS:
+			getMethods().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -264,14 +299,16 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case JavaPackage.JINTERFACE__PROPERTY:
-			return property != null && !property.isEmpty();
+		case JavaPackage.JINTERFACE__PROPERTIES:
+			return properties != null && !properties.isEmpty();
 		case JavaPackage.JINTERFACE__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case JavaPackage.JINTERFACE__FIELDS:
 			return fields != null && !fields.isEmpty();
 		case JavaPackage.JINTERFACE__SUPER_TYPES:
 			return superTypes != null && !superTypes.isEmpty();
+		case JavaPackage.JINTERFACE__METHODS:
+			return methods != null && !methods.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -284,8 +321,8 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (derivedFeatureID) {
-			case JavaPackage.JINTERFACE__PROPERTY:
-				return ElementsPackage.ELEMENT__PROPERTY;
+			case JavaPackage.JINTERFACE__PROPERTIES:
+				return ElementsPackage.ELEMENT__PROPERTIES;
 			default:
 				return -1;
 			}
@@ -310,6 +347,8 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 				return NamedElementsPackage.COMPLEX_TYPE__FIELDS;
 			case JavaPackage.JINTERFACE__SUPER_TYPES:
 				return NamedElementsPackage.COMPLEX_TYPE__SUPER_TYPES;
+			case JavaPackage.JINTERFACE__METHODS:
+				return NamedElementsPackage.COMPLEX_TYPE__METHODS;
 			default:
 				return -1;
 			}
@@ -325,8 +364,8 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (baseFeatureID) {
-			case ElementsPackage.ELEMENT__PROPERTY:
-				return JavaPackage.JINTERFACE__PROPERTY;
+			case ElementsPackage.ELEMENT__PROPERTIES:
+				return JavaPackage.JINTERFACE__PROPERTIES;
 			default:
 				return -1;
 			}
@@ -351,6 +390,8 @@ public class JInterfaceImpl extends JElementImpl implements JInterface {
 				return JavaPackage.JINTERFACE__FIELDS;
 			case NamedElementsPackage.COMPLEX_TYPE__SUPER_TYPES:
 				return JavaPackage.JINTERFACE__SUPER_TYPES;
+			case NamedElementsPackage.COMPLEX_TYPE__METHODS:
+				return JavaPackage.JINTERFACE__METHODS;
 			default:
 				return -1;
 			}

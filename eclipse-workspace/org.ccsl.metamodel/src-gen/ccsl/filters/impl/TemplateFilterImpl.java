@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link ccsl.filters.impl.TemplateFilterImpl#getTemplate <em>Template</em>}</li>
- *   <li>{@link ccsl.filters.impl.TemplateFilterImpl#isExact <em>Exact</em>}</li>
+ *   <li>{@link ccsl.filters.impl.TemplateFilterImpl#isExactMatch <em>Exact Match</em>}</li>
  * </ul>
  *
  * @generated
@@ -41,24 +41,24 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 	protected Element template;
 
 	/**
-	 * The default value of the '{@link #isExact() <em>Exact</em>}' attribute.
+	 * The default value of the '{@link #isExactMatch() <em>Exact Match</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isExact()
+	 * @see #isExactMatch()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean EXACT_EDEFAULT = false;
+	protected static final boolean EXACT_MATCH_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isExact() <em>Exact</em>}' attribute.
+	 * The cached value of the '{@link #isExactMatch() <em>Exact Match</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isExact()
+	 * @see #isExactMatch()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean exact = EXACT_EDEFAULT;
+	protected boolean exactMatch = EXACT_MATCH_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,8 +133,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isExact() {
-		return exact;
+	public boolean isExactMatch() {
+		return exactMatch;
 	}
 
 	/**
@@ -142,12 +142,12 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setExact(boolean newExact) {
-		boolean oldExact = exact;
-		exact = newExact;
+	public void setExactMatch(boolean newExactMatch) {
+		boolean oldExactMatch = exactMatch;
+		exactMatch = newExactMatch;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FiltersPackage.TEMPLATE_FILTER__EXACT, oldExact,
-					exact));
+			eNotify(new ENotificationImpl(this, Notification.SET, FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH,
+					oldExactMatch, exactMatch));
 	}
 
 	/**
@@ -172,8 +172,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 		switch (featureID) {
 		case FiltersPackage.TEMPLATE_FILTER__TEMPLATE:
 			return getTemplate();
-		case FiltersPackage.TEMPLATE_FILTER__EXACT:
-			return isExact() ? Boolean.TRUE : Boolean.FALSE;
+		case FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH:
+			return isExactMatch() ? Boolean.TRUE : Boolean.FALSE;
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -188,8 +188,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 		case FiltersPackage.TEMPLATE_FILTER__TEMPLATE:
 			setTemplate((Element) newValue);
 			return;
-		case FiltersPackage.TEMPLATE_FILTER__EXACT:
-			setExact(((Boolean) newValue).booleanValue());
+		case FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH:
+			setExactMatch(((Boolean) newValue).booleanValue());
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -205,8 +205,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 		case FiltersPackage.TEMPLATE_FILTER__TEMPLATE:
 			setTemplate((Element) null);
 			return;
-		case FiltersPackage.TEMPLATE_FILTER__EXACT:
-			setExact(EXACT_EDEFAULT);
+		case FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH:
+			setExactMatch(EXACT_MATCH_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -221,8 +221,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 		switch (featureID) {
 		case FiltersPackage.TEMPLATE_FILTER__TEMPLATE:
 			return template != null;
-		case FiltersPackage.TEMPLATE_FILTER__EXACT:
-			return exact != EXACT_EDEFAULT;
+		case FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH:
+			return exactMatch != EXACT_MATCH_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -237,8 +237,8 @@ public class TemplateFilterImpl extends AtomicFilterImpl implements TemplateFilt
 			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (exact: ");
-		result.append(exact);
+		result.append(" (exactMatch: ");
+		result.append(exactMatch);
 		result.append(')');
 		return result.toString();
 	}

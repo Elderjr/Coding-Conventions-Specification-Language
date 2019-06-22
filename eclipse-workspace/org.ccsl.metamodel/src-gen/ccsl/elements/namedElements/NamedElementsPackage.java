@@ -68,13 +68,13 @@ public interface NamedElementsPackage extends EPackage {
 	int NAMED_ELEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_ELEMENT__PROPERTY = ElementsPackage.ELEMENT__PROPERTY;
+	int NAMED_ELEMENT__PROPERTIES = ElementsPackage.ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -105,13 +105,13 @@ public interface NamedElementsPackage extends EPackage {
 	int COMPLEX_TYPE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPLEX_TYPE__PROPERTY = NAMED_ELEMENT__PROPERTY;
+	int COMPLEX_TYPE__PROPERTIES = NAMED_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -141,13 +141,22 @@ public interface NamedElementsPackage extends EPackage {
 	int COMPLEX_TYPE__SUPER_TYPES = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPLEX_TYPE__METHODS = NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Complex Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPLEX_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int COMPLEX_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link ccsl.elements.namedElements.impl.VariableImpl <em>Variable</em>}' class.
@@ -160,13 +169,13 @@ public interface NamedElementsPackage extends EPackage {
 	int VARIABLE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE__PROPERTY = NAMED_ELEMENT__PROPERTY;
+	int VARIABLE__PROPERTIES = NAMED_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -206,13 +215,13 @@ public interface NamedElementsPackage extends EPackage {
 	int METHOD = 3;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METHOD__PROPERTY = NAMED_ELEMENT__PROPERTY;
+	int METHOD__PROPERTIES = NAMED_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -249,6 +258,89 @@ public interface NamedElementsPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link ccsl.elements.namedElements.impl.ConstructorImpl <em>Constructor</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see ccsl.elements.namedElements.impl.ConstructorImpl
+	 * @see ccsl.elements.namedElements.impl.NamedElementsPackageImpl#getConstructor()
+	 * @generated
+	 */
+	int CONSTRUCTOR = 4;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRUCTOR__PROPERTIES = METHOD__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRUCTOR__NAME = METHOD__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Params</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRUCTOR__PARAMS = METHOD__PARAMS;
+
+	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRUCTOR__RETURN_TYPE = METHOD__RETURN_TYPE;
+
+	/**
+	 * The number of structural features of the '<em>Constructor</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSTRUCTOR_FEATURE_COUNT = METHOD_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link ccsl.elements.namedElements.impl.NamespaceImpl <em>Namespace</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see ccsl.elements.namedElements.impl.NamespaceImpl
+	 * @see ccsl.elements.namedElements.impl.NamedElementsPackageImpl#getNamespace()
+	 * @generated
+	 */
+	int NAMESPACE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Grouped Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMESPACE__GROUPED_ELEMENTS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Namespace</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMESPACE_FEATURE_COUNT = 1;
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.elements.namedElements.NamedElement <em>Named Element</em>}'.
@@ -304,6 +396,17 @@ public interface NamedElementsPackage extends EPackage {
 	EReference getComplexType_SuperTypes();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link ccsl.elements.namedElements.ComplexType#getMethods <em>Methods</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Methods</em>'.
+	 * @see ccsl.elements.namedElements.ComplexType#getMethods()
+	 * @see #getComplexType()
+	 * @generated
+	 */
+	EReference getComplexType_Methods();
+
+	/**
 	 * Returns the meta object for class '{@link ccsl.elements.namedElements.Variable <em>Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -355,6 +458,37 @@ public interface NamedElementsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getMethod_ReturnType();
+
+	/**
+	 * Returns the meta object for class '{@link ccsl.elements.namedElements.Constructor <em>Constructor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Constructor</em>'.
+	 * @see ccsl.elements.namedElements.Constructor
+	 * @generated
+	 */
+	EClass getConstructor();
+
+	/**
+	 * Returns the meta object for class '{@link ccsl.elements.namedElements.Namespace <em>Namespace</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Namespace</em>'.
+	 * @see ccsl.elements.namedElements.Namespace
+	 * @generated
+	 */
+	EClass getNamespace();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link ccsl.elements.namedElements.Namespace#getGroupedElements <em>Grouped Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Grouped Elements</em>'.
+	 * @see ccsl.elements.namedElements.Namespace#getGroupedElements()
+	 * @see #getNamespace()
+	 * @generated
+	 */
+	EReference getNamespace_GroupedElements();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -423,6 +557,14 @@ public interface NamedElementsPackage extends EPackage {
 		EReference COMPLEX_TYPE__SUPER_TYPES = eINSTANCE.getComplexType_SuperTypes();
 
 		/**
+		 * The meta object literal for the '<em><b>Methods</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPLEX_TYPE__METHODS = eINSTANCE.getComplexType_Methods();
+
+		/**
 		 * The meta object literal for the '{@link ccsl.elements.namedElements.impl.VariableImpl <em>Variable</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -465,6 +607,34 @@ public interface NamedElementsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference METHOD__RETURN_TYPE = eINSTANCE.getMethod_ReturnType();
+
+		/**
+		 * The meta object literal for the '{@link ccsl.elements.namedElements.impl.ConstructorImpl <em>Constructor</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see ccsl.elements.namedElements.impl.ConstructorImpl
+		 * @see ccsl.elements.namedElements.impl.NamedElementsPackageImpl#getConstructor()
+		 * @generated
+		 */
+		EClass CONSTRUCTOR = eINSTANCE.getConstructor();
+
+		/**
+		 * The meta object literal for the '{@link ccsl.elements.namedElements.impl.NamespaceImpl <em>Namespace</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see ccsl.elements.namedElements.impl.NamespaceImpl
+		 * @see ccsl.elements.namedElements.impl.NamedElementsPackageImpl#getNamespace()
+		 * @generated
+		 */
+		EClass NAMESPACE = eINSTANCE.getNamespace();
+
+		/**
+		 * The meta object literal for the '<em><b>Grouped Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NAMESPACE__GROUPED_ELEMENTS = eINSTANCE.getNamespace_GroupedElements();
 
 	}
 

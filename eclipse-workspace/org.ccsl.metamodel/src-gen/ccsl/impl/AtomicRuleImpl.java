@@ -11,12 +11,15 @@ import ccsl.filters.Filter;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -29,7 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.impl.AtomicRuleImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link ccsl.impl.AtomicRuleImpl#getScope <em>Scope</em>}</li>
  *   <li>{@link ccsl.impl.AtomicRuleImpl#getFilter <em>Filter</em>}</li>
  * </ul>
  *
@@ -37,14 +40,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	/**
-	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
+	 * The cached value of the '{@link #getScope() <em>Scope</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getElements()
+	 * @see #getScope()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList elements;
+	protected Element scope;
 
 	/**
 	 * The cached value of the '{@link #getFilter() <em>Filter</em>}' containment reference list.
@@ -79,11 +82,48 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getElements() {
-		if (elements == null) {
-			elements = new EObjectContainmentEList(Element.class, this, ccslPackage.ATOMIC_RULE__ELEMENTS);
+	public Element getScope() {
+		return scope;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetScope(Element newScope, NotificationChain msgs) {
+		Element oldScope = scope;
+		scope = newScope;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					ccslPackage.ATOMIC_RULE__SCOPE, oldScope, newScope);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
-		return elements;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScope(Element newScope) {
+		if (newScope != scope) {
+			NotificationChain msgs = null;
+			if (scope != null)
+				msgs = ((InternalEObject) scope).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - ccslPackage.ATOMIC_RULE__SCOPE, null, msgs);
+			if (newScope != null)
+				msgs = ((InternalEObject) newScope).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - ccslPackage.ATOMIC_RULE__SCOPE, null, msgs);
+			msgs = basicSetScope(newScope, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ccslPackage.ATOMIC_RULE__SCOPE, newScope, newScope));
 	}
 
 	/**
@@ -105,8 +145,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case ccslPackage.ATOMIC_RULE__ELEMENTS:
-			return ((InternalEList) getElements()).basicRemove(otherEnd, msgs);
+		case ccslPackage.ATOMIC_RULE__SCOPE:
+			return basicSetScope(null, msgs);
 		case ccslPackage.ATOMIC_RULE__FILTER:
 			return ((InternalEList) getFilter()).basicRemove(otherEnd, msgs);
 		}
@@ -120,8 +160,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case ccslPackage.ATOMIC_RULE__ELEMENTS:
-			return getElements();
+		case ccslPackage.ATOMIC_RULE__SCOPE:
+			return getScope();
 		case ccslPackage.ATOMIC_RULE__FILTER:
 			return getFilter();
 		}
@@ -135,9 +175,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case ccslPackage.ATOMIC_RULE__ELEMENTS:
-			getElements().clear();
-			getElements().addAll((Collection) newValue);
+		case ccslPackage.ATOMIC_RULE__SCOPE:
+			setScope((Element) newValue);
 			return;
 		case ccslPackage.ATOMIC_RULE__FILTER:
 			getFilter().clear();
@@ -154,8 +193,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case ccslPackage.ATOMIC_RULE__ELEMENTS:
-			getElements().clear();
+		case ccslPackage.ATOMIC_RULE__SCOPE:
+			setScope((Element) null);
 			return;
 		case ccslPackage.ATOMIC_RULE__FILTER:
 			getFilter().clear();
@@ -171,8 +210,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case ccslPackage.ATOMIC_RULE__ELEMENTS:
-			return elements != null && !elements.isEmpty();
+		case ccslPackage.ATOMIC_RULE__SCOPE:
+			return scope != null;
 		case ccslPackage.ATOMIC_RULE__FILTER:
 			return filter != null && !filter.isEmpty();
 		}

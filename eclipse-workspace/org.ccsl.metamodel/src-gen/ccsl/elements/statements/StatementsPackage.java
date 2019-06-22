@@ -68,13 +68,13 @@ public interface StatementsPackage extends EPackage {
 	int STATEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATEMENT__PROPERTY = ElementsPackage.ELEMENT__PROPERTY;
+	int STATEMENT__PROPERTIES = ElementsPackage.ELEMENT__PROPERTIES;
 
 	/**
 	 * The number of structural features of the '<em>Statement</em>' class.
@@ -96,13 +96,13 @@ public interface StatementsPackage extends EPackage {
 	int NAMED_ELEMENT_ACCESS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_ELEMENT_ACCESS__PROPERTY = STATEMENT__PROPERTY;
+	int NAMED_ELEMENT_ACCESS__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -133,13 +133,13 @@ public interface StatementsPackage extends EPackage {
 	int ACCESS = 5;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACCESS__PROPERTY = STATEMENT__PROPERTY;
+	int ACCESS__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -179,13 +179,13 @@ public interface StatementsPackage extends EPackage {
 	int VARIABLE_ACCESS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE_ACCESS__PROPERTY = ACCESS__PROPERTY;
+	int VARIABLE_ACCESS__PROPERTIES = ACCESS__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -225,13 +225,13 @@ public interface StatementsPackage extends EPackage {
 	int COMPLEX_TYPE_ACCESS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPLEX_TYPE_ACCESS__PROPERTY = ACCESS__PROPERTY;
+	int COMPLEX_TYPE_ACCESS__PROPERTIES = ACCESS__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -271,13 +271,13 @@ public interface StatementsPackage extends EPackage {
 	int METHOD_INVOCATION = 4;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METHOD_INVOCATION__PROPERTY = ACCESS__PROPERTY;
+	int METHOD_INVOCATION__PROPERTIES = ACCESS__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -298,13 +298,13 @@ public interface StatementsPackage extends EPackage {
 	int METHOD_INVOCATION__FROM = ACCESS__FROM;
 
 	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Args</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METHOD_INVOCATION__ARGUMENTS = ACCESS_FEATURE_COUNT + 0;
+	int METHOD_INVOCATION__ARGS = ACCESS_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Method Invocation</em>' class.
@@ -326,13 +326,13 @@ public interface StatementsPackage extends EPackage {
 	int LITERAL_VALUE = 6;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LITERAL_VALUE__PROPERTY = STATEMENT__PROPERTY;
+	int LITERAL_VALUE__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -372,13 +372,13 @@ public interface StatementsPackage extends EPackage {
 	int EXPRESSION = 7;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPRESSION__PROPERTY = STATEMENT__PROPERTY;
+	int EXPRESSION__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The number of structural features of the '<em>Expression</em>' class.
@@ -400,13 +400,13 @@ public interface StatementsPackage extends EPackage {
 	int COMPOSITE_EXP = 8;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_EXP__PROPERTY = EXPRESSION__PROPERTY;
+	int COMPOSITE_EXP__PROPERTIES = EXPRESSION__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Logic Operator</b></em>' attribute.
@@ -446,13 +446,13 @@ public interface StatementsPackage extends EPackage {
 	int ATOMIC_EXP = 9;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_EXP__PROPERTY = EXPRESSION__PROPERTY;
+	int ATOMIC_EXP__PROPERTIES = EXPRESSION__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -483,13 +483,13 @@ public interface StatementsPackage extends EPackage {
 	int CONTROL_FLOW = 10;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTROL_FLOW__PROPERTY = STATEMENT__PROPERTY;
+	int CONTROL_FLOW__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Conditional</b></em>' containment reference.
@@ -520,13 +520,13 @@ public interface StatementsPackage extends EPackage {
 	int VAR_ASSIGNMENT = 11;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VAR_ASSIGNMENT__PROPERTY = STATEMENT__PROPERTY;
+	int VAR_ASSIGNMENT__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' containment reference.
@@ -566,13 +566,13 @@ public interface StatementsPackage extends EPackage {
 	int BRANCH_CONTROL = 12;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BRANCH_CONTROL__PROPERTY = CONTROL_FLOW__PROPERTY;
+	int BRANCH_CONTROL__PROPERTIES = CONTROL_FLOW__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Conditional</b></em>' containment reference.
@@ -603,13 +603,13 @@ public interface StatementsPackage extends EPackage {
 	int LOOP_CONTROL = 13;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOOP_CONTROL__PROPERTY = CONTROL_FLOW__PROPERTY;
+	int LOOP_CONTROL__PROPERTIES = CONTROL_FLOW__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Conditional</b></em>' containment reference.
@@ -640,13 +640,13 @@ public interface StatementsPackage extends EPackage {
 	int BLOCK = 14;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__PROPERTY = STATEMENT__PROPERTY;
+	int BLOCK__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -677,13 +677,13 @@ public interface StatementsPackage extends EPackage {
 	int IF_STATEMENT = 15;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IF_STATEMENT__PROPERTY = CONTROL_FLOW__PROPERTY;
+	int IF_STATEMENT__PROPERTIES = CONTROL_FLOW__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Conditional</b></em>' containment reference.
@@ -732,13 +732,13 @@ public interface StatementsPackage extends EPackage {
 	int PREFIX_EXP = 16;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PREFIX_EXP__PROPERTY = ATOMIC_EXP__PROPERTY;
+	int PREFIX_EXP__PROPERTIES = ATOMIC_EXP__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -778,13 +778,13 @@ public interface StatementsPackage extends EPackage {
 	int INFIX_EXP = 17;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INFIX_EXP__PROPERTY = ATOMIC_EXP__PROPERTY;
+	int INFIX_EXP__PROPERTIES = ATOMIC_EXP__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -833,13 +833,13 @@ public interface StatementsPackage extends EPackage {
 	int POSTFIX_EXP = 18;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int POSTFIX_EXP__PROPERTY = ATOMIC_EXP__PROPERTY;
+	int POSTFIX_EXP__PROPERTIES = ATOMIC_EXP__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -879,13 +879,13 @@ public interface StatementsPackage extends EPackage {
 	int SUPER_METHOD_INVOCATION = 19;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUPER_METHOD_INVOCATION__PROPERTY = METHOD_INVOCATION__PROPERTY;
+	int SUPER_METHOD_INVOCATION__PROPERTIES = METHOD_INVOCATION__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -906,13 +906,13 @@ public interface StatementsPackage extends EPackage {
 	int SUPER_METHOD_INVOCATION__FROM = METHOD_INVOCATION__FROM;
 
 	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Args</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUPER_METHOD_INVOCATION__ARGUMENTS = METHOD_INVOCATION__ARGUMENTS;
+	int SUPER_METHOD_INVOCATION__ARGS = METHOD_INVOCATION__ARGS;
 
 	/**
 	 * The number of structural features of the '<em>Super Method Invocation</em>' class.
@@ -934,13 +934,13 @@ public interface StatementsPackage extends EPackage {
 	int VAR_DECLARATION = 20;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VAR_DECLARATION__PROPERTY = STATEMENT__PROPERTY;
+	int VAR_DECLARATION__PROPERTIES = STATEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -980,13 +980,13 @@ public interface StatementsPackage extends EPackage {
 	int INSTANCE_CREATION = 21;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INSTANCE_CREATION__PROPERTY = METHOD_INVOCATION__PROPERTY;
+	int INSTANCE_CREATION__PROPERTIES = METHOD_INVOCATION__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Element Accessed</b></em>' reference.
@@ -1007,13 +1007,13 @@ public interface StatementsPackage extends EPackage {
 	int INSTANCE_CREATION__FROM = METHOD_INVOCATION__FROM;
 
 	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Args</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INSTANCE_CREATION__ARGUMENTS = METHOD_INVOCATION__ARGUMENTS;
+	int INSTANCE_CREATION__ARGS = METHOD_INVOCATION__ARGS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -1095,15 +1095,15 @@ public interface StatementsPackage extends EPackage {
 	EClass getMethodInvocation();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.elements.statements.MethodInvocation#getArguments <em>Arguments</em>}'.
+	 * Returns the meta object for the containment reference list '{@link ccsl.elements.statements.MethodInvocation#getArgs <em>Args</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Arguments</em>'.
-	 * @see ccsl.elements.statements.MethodInvocation#getArguments()
+	 * @return the meta object for the containment reference list '<em>Args</em>'.
+	 * @see ccsl.elements.statements.MethodInvocation#getArgs()
 	 * @see #getMethodInvocation()
 	 * @generated
 	 */
-	EReference getMethodInvocation_Arguments();
+	EReference getMethodInvocation_Args();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.elements.statements.Access <em>Access</em>}'.
@@ -1576,12 +1576,12 @@ public interface StatementsPackage extends EPackage {
 		EClass METHOD_INVOCATION = eINSTANCE.getMethodInvocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Args</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference METHOD_INVOCATION__ARGUMENTS = eINSTANCE.getMethodInvocation_Arguments();
+		EReference METHOD_INVOCATION__ARGS = eINSTANCE.getMethodInvocation_Args();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.elements.statements.impl.AccessImpl <em>Access</em>}' class.

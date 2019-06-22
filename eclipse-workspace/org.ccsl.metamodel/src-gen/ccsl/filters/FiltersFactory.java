@@ -94,6 +94,15 @@ public interface FiltersFactory extends EFactory {
 	EqualsNamedElementWithLiterals createEqualsNamedElementWithLiterals();
 
 	/**
+	 * Returns a new object of class '<em>Named Element Regex Match</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Named Element Regex Match</em>'.
+	 * @generated
+	 */
+	NamedElementRegexMatch createNamedElementRegexMatch();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -249,6 +249,28 @@ public class FiltersItemProviderAdapterFactory extends FiltersAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link ccsl.filters.NamedElementRegexMatch} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NamedElementRegexMatchItemProvider namedElementRegexMatchItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link ccsl.filters.NamedElementRegexMatch}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Adapter createNamedElementRegexMatchAdapter() {
+		if (namedElementRegexMatchItemProvider == null) {
+			namedElementRegexMatchItemProvider = new NamedElementRegexMatchItemProvider(this);
+		}
+
+		return namedElementRegexMatchItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -360,6 +382,8 @@ public class FiltersItemProviderAdapterFactory extends FiltersAdapterFactory
 			countBlockStatementsFilterItemProvider.dispose();
 		if (equalsNamedElementWithLiteralsItemProvider != null)
 			equalsNamedElementWithLiteralsItemProvider.dispose();
+		if (namedElementRegexMatchItemProvider != null)
+			namedElementRegexMatchItemProvider.dispose();
 	}
 
 }

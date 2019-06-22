@@ -6,6 +6,8 @@ import ccsl.elements.namedElements.ComplexType;
 import ccsl.elements.namedElements.NamedElementsFactory;
 import ccsl.elements.namedElements.NamedElementsPackage;
 
+import ccsl.java.JavaFactory;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -76,6 +78,7 @@ public class ComplexTypeItemProvider extends NamedElementItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(NamedElementsPackage.Literals.COMPLEX_TYPE__FIELDS);
+			childrenFeatures.add(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS);
 		}
 		return childrenFeatures;
 	}
@@ -126,6 +129,7 @@ public class ComplexTypeItemProvider extends NamedElementItemProvider {
 
 		switch (notification.getFeatureID(ComplexType.class)) {
 		case NamedElementsPackage.COMPLEX_TYPE__FIELDS:
+		case NamedElementsPackage.COMPLEX_TYPE__METHODS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -144,6 +148,18 @@ public class ComplexTypeItemProvider extends NamedElementItemProvider {
 
 		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__FIELDS,
 				NamedElementsFactory.eINSTANCE.createVariable()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				NamedElementsFactory.eINSTANCE.createMethod()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				NamedElementsFactory.eINSTANCE.createConstructor()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				JavaFactory.eINSTANCE.createJMethod()));
+
+		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.COMPLEX_TYPE__METHODS,
+				JavaFactory.eINSTANCE.createJConstructor()));
 	}
 
 }

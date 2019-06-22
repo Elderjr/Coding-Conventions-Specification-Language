@@ -58,6 +58,24 @@ public interface NamedElementsFactory extends EFactory {
 	Method createMethod();
 
 	/**
+	 * Returns a new object of class '<em>Constructor</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Constructor</em>'.
+	 * @generated
+	 */
+	Constructor createConstructor();
+
+	/**
+	 * Returns a new object of class '<em>Namespace</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Namespace</em>'.
+	 * @generated
+	 */
+	Namespace createNamespace();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -2,6 +2,8 @@
  */
 package ccsl;
 
+import ccsl.elements.Element;
+
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -13,7 +15,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link ccsl.AtomicRule#getElements <em>Elements</em>}</li>
+ *   <li>{@link ccsl.AtomicRule#getScope <em>Scope</em>}</li>
  *   <li>{@link ccsl.AtomicRule#getFilter <em>Filter</em>}</li>
  * </ul>
  *
@@ -23,20 +25,30 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface AtomicRule extends Rule {
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link ccsl.elements.Element}.
+	 * Returns the value of the '<em><b>Scope</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Scope</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Elements</em>' containment reference list.
-	 * @see ccsl.ccslPackage#getAtomicRule_Elements()
-	 * @model type="ccsl.elements.Element" containment="true" required="true"
+	 * @return the value of the '<em>Scope</em>' containment reference.
+	 * @see #setScope(Element)
+	 * @see ccsl.ccslPackage#getAtomicRule_Scope()
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	EList getElements();
+	Element getScope();
+
+	/**
+	 * Sets the value of the '{@link ccsl.AtomicRule#getScope <em>Scope</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scope</em>' containment reference.
+	 * @see #getScope()
+	 * @generated
+	 */
+	void setScope(Element value);
 
 	/**
 	 * Returns the value of the '<em><b>Filter</b></em>' containment reference list.

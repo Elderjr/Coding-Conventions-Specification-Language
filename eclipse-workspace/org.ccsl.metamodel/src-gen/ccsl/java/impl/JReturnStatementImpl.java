@@ -31,21 +31,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.java.impl.JReturnStatementImpl#getProperty <em>Property</em>}</li>
+ *   <li>{@link ccsl.java.impl.JReturnStatementImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class JReturnStatementImpl extends JElementImpl implements JReturnStatement {
 	/**
-	 * The cached value of the '{@link #getProperty() <em>Property</em>}' containment reference list.
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperty()
+	 * @see #getProperties()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList property;
+	protected EList properties;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,11 +70,11 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getProperty() {
-		if (property == null) {
-			property = new EObjectContainmentEList(Property.class, this, JavaPackage.JRETURN_STATEMENT__PROPERTY);
+	public EList getProperties() {
+		if (properties == null) {
+			properties = new EObjectContainmentEList(Property.class, this, JavaPackage.JRETURN_STATEMENT__PROPERTIES);
 		}
-		return property;
+		return properties;
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-			return ((InternalEList) getProperty()).basicRemove(otherEnd, msgs);
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+			return ((InternalEList) getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -97,8 +97,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-			return getProperty();
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+			return getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,9 +110,9 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-			getProperty().clear();
-			getProperty().addAll((Collection) newValue);
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+			getProperties().clear();
+			getProperties().addAll((Collection) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -125,8 +125,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-			getProperty().clear();
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+			getProperties().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -139,8 +139,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-			return property != null && !property.isEmpty();
+		case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+			return properties != null && !properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -153,8 +153,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (derivedFeatureID) {
-			case JavaPackage.JRETURN_STATEMENT__PROPERTY:
-				return ElementsPackage.ELEMENT__PROPERTY;
+			case JavaPackage.JRETURN_STATEMENT__PROPERTIES:
+				return ElementsPackage.ELEMENT__PROPERTIES;
 			default:
 				return -1;
 			}
@@ -176,8 +176,8 @@ public class JReturnStatementImpl extends JElementImpl implements JReturnStateme
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class baseClass) {
 		if (baseClass == Element.class) {
 			switch (baseFeatureID) {
-			case ElementsPackage.ELEMENT__PROPERTY:
-				return JavaPackage.JRETURN_STATEMENT__PROPERTY;
+			case ElementsPackage.ELEMENT__PROPERTIES:
+				return JavaPackage.JRETURN_STATEMENT__PROPERTIES;
 			default:
 				return -1;
 			}

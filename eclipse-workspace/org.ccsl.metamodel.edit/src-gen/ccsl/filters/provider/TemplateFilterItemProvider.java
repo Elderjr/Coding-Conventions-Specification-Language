@@ -52,24 +52,24 @@ public class TemplateFilterItemProvider extends AtomicFilterItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addExactPropertyDescriptor(object);
+			addExactMatchPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Exact feature.
+	 * This adds a property descriptor for the Exact Match feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addExactPropertyDescriptor(Object object) {
+	protected void addExactMatchPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_TemplateFilter_exact_feature"),
-						getString("_UI_PropertyDescriptor_description", "_UI_TemplateFilter_exact_feature",
+						getResourceLocator(), getString("_UI_TemplateFilter_exactMatch_feature"),
+						getString("_UI_PropertyDescriptor_description", "_UI_TemplateFilter_exactMatch_feature",
 								"_UI_TemplateFilter_type"),
-						FiltersPackage.Literals.TEMPLATE_FILTER__EXACT, true, false, false,
+						FiltersPackage.Literals.TEMPLATE_FILTER__EXACT_MATCH, true, false, false,
 						ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
@@ -133,7 +133,7 @@ public class TemplateFilterItemProvider extends AtomicFilterItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(TemplateFilter.class)) {
-		case FiltersPackage.TEMPLATE_FILTER__EXACT:
+		case FiltersPackage.TEMPLATE_FILTER__EXACT_MATCH:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case FiltersPackage.TEMPLATE_FILTER__TEMPLATE:
@@ -167,6 +167,9 @@ public class TemplateFilterItemProvider extends AtomicFilterItemProvider {
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.TEMPLATE_FILTER__TEMPLATE,
 				NamedElementsFactory.eINSTANCE.createMethod()));
+
+		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.TEMPLATE_FILTER__TEMPLATE,
+				NamedElementsFactory.eINSTANCE.createConstructor()));
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.TEMPLATE_FILTER__TEMPLATE,
 				StatementsFactory.eINSTANCE.createStatement()));

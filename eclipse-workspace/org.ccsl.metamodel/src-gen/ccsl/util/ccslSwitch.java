@@ -111,13 +111,6 @@ public class ccslSwitch {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case ccslPackage.MAIN_CONTENT: {
-			MainContent mainContent = (MainContent) theEObject;
-			Object result = caseMainContent(mainContent);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -180,21 +173,6 @@ public class ccslSwitch {
 	 * @generated
 	 */
 	public Object caseJAnnotations(JAnnotations object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Main Content</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Main Content</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public Object caseMainContent(MainContent object) {
 		return null;
 	}
 

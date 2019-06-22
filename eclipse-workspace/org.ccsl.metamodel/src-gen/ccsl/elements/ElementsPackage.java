@@ -66,13 +66,13 @@ public interface ElementsPackage extends EPackage {
 	int ELEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT__PROPERTY = 0;
+	int ELEMENT__PROPERTIES = 0;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -131,15 +131,15 @@ public interface ElementsPackage extends EPackage {
 	EClass getElement();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.elements.Element#getProperty <em>Property</em>}'.
+	 * Returns the meta object for the containment reference list '{@link ccsl.elements.Element#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Property</em>'.
-	 * @see ccsl.elements.Element#getProperty()
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see ccsl.elements.Element#getProperties()
 	 * @see #getElement()
 	 * @generated
 	 */
-	EReference getElement_Property();
+	EReference getElement_Properties();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.elements.Property <em>Property</em>}'.
@@ -206,12 +206,12 @@ public interface ElementsPackage extends EPackage {
 		EClass ELEMENT = eINSTANCE.getElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Property</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ELEMENT__PROPERTY = eINSTANCE.getElement_Property();
+		EReference ELEMENT__PROPERTIES = eINSTANCE.getElement_Properties();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.elements.impl.PropertyImpl <em>Property</em>}' class.

@@ -1,24 +1,23 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::namedElement::namedElementToOcl /]
-[import org::ccsl::gen::ocl::elements::namedElement::variable::variableToOcl /]
+[import org::ccsl::gen::ocl::elements::elementModule/]
+[import org::ccsl::gen::ocl::filters::filterModule /]
 
 
-[template public main(mainContent : MainContent)]
+[template public main(rule : Rule)]
 [comment @main/]
-[file ('ocl',false, 'UTF-8')]
-[mainContent.rule.ruleToOcl()/]
+[file ('gen',false, 'UTF-8')]
+[rule.defineOcl()/]
 [/file]
 [/template]
 
-[template public ruleToOcl(rule : Rule) ? (oclIsTypeOf(AtomicRule)) post(trim())]
-[let atomicRule: AtomicRule = rule.oclAsType(AtomicRule)]
-[for (element: Element | atomicRule.elements)]
-[element.elementToOcl()/]
-[/for]
-[/let]
+[template public defineOcl(rule : Rule) ? (oclIsTypeOf(AtomicRule)) post(trim())] 
+[rule.oclAsType(AtomicRule).scope.callDefineSelectQuery(OrderedSet(AtomicFilter){}) /]
 [/template]
 
-[template public ruleToOcl(rule : Rule) ? (oclIsTypeOf(CompositeRule)) post(trim())]
-### Composite Rule not yet supported ###
+
+[template public defineOcl(rule : Rule) ? (oclIsTypeOf(CompositeRule)) post(trim())]
+### Composite Rule not supported yet ###
 [/template]
+
+

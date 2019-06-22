@@ -105,6 +105,10 @@ public class FiltersAdapterFactory extends AdapterFactoryImpl {
 			return createEqualsNamedElementWithLiteralsAdapter();
 		}
 
+		public Object caseNamedElementRegexMatch(NamedElementRegexMatch object) {
+			return createNamedElementRegexMatchAdapter();
+		}
+
 		public Object defaultCase(EObject object) {
 			return createEObjectAdapter();
 		}
@@ -259,6 +263,20 @@ public class FiltersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEqualsNamedElementWithLiteralsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link ccsl.filters.NamedElementRegexMatch <em>Named Element Regex Match</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see ccsl.filters.NamedElementRegexMatch
+	 * @generated
+	 */
+	public Adapter createNamedElementRegexMatchAdapter() {
 		return null;
 	}
 

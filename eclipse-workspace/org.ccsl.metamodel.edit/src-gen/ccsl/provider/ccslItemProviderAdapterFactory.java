@@ -139,28 +139,6 @@ public class ccslItemProviderAdapterFactory extends ccslAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link ccsl.MainContent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MainContentItemProvider mainContentItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link ccsl.MainContent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createMainContentAdapter() {
-		if (mainContentItemProvider == null) {
-			mainContentItemProvider = new MainContentItemProvider(this);
-		}
-
-		return mainContentItemProvider;
-	}
-
-	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -262,8 +240,6 @@ public class ccslItemProviderAdapterFactory extends ccslAdapterFactory
 			atomicRuleItemProvider.dispose();
 		if (jAnnotationsItemProvider != null)
 			jAnnotationsItemProvider.dispose();
-		if (mainContentItemProvider != null)
-			mainContentItemProvider.dispose();
 	}
 
 }

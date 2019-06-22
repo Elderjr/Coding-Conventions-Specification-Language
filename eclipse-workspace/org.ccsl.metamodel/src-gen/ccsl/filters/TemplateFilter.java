@@ -14,7 +14,7 @@ import ccsl.elements.Element;
  * </p>
  * <ul>
  *   <li>{@link ccsl.filters.TemplateFilter#getTemplate <em>Template</em>}</li>
- *   <li>{@link ccsl.filters.TemplateFilter#isExact <em>Exact</em>}</li>
+ *   <li>{@link ccsl.filters.TemplateFilter#isExactMatch <em>Exact Match</em>}</li>
  * </ul>
  *
  * @see ccsl.filters.FiltersPackage#getTemplateFilter()
@@ -49,29 +49,29 @@ public interface TemplateFilter extends AtomicFilter {
 	void setTemplate(Element value);
 
 	/**
-	 * Returns the value of the '<em><b>Exact</b></em>' attribute.
+	 * Returns the value of the '<em><b>Exact Match</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Exact</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Exact Match</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Exact</em>' attribute.
-	 * @see #setExact(boolean)
-	 * @see ccsl.filters.FiltersPackage#getTemplateFilter_Exact()
+	 * @return the value of the '<em>Exact Match</em>' attribute.
+	 * @see #setExactMatch(boolean)
+	 * @see ccsl.filters.FiltersPackage#getTemplateFilter_ExactMatch()
 	 * @model dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
-	boolean isExact();
+	boolean isExactMatch();
 
 	/**
-	 * Sets the value of the '{@link ccsl.filters.TemplateFilter#isExact <em>Exact</em>}' attribute.
+	 * Sets the value of the '{@link ccsl.filters.TemplateFilter#isExactMatch <em>Exact Match</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Exact</em>' attribute.
-	 * @see #isExact()
+	 * @param value the new value of the '<em>Exact Match</em>' attribute.
+	 * @see #isExactMatch()
 	 * @generated
 	 */
-	void setExact(boolean value);
+	void setExactMatch(boolean value);
 
 } // TemplateFilter

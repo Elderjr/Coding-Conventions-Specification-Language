@@ -88,13 +88,13 @@ public interface JavaPackage extends EPackage {
 	int JCLASS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__PROPERTY = NamedElementsPackage.COMPLEX_TYPE__PROPERTY;
+	int JCLASS__PROPERTIES = NamedElementsPackage.COMPLEX_TYPE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -122,6 +122,15 @@ public interface JavaPackage extends EPackage {
 	 * @ordered
 	 */
 	int JCLASS__SUPER_TYPES = NamedElementsPackage.COMPLEX_TYPE__SUPER_TYPES;
+
+	/**
+	 * The feature id for the '<em><b>Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JCLASS__METHODS = NamedElementsPackage.COMPLEX_TYPE__METHODS;
 
 	/**
 	 * The feature id for the '<em><b>Nested Classes</b></em>' containment reference list.
@@ -170,13 +179,13 @@ public interface JavaPackage extends EPackage {
 	int JINTERFACE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JINTERFACE__PROPERTY = JELEMENT_FEATURE_COUNT + 0;
+	int JINTERFACE__PROPERTIES = JELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -206,13 +215,22 @@ public interface JavaPackage extends EPackage {
 	int JINTERFACE__SUPER_TYPES = JELEMENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JINTERFACE__METHODS = JELEMENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>JInterface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JINTERFACE_FEATURE_COUNT = JELEMENT_FEATURE_COUNT + 4;
+	int JINTERFACE_FEATURE_COUNT = JELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link ccsl.java.impl.JMethodImpl <em>JMethod</em>}' class.
@@ -225,13 +243,13 @@ public interface JavaPackage extends EPackage {
 	int JMETHOD = 3;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JMETHOD__PROPERTY = NamedElementsPackage.METHOD__PROPERTY;
+	int JMETHOD__PROPERTIES = NamedElementsPackage.METHOD__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -289,13 +307,13 @@ public interface JavaPackage extends EPackage {
 	int JCONSTRUCTOR = 4;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JCONSTRUCTOR__PROPERTY = JMETHOD__PROPERTY;
+	int JCONSTRUCTOR__PROPERTIES = JMETHOD__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -390,13 +408,13 @@ public interface JavaPackage extends EPackage {
 	int JTRY_CLAUSE = 6;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JTRY_CLAUSE__PROPERTY = StatementsPackage.BLOCK__PROPERTY;
+	int JTRY_CLAUSE__PROPERTIES = StatementsPackage.BLOCK__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -436,13 +454,13 @@ public interface JavaPackage extends EPackage {
 	int JCATCH_CLAUSE = 7;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JCATCH_CLAUSE__PROPERTY = StatementsPackage.BLOCK__PROPERTY;
+	int JCATCH_CLAUSE__PROPERTIES = StatementsPackage.BLOCK__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -491,13 +509,13 @@ public interface JavaPackage extends EPackage {
 	int INSTANCE_OF = 8;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INSTANCE_OF__PROPERTY = JELEMENT_FEATURE_COUNT + 0;
+	int INSTANCE_OF__PROPERTIES = JELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -574,13 +592,13 @@ public interface JavaPackage extends EPackage {
 	int JFOR = 10;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JFOR__PROPERTY = StatementsPackage.BLOCK__PROPERTY;
+	int JFOR__PROPERTIES = StatementsPackage.BLOCK__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Statements</b></em>' containment reference list.
@@ -638,13 +656,13 @@ public interface JavaPackage extends EPackage {
 	int JRETURN_STATEMENT = 11;
 
 	/**
-	 * The feature id for the '<em><b>Property</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JRETURN_STATEMENT__PROPERTY = JELEMENT_FEATURE_COUNT + 0;
+	int JRETURN_STATEMENT__PROPERTIES = JELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>JReturn Statement</em>' class.

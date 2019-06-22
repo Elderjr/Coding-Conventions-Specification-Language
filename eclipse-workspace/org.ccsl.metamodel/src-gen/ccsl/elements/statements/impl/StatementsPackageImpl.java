@@ -384,7 +384,7 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getMethodInvocation_Arguments() {
+	public EReference getMethodInvocation_Args() {
 		return (EReference) methodInvocationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -760,7 +760,7 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 		complexTypeAccessEClass = createEClass(COMPLEX_TYPE_ACCESS);
 
 		methodInvocationEClass = createEClass(METHOD_INVOCATION);
-		createEReference(methodInvocationEClass, METHOD_INVOCATION__ARGUMENTS);
+		createEReference(methodInvocationEClass, METHOD_INVOCATION__ARGS);
 
 		accessEClass = createEClass(ACCESS);
 		createEReference(accessEClass, ACCESS__ELEMENT_ACCESSED);
@@ -894,7 +894,7 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 
 		initEClass(methodInvocationEClass, MethodInvocation.class, "MethodInvocation", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMethodInvocation_Arguments(), this.getStatement(), null, "arguments", null, 0, -1,
+		initEReference(getMethodInvocation_Args(), this.getStatement(), null, "args", null, 0, -1,
 				MethodInvocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

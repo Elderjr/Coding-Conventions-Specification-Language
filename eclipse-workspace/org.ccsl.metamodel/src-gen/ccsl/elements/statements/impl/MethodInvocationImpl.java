@@ -26,21 +26,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link ccsl.elements.statements.impl.MethodInvocationImpl#getArguments <em>Arguments</em>}</li>
+ *   <li>{@link ccsl.elements.statements.impl.MethodInvocationImpl#getArgs <em>Args</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class MethodInvocationImpl extends AccessImpl implements MethodInvocation {
 	/**
-	 * The cached value of the '{@link #getArguments() <em>Arguments</em>}' containment reference list.
+	 * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getArguments()
+	 * @see #getArgs()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList arguments;
+	protected EList args;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -65,12 +65,11 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getArguments() {
-		if (arguments == null) {
-			arguments = new EObjectContainmentEList(Statement.class, this,
-					StatementsPackage.METHOD_INVOCATION__ARGUMENTS);
+	public EList getArgs() {
+		if (args == null) {
+			args = new EObjectContainmentEList(Statement.class, this, StatementsPackage.METHOD_INVOCATION__ARGS);
 		}
-		return arguments;
+		return args;
 	}
 
 	/**
@@ -80,8 +79,8 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 */
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
-			return ((InternalEList) getArguments()).basicRemove(otherEnd, msgs);
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
+			return ((InternalEList) getArgs()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -93,8 +92,8 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 */
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
-			return getArguments();
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
+			return getArgs();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -106,9 +105,9 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 */
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
-			getArguments().clear();
-			getArguments().addAll((Collection) newValue);
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
+			getArgs().clear();
+			getArgs().addAll((Collection) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -121,8 +120,8 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 */
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
-			getArguments().clear();
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
+			getArgs().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -135,8 +134,8 @@ public class MethodInvocationImpl extends AccessImpl implements MethodInvocation
 	 */
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case StatementsPackage.METHOD_INVOCATION__ARGUMENTS:
-			return arguments != null && !arguments.isEmpty();
+		case StatementsPackage.METHOD_INVOCATION__ARGS:
+			return args != null && !args.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ccsl:MainContent xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements">
-  <rule xsi:type="ccsl:AtomicRule">
-    <elements xsi:type="namedElements:Variable" name="x" type="//@primitiveTypesReferences.0"/>
-  </rule>
-  <primitiveTypesReferences name="short"/>
-</ccsl:MainContent>

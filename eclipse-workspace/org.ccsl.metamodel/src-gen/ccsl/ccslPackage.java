@@ -76,13 +76,31 @@ public interface ccslPackage extends EPackage {
 	int RULE__NEGATED = 0;
 
 	/**
+	 * The feature id for the '<em><b>Primitive Types References</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RULE__PRIMITIVE_TYPES_REFERENCES = 1;
+
+	/**
+	 * The feature id for the '<em><b>Auxiliary Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RULE__AUXILIARY_ELEMENTS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Rule</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RULE_FEATURE_COUNT = 1;
+	int RULE_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link ccsl.impl.CompositeRuleImpl <em>Composite Rule</em>}' class.
@@ -102,6 +120,24 @@ public interface ccslPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE_RULE__NEGATED = RULE__NEGATED;
+
+	/**
+	 * The feature id for the '<em><b>Primitive Types References</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_RULE__PRIMITIVE_TYPES_REFERENCES = RULE__PRIMITIVE_TYPES_REFERENCES;
+
+	/**
+	 * The feature id for the '<em><b>Auxiliary Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE_RULE__AUXILIARY_ELEMENTS = RULE__AUXILIARY_ELEMENTS;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -150,13 +186,31 @@ public interface ccslPackage extends EPackage {
 	int ATOMIC_RULE__NEGATED = RULE__NEGATED;
 
 	/**
-	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Primitive Types References</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_RULE__ELEMENTS = RULE_FEATURE_COUNT + 0;
+	int ATOMIC_RULE__PRIMITIVE_TYPES_REFERENCES = RULE__PRIMITIVE_TYPES_REFERENCES;
+
+	/**
+	 * The feature id for the '<em><b>Auxiliary Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_RULE__AUXILIARY_ELEMENTS = RULE__AUXILIARY_ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Scope</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOMIC_RULE__SCOPE = RULE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Filter</b></em>' containment reference list.
@@ -205,43 +259,6 @@ public interface ccslPackage extends EPackage {
 	int JANNOTATIONS_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link ccsl.impl.MainContentImpl <em>Main Content</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see ccsl.impl.MainContentImpl
-	 * @see ccsl.impl.ccslPackageImpl#getMainContent()
-	 * @generated
-	 */
-	int MAIN_CONTENT = 4;
-
-	/**
-	 * The feature id for the '<em><b>Rule</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAIN_CONTENT__RULE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Primitive Types References</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAIN_CONTENT__PRIMITIVE_TYPES_REFERENCES = 1;
-
-	/**
-	 * The number of structural features of the '<em>Main Content</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAIN_CONTENT_FEATURE_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link ccsl.LogicOperators <em>Logic Operators</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -249,7 +266,7 @@ public interface ccslPackage extends EPackage {
 	 * @see ccsl.impl.ccslPackageImpl#getLogicOperators()
 	 * @generated
 	 */
-	int LOGIC_OPERATORS = 5;
+	int LOGIC_OPERATORS = 4;
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.Rule <em>Rule</em>}'.
@@ -271,6 +288,28 @@ public interface ccslPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRule_Negated();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link ccsl.Rule#getPrimitiveTypesReferences <em>Primitive Types References</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Primitive Types References</em>'.
+	 * @see ccsl.Rule#getPrimitiveTypesReferences()
+	 * @see #getRule()
+	 * @generated
+	 */
+	EReference getRule_PrimitiveTypesReferences();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link ccsl.Rule#getAuxiliaryElements <em>Auxiliary Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Auxiliary Elements</em>'.
+	 * @see ccsl.Rule#getAuxiliaryElements()
+	 * @see #getRule()
+	 * @generated
+	 */
+	EReference getRule_AuxiliaryElements();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.CompositeRule <em>Composite Rule</em>}'.
@@ -315,15 +354,15 @@ public interface ccslPackage extends EPackage {
 	EClass getAtomicRule();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.AtomicRule#getElements <em>Elements</em>}'.
+	 * Returns the meta object for the containment reference '{@link ccsl.AtomicRule#getScope <em>Scope</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Elements</em>'.
-	 * @see ccsl.AtomicRule#getElements()
+	 * @return the meta object for the containment reference '<em>Scope</em>'.
+	 * @see ccsl.AtomicRule#getScope()
 	 * @see #getAtomicRule()
 	 * @generated
 	 */
-	EReference getAtomicRule_Elements();
+	EReference getAtomicRule_Scope();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link ccsl.AtomicRule#getFilter <em>Filter</em>}'.
@@ -356,38 +395,6 @@ public interface ccslPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getJAnnotations_Name();
-
-	/**
-	 * Returns the meta object for class '{@link ccsl.MainContent <em>Main Content</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Main Content</em>'.
-	 * @see ccsl.MainContent
-	 * @generated
-	 */
-	EClass getMainContent();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link ccsl.MainContent#getRule <em>Rule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Rule</em>'.
-	 * @see ccsl.MainContent#getRule()
-	 * @see #getMainContent()
-	 * @generated
-	 */
-	EReference getMainContent_Rule();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.MainContent#getPrimitiveTypesReferences <em>Primitive Types References</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Primitive Types References</em>'.
-	 * @see ccsl.MainContent#getPrimitiveTypesReferences()
-	 * @see #getMainContent()
-	 * @generated
-	 */
-	EReference getMainContent_PrimitiveTypesReferences();
 
 	/**
 	 * Returns the meta object for enum '{@link ccsl.LogicOperators <em>Logic Operators</em>}'.
@@ -440,6 +447,22 @@ public interface ccslPackage extends EPackage {
 		EAttribute RULE__NEGATED = eINSTANCE.getRule_Negated();
 
 		/**
+		 * The meta object literal for the '<em><b>Primitive Types References</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RULE__PRIMITIVE_TYPES_REFERENCES = eINSTANCE.getRule_PrimitiveTypesReferences();
+
+		/**
+		 * The meta object literal for the '<em><b>Auxiliary Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RULE__AUXILIARY_ELEMENTS = eINSTANCE.getRule_AuxiliaryElements();
+
+		/**
 		 * The meta object literal for the '{@link ccsl.impl.CompositeRuleImpl <em>Composite Rule</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -476,12 +499,12 @@ public interface ccslPackage extends EPackage {
 		EClass ATOMIC_RULE = eINSTANCE.getAtomicRule();
 
 		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Scope</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ATOMIC_RULE__ELEMENTS = eINSTANCE.getAtomicRule_Elements();
+		EReference ATOMIC_RULE__SCOPE = eINSTANCE.getAtomicRule_Scope();
 
 		/**
 		 * The meta object literal for the '<em><b>Filter</b></em>' containment reference list feature.
@@ -508,32 +531,6 @@ public interface ccslPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute JANNOTATIONS__NAME = eINSTANCE.getJAnnotations_Name();
-
-		/**
-		 * The meta object literal for the '{@link ccsl.impl.MainContentImpl <em>Main Content</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see ccsl.impl.MainContentImpl
-		 * @see ccsl.impl.ccslPackageImpl#getMainContent()
-		 * @generated
-		 */
-		EClass MAIN_CONTENT = eINSTANCE.getMainContent();
-
-		/**
-		 * The meta object literal for the '<em><b>Rule</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MAIN_CONTENT__RULE = eINSTANCE.getMainContent_Rule();
-
-		/**
-		 * The meta object literal for the '<em><b>Primitive Types References</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MAIN_CONTENT__PRIMITIVE_TYPES_REFERENCES = eINSTANCE.getMainContent_PrimitiveTypesReferences();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.LogicOperators <em>Logic Operators</em>}' enum.

@@ -63,6 +63,10 @@ public class NamedElementsFactoryImpl extends EFactoryImpl implements NamedEleme
 			return createVariable();
 		case NamedElementsPackage.METHOD:
 			return createMethod();
+		case NamedElementsPackage.CONSTRUCTOR:
+			return createConstructor();
+		case NamedElementsPackage.NAMESPACE:
+			return createNamespace();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -106,6 +110,26 @@ public class NamedElementsFactoryImpl extends EFactoryImpl implements NamedEleme
 	public Method createMethod() {
 		MethodImpl method = new MethodImpl();
 		return method;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Constructor createConstructor() {
+		ConstructorImpl constructor = new ConstructorImpl();
+		return constructor;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Namespace createNamespace() {
+		NamespaceImpl namespace = new NamespaceImpl();
+		return namespace;
 	}
 
 	/**

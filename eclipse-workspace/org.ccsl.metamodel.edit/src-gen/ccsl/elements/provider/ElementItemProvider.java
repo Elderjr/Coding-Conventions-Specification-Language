@@ -69,7 +69,7 @@ public class ElementItemProvider extends ItemProviderAdapter implements IEditing
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTY);
+			childrenFeatures.add(ElementsPackage.Literals.ELEMENT__PROPERTIES);
 		}
 		return childrenFeatures;
 	}
@@ -117,7 +117,7 @@ public class ElementItemProvider extends ItemProviderAdapter implements IEditing
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Element.class)) {
-		case ElementsPackage.ELEMENT__PROPERTY:
+		case ElementsPackage.ELEMENT__PROPERTIES:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -134,7 +134,7 @@ public class ElementItemProvider extends ItemProviderAdapter implements IEditing
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTY,
+		newChildDescriptors.add(createChildParameter(ElementsPackage.Literals.ELEMENT__PROPERTIES,
 				ElementsFactory.eINSTANCE.createProperty()));
 	}
 
