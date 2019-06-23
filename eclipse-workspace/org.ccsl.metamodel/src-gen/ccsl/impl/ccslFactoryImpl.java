@@ -73,8 +73,8 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 	 */
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-		case ccslPackage.LOGIC_OPERATORS:
-			return createLogicOperatorsFromString(eDataType, initialValue);
+		case ccslPackage.LOGIC_OPERATOR:
+			return createLogicOperatorFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -87,8 +87,8 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 	 */
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-		case ccslPackage.LOGIC_OPERATORS:
-			return convertLogicOperatorsToString(eDataType, instanceValue);
+		case ccslPackage.LOGIC_OPERATOR:
+			return convertLogicOperatorToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -129,8 +129,8 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LogicOperators createLogicOperatorsFromString(EDataType eDataType, String initialValue) {
-		LogicOperators result = LogicOperators.get(initialValue);
+	public LogicOperator createLogicOperatorFromString(EDataType eDataType, String initialValue) {
+		LogicOperator result = LogicOperator.get(initialValue);
 		if (result == null)
 			throw new IllegalArgumentException(
 					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -142,7 +142,7 @@ public class ccslFactoryImpl extends EFactoryImpl implements ccslFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertLogicOperatorsToString(EDataType eDataType, Object instanceValue) {
+	public String convertLogicOperatorToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

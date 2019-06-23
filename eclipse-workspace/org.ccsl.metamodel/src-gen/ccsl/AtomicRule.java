@@ -16,7 +16,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link ccsl.AtomicRule#getScope <em>Scope</em>}</li>
- *   <li>{@link ccsl.AtomicRule#getFilter <em>Filter</em>}</li>
+ *   <li>{@link ccsl.AtomicRule#getFilters <em>Filters</em>}</li>
  * </ul>
  *
  * @see ccsl.ccslPackage#getAtomicRule()
@@ -51,19 +51,19 @@ public interface AtomicRule extends Rule {
 	void setScope(Element value);
 
 	/**
-	 * Returns the value of the '<em><b>Filter</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Filters</b></em>' containment reference list.
 	 * The list contents are of type {@link ccsl.filters.Filter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Filter</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Filters</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Filter</em>' containment reference list.
-	 * @see ccsl.ccslPackage#getAtomicRule_Filter()
+	 * @return the value of the '<em>Filters</em>' containment reference list.
+	 * @see ccsl.ccslPackage#getAtomicRule_Filters()
 	 * @model type="ccsl.filters.Filter" containment="true"
 	 * @generated
 	 */
-	EList getFilter();
+	EList getFilters();
 
 } // AtomicRule

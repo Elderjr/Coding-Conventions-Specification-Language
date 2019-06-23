@@ -9,11 +9,10 @@
   <foreignModel>ccsl.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
   <genPackages prefix="ccsl" disposableProviderFactory="true" ecorePackage="ccsl.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//LogicOperators">
-      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperators/AND"/>
-      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperators/OR"/>
-      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperators/IF_THEN"/>
-      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperators/ANY"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//LogicOperator">
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperator/AND"/>
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperator/OR"/>
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperator/IF_THEN"/>
     </genEnums>
     <genClasses image="false" ecoreClass="ccsl.ecore#//Rule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//Rule/negated"/>
@@ -26,7 +25,7 @@
     </genClasses>
     <genClasses ecoreClass="ccsl.ecore#//AtomicRule">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//AtomicRule/scope"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//AtomicRule/filter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//AtomicRule/filters"/>
     </genClasses>
     <genClasses ecoreClass="ccsl.ecore#//JAnnotations">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//JAnnotations/name"/>
@@ -87,7 +86,6 @@
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/Expression"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/CompositeExp">
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/CompositeExp/logicOperator"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/CompositeExp/expressions"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/AtomicExp">

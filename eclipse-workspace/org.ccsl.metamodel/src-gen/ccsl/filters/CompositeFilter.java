@@ -2,7 +2,7 @@
  */
 package ccsl.filters;
 
-import ccsl.LogicOperators;
+import ccsl.LogicOperator;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -42,7 +42,7 @@ public interface CompositeFilter extends Filter {
 
 	/**
 	 * Returns the value of the '<em><b>Operator</b></em>' attribute.
-	 * The literals are from the enumeration {@link ccsl.LogicOperators}.
+	 * The literals are from the enumeration {@link ccsl.LogicOperator}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Operator</em>' attribute isn't clear,
@@ -50,23 +50,23 @@ public interface CompositeFilter extends Filter {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operator</em>' attribute.
-	 * @see ccsl.LogicOperators
-	 * @see #setOperator(LogicOperators)
+	 * @see ccsl.LogicOperator
+	 * @see #setOperator(LogicOperator)
 	 * @see ccsl.filters.FiltersPackage#getCompositeFilter_Operator()
 	 * @model
 	 * @generated
 	 */
-	LogicOperators getOperator();
+	LogicOperator getOperator();
 
 	/**
 	 * Sets the value of the '{@link ccsl.filters.CompositeFilter#getOperator <em>Operator</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Operator</em>' attribute.
-	 * @see ccsl.LogicOperators
+	 * @see ccsl.LogicOperator
 	 * @see #getOperator()
 	 * @generated
 	 */
-	void setOperator(LogicOperators value);
+	void setOperator(LogicOperator value);
 
 } // CompositeFilter

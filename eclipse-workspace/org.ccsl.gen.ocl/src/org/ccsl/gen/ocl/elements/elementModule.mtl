@@ -1,26 +1,40 @@
 [comment encoding = UTF-8 /]
-[module elementModule('http://www.example.org/ccsl')]
+[module elementModule('http://www.example.org/ccsl')  /]
+[import org::ccsl::gen::ocl::filters::filterModule /]
+[import org::ccsl::gen::ocl::elements::statements::methodInvocation::methodInvocationModule/]
 [import org::ccsl::gen::ocl::elements::namedElement::complexType::complexTypeModule /]
 [import org::ccsl::gen::ocl::elements::namedElement::method::methodModule /]
 [import org::ccsl::gen::ocl::elements::namedElement::variable::variableModule /]
 [import org::ccsl::gen::ocl::services::elementIdentifierService::elementIndentifierService/]
+[import org::gen::ocl::strings::stringModule /]
 
 
-[template public callDefineSelectQuery(element: Element, filters: OrderedSet(AtomicFilter))]
-[element.defineSelectQuery(filters) /]
+
+[query public getAllElementConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+Set(String) {
+  element.generateAncestorCondtions(contextElement, varName, filters, exactMatch)
+}
+->union(filters->select(f: AtomicFilter | f.targets->includes(element)).callFilterGenerateConditions(element, varName)->flatten()->asSet())
+->select(condition: String | condition.trim().size() > 0)
+/]
+
+[template public callGenerateSelect(element: Element, filters: OrderedSet(AtomicFilter))]
+[element.generateSelect(filters) /]
 [/template]
 
-[template public callDefineQueryConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
-[element.defineQueryCondition(contextElement, varName, filters, exactMatch) /]
+[template public callGenerateConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean)]
+[element.generateConditions(contextElement, varName, filters, exactMatch, typeCheck) /]
 [/template]
 
-[template public callDefineQueryConditionsProperties(element: Element, varName: String, properties: OrderedSet(Property))]
- [element.defineQueryConditionProperties(varName, properties) /]
+[template public callGeneratePropertiesConditions(element: Element, varName: String, properties: OrderedSet(Property))]
+[element.generatePropertiesConditions(varName, properties) /]
 [/template]
 
-[template public callAncestorsQueryCondition(element: Element, varName:String, filters: OrderedSet(AtomicFilter))]
-
+[template private generateAncestorCondtions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
+[if (not element.eContainer().oclIsUndefined()) and element.eContainer() <> contextElement and element.eContainer().oclIsKindOf(Element)]
+  [element.eContainer().oclAsType(Element).callGenerateConditions(element, varName.concat('.oclContainer()'), filters, exactMatch, true) /][/if]
 [/template]
+
 
 [template private generateOclAsType(varName: String, targetMetaClass: String)]
 [if not targetMetaClass.oclIsUndefined()][varName /].oclAsType([targetMetaClass /])[else][varName /][/if]
@@ -30,15 +44,24 @@
 [baseName /]_[element.getId() /]
 [/template]
 
-[template public generateGenericMultivaluedAttributeCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, values: OrderedSet(Element), targetProperty: String, targetMetaClass: String, letBaseName: String, selectBaseName: String) post(trim())]
+
+[template public generateGenericSingleAttributeCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean, value: Element, targetProperty: String)]
+[if (not value.oclIsUndefined()) and (value <> contextElement)]
+[value.callGenerateConditions(element, varName.concat('.').concat(targetProperty), filters, exactMatch, typeCheck) /][/if]
+[/template]
+
+[template public generateGenericMultivaluedAttributeCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean, values: OrderedSet(Element), targetProperty: String, letBaseName: String, selectBaseName: String)]
 [let valuesWithoutContext: OrderedSet(Element) = values->select(x | x <> contextElement)]
 [if not valuesWithoutContext->isEmpty()]
 [for (value: Element | valuesWithoutContext)]
 [let selectName: String =  value.generateValidName(selectBaseName)]
-[let condition: String = value.defineQueryCondition(contextElement, selectName.generateOclAsType(targetMetaClass), filters, false)]
-let [value.generateValidName(letBaseName) /] = [varName/].[targetProperty /]->select([selectName /]| [if not targetMetaClass.oclIsUndefined()][selectName /].oclIsTypeOf([targetMetaClass /])[/if] [if condition.size() > 0]and [condition /][/if]) in
+[let condition: String = value.generateConditions(element, selectName, filters, false, typeCheck)]
+let [value.generateValidName(letBaseName) /] = [varName/].[targetProperty /][if condition.size() > 0]->select([selectName /] |
+    [condition.printStringWithIdentation() /]
+)[/if] in
 [/let][/let][/for]
-[for (value: Element | valuesWithoutContext) separator(' and ')][value.generateValidName(letBaseName) /]->size() > 0[/for] and
-[for (value: Element | valuesWithoutContext) separator('->union(')][value.generateValidName(letBaseName) /][if i <> 1])[/if][/for]->asOrderedSet()->size() [if exactMatch]=[else]>=[/if] [if values->size() = valuesWithoutContext->size()][values->size() /][else][values->size() - 1 /][/if]
-[/if][/let]
+[for (value: Element | valuesWithoutContext) separator(' and ')]
+[value.generateValidName(letBaseName) /]->size() > 0[/for] and
+[for (value: Element | valuesWithoutContext) separator('->union(')]
+[value.generateValidName(letBaseName) /][if i <> 1])[/if][/for]->asOrderedSet()->size() [if exactMatch]=[else]>=[/if] [if values->size() = valuesWithoutContext->size()][values->size() /][else][values->size() - 1 /][/if][/if][/let]
 [/template]

@@ -4,7 +4,7 @@
     <fields>
       <properties name="public" value="public"/>
     </fields>
-    <fields name="">
+    <fields>
       <properties name="private" value="private"/>
     </fields>
     <methods name="xName"/>

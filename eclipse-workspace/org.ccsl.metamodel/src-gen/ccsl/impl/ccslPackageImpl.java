@@ -5,7 +5,7 @@ package ccsl.impl;
 import ccsl.AtomicRule;
 import ccsl.CompositeRule;
 import ccsl.JAnnotations;
-import ccsl.LogicOperators;
+import ccsl.LogicOperator;
 import ccsl.Rule;
 import ccsl.ccslFactory;
 import ccsl.ccslPackage;
@@ -84,7 +84,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EEnum logicOperatorsEEnum = null;
+	private EEnum logicOperatorEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -276,7 +276,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAtomicRule_Filter() {
+	public EReference getAtomicRule_Filters() {
 		return (EReference) atomicRuleEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -303,8 +303,8 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EEnum getLogicOperators() {
-		return logicOperatorsEEnum;
+	public EEnum getLogicOperator() {
+		return logicOperatorEEnum;
 	}
 
 	/**
@@ -347,13 +347,13 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 
 		atomicRuleEClass = createEClass(ATOMIC_RULE);
 		createEReference(atomicRuleEClass, ATOMIC_RULE__SCOPE);
-		createEReference(atomicRuleEClass, ATOMIC_RULE__FILTER);
+		createEReference(atomicRuleEClass, ATOMIC_RULE__FILTERS);
 
 		jAnnotationsEClass = createEClass(JANNOTATIONS);
 		createEAttribute(jAnnotationsEClass, JANNOTATIONS__NAME);
 
 		// Create enums
-		logicOperatorsEEnum = createEEnum(LOGIC_OPERATORS);
+		logicOperatorEEnum = createEEnum(LOGIC_OPERATOR);
 	}
 
 	/**
@@ -413,7 +413,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 
 		initEClass(compositeRuleEClass, CompositeRule.class, "CompositeRule", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCompositeRule_Operator(), this.getLogicOperators(), "operator", null, 0, 1,
+		initEAttribute(getCompositeRule_Operator(), this.getLogicOperator(), "operator", null, 0, 1,
 				CompositeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeRule_Rule(), this.getRule(), null, "rule", null, 2, -1, CompositeRule.class,
@@ -425,7 +425,7 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 		initEReference(getAtomicRule_Scope(), theElementsPackage.getElement(), null, "scope", null, 1, 1,
 				AtomicRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAtomicRule_Filter(), theFiltersPackage.getFilter(), null, "filter", null, 0, -1,
+		initEReference(getAtomicRule_Filters(), theFiltersPackage.getFilter(), null, "filters", null, 0, -1,
 				AtomicRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -435,11 +435,10 @@ public class ccslPackageImpl extends EPackageImpl implements ccslPackage {
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
-		initEEnum(logicOperatorsEEnum, LogicOperators.class, "LogicOperators");
-		addEEnumLiteral(logicOperatorsEEnum, LogicOperators.AND_LITERAL);
-		addEEnumLiteral(logicOperatorsEEnum, LogicOperators.OR_LITERAL);
-		addEEnumLiteral(logicOperatorsEEnum, LogicOperators.IF_THEN_LITERAL);
-		addEEnumLiteral(logicOperatorsEEnum, LogicOperators.ANY_LITERAL);
+		initEEnum(logicOperatorEEnum, LogicOperator.class, "LogicOperator");
+		addEEnumLiteral(logicOperatorEEnum, LogicOperator.AND_LITERAL);
+		addEEnumLiteral(logicOperatorEEnum, LogicOperator.OR_LITERAL);
+		addEEnumLiteral(logicOperatorEEnum, LogicOperator.IF_THEN_LITERAL);
 
 		// Create resource
 		createResource(eNS_URI);

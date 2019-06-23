@@ -1,20 +1,106 @@
-java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
-    let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public) in
-    let class_1_fields_3 = class.bodyDeclarations->select(class_1_fieldToSelect_3| class_1_fieldToSelect_3.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_3.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::private) in
-    class_1_fields_2->size() > 0 and class_1_fields_3->size() > 0 and
-    class_1_fields_2->union(class_1_fields_3)->asOrderedSet()->size() >= 2 and 
-    let class_1_methods_4 = class.bodyDeclarations->select(class_1_methodToSelect_4| class_1_methodToSelect_4.oclIsTypeOf(MethodDeclaration) and class_1_methodToSelect_4.oclAsType(MethodDeclaration).name='xName') in
-    let class_1_methods_5 = class.bodyDeclarations->select(class_1_methodToSelect_5| class_1_methodToSelect_5.oclIsTypeOf(MethodDeclaration) and class_1_methodToSelect_5.oclAsType(MethodDeclaration).name='yName') in
-    class_1_methods_4->size() > 0 and class_1_methods_5->size() > 0 and
-    class_1_methods_4->union(class_1_methods_5)->asOrderedSet()->size() >= 2
-)->union(
-java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
-    let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public) in
-    let class_1_fields_3 = interface.bodyDeclarations->select(class_1_fieldToSelect_3| class_1_fieldToSelect_3.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_3.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::private) in
-    class_1_fields_2->size() > 0 and class_1_fields_3->size() > 0 and
-    class_1_fields_2->union(class_1_fields_3)->asOrderedSet()->size() >= 2 and 
-    let class_1_methods_4 = interface.bodyDeclarations->select(class_1_methodToSelect_4| class_1_methodToSelect_4.oclIsTypeOf(MethodDeclaration) and class_1_methodToSelect_4.oclAsType(MethodDeclaration).name='xName') in
-    let class_1_methods_5 = interface.bodyDeclarations->select(class_1_methodToSelect_5| class_1_methodToSelect_5.oclIsTypeOf(MethodDeclaration) and class_1_methodToSelect_5.oclAsType(MethodDeclaration).name='yName') in
-    class_1_methods_4->size() > 0 and class_1_methods_5->size() > 0 and
-    class_1_methods_4->union(class_1_methods_5)->asOrderedSet()->size() >= 2
-))
+------- Composite Iteration --------
+  ------------- Iteration -------------:
+    java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+      ( -- ComplexType Conditions
+        let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2 |
+            ( --Variable Conditions
+              class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+              class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+            ) --End Variable Conditions
+        ) in
+        class_1_fields_2->size() > 0 and
+        class_1_fields_2->asOrderedSet()->size() >= 1 and 
+        (not class.name.matches('Bean')) and 
+        class.name='SacaRolha!'
+      ) -- End ComplexType Conditions
+    )->union(
+      java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+        ( -- ComplexType Conditions
+          interface.name='SacaRolha!' and 
+          let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2 |
+              ( --Variable Conditions
+                class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+                class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+              ) --End Variable Conditions
+          ) in
+          class_1_fields_2->size() > 0 and
+          class_1_fields_2->asOrderedSet()->size() >= 1 and 
+          (not interface.name.matches('Bean'))
+        ) -- End ComplexType Conditions
+      )
+    )
+  ----------- End Iteration -----------;
+  ->intersection(
+  ------- Composite Iteration --------
+    ------------- Iteration -------------:
+      java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+        ( -- ComplexType Conditions
+          let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2 |
+              ( --Variable Conditions
+                class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+                class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+                and 
+                not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.static)
+              ) --End Variable Conditions
+          ) in
+          class_1_fields_2->size() > 0 and
+          class_1_fields_2->asOrderedSet()->size() >= 1 and 
+          class.name='SacaRolha!'
+        ) -- End ComplexType Conditions
+      )->union(
+        java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+          ( -- ComplexType Conditions
+            interface.name='SacaRolha!' and 
+            let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2 |
+                ( --Variable Conditions
+                  class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+                  class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+                  and 
+                  not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.static)
+                ) --End Variable Conditions
+            ) in
+            class_1_fields_2->size() > 0 and
+            class_1_fields_2->asOrderedSet()->size() >= 1
+          ) -- End ComplexType Conditions
+        )
+      )
+    ----------- End Iteration -----------;
+    ->union(
+    ------------- Iteration -------------:
+      java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+        ( -- ComplexType Conditions
+          let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2 |
+              ( --Variable Conditions
+                class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+                class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+                and 
+                not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.inheritance = java::InheritanceKind::final)
+              ) --End Variable Conditions
+          ) in
+          class_1_fields_2->size() > 0 and
+          class_1_fields_2->asOrderedSet()->size() >= 1 and 
+          class.name='SacaRolha!'
+        ) -- End ComplexType Conditions
+      )->union(
+        java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+          ( -- ComplexType Conditions
+            let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2 |
+                ( --Variable Conditions
+                  class_1_fieldToSelect_2.oclIsKindOf(FieldDeclaration) and
+                  class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public
+                  and 
+                  not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.inheritance = java::InheritanceKind::final)
+                ) --End Variable Conditions
+            ) in
+            class_1_fields_2->size() > 0 and
+            class_1_fields_2->asOrderedSet()->size() >= 1 and 
+            interface.name='SacaRolha!'
+          ) -- End ComplexType Conditions
+        )
+      )
+    ----------- End Iteration -----------;
+    )--close union
+  ------- End Composite Iteration --------
+  )--close intersection
+  
+------- End Composite Iteration --------

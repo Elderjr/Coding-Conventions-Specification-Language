@@ -608,7 +608,7 @@ public class FiltersPackageImpl extends EPackageImpl implements FiltersPackage {
 		initEReference(getCompositeFilter_Filters(), this.getFilter(), null, "filters", null, 1, -1,
 				CompositeFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCompositeFilter_Operator(), theccslPackage.getLogicOperators(), "operator", null, 0, 1,
+		initEAttribute(getCompositeFilter_Operator(), theccslPackage.getLogicOperator(), "operator", null, 0, 1,
 				CompositeFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 

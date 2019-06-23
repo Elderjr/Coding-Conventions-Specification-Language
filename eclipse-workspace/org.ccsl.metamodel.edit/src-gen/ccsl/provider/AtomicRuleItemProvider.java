@@ -68,7 +68,7 @@ public class AtomicRuleItemProvider extends RuleItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ccslPackage.Literals.ATOMIC_RULE__SCOPE);
-			childrenFeatures.add(ccslPackage.Literals.ATOMIC_RULE__FILTER);
+			childrenFeatures.add(ccslPackage.Literals.ATOMIC_RULE__FILTERS);
 		}
 		return childrenFeatures;
 	}
@@ -118,7 +118,7 @@ public class AtomicRuleItemProvider extends RuleItemProvider {
 
 		switch (notification.getFeatureID(AtomicRule.class)) {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
-		case ccslPackage.ATOMIC_RULE__FILTER:
+		case ccslPackage.ATOMIC_RULE__FILTERS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -246,28 +246,28 @@ public class AtomicRuleItemProvider extends RuleItemProvider {
 		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__SCOPE,
 				JavaFactory.eINSTANCE.createJReturnStatement()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createCompositeFilter()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createPropertyFilter()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createTemplateFilter()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createDefinesMethod()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createEqualsNamedElement()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createRegexLiteralValueFilter()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createEqualsNamedElementWithLiterals()));
 
-		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTER,
+		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__FILTERS,
 				FiltersFactory.eINSTANCE.createNamedElementRegexMatch()));
 	}
 

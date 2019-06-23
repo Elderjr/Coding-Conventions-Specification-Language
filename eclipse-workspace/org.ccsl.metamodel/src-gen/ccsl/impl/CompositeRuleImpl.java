@@ -3,7 +3,7 @@
 package ccsl.impl;
 
 import ccsl.CompositeRule;
-import ccsl.LogicOperators;
+import ccsl.LogicOperator;
 import ccsl.Rule;
 import ccsl.ccslPackage;
 
@@ -45,7 +45,7 @@ public class CompositeRuleImpl extends RuleImpl implements CompositeRule {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LogicOperators OPERATOR_EDEFAULT = LogicOperators.AND_LITERAL;
+	protected static final LogicOperator OPERATOR_EDEFAULT = LogicOperator.AND_LITERAL;
 
 	/**
 	 * The cached value of the '{@link #getOperator() <em>Operator</em>}' attribute.
@@ -55,7 +55,7 @@ public class CompositeRuleImpl extends RuleImpl implements CompositeRule {
 	 * @generated
 	 * @ordered
 	 */
-	protected LogicOperators operator = OPERATOR_EDEFAULT;
+	protected LogicOperator operator = OPERATOR_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getRule() <em>Rule</em>}' containment reference list.
@@ -90,7 +90,7 @@ public class CompositeRuleImpl extends RuleImpl implements CompositeRule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LogicOperators getOperator() {
+	public LogicOperator getOperator() {
 		return operator;
 	}
 
@@ -99,8 +99,8 @@ public class CompositeRuleImpl extends RuleImpl implements CompositeRule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOperator(LogicOperators newOperator) {
-		LogicOperators oldOperator = operator;
+	public void setOperator(LogicOperator newOperator) {
+		LogicOperator oldOperator = operator;
 		operator = newOperator == null ? OPERATOR_EDEFAULT : newOperator;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ccslPackage.COMPOSITE_RULE__OPERATOR, oldOperator,
@@ -155,7 +155,7 @@ public class CompositeRuleImpl extends RuleImpl implements CompositeRule {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case ccslPackage.COMPOSITE_RULE__OPERATOR:
-			setOperator((LogicOperators) newValue);
+			setOperator((LogicOperator) newValue);
 			return;
 		case ccslPackage.COMPOSITE_RULE__RULE:
 			getRule().clear();

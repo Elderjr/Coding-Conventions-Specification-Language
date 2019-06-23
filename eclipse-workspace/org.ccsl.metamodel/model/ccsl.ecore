@@ -9,24 +9,23 @@
         eType="#//elements/Element" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeRule" eSuperTypes="#//Rule">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperators"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperator"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="2" upperBound="-1"
         eType="#//Rule" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicRule" eSuperTypes="#//Rule">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scope" lowerBound="1" eType="#//elements/Element"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="filter" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
         eType="#//filters/Filter" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JAnnotations">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="LogicOperators">
+  <eClassifiers xsi:type="ecore:EEnum" name="LogicOperator">
     <eLiterals name="AND"/>
     <eLiterals name="OR" value="1"/>
     <eLiterals name="IF_THEN" value="2"/>
-    <eLiterals name="ANY" value="3"/>
   </eClassifiers>
   <eSubpackages name="elements" nsURI="http://www.example.org/ccsl/elements" nsPrefix="elements">
     <eClassifiers xsi:type="ecore:EClass" name="Element">
@@ -88,8 +87,6 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//elements/statements/Statement"/>
       <eClassifiers xsi:type="ecore:EClass" name="CompositeExp" eSuperTypes="#//elements/statements/Expression">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="logicOperator" eType="#//LogicOperators"
-            defaultValueLiteral="ANY"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
             eType="#//elements/statements/Expression" containment="true"/>
       </eClassifiers>
@@ -206,7 +203,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="CompositeFilter" eSuperTypes="#//filters/Filter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="filters" lowerBound="1"
           upperBound="-1" eType="#//filters/Filter" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperator"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="PropertyFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="properties" lowerBound="1"

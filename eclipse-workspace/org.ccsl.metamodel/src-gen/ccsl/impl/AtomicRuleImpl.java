@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * </p>
  * <ul>
  *   <li>{@link ccsl.impl.AtomicRuleImpl#getScope <em>Scope</em>}</li>
- *   <li>{@link ccsl.impl.AtomicRuleImpl#getFilter <em>Filter</em>}</li>
+ *   <li>{@link ccsl.impl.AtomicRuleImpl#getFilters <em>Filters</em>}</li>
  * </ul>
  *
  * @generated
@@ -50,14 +50,14 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	protected Element scope;
 
 	/**
-	 * The cached value of the '{@link #getFilter() <em>Filter</em>}' containment reference list.
+	 * The cached value of the '{@link #getFilters() <em>Filters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFilter()
+	 * @see #getFilters()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList filter;
+	protected EList filters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -131,11 +131,11 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList getFilter() {
-		if (filter == null) {
-			filter = new EObjectContainmentEList(Filter.class, this, ccslPackage.ATOMIC_RULE__FILTER);
+	public EList getFilters() {
+		if (filters == null) {
+			filters = new EObjectContainmentEList(Filter.class, this, ccslPackage.ATOMIC_RULE__FILTERS);
 		}
-		return filter;
+		return filters;
 	}
 
 	/**
@@ -147,8 +147,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 		switch (featureID) {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
 			return basicSetScope(null, msgs);
-		case ccslPackage.ATOMIC_RULE__FILTER:
-			return ((InternalEList) getFilter()).basicRemove(otherEnd, msgs);
+		case ccslPackage.ATOMIC_RULE__FILTERS:
+			return ((InternalEList) getFilters()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -162,8 +162,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 		switch (featureID) {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
 			return getScope();
-		case ccslPackage.ATOMIC_RULE__FILTER:
-			return getFilter();
+		case ccslPackage.ATOMIC_RULE__FILTERS:
+			return getFilters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -178,9 +178,9 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
 			setScope((Element) newValue);
 			return;
-		case ccslPackage.ATOMIC_RULE__FILTER:
-			getFilter().clear();
-			getFilter().addAll((Collection) newValue);
+		case ccslPackage.ATOMIC_RULE__FILTERS:
+			getFilters().clear();
+			getFilters().addAll((Collection) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -196,8 +196,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
 			setScope((Element) null);
 			return;
-		case ccslPackage.ATOMIC_RULE__FILTER:
-			getFilter().clear();
+		case ccslPackage.ATOMIC_RULE__FILTERS:
+			getFilters().clear();
 			return;
 		}
 		super.eUnset(featureID);
@@ -212,8 +212,8 @@ public class AtomicRuleImpl extends RuleImpl implements AtomicRule {
 		switch (featureID) {
 		case ccslPackage.ATOMIC_RULE__SCOPE:
 			return scope != null;
-		case ccslPackage.ATOMIC_RULE__FILTER:
-			return filter != null && !filter.isEmpty();
+		case ccslPackage.ATOMIC_RULE__FILTERS:
+			return filters != null && !filters.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

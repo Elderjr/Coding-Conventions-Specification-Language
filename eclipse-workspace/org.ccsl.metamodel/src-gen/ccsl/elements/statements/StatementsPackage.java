@@ -409,22 +409,13 @@ public interface StatementsPackage extends EPackage {
 	int COMPOSITE_EXP__PROPERTIES = EXPRESSION__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Logic Operator</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPOSITE_EXP__LOGIC_OPERATOR = EXPRESSION_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Expressions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_EXP__EXPRESSIONS = EXPRESSION_FEATURE_COUNT + 1;
+	int COMPOSITE_EXP__EXPRESSIONS = EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Composite Exp</em>' class.
@@ -433,7 +424,7 @@ public interface StatementsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_EXP_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
+	int COMPOSITE_EXP_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link ccsl.elements.statements.impl.AtomicExpImpl <em>Atomic Exp</em>}' class.
@@ -1190,17 +1181,6 @@ public interface StatementsPackage extends EPackage {
 	EClass getCompositeExp();
 
 	/**
-	 * Returns the meta object for the attribute '{@link ccsl.elements.statements.CompositeExp#getLogicOperator <em>Logic Operator</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Logic Operator</em>'.
-	 * @see ccsl.elements.statements.CompositeExp#getLogicOperator()
-	 * @see #getCompositeExp()
-	 * @generated
-	 */
-	EAttribute getCompositeExp_LogicOperator();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link ccsl.elements.statements.CompositeExp#getExpressions <em>Expressions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1654,14 +1634,6 @@ public interface StatementsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COMPOSITE_EXP = eINSTANCE.getCompositeExp();
-
-		/**
-		 * The meta object literal for the '<em><b>Logic Operator</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COMPOSITE_EXP__LOGIC_OPERATOR = eINSTANCE.getCompositeExp_LogicOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Expressions</b></em>' containment reference list feature.

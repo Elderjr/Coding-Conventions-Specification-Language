@@ -2,8 +2,6 @@
  */
 package ccsl.elements.statements.provider;
 
-import ccsl.LogicOperators;
-
 import ccsl.elements.statements.CompositeExp;
 import ccsl.elements.statements.StatementsFactory;
 import ccsl.elements.statements.StatementsPackage;
@@ -18,8 +16,6 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
@@ -49,25 +45,8 @@ public class CompositeExpItemProvider extends ExpressionItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLogicOperatorPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Logic Operator feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLogicOperatorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_CompositeExp_logicOperator_feature"),
-						getString("_UI_PropertyDescriptor_description", "_UI_CompositeExp_logicOperator_feature",
-								"_UI_CompositeExp_type"),
-						StatementsPackage.Literals.COMPOSITE_EXP__LOGIC_OPERATOR, true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -115,10 +94,7 @@ public class CompositeExpItemProvider extends ExpressionItemProvider {
 	 * @generated
 	 */
 	public String getText(Object object) {
-		LogicOperators labelValue = ((CompositeExp) object).getLogicOperator();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ? getString("_UI_CompositeExp_type")
-				: getString("_UI_CompositeExp_type") + " " + label;
+		return getString("_UI_CompositeExp_type");
 	}
 
 	/**
@@ -132,9 +108,6 @@ public class CompositeExpItemProvider extends ExpressionItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CompositeExp.class)) {
-		case StatementsPackage.COMPOSITE_EXP__LOGIC_OPERATOR:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-			return;
 		case StatementsPackage.COMPOSITE_EXP__EXPRESSIONS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;

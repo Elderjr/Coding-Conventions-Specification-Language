@@ -213,13 +213,13 @@ public interface ccslPackage extends EPackage {
 	int ATOMIC_RULE__SCOPE = RULE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Filter</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Filters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ATOMIC_RULE__FILTER = RULE_FEATURE_COUNT + 1;
+	int ATOMIC_RULE__FILTERS = RULE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Atomic Rule</em>' class.
@@ -259,14 +259,14 @@ public interface ccslPackage extends EPackage {
 	int JANNOTATIONS_FEATURE_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link ccsl.LogicOperators <em>Logic Operators</em>}' enum.
+	 * The meta object id for the '{@link ccsl.LogicOperator <em>Logic Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see ccsl.LogicOperators
-	 * @see ccsl.impl.ccslPackageImpl#getLogicOperators()
+	 * @see ccsl.LogicOperator
+	 * @see ccsl.impl.ccslPackageImpl#getLogicOperator()
 	 * @generated
 	 */
-	int LOGIC_OPERATORS = 4;
+	int LOGIC_OPERATOR = 4;
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.Rule <em>Rule</em>}'.
@@ -365,15 +365,15 @@ public interface ccslPackage extends EPackage {
 	EReference getAtomicRule_Scope();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.AtomicRule#getFilter <em>Filter</em>}'.
+	 * Returns the meta object for the containment reference list '{@link ccsl.AtomicRule#getFilters <em>Filters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Filter</em>'.
-	 * @see ccsl.AtomicRule#getFilter()
+	 * @return the meta object for the containment reference list '<em>Filters</em>'.
+	 * @see ccsl.AtomicRule#getFilters()
 	 * @see #getAtomicRule()
 	 * @generated
 	 */
-	EReference getAtomicRule_Filter();
+	EReference getAtomicRule_Filters();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.JAnnotations <em>JAnnotations</em>}'.
@@ -397,14 +397,14 @@ public interface ccslPackage extends EPackage {
 	EAttribute getJAnnotations_Name();
 
 	/**
-	 * Returns the meta object for enum '{@link ccsl.LogicOperators <em>Logic Operators</em>}'.
+	 * Returns the meta object for enum '{@link ccsl.LogicOperator <em>Logic Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Logic Operators</em>'.
-	 * @see ccsl.LogicOperators
+	 * @return the meta object for enum '<em>Logic Operator</em>'.
+	 * @see ccsl.LogicOperator
 	 * @generated
 	 */
-	EEnum getLogicOperators();
+	EEnum getLogicOperator();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -507,12 +507,12 @@ public interface ccslPackage extends EPackage {
 		EReference ATOMIC_RULE__SCOPE = eINSTANCE.getAtomicRule_Scope();
 
 		/**
-		 * The meta object literal for the '<em><b>Filter</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Filters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ATOMIC_RULE__FILTER = eINSTANCE.getAtomicRule_Filter();
+		EReference ATOMIC_RULE__FILTERS = eINSTANCE.getAtomicRule_Filters();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.impl.JAnnotationsImpl <em>JAnnotations</em>}' class.
@@ -533,14 +533,14 @@ public interface ccslPackage extends EPackage {
 		EAttribute JANNOTATIONS__NAME = eINSTANCE.getJAnnotations_Name();
 
 		/**
-		 * The meta object literal for the '{@link ccsl.LogicOperators <em>Logic Operators</em>}' enum.
+		 * The meta object literal for the '{@link ccsl.LogicOperator <em>Logic Operator</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see ccsl.LogicOperators
-		 * @see ccsl.impl.ccslPackageImpl#getLogicOperators()
+		 * @see ccsl.LogicOperator
+		 * @see ccsl.impl.ccslPackageImpl#getLogicOperator()
 		 * @generated
 		 */
-		EEnum LOGIC_OPERATORS = eINSTANCE.getLogicOperators();
+		EEnum LOGIC_OPERATOR = eINSTANCE.getLogicOperator();
 
 	}
 

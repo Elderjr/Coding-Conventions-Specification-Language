@@ -2,7 +2,7 @@
  */
 package ccsl.filters.impl;
 
-import ccsl.LogicOperators;
+import ccsl.LogicOperator;
 
 import ccsl.filters.CompositeFilter;
 import ccsl.filters.Filter;
@@ -56,7 +56,7 @@ public class CompositeFilterImpl extends FilterImpl implements CompositeFilter {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LogicOperators OPERATOR_EDEFAULT = LogicOperators.AND_LITERAL;
+	protected static final LogicOperator OPERATOR_EDEFAULT = LogicOperator.AND_LITERAL;
 
 	/**
 	 * The cached value of the '{@link #getOperator() <em>Operator</em>}' attribute.
@@ -66,7 +66,7 @@ public class CompositeFilterImpl extends FilterImpl implements CompositeFilter {
 	 * @generated
 	 * @ordered
 	 */
-	protected LogicOperators operator = OPERATOR_EDEFAULT;
+	protected LogicOperator operator = OPERATOR_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -103,7 +103,7 @@ public class CompositeFilterImpl extends FilterImpl implements CompositeFilter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LogicOperators getOperator() {
+	public LogicOperator getOperator() {
 		return operator;
 	}
 
@@ -112,8 +112,8 @@ public class CompositeFilterImpl extends FilterImpl implements CompositeFilter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOperator(LogicOperators newOperator) {
-		LogicOperators oldOperator = operator;
+	public void setOperator(LogicOperator newOperator) {
+		LogicOperator oldOperator = operator;
 		operator = newOperator == null ? OPERATOR_EDEFAULT : newOperator;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FiltersPackage.COMPOSITE_FILTER__OPERATOR,
@@ -160,7 +160,7 @@ public class CompositeFilterImpl extends FilterImpl implements CompositeFilter {
 			getFilters().addAll((Collection) newValue);
 			return;
 		case FiltersPackage.COMPOSITE_FILTER__OPERATOR:
-			setOperator((LogicOperators) newValue);
+			setOperator((LogicOperator) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);

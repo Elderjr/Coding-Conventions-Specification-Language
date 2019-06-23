@@ -465,17 +465,8 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCompositeExp_LogicOperator() {
-		return (EAttribute) compositeExpEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getCompositeExp_Expressions() {
-		return (EReference) compositeExpEClass.getEStructuralFeatures().get(1);
+		return (EReference) compositeExpEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -773,7 +764,6 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 		expressionEClass = createEClass(EXPRESSION);
 
 		compositeExpEClass = createEClass(COMPOSITE_EXP);
-		createEAttribute(compositeExpEClass, COMPOSITE_EXP__LOGIC_OPERATOR);
 		createEReference(compositeExpEClass, COMPOSITE_EXP__EXPRESSIONS);
 
 		atomicExpEClass = createEClass(ATOMIC_EXP);
@@ -850,7 +840,6 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 				.getEPackage(XMLTypePackage.eNS_URI);
 		DatatypePackage theDatatypePackage = (DatatypePackage) EPackage.Registry.INSTANCE
 				.getEPackage(DatatypePackage.eNS_URI);
-		ccslPackage theccslPackage = (ccslPackage) EPackage.Registry.INSTANCE.getEPackage(ccslPackage.eNS_URI);
 
 		// Add supertypes to classes
 		statementEClass.getESuperTypes().add(theElementsPackage.getElement());
@@ -919,9 +908,6 @@ public class StatementsPackageImpl extends EPackageImpl implements StatementsPac
 
 		initEClass(compositeExpEClass, CompositeExp.class, "CompositeExp", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCompositeExp_LogicOperator(), theccslPackage.getLogicOperators(), "logicOperator", "ANY", 0,
-				1, CompositeExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
 		initEReference(getCompositeExp_Expressions(), this.getExpression(), null, "expressions", null, 0, -1,
 				CompositeExp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

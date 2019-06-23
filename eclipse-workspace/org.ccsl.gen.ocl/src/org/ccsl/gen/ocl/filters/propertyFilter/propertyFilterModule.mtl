@@ -2,8 +2,7 @@
 [module propertyFilterModule('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::elements::elementModule /]
 
-[template public defineFilterConditions(filter : Filter, element: Element, varName: String) ? (filter.oclIsTypeOf(PropertyFilter)) post(trim())]
+[template public generateCondition(filter : Filter, element: Element, varName: String) ? (filter.oclIsTypeOf(PropertyFilter)) post(trim())]
 [let propertyFilter: PropertyFilter = filter.oclAsType(PropertyFilter)]
-[element.callDefineQueryConditionsProperties(varName, propertyFilter.properties) /]
-[/let]
+[if filter.negated]not ([/if][element.callGeneratePropertiesConditions(varName, propertyFilter.properties) /][if filter.negated])[/if][/let]
 [/template]
