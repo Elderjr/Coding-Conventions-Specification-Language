@@ -238,7 +238,7 @@ public class TemplateFilterItemProvider extends AtomicFilterItemProvider {
 				StatementsFactory.eINSTANCE.createInstanceCreation()));
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.TEMPLATE_FILTER__TEMPLATE,
-				JavaFactory.eINSTANCE.createJClass()));
+				JavaFactory.eINSTANCE.createJavaClass()));
 
 		newChildDescriptors.add(createChildParameter(FiltersPackage.Literals.TEMPLATE_FILTER__TEMPLATE,
 				JavaFactory.eINSTANCE.createJInterface()));

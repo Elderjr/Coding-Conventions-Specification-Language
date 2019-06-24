@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_rBSiUTSMEemA_eaIxOfEtw" elementId="org.eclipse.e4.legacy.ide.application" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_rBSiUjSMEemA_eaIxOfEtw" bindingContexts="_rBSiVDSMEemA_eaIxOfEtw">
-  <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;workbench>&#xA;&lt;mruList>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;SampleRule.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/SampleRule.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/SampleRule.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;PublicVariables.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;DoNotCallThreadRun.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/DoNotCallThreadRun.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/DoNotCallThreadRun.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;IntegerInstanciation.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/IntegerInstanciation.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/IntegerInstanciation.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;BigIntegerConstants.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/BigIntegerConstants.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/BigIntegerConstants.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;SimpleRule.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/SimpleRule.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/SimpleRule.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;/mruList>&#xA;&lt;/workbench>"/>
+  <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;workbench>&#xA;&lt;mruList>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;PublicVariables.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;SampleRule.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/SampleRule.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/SampleRule.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;DoNotCallThreadRun.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/DoNotCallThreadRun.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/DoNotCallThreadRun.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;IntegerInstanciation.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/IntegerInstanciation.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/IntegerInstanciation.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.eclipse.ui.DefaultTextEditor&quot; name=&quot;BigIntegerConstants.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/BigIntegerConstants.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/BigIntegerConstants.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;SimpleRule.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/SimpleRule.ccsl&quot;>&#xA;&lt;persistable path=&quot;/org.ccsl.metamodel.examples/SimpleRule.ccsl&quot;/>&#xA;&lt;/file>&#xA;&lt;/mruList>&#xA;&lt;/workbench>"/>
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
   <tags>ModelMigrationProcessor.001</tags>
   <children xsi:type="basic:TrimmedWindow" xmi:id="_rBSiUjSMEemA_eaIxOfEtw" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.platform" selectedElement="_rZ8S4jSMEemA_eaIxOfEtw" label="%trimmedwindow.label.eclipseSDK" x="1041" y="192" width="1024" height="768">
@@ -70,7 +70,7 @@
                 <children xsi:type="advanced:Placeholder" xmi:id="_rkJXzDSMEemA_eaIxOfEtw" elementId="org.eclipse.ant.ui.views.AntView" toBeRendered="false" ref="_rkIwsjSMEemA_eaIxOfEtw"/>
               </children>
             </children>
-            <children xsi:type="basic:PartSashContainer" xmi:id="_rkJXzTSMEemA_eaIxOfEtw" containerData="7400" selectedElement="_rkJX0jSMEemA_eaIxOfEtw">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_rkJXzTSMEemA_eaIxOfEtw" containerData="7400" selectedElement="_rkJXzjSMEemA_eaIxOfEtw">
               <children xsi:type="basic:PartSashContainer" xmi:id="_rkJXzjSMEemA_eaIxOfEtw" containerData="4434" selectedElement="_rkJX0TSMEemA_eaIxOfEtw" horizontal="true">
                 <children xsi:type="basic:PartStack" xmi:id="_rkJXzzSMEemA_eaIxOfEtw" elementId="org.eclipse.gef.ui.palette_viewMStack" toBeRendered="false" containerData="1600">
                   <children xsi:type="advanced:Placeholder" xmi:id="_rkJX0DSMEemA_eaIxOfEtw" elementId="org.eclipse.gef.ui.palette_view" toBeRendered="false" ref="_rkHikDSMEemA_eaIxOfEtw"/>
@@ -80,8 +80,6 @@
               <children xsi:type="basic:PartStack" xmi:id="_rkJX0jSMEemA_eaIxOfEtw" elementId="bottomRight" containerData="5566" selectedElement="_rkJX1DSMEemA_eaIxOfEtw">
                 <tags>org.eclipse.e4.secondaryDataStack</tags>
                 <tags>Ecore Tools</tags>
-                <tags>active</tags>
-                <tags>noFocus</tags>
                 <children xsi:type="advanced:Placeholder" xmi:id="_rkJX0zSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.views.TaskList" ref="_rkDRIDSMEemA_eaIxOfEtw"/>
                 <children xsi:type="advanced:Placeholder" xmi:id="_rkJX1DSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.views.PropertySheet" ref="_rkIJoDSMEemA_eaIxOfEtw"/>
                 <children xsi:type="advanced:Placeholder" xmi:id="_rkJX1TSMEemA_eaIxOfEtw" elementId="org.eclipse.team.ui.GenericHistoryView" toBeRendered="false" ref="_rkIwsDSMEemA_eaIxOfEtw"/>
@@ -124,9 +122,19 @@
       <tags>categoryTag:Help</tags>
     </sharedElements>
     <sharedElements xsi:type="advanced:Area" xmi:id="_rjyycDSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.editorss" selectedElement="_rjyycTSMEemA_eaIxOfEtw">
-      <children xsi:type="basic:PartStack" xmi:id="_rjyycTSMEemA_eaIxOfEtw" elementId="org.eclipse.e4.primaryDataStack">
+      <children xsi:type="basic:PartStack" xmi:id="_rjyycTSMEemA_eaIxOfEtw" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_827joJYzEemc34zmNtqlpw">
         <tags>org.eclipse.e4.primaryDataStack</tags>
         <tags>EditorStack</tags>
+        <tags>active</tags>
+        <tags>noFocus</tags>
+        <children xsi:type="basic:Part" xmi:id="_827joJYzEemc34zmNtqlpw" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="PublicVariables.ccsl" iconURI="platform:/plugin/org.ccsl.metamodel.editor/icons/full/obj16/ccslModelFile.gif" closeable="true">
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;editor id=&quot;ccsl.presentation.ccslEditorID&quot; name=&quot;PublicVariables.ccsl&quot; partName=&quot;PublicVariables.ccsl&quot; title=&quot;PublicVariables.ccsl&quot; tooltip=&quot;org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;>&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/org.ccsl.metamodel.examples/PublicVariables.ccsl&quot;/>&#xA;&lt;/editor>"/>
+          <tags>Editor</tags>
+          <tags>ccsl.presentation.ccslEditorID</tags>
+          <tags>removeOnHide</tags>
+          <tags>active</tags>
+          <tags>activeOnClose</tags>
+        </children>
       </children>
     </sharedElements>
     <sharedElements xsi:type="basic:Part" xmi:id="_rj9KgDSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources/icons/full/eview16/resource_persp.png" tooltip="" closeable="true">
@@ -195,8 +203,6 @@
       <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xA;&lt;view/>"/>
       <tags>View</tags>
       <tags>categoryTag:General</tags>
-      <tags>active</tags>
-      <tags>activeOnClose</tags>
       <menus xmi:id="_MvxvEHhNEemmTe2Ztv9SNA" elementId="org.eclipse.ui.views.PropertySheet">
         <tags>ViewMenu</tags>
         <tags>menuContribution:menu</tags>
@@ -263,7 +269,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_rc1O0DSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_jDNLAJR_Eem9idN8FFfWvw" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_rBxqyDSMEemA_eaIxOfEtw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_x2U88JYzEemc34zmNtqlpw" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_rBxqyDSMEemA_eaIxOfEtw"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_rc114DSMEemA_eaIxOfEtw" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -287,7 +293,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_rc115DSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_jDPAMJR_Eem9idN8FFfWvw" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_rB0HUDSMEemA_eaIxOfEtw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_x2XZMJYzEemc34zmNtqlpw" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_rB0HUDSMEemA_eaIxOfEtw"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_rc2c8DSMEemA_eaIxOfEtw" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -3516,7 +3522,7 @@
   <addons xmi:id="_rBSiYzSMEemA_eaIxOfEtw" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_rBSiZDSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_rBYo8DSMEemA_eaIxOfEtw" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_iuv98ZR_Eem9idN8FFfWvw" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_xis2UZYzEemc34zmNtqlpw" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_dz0JgGOlEeSMMaPQU2nlzw" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_rBrj4DSMEemA_eaIxOfEtw" elementId="org.eclipse.ui.category.edit" name="Edit"/>
   <categories xmi:id="_rBrj4TSMEemA_eaIxOfEtw" elementId="org.eclipse.papyrus.infra.nattable.rows.command.category" name="NatTable Rows Catgerory" description="This category is used for all rows commands"/>

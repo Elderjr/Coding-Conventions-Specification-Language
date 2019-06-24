@@ -102,19 +102,19 @@ public class JavaSwitch {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case JavaPackage.JCLASS: {
-			JClass jClass = (JClass) theEObject;
-			Object result = caseJClass(jClass);
+		case JavaPackage.JAVA_CLASS: {
+			JavaClass javaClass = (JavaClass) theEObject;
+			Object result = caseJavaClass(javaClass);
 			if (result == null)
-				result = caseComplexType(jClass);
+				result = caseComplexType(javaClass);
 			if (result == null)
-				result = caseJElement(jClass);
+				result = caseJElement(javaClass);
 			if (result == null)
-				result = caseNamedElement(jClass);
+				result = caseNamedElement(javaClass);
 			if (result == null)
-				result = caseDataType(jClass);
+				result = caseDataType(javaClass);
 			if (result == null)
-				result = caseElement(jClass);
+				result = caseElement(javaClass);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -280,17 +280,17 @@ public class JavaSwitch {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>JClass</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Class</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>JClass</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Class</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public Object caseJClass(JClass object) {
+	public Object caseJavaClass(JavaClass object) {
 		return null;
 	}
 

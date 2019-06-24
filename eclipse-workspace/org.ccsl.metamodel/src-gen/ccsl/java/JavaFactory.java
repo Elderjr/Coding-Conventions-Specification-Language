@@ -31,13 +31,13 @@ public interface JavaFactory extends EFactory {
 	JElement createJElement();
 
 	/**
-	 * Returns a new object of class '<em>JClass</em>'.
+	 * Returns a new object of class '<em>Class</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>JClass</em>'.
+	 * @return a new object of class '<em>Class</em>'.
 	 * @generated
 	 */
-	JClass createJClass();
+	JavaClass createJavaClass();
 
 	/**
 	 * Returns a new object of class '<em>JInterface</em>'.

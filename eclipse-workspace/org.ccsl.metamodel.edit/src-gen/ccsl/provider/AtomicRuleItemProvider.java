@@ -220,7 +220,7 @@ public class AtomicRuleItemProvider extends RuleItemProvider {
 				StatementsFactory.eINSTANCE.createInstanceCreation()));
 
 		newChildDescriptors.add(
-				createChildParameter(ccslPackage.Literals.ATOMIC_RULE__SCOPE, JavaFactory.eINSTANCE.createJClass()));
+				createChildParameter(ccslPackage.Literals.ATOMIC_RULE__SCOPE, JavaFactory.eINSTANCE.createJavaClass()));
 
 		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.ATOMIC_RULE__SCOPE,
 				JavaFactory.eINSTANCE.createJInterface()));

@@ -25,7 +25,7 @@ import org.eclipse.emf.common.util.EList;
 public interface JMethod extends Method {
 	/**
 	 * Returns the value of the '<em><b>Throws</b></em>' reference list.
-	 * The list contents are of type {@link ccsl.java.JClass}.
+	 * The list contents are of type {@link ccsl.java.JavaClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Throws</em>' reference list isn't clear,
@@ -34,7 +34,7 @@ public interface JMethod extends Method {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Throws</em>' reference list.
 	 * @see ccsl.java.JavaPackage#getJMethod_Throws()
-	 * @model type="ccsl.java.JClass"
+	 * @model type="ccsl.java.JavaClass"
 	 * @generated
 	 */
 	EList getThrows();

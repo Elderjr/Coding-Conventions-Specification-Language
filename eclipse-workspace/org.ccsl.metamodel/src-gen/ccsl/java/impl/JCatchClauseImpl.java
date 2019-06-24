@@ -7,7 +7,7 @@ import ccsl.elements.namedElements.Variable;
 import ccsl.elements.statements.impl.BlockImpl;
 
 import ccsl.java.JCatchClause;
-import ccsl.java.JClass;
+import ccsl.java.JavaClass;
 import ccsl.java.JavaPackage;
 
 import java.util.Collection;
@@ -84,7 +84,7 @@ public class JCatchClauseImpl extends BlockImpl implements JCatchClause {
 	 */
 	public EList getExceptions() {
 		if (exceptions == null) {
-			exceptions = new EObjectResolvingEList(JClass.class, this, JavaPackage.JCATCH_CLAUSE__EXCEPTIONS);
+			exceptions = new EObjectResolvingEList(JavaClass.class, this, JavaPackage.JCATCH_CLAUSE__EXCEPTIONS);
 		}
 		return exceptions;
 	}

@@ -6,7 +6,7 @@ import ccsl.elements.namedElements.provider.ComplexTypeItemProvider;
 
 import ccsl.elements.statements.StatementsFactory;
 
-import ccsl.java.JClass;
+import ccsl.java.JavaClass;
 import ccsl.java.JavaFactory;
 import ccsl.java.JavaPackage;
 
@@ -26,19 +26,19 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link ccsl.java.JClass} object.
+ * This is the item provider adapter for a {@link ccsl.java.JavaClass} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class JClassItemProvider extends ComplexTypeItemProvider {
+public class JavaClassItemProvider extends ComplexTypeItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public JClassItemProvider(AdapterFactory adapterFactory) {
+	public JavaClassItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,10 +66,10 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	protected void addImplementsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_JClass_implements_feature"),
-						getString("_UI_PropertyDescriptor_description", "_UI_JClass_implements_feature",
-								"_UI_JClass_type"),
-						JavaPackage.Literals.JCLASS__IMPLEMENTS, true, false, true, null, null, null));
+						getResourceLocator(), getString("_UI_JavaClass_implements_feature"),
+						getString("_UI_PropertyDescriptor_description", "_UI_JavaClass_implements_feature",
+								"_UI_JavaClass_type"),
+						JavaPackage.Literals.JAVA_CLASS__IMPLEMENTS, true, false, true, null, null, null));
 	}
 
 	/**
@@ -83,8 +83,8 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	public Collection getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(JavaPackage.Literals.JCLASS__NESTED_CLASSES);
-			childrenFeatures.add(JavaPackage.Literals.JCLASS__BLOCKS);
+			childrenFeatures.add(JavaPackage.Literals.JAVA_CLASS__NESTED_CLASSES);
+			childrenFeatures.add(JavaPackage.Literals.JAVA_CLASS__BLOCKS);
 		}
 		return childrenFeatures;
 	}
@@ -102,13 +102,13 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	}
 
 	/**
-	 * This returns JClass.gif.
+	 * This returns JavaClass.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/JClass"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/JavaClass"));
 	}
 
 	/**
@@ -118,9 +118,9 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	 * @generated
 	 */
 	public String getText(Object object) {
-		String label = ((JClass) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_JClass_type")
-				: getString("_UI_JClass_type") + " " + label;
+		String label = ((JavaClass) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_JavaClass_type")
+				: getString("_UI_JavaClass_type") + " " + label;
 	}
 
 	/**
@@ -133,9 +133,9 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(JClass.class)) {
-		case JavaPackage.JCLASS__NESTED_CLASSES:
-		case JavaPackage.JCLASS__BLOCKS:
+		switch (notification.getFeatureID(JavaClass.class)) {
+		case JavaPackage.JAVA_CLASS__NESTED_CLASSES:
+		case JavaPackage.JAVA_CLASS__BLOCKS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -152,20 +152,20 @@ public class JClassItemProvider extends ComplexTypeItemProvider {
 	protected void collectNewChildDescriptors(Collection newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(JavaPackage.Literals.JCLASS__NESTED_CLASSES,
-				JavaFactory.eINSTANCE.createJClass()));
+		newChildDescriptors.add(createChildParameter(JavaPackage.Literals.JAVA_CLASS__NESTED_CLASSES,
+				JavaFactory.eINSTANCE.createJavaClass()));
 
-		newChildDescriptors.add(
-				createChildParameter(JavaPackage.Literals.JCLASS__BLOCKS, JavaFactory.eINSTANCE.createJTryClause()));
+		newChildDescriptors.add(createChildParameter(JavaPackage.Literals.JAVA_CLASS__BLOCKS,
+				JavaFactory.eINSTANCE.createJTryClause()));
 
-		newChildDescriptors.add(
-				createChildParameter(JavaPackage.Literals.JCLASS__BLOCKS, JavaFactory.eINSTANCE.createJCatchClause()));
+		newChildDescriptors.add(createChildParameter(JavaPackage.Literals.JAVA_CLASS__BLOCKS,
+				JavaFactory.eINSTANCE.createJCatchClause()));
 
 		newChildDescriptors
-				.add(createChildParameter(JavaPackage.Literals.JCLASS__BLOCKS, JavaFactory.eINSTANCE.createJFor()));
+				.add(createChildParameter(JavaPackage.Literals.JAVA_CLASS__BLOCKS, JavaFactory.eINSTANCE.createJFor()));
 
-		newChildDescriptors.add(
-				createChildParameter(JavaPackage.Literals.JCLASS__BLOCKS, StatementsFactory.eINSTANCE.createBlock()));
+		newChildDescriptors.add(createChildParameter(JavaPackage.Literals.JAVA_CLASS__BLOCKS,
+				StatementsFactory.eINSTANCE.createBlock()));
 	}
 
 	/**

@@ -149,9 +149,9 @@
   </eSubpackages>
   <eSubpackages name="java" nsURI="http://www.example.org/ccsl/java" nsPrefix="java">
     <eClassifiers xsi:type="ecore:EClass" name="JElement"/>
-    <eClassifiers xsi:type="ecore:EClass" name="JClass" eSuperTypes="#//elements/namedElements/ComplexType #//java/JElement">
+    <eClassifiers xsi:type="ecore:EClass" name="JavaClass" eSuperTypes="#//elements/namedElements/ComplexType #//java/JElement">
       <eStructuralFeatures xsi:type="ecore:EReference" name="nestedClasses" upperBound="-1"
-          eType="#//java/JClass" containment="true"/>
+          eType="#//java/JavaClass" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="implements" upperBound="-1"
           eType="#//java/JInterface"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
@@ -160,7 +160,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="JInterface" eSuperTypes="#//java/JElement #//elements/namedElements/ComplexType"/>
     <eClassifiers xsi:type="ecore:EClass" name="JMethod" eSuperTypes="#//elements/namedElements/Method">
       <eStructuralFeatures xsi:type="ecore:EReference" name="throws" upperBound="-1"
-          eType="#//java/JClass"/>
+          eType="#//java/JavaClass"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="JConstructor" eSuperTypes="#//java/JMethod"/>
     <eClassifiers xsi:type="ecore:EClass" name="JTryCatch" eSuperTypes="#//java/JElement">
@@ -175,7 +175,7 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="JCatchClause" eSuperTypes="#//elements/statements/Block">
       <eStructuralFeatures xsi:type="ecore:EReference" name="exceptions" upperBound="-1"
-          eType="#//java/JClass"/>
+          eType="#//java/JavaClass"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//elements/namedElements/Variable"
           containment="true"/>
     </eClassifiers>

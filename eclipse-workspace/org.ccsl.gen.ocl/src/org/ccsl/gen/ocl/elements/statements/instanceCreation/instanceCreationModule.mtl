@@ -1,35 +1,4 @@
 [comment encoding = UTF-8 /]
 [module instanceCreationModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::statements::methodInvocation::methodInvocationModule/]
-[import org::ccsl::gen::ocl::elements::namedElement::complexType::complexTypeModule /]
-[import org::ccsl::gen::ocl::elements::elementModule/]
 
-[template public selectQuery(element: Element) ? (element.oclIsTypeOf(InstanceCreation))]
-[let creation : InstanceCreation = element.oclAsType(InstanceCreation)]
-action::Creates.allInstances()->select(c: action::Creates | [creation.queryConditions('c')/])
-[/let]
-[/template]
 
-[template public queryConditions(element : Element, varName: String) ? (element.oclIsTypeOf(InstanceCreation))]
-[element.oclAsType(InstanceCreation).instanceCreationQueryConditions(varName) /]
-[/template]
-
-[template public instanceCreationQueryConditions(creation: InstanceCreation, varName: String)]
-[if not creation.type.oclIsUndefined()] [ creation.type.queryConditions(varName.concat('.to'))/][/if]
- [comment query conditions of the InstanceCreation superclass /]
-[/template]
-
-[template public test(element : Element) ? (element.oclIsTypeOf(InstanceCreation))]
-This is InstanceCreation's template
-[if (element.eClass().eAllSuperTypes->append(element.eClass())->exists(x | x = InstanceCreation))]
-opa e' igual!
-[/if]
-[let instance: InstanceCreation = element.oclAsType(InstanceCreation)]
-[for (attributes: ecore::EStructuralFeature| instance.eClass().eAllStructuralFeatures)]
-[if (instance.type = instance.eGet(attributes.name))]
-Achei!
-[/if]
-[/for]
-[instance.oclAsType(Element).eClass().name /] 
-[/let]
-[/template]

@@ -56,8 +56,8 @@ public class JavaFactoryImpl extends EFactoryImpl implements JavaFactory {
 		switch (eClass.getClassifierID()) {
 		case JavaPackage.JELEMENT:
 			return createJElement();
-		case JavaPackage.JCLASS:
-			return createJClass();
+		case JavaPackage.JAVA_CLASS:
+			return createJavaClass();
 		case JavaPackage.JINTERFACE:
 			return createJInterface();
 		case JavaPackage.JMETHOD:
@@ -98,9 +98,9 @@ public class JavaFactoryImpl extends EFactoryImpl implements JavaFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public JClass createJClass() {
-		JClassImpl jClass = new JClassImpl();
-		return jClass;
+	public JavaClass createJavaClass() {
+		JavaClassImpl javaClass = new JavaClassImpl();
+		return javaClass;
 	}
 
 	/**

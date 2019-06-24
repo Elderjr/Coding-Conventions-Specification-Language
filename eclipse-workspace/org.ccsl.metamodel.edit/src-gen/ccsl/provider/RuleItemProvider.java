@@ -243,7 +243,7 @@ public class RuleItemProvider extends ItemProviderAdapter implements IEditingDom
 				StatementsFactory.eINSTANCE.createInstanceCreation()));
 
 		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.RULE__AUXILIARY_ELEMENTS,
-				JavaFactory.eINSTANCE.createJClass()));
+				JavaFactory.eINSTANCE.createJavaClass()));
 
 		newChildDescriptors.add(createChildParameter(ccslPackage.Literals.RULE__AUXILIARY_ELEMENTS,
 				JavaFactory.eINSTANCE.createJInterface()));

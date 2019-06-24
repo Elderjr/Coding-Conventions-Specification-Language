@@ -152,7 +152,7 @@ public class NamespaceItemProvider extends ItemProviderAdapter implements IEditi
 				NamedElementsFactory.eINSTANCE.createConstructor()));
 
 		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.NAMESPACE__GROUPED_ELEMENTS,
-				JavaFactory.eINSTANCE.createJClass()));
+				JavaFactory.eINSTANCE.createJavaClass()));
 
 		newChildDescriptors.add(createChildParameter(NamedElementsPackage.Literals.NAMESPACE__GROUPED_ELEMENTS,
 				JavaFactory.eINSTANCE.createJInterface()));

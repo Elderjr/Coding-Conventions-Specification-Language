@@ -1,7 +1,5 @@
 [comment encoding = UTF-8 /]
-[module methodModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::elementModule /]
-[import org::ccsl::gen::ocl::elements::namedElement::namedElementModule /]
+[module methodModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::elements::namedElement::namedElementModule /]
 [import org::gen::ocl::strings::stringModule /]
 
 [query public getAllMethodConditions(method: Method, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
@@ -11,11 +9,10 @@ Set(String){
 ->select(condition: String | condition.trim().size() > 0)
 ->union(method.getAllNamedElementConditions(contextElement, varName, filters, exactMatch))/]
 
-[template public generateConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) ? (element.oclIsTypeOf(Method)) post(trim())]
+[template public generateConditions(method: Method, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean)  overrides generateConditions]
 ( --Method Conditions
-[for (condition: String | element.oclAsType(Method).getAllMethodConditions(contextElement, varName, filters, exactMatch)) separator('  and\n')]
+[for (condition: String | method.getAllMethodConditions(contextElement, varName, filters, exactMatch)) separator('  and\n')]
   [condition.printStringWithIdentation() /]
 [/for]
 ) --End Method Conditions
 [/template]
-

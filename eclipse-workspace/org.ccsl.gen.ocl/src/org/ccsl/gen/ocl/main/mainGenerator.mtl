@@ -1,12 +1,12 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::elementModule/]
 [import org::ccsl::gen::services::compositeFilterService::compositeFilterService /]
+[import org::ccsl::gen::ocl::dispatchers::elementDispatcherModule /]
 
 [template public main(rule : Rule)]
 [comment @main/]
 [file ('gen',false, 'UTF-8')]
-[rule.generateOcl()/]
+[rule.generateOcl() /]
 [/file]
 [/template]
 
@@ -23,9 +23,7 @@
 [if operator = LogicOperator::AND]intersection[else]union[/if]
 [/template]
 
-
-
-[template private runContext(filters: OrderedSet(Filter), scope: Element)]
+[template private runContext(filters: OrderedSet(Filter), scope: Element) post(trim())]
 [let atomicFilters: OrderedSet(AtomicFilter) = filters->select(f | f.oclIsKindOf(AtomicFilter))]
 [let compositeFilters: OrderedSet(CompositeFilter) = filters->select(f | f.oclIsKindOf(CompositeFilter))]
 [if not atomicFilters->isEmpty()]
@@ -58,8 +56,7 @@
   [filter.runContext(scope) /]
 [if i <> 1]
   )--close union
-[/if]
-[/for]
-[/if]
+
+[/if][/for][/if]
 ------- End Composite Iteration --------
 [/template]

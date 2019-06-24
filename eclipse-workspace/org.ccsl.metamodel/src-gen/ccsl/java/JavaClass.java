@@ -8,26 +8,26 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>JClass</b></em>'.
+ * A representation of the model object '<em><b>Class</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link ccsl.java.JClass#getNestedClasses <em>Nested Classes</em>}</li>
- *   <li>{@link ccsl.java.JClass#getImplements <em>Implements</em>}</li>
- *   <li>{@link ccsl.java.JClass#getBlocks <em>Blocks</em>}</li>
+ *   <li>{@link ccsl.java.JavaClass#getNestedClasses <em>Nested Classes</em>}</li>
+ *   <li>{@link ccsl.java.JavaClass#getImplements <em>Implements</em>}</li>
+ *   <li>{@link ccsl.java.JavaClass#getBlocks <em>Blocks</em>}</li>
  * </ul>
  *
- * @see ccsl.java.JavaPackage#getJClass()
+ * @see ccsl.java.JavaPackage#getJavaClass()
  * @model
  * @generated
  */
-public interface JClass extends ComplexType, JElement {
+public interface JavaClass extends ComplexType, JElement {
 	/**
 	 * Returns the value of the '<em><b>Nested Classes</b></em>' containment reference list.
-	 * The list contents are of type {@link ccsl.java.JClass}.
+	 * The list contents are of type {@link ccsl.java.JavaClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Nested Classes</em>' containment reference list isn't clear,
@@ -35,8 +35,8 @@ public interface JClass extends ComplexType, JElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Nested Classes</em>' containment reference list.
-	 * @see ccsl.java.JavaPackage#getJClass_NestedClasses()
-	 * @model type="ccsl.java.JClass" containment="true"
+	 * @see ccsl.java.JavaPackage#getJavaClass_NestedClasses()
+	 * @model type="ccsl.java.JavaClass" containment="true"
 	 * @generated
 	 */
 	EList getNestedClasses();
@@ -51,7 +51,7 @@ public interface JClass extends ComplexType, JElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Implements</em>' reference list.
-	 * @see ccsl.java.JavaPackage#getJClass_Implements()
+	 * @see ccsl.java.JavaPackage#getJavaClass_Implements()
 	 * @model type="ccsl.java.JInterface"
 	 * @generated
 	 */
@@ -67,10 +67,10 @@ public interface JClass extends ComplexType, JElement {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Blocks</em>' containment reference list.
-	 * @see ccsl.java.JavaPackage#getJClass_Blocks()
+	 * @see ccsl.java.JavaPackage#getJavaClass_Blocks()
 	 * @model type="ccsl.elements.statements.Block" containment="true"
 	 * @generated
 	 */
 	EList getBlocks();
 
-} // JClass
+} // JavaClass

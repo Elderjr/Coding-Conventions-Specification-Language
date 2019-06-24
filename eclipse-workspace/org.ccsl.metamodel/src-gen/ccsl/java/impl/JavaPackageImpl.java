@@ -28,7 +28,6 @@ import ccsl.impl.ccslPackageImpl;
 
 import ccsl.java.InstanceOf;
 import ccsl.java.JCatchClause;
-import ccsl.java.JClass;
 import ccsl.java.JConstructor;
 import ccsl.java.JElement;
 import ccsl.java.JFor;
@@ -37,6 +36,7 @@ import ccsl.java.JMethod;
 import ccsl.java.JReturnStatement;
 import ccsl.java.JTryCatch;
 import ccsl.java.JTryClause;
+import ccsl.java.JavaClass;
 import ccsl.java.JavaFactory;
 import ccsl.java.JavaPackage;
 import ccsl.java.ThrowStatement;
@@ -66,7 +66,7 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass jClassEClass = null;
+	private EClass javaClassEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -253,8 +253,8 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getJClass() {
-		return jClassEClass;
+	public EClass getJavaClass() {
+		return javaClassEClass;
 	}
 
 	/**
@@ -262,8 +262,8 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getJClass_NestedClasses() {
-		return (EReference) jClassEClass.getEStructuralFeatures().get(0);
+	public EReference getJavaClass_NestedClasses() {
+		return (EReference) javaClassEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -271,8 +271,8 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getJClass_Implements() {
-		return (EReference) jClassEClass.getEStructuralFeatures().get(1);
+	public EReference getJavaClass_Implements() {
+		return (EReference) javaClassEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -280,8 +280,8 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getJClass_Blocks() {
-		return (EReference) jClassEClass.getEStructuralFeatures().get(2);
+	public EReference getJavaClass_Blocks() {
+		return (EReference) javaClassEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -486,10 +486,10 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 		// Create classes and their features
 		jElementEClass = createEClass(JELEMENT);
 
-		jClassEClass = createEClass(JCLASS);
-		createEReference(jClassEClass, JCLASS__NESTED_CLASSES);
-		createEReference(jClassEClass, JCLASS__IMPLEMENTS);
-		createEReference(jClassEClass, JCLASS__BLOCKS);
+		javaClassEClass = createEClass(JAVA_CLASS);
+		createEReference(javaClassEClass, JAVA_CLASS__NESTED_CLASSES);
+		createEReference(javaClassEClass, JAVA_CLASS__IMPLEMENTS);
+		createEReference(javaClassEClass, JAVA_CLASS__BLOCKS);
 
 		jInterfaceEClass = createEClass(JINTERFACE);
 
@@ -552,8 +552,8 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 				.getEPackage(StatementsPackage.eNS_URI);
 
 		// Add supertypes to classes
-		jClassEClass.getESuperTypes().add(theNamedElementsPackage.getComplexType());
-		jClassEClass.getESuperTypes().add(this.getJElement());
+		javaClassEClass.getESuperTypes().add(theNamedElementsPackage.getComplexType());
+		javaClassEClass.getESuperTypes().add(this.getJElement());
 		jInterfaceEClass.getESuperTypes().add(this.getJElement());
 		jInterfaceEClass.getESuperTypes().add(theNamedElementsPackage.getComplexType());
 		jMethodEClass.getESuperTypes().add(theNamedElementsPackage.getMethod());
@@ -575,24 +575,25 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 		initEClass(jElementEClass, JElement.class, "JElement", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(jClassEClass, JClass.class, "JClass", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJClass_NestedClasses(), this.getJClass(), null, "nestedClasses", null, 0, -1, JClass.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getJClass_Implements(), this.getJInterface(), null, "implements", null, 0, -1, JClass.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getJClass_Blocks(), theStatementsPackage.getBlock(), null, "blocks", null, 0, -1, JClass.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(javaClassEClass, JavaClass.class, "JavaClass", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getJavaClass_NestedClasses(), this.getJavaClass(), null, "nestedClasses", null, 0, -1,
+				JavaClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJavaClass_Implements(), this.getJInterface(), null, "implements", null, 0, -1,
+				JavaClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJavaClass_Blocks(), theStatementsPackage.getBlock(), null, "blocks", null, 0, -1,
+				JavaClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(jInterfaceEClass, JInterface.class, "JInterface", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(jMethodEClass, JMethod.class, "JMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJMethod_Throws(), this.getJClass(), null, "throws", null, 0, -1, JMethod.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
+		initEReference(getJMethod_Throws(), this.getJavaClass(), null, "throws", null, 0, -1, JMethod.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(jConstructorEClass, JConstructor.class, "JConstructor", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
@@ -614,7 +615,7 @@ public class JavaPackageImpl extends EPackageImpl implements JavaPackage {
 
 		initEClass(jCatchClauseEClass, JCatchClause.class, "JCatchClause", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJCatchClause_Exceptions(), this.getJClass(), null, "exceptions", null, 0, -1,
+		initEReference(getJCatchClause_Exceptions(), this.getJavaClass(), null, "exceptions", null, 0, -1,
 				JCatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJCatchClause_Param(), theNamedElementsPackage.getVariable(), null, "param", null, 0, 1,

@@ -95,25 +95,25 @@ public class JavaItemProviderAdapterFactory extends JavaAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link ccsl.java.JClass} instances.
+	 * This keeps track of the one adapter used for all {@link ccsl.java.JavaClass} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected JClassItemProvider jClassItemProvider;
+	protected JavaClassItemProvider javaClassItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link ccsl.java.JClass}.
+	 * This creates an adapter for a {@link ccsl.java.JavaClass}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Adapter createJClassAdapter() {
-		if (jClassItemProvider == null) {
-			jClassItemProvider = new JClassItemProvider(this);
+	public Adapter createJavaClassAdapter() {
+		if (javaClassItemProvider == null) {
+			javaClassItemProvider = new JavaClassItemProvider(this);
 		}
 
-		return jClassItemProvider;
+		return javaClassItemProvider;
 	}
 
 	/**
@@ -434,8 +434,8 @@ public class JavaItemProviderAdapterFactory extends JavaAdapterFactory
 	public void dispose() {
 		if (jElementItemProvider != null)
 			jElementItemProvider.dispose();
-		if (jClassItemProvider != null)
-			jClassItemProvider.dispose();
+		if (javaClassItemProvider != null)
+			javaClassItemProvider.dispose();
 		if (jInterfaceItemProvider != null)
 			jInterfaceItemProvider.dispose();
 		if (jMethodItemProvider != null)

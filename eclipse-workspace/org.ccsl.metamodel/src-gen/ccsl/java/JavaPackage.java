@@ -78,14 +78,14 @@ public interface JavaPackage extends EPackage {
 	int JELEMENT_FEATURE_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link ccsl.java.impl.JClassImpl <em>JClass</em>}' class.
+	 * The meta object id for the '{@link ccsl.java.impl.JavaClassImpl <em>Class</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see ccsl.java.impl.JClassImpl
-	 * @see ccsl.java.impl.JavaPackageImpl#getJClass()
+	 * @see ccsl.java.impl.JavaClassImpl
+	 * @see ccsl.java.impl.JavaPackageImpl#getJavaClass()
 	 * @generated
 	 */
-	int JCLASS = 1;
+	int JAVA_CLASS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -94,7 +94,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__PROPERTIES = NamedElementsPackage.COMPLEX_TYPE__PROPERTIES;
+	int JAVA_CLASS__PROPERTIES = NamedElementsPackage.COMPLEX_TYPE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -103,7 +103,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__NAME = NamedElementsPackage.COMPLEX_TYPE__NAME;
+	int JAVA_CLASS__NAME = NamedElementsPackage.COMPLEX_TYPE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Fields</b></em>' containment reference list.
@@ -112,7 +112,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__FIELDS = NamedElementsPackage.COMPLEX_TYPE__FIELDS;
+	int JAVA_CLASS__FIELDS = NamedElementsPackage.COMPLEX_TYPE__FIELDS;
 
 	/**
 	 * The feature id for the '<em><b>Super Types</b></em>' reference list.
@@ -121,7 +121,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__SUPER_TYPES = NamedElementsPackage.COMPLEX_TYPE__SUPER_TYPES;
+	int JAVA_CLASS__SUPER_TYPES = NamedElementsPackage.COMPLEX_TYPE__SUPER_TYPES;
 
 	/**
 	 * The feature id for the '<em><b>Methods</b></em>' containment reference list.
@@ -130,7 +130,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__METHODS = NamedElementsPackage.COMPLEX_TYPE__METHODS;
+	int JAVA_CLASS__METHODS = NamedElementsPackage.COMPLEX_TYPE__METHODS;
 
 	/**
 	 * The feature id for the '<em><b>Nested Classes</b></em>' containment reference list.
@@ -139,7 +139,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__NESTED_CLASSES = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 0;
+	int JAVA_CLASS__NESTED_CLASSES = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Implements</b></em>' reference list.
@@ -148,7 +148,7 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__IMPLEMENTS = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 1;
+	int JAVA_CLASS__IMPLEMENTS = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Blocks</b></em>' containment reference list.
@@ -157,16 +157,16 @@ public interface JavaPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS__BLOCKS = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 2;
+	int JAVA_CLASS__BLOCKS = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of structural features of the '<em>JClass</em>' class.
+	 * The number of structural features of the '<em>Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JCLASS_FEATURE_COUNT = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 3;
+	int JAVA_CLASS_FEATURE_COUNT = NamedElementsPackage.COMPLEX_TYPE_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link ccsl.java.impl.JInterfaceImpl <em>JInterface</em>}' class.
@@ -684,47 +684,47 @@ public interface JavaPackage extends EPackage {
 	EClass getJElement();
 
 	/**
-	 * Returns the meta object for class '{@link ccsl.java.JClass <em>JClass</em>}'.
+	 * Returns the meta object for class '{@link ccsl.java.JavaClass <em>Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>JClass</em>'.
-	 * @see ccsl.java.JClass
+	 * @return the meta object for class '<em>Class</em>'.
+	 * @see ccsl.java.JavaClass
 	 * @generated
 	 */
-	EClass getJClass();
+	EClass getJavaClass();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.java.JClass#getNestedClasses <em>Nested Classes</em>}'.
+	 * Returns the meta object for the containment reference list '{@link ccsl.java.JavaClass#getNestedClasses <em>Nested Classes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Nested Classes</em>'.
-	 * @see ccsl.java.JClass#getNestedClasses()
-	 * @see #getJClass()
+	 * @see ccsl.java.JavaClass#getNestedClasses()
+	 * @see #getJavaClass()
 	 * @generated
 	 */
-	EReference getJClass_NestedClasses();
+	EReference getJavaClass_NestedClasses();
 
 	/**
-	 * Returns the meta object for the reference list '{@link ccsl.java.JClass#getImplements <em>Implements</em>}'.
+	 * Returns the meta object for the reference list '{@link ccsl.java.JavaClass#getImplements <em>Implements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Implements</em>'.
-	 * @see ccsl.java.JClass#getImplements()
-	 * @see #getJClass()
+	 * @see ccsl.java.JavaClass#getImplements()
+	 * @see #getJavaClass()
 	 * @generated
 	 */
-	EReference getJClass_Implements();
+	EReference getJavaClass_Implements();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link ccsl.java.JClass#getBlocks <em>Blocks</em>}'.
+	 * Returns the meta object for the containment reference list '{@link ccsl.java.JavaClass#getBlocks <em>Blocks</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Blocks</em>'.
-	 * @see ccsl.java.JClass#getBlocks()
-	 * @see #getJClass()
+	 * @see ccsl.java.JavaClass#getBlocks()
+	 * @see #getJavaClass()
 	 * @generated
 	 */
-	EReference getJClass_Blocks();
+	EReference getJavaClass_Blocks();
 
 	/**
 	 * Returns the meta object for class '{@link ccsl.java.JInterface <em>JInterface</em>}'.
@@ -958,14 +958,14 @@ public interface JavaPackage extends EPackage {
 		EClass JELEMENT = eINSTANCE.getJElement();
 
 		/**
-		 * The meta object literal for the '{@link ccsl.java.impl.JClassImpl <em>JClass</em>}' class.
+		 * The meta object literal for the '{@link ccsl.java.impl.JavaClassImpl <em>Class</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see ccsl.java.impl.JClassImpl
-		 * @see ccsl.java.impl.JavaPackageImpl#getJClass()
+		 * @see ccsl.java.impl.JavaClassImpl
+		 * @see ccsl.java.impl.JavaPackageImpl#getJavaClass()
 		 * @generated
 		 */
-		EClass JCLASS = eINSTANCE.getJClass();
+		EClass JAVA_CLASS = eINSTANCE.getJavaClass();
 
 		/**
 		 * The meta object literal for the '<em><b>Nested Classes</b></em>' containment reference list feature.
@@ -973,7 +973,7 @@ public interface JavaPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference JCLASS__NESTED_CLASSES = eINSTANCE.getJClass_NestedClasses();
+		EReference JAVA_CLASS__NESTED_CLASSES = eINSTANCE.getJavaClass_NestedClasses();
 
 		/**
 		 * The meta object literal for the '<em><b>Implements</b></em>' reference list feature.
@@ -981,7 +981,7 @@ public interface JavaPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference JCLASS__IMPLEMENTS = eINSTANCE.getJClass_Implements();
+		EReference JAVA_CLASS__IMPLEMENTS = eINSTANCE.getJavaClass_Implements();
 
 		/**
 		 * The meta object literal for the '<em><b>Blocks</b></em>' containment reference list feature.
@@ -989,7 +989,7 @@ public interface JavaPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference JCLASS__BLOCKS = eINSTANCE.getJClass_Blocks();
+		EReference JAVA_CLASS__BLOCKS = eINSTANCE.getJavaClass_Blocks();
 
 		/**
 		 * The meta object literal for the '{@link ccsl.java.impl.JInterfaceImpl <em>JInterface</em>}' class.

@@ -28,7 +28,7 @@ import org.eclipse.emf.common.util.EList;
 public interface JCatchClause extends Block {
 	/**
 	 * Returns the value of the '<em><b>Exceptions</b></em>' reference list.
-	 * The list contents are of type {@link ccsl.java.JClass}.
+	 * The list contents are of type {@link ccsl.java.JavaClass}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Exceptions</em>' reference list isn't clear,
@@ -37,7 +37,7 @@ public interface JCatchClause extends Block {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Exceptions</em>' reference list.
 	 * @see ccsl.java.JavaPackage#getJCatchClause_Exceptions()
-	 * @model type="ccsl.java.JClass"
+	 * @model type="ccsl.java.JavaClass"
 	 * @generated
 	 */
 	EList getExceptions();

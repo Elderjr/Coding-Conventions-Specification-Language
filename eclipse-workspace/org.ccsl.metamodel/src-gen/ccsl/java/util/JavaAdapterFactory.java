@@ -85,8 +85,8 @@ public class JavaAdapterFactory extends AdapterFactoryImpl {
 			return createJElementAdapter();
 		}
 
-		public Object caseJClass(JClass object) {
-			return createJClassAdapter();
+		public Object caseJavaClass(JavaClass object) {
+			return createJavaClassAdapter();
 		}
 
 		public Object caseJInterface(JInterface object) {
@@ -209,16 +209,16 @@ public class JavaAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link ccsl.java.JClass <em>JClass</em>}'.
+	 * Creates a new adapter for an object of class '{@link ccsl.java.JavaClass <em>Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see ccsl.java.JClass
+	 * @see ccsl.java.JavaClass
 	 * @generated
 	 */
-	public Adapter createJClassAdapter() {
+	public Adapter createJavaClassAdapter() {
 		return null;
 	}
 

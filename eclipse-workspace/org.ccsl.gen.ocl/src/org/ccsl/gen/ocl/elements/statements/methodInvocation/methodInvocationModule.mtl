@@ -1,18 +1,23 @@
 [comment encoding = UTF-8 /]
-[module methodInvocationModule('http://www.example.org/ccsl')/]
-[import org::ccsl::gen::ocl::elements::elementModule /]
-[import org::ccsl::gen::ocl::elements::statements::statementModule /]
+[module methodInvocationModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::elements::statements::statementModule /]
+[import org::ccsl::gen::ocl::dispatchers::elementDispatcherModule /]
+
 [import org::gen::ocl::strings::stringModule /]
 
-[comment 
-  These methods are generated automatically and should not be modified.
-  Such methods are defined in order to reuse the specific methods of this module by super metaclasses.   
-/]
-[template public generateSelect(element: Element, filters: OrderedSet(AtomicFilter)) ? (element.oclIsTypeOf(MethodInvocation))]
+
+[template public generateSelect(methodInvocation: MethodInvocation, filters: OrderedSet(AtomicFilter)) overrides generateSelect]
 MethodInvocation.allInstances()
   ->select(inv: MethodInvocation |
-    [element.generateConditions(null, 'inv', filters, false, false) /]
+    [methodInvocation.generateConditions(null, 'inv', filters, false, false) /]
 )
+[/template]
+
+[template public generateConditions(methodInvocation: MethodInvocation, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) overrides generateConditions]
+( -- Method Invocation conditions
+[for (condition: String | methodInvocation.getAllMethodInvocationConditions(contextElement, varName, filters, exactMatch)) separator(' and \n')]
+  [condition.printStringWithIdentation() /][/for]
+
+) --End Method Invocation conditions
 [/template]
 
 [query public getAllMethodInvocationConditions(methodInvocation: MethodInvocation, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
@@ -23,15 +28,8 @@ Set(String){
 ->union(methodInvocation.getAllStatementConditions(contextElement, varName, filters, exactMatch))
 /]
 
-[template public generateConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) ? (element.oclIsTypeOf(MethodInvocation)) post(trim())]
-( -- Method Invocation conditions
-[for (condition: String | element.oclAsType(MethodInvocation).getAllMethodInvocationConditions(contextElement, varName, filters, exactMatch)) separator(' and \n')]
-  [condition.printStringWithIdentation() /][/for]
-
-) --End Method Invocation conditions
-[/template]
-
 [template private generateMethodCondition(methodInvocation: MethodInvocation, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
-[methodInvocation.generateGenericSingleAttributeCondition(contextElement, varName, filters, false, false, methodInvocation.elementAccessed.oclAsType(Method), 'method') /]
+[if (not methodInvocation.elementAccessed.oclIsUndefined()) and (methodInvocation.elementAccessed <> contextElement)]
+[methodInvocation.elementAccessed.callGenerateConditions(methodInvocation, varName.concat('.method'), filters, false, false) /][/if]
 [/template]
 

@@ -4,8 +4,8 @@ package ccsl.java.impl;
 
 import ccsl.elements.namedElements.impl.MethodImpl;
 
-import ccsl.java.JClass;
 import ccsl.java.JMethod;
+import ccsl.java.JavaClass;
 import ccsl.java.JavaPackage;
 
 import java.util.Collection;
@@ -65,7 +65,7 @@ public class JMethodImpl extends MethodImpl implements JMethod {
 	 */
 	public EList getThrows() {
 		if (throws_ == null) {
-			throws_ = new EObjectResolvingEList(JClass.class, this, JavaPackage.JMETHOD__THROWS);
+			throws_ = new EObjectResolvingEList(JavaClass.class, this, JavaPackage.JMETHOD__THROWS);
 		}
 		return throws_;
 	}
