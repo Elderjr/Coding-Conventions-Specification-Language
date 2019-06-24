@@ -1,0 +1,26 @@
+[comment encoding = UTF-8 /]
+[module elementDispatcherModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::elements::elementModule /]
+[import org::ccsl::gen::ocl::elements::namedElement::namedElementModule /]
+[import org::ccsl::gen::ocl::elements::namedElement::complexType::complexTypeModule /]
+[import org::ccsl::gen::ocl::elements::namedElement::variable::variableModule /]
+[import org::ccsl::gen::ocl::elements::namedElement::method::methodModule /]
+
+[import org::ccsl::gen::ocl::elements::statements::statementModule /]
+[import org::ccsl::gen::ocl::elements::statements::methodInvocation::methodInvocationModule /]
+
+
+[template public callGenerateConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean)]
+[element.generateConditions(contextElement, varName, filters, exactMatch, typeCheck) /]
+[/template]
+
+
+[template public callGeneratePropertiesConditions(element: Element, varName: String, filters: OrderedSet(Property), exactMatch: Boolean)]
+[element.generatePropertiesConditions(varName, filters, exactMatch) /]
+[/template]
+
+
+[template public callGenerateSelect(element : Element, filters: OrderedSet(AtomicFilter))]
+[element.generateSelect(filters) /]
+[/template]

@@ -1,0 +1,64 @@
+Signature-Version: 1.0
+SHA-256-Digest-Manifest-Main-Attributes: eSIDZUo/0bFp6zauXJufzVh7h+jgI
+ moHceGhaB3p+d0=
+SHA-256-Digest-Manifest: GL3swGi2LLC9MQmGqsq46nodMe+XjuyqpGuFDiZUQHQ=
+Created-By: 1.8.0_162 (Oracle Corporation)
+
+Name: about.html
+SHA-256-Digest: Yb9nT4AQtkAyntrTJPKsiLxw/pEHlS2hWw0PND6lP8A=
+
+Name: plugin.xml
+SHA-256-Digest: zXpKyzchFLzMs9mKNEBAKHxqI1rGtaK6qtOQRbCY9Cs=
+
+Name: intro/images/banner-discovery.png
+SHA-256-Digest: EYZz2fxCoobijWO+ccQVp644udDAHf6NhCi91iO/Ukc=
+
+Name: icons/PapyrusLogo32x32.png
+SHA-256-Digest: bgDUObfJO+WUMRHW0RAPviJk6Fr1f+JACui4q+trbtw=
+
+Name: intro/css/overview.css
+SHA-256-Digest: RIffFEflQlLwQnaXU+pOO+AUsFKO7TpXMtJ5JOFXyD0=
+
+Name: doc/ToDo.txt
+SHA-256-Digest: +D1V8PZedy726mYXquI3QLFp2zuEn3viWh56FKR1lU0=
+
+Name: intro/css/overview.properties
+SHA-256-Digest: YSm2qYm86wAt0364ZwuNQII9Hbtwp4ZnSOkVfqv92/c=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/Activator.class
+SHA-256-Digest: JGcSMn4BIGs9N4kdxOYNde3OwDkA+bJs5YKjBq9nqn0=
+
+Name: META-INF/maven/org.eclipse.papyrus/org.eclipse.papyrus.infra.dis
+ covery.ui.menu/pom.properties
+SHA-256-Digest: lxhE3V5A2NMBtmTA+fc/s2aTMjVQ5W1kgTCxDnQ/v0E=
+
+Name: icons/papyrus.png
+SHA-256-Digest: lTx2PZwHslhJplzPAkgm0rgdkP8MN7N3i5H2f6scero=
+
+Name: icons/Papyrus_32x32_t.gif
+SHA-256-Digest: 9Cl3Qxb9q8ZNBqnIIbUn0EWYOtbo+A93PzdIBafmFsg=
+
+Name: intro/images/banner-discovery-papyrus.png
+SHA-256-Digest: JgiP9MFJ7P3c43PL/UDxs2Jz1FzW0wmcPHd/5twz/Jo=
+
+Name: icons/Papyrus_16x16.gif
+SHA-256-Digest: jw1SjKmYNgcsu2nqeLkVYxk3NrxEsaHhK1LVx9xNdz0=
+
+Name: plugin.properties
+SHA-256-Digest: 0eL+vASkPuhaDAPBTpogbdkgQWIanP4Q+uhQOynqRjE=
+
+Name: META-INF/maven/org.eclipse.papyrus/org.eclipse.papyrus.infra.dis
+ covery.ui.menu/pom.xml
+SHA-256-Digest: 6pK4SXHyBWGHXudzhcsF5xemcZLols3Cv8Kc+eFRNso=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/handler/PapyrusDisco
+ veryHandler.class
+SHA-256-Digest: bbaZ+TBoj+gK+QsZbRh6W8He11hJaL+Ay0rH0k/V+B8=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/handler/PapyrusDisco
+ veryAction.class
+SHA-256-Digest: gPyEsVFESf7+Yol30wus/3ihuuAYnVKhHmHbbcoCGJ0=
+
+Name: intro/papyrusDiscovery.xml
+SHA-256-Digest: A69LCQGsiZr7YzWAjQXLJL9xtCxzbr8NK7HJSiA0PyU=
+

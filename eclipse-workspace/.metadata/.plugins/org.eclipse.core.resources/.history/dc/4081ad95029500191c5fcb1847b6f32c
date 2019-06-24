@@ -1,0 +1,18 @@
+package org.ccsl.gen.services.compositeFilterService;
+
+import ccsl.LogicOperators;
+import ccsl.filters.CompositeFilter;
+
+public class CompositeFilterService {
+
+	
+	public static void setup(CompositeFilter compositeFilter) {
+		if(compositeFilter.isNegated()) {
+			if(compositeFilter.getOperator() == LogicOperators.AND_LITERAL) {
+				compositeFilter.setOperator(LogicOperators.OR_LITERAL);
+			}else if(compositeFilter.getOperator() == LogicOperators.OR_LITERAL) {
+				compositeFilter.setOperator(LogicOperators.AND_LITERAL);
+			}
+		}
+	}
+}

@@ -1,0 +1,10 @@
+package org.ccsl.gen.ocl.services.uniqueNameGeneratorService;
+
+
+import ccsl.elements.Element;
+
+public class UniqueNameGeneratorService {	
+	public static String generateUniqueName(String baseName, Element element) {
+		return  baseName + "_" + element.hashCode();
+	}
+}

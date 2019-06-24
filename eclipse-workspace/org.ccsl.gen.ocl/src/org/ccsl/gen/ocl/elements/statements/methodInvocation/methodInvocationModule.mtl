@@ -1,8 +1,7 @@
 [comment encoding = UTF-8 /]
 [module methodInvocationModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::elements::statements::statementModule /]
-[import org::ccsl::gen::ocl::dispatchers::elementDispatcherModule /]
-
-[import org::gen::ocl::strings::stringModule /]
+[import org::ccsl::gen::ocl::commom::elementDispatcherModule /]
+[import org::ccsl::gen::ocl::commom::stringModule /]
 
 
 [template public generateSelect(methodInvocation: MethodInvocation, filters: OrderedSet(AtomicFilter)) overrides generateSelect]

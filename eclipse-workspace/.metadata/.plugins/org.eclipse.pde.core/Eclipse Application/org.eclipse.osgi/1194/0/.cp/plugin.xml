@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+<extension-point id="templates" name="UML2 Model Templates" schema="schema/templates.exsd"/>
+<extension-point id="newModelStorageProviders" name="New Model Storage Providers" schema="schema/newModelStorageProviders.exsd"/>
+
+<extension point="org.eclipse.ui.newWizards">
+	<wizard
+         category="org.eclipse.papyrus.wizards.category"
+         class="org.eclipse.papyrus.uml.diagram.wizards.wizards.NewPapyrusProjectWizard"
+         finalPerspective="org.eclipse.papyrus.infra.core.perspective"         
+         icon="icons/papyrus/new_papyrus_project.gif"
+         id="org.eclipse.papyrus.uml.diagram.wizards.createproject"
+         name="%wizardPapyrusProject"
+         project="true">
+      <description>
+         %NewWizards.project.description
+      </description>
+	</wizard>
+    <wizard
+         category="org.eclipse.papyrus.wizards.category"
+         class="org.eclipse.papyrus.uml.diagram.wizards.wizards.InitModelWizard"
+         finalPerspective="org.eclipse.papyrus.infra.core.perspective"
+         icon="icons/papyrus/new_papyrus_model.gif"
+         id="org.eclipse.papyrus.uml.diagram.wizards.createmodel"
+         name="%wizardPapyrusModel">
+   </wizard>
+</extension>
+
+<extension
+      point="org.eclipse.papyrus.uml.diagram.wizards.newModelStorageProviders">
+   <provider
+         class="org.eclipse.papyrus.uml.diagram.wizards.providers.WorkspaceNewModelStorageProvider"
+         name="In the workspace">
+      <enablement>
+         <iterate>
+             <adapt
+                   type="org.eclipse.core.resources.IResource">
+             </adapt>
+         </iterate>
+      </enablement>
+   </provider>
+</extension>
+<extension
+      point="org.eclipse.help.contexts">
+   <contexts
+         file="help/helpContext.xml"
+         plugin="org.eclipse.papyrus.uml.diagram.wizards">
+   </contexts>
+</extension>
+		
+  <extension
+        point="org.eclipse.ui.intro.configExtension">
+     <configExtension
+           configId="org.eclipse.ui.intro.universalConfig"
+           content="intro/firststeps.xml">
+     </configExtension>
+     <configExtension
+           configId="org.eclipse.ui.intro.universalConfig"
+           content="intro/overview.xml">
+     </configExtension>
+  </extension>
+  
+</plugin>

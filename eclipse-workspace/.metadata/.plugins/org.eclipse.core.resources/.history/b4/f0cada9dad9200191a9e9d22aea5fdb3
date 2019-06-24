@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module namedElementRegexMatchModule('http://www.example.org/ccsl')]
+
+
+[template public defineConditionFilter(filter : Filter, element: Element, varName: String) ? (filter.oclIsTypeOf(NamedElementRegexMatch) and element.oclIsKindOf(NamedElement))]
+[let regexFilter: NamedElementRegexMatch = filter.oclAsType(NamedElementRegexMatch)]
+[varName /].name.matches('[regexFilter.regex /]')
+[/let]
+[/template]
+

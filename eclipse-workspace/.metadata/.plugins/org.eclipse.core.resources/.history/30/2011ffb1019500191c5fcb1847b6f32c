@@ -1,0 +1,12 @@
+package org.ccsl.gen.services.compositeFilterService;
+
+import ccsl.filters.CompositeFilter;
+
+public class CompositeFilterService {
+
+	public static void setup(CompositeFilter compositeFilter) {
+		if(compositeFilter.isNegated()) {
+			
+		}
+	}
+}

@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module propertyFilterModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+
+[template public generateFilterConditions(filter : PropertyFilter, element: Element, varName: String) overrides generateFilterConditions]
+[if filter.negated]not ([/if][element.callGeneratePropertiesConditions(varName, propertyFilter.properties) /][if filter.negated])[/if][/let]
+[/template]

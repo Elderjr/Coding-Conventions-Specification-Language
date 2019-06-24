@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.example.org/ccsl')/]
+
+[query public setup(arg0 : CompositeFilter) : OclVoid
+	= invoke('org.ccsl.gen.services.compositeFilterService.CompositeFilterService', 'setup(ccsl.filters.CompositeFilter)', Sequence{arg0})
+/]
+

@@ -1,0 +1,12 @@
+java::ClassDeclaration.allInstances()
+  ->select(complexType: java::ClassDeclaration |
+    complexType.bodyDeclarations->select(field | field.oclIsTypeOf(java::FieldDeclaration) and field.oclAsType(FieldDeclaration))
+    methods
+    
+)->union(
+java::InterfaceDeclaration.allInstances()
+  ->select(complexType: java::InterfaceDeclaration |
+    complexType.bodyDeclarations->select(field | field.oclIsTypeOf(java::FieldDeclaration) and field.oclAsType(FieldDeclaration))
+    methods
+    
+)

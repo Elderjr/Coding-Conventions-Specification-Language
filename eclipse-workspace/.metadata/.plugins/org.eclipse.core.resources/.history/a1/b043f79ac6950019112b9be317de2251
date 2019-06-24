@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module stringModule('http://www.example.org/ccsl')]
+
+
+[template public printStringWithIdentation(anString : String)]
+[anString /]
+[/template]

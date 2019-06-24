@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module statementModule('http://www.example.org/ccsl') extends extends org::ccsl::gen::ocl::elements::elementModule /]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+
+
+
+[query public getAllStatementConditions(statement: Statement, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+	statement.getAllElementConditions(contextElement, varName, filters, exactMatch)
+/]
+

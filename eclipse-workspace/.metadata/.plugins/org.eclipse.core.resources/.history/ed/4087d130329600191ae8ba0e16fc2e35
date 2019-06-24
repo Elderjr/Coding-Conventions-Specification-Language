@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module javaClassModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::elements::namedElement::complexType::complexTypeModule]
+[import org::gen::ocl::strings::stringModule /]
+
+[template public generateSelect(complexType: ComplexType, filters: OrderedSet(AtomicFilter)) overrides generateSelect]
+java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+  [complexType.generateConditions(null, 'class', filters, false, false) /]
+)
+[/template]
+
+
+[query public getAllJavaClassConditions(javaClass: JavaClass, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+Set(String){
+
+}
+->union(javaClass.getAllComplexTypeConditions(contextElement, varName, filters, exactMatch))
+/]
+
+[template public generateConditions(javaClass: JavaClass, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) overrides generateConditions]
+[if typeCheck]
+[let conditions: Set(String) = complexType.getAllComplexTypeConditions(contextElement, varName.concat('.oclAsType(ClassDeclaration)'), filters, exactMatch)]
+( -- JavaClass Conditions
+  [varName /].oclIsKindOf(ClassDeclaration)[if conditions->size() > 0] and 
+[for (condition: String | conditions) separator('  and \n')]
+  [condition.printStringWithIdentation() /]
+[/for][/if]
+) -- End JavaClass Conditions
+[/let]
+[else]
+( -- JavaClass Conditions
+[for (condition: String | complexType.getAllComplexTypeConditions(contextElement, varName, filters, exactMatch)) separator(' and \n')]
+  [condition.printStringWithIdentation() /][/for]
+
+) -- End JavaClass Conditions
+[/if]
+[/template]
+
+
+
+[template private generateFieldsConditions(complexType: ComplexType, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
+[if not complexType.fields->oclIsUndefined()]
+[complexType.generateGenericMultivaluedAttributeCondition(contextElement, varName, filters, exactMatch, true, complexType.fields, 'bodyDeclarations',complexType.generateValidName('class').concat('_fields'), complexType.generateValidName('class').concat('_fieldToSelect')) /][/if]
+[/template]
+
+
+[template private generateMethodsConditions(complexType: ComplexType, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean)]
+[complexType.generateGenericMultivaluedAttributeCondition(contextElement, varName, filters, exactMatch, true, complexType.methods, 'bodyDeclarations', complexType.generateValidName('class').concat('_methods'), complexType.generateValidName('class').concat('_methodToSelect')) /]
+[/template]
+

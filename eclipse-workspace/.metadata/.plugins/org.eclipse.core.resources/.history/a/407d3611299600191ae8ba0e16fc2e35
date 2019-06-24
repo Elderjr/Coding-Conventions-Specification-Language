@@ -1,0 +1,23 @@
+[comment encoding = UTF-8 /]
+[module dispatcherModule('http://www.example.org/ccsl')]
+
+
+[import org::ccsl::gen::ocl::elements::namedElement::namedElementModule /]
+[import org::ccsl::gen::ocl::elements::statements::methodInvocation::methodInvocationModule/]
+
+[template public callTest(element : Element, set: OrderedSet(Integer))]
+[element.test() /]
+[/template]
+
+
+
+
+
+[comment MethodInvocation /]
+[template public generateConditions(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) ? (element.oclIsTypeOf(MethodInvocation))]
+[element.oclAsType(MethodInvocation).generateMethodInvocationConditions(contextElement, varName, filters, exactMatch, typeCheck) /]
+[/template]
+
+[template public generateSelect(element : Element, filters: OrderedSet(AtomicFilter)) ? (element.oclIsTypeOf(MethodInvocation))]
+[element.oclAsType(MethodInvocation).generateMethodInvocationSelect(filters) /]
+[/template]

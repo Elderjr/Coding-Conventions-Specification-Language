@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::services::compositeFilterService::compositeFilterService /]
-[import org::ccsl::gen::ocl::dispatchers::elementDispatcherModule /]
+[import org::ccsl::gen::ocl::commom::elementDispatcherModule /]
 
 [template public main(rule : Rule)]
 [comment @main/]
@@ -56,7 +56,6 @@
   [filter.runContext(scope) /]
 [if i <> 1]
   )--close union
-
 [/if][/for][/if]
 ------- End Composite Iteration --------
 [/template]

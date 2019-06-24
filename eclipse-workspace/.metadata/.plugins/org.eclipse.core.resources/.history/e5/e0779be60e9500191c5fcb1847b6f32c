@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module namedElementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+
+[query public queryConditionNamedElement(namedElement: NamedElement, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+OrderedSet(String){
+  	namedElement.defineNameQueryCondition(varName)
+}
+->select(condition: String | condition.trim().size() > 0)
+->union(namedElement.queryConditionElement(contextElement, varName, filters, exactMatch))
+/]
+
+[template public defineQueryCondition(element: Element, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean) ? (element.oclIsTypeOf(NamedElement)) post(trim())]
+[for (condition: String | element.oclAsType(NamedElement).queryConditionNamedElement(contextElement, varName, filters, exactMatch)) separator(' and \n')]
+[condition /][/for]
+[/template]
+
+[template private defineNameQueryCondition(namedElement: NamedElement, varName: String)]
+[if not namedElement.name.oclIsUndefined()][varName /].name='[namedElement.name/]'[/if]
+[/template]

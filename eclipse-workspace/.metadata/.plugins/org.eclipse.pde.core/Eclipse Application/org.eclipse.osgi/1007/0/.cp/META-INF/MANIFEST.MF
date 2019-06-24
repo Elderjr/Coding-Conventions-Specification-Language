@@ -1,0 +1,85 @@
+Manifest-Version: 1.0
+Bundle-Description: %pluginDescription
+Bundle-SymbolicName: org.eclipse.papyrus.infra.discovery.ui.menu;singl
+ eton:=true
+Archiver-Version: Plexus Archiver
+Built-By: genie.papyrus
+Require-Bundle: org.eclipse.ui;bundle-version="[3.107.0,4.0.0)";visibi
+ lity:=reexport,org.eclipse.papyrus.infra.discovery.ui;bundle-version=
+ "[3.0.0,4.0.0)"
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-SourceReferences: scm:git:git://git.eclipse.org/gitroot/papyru
+ s/org.eclipse.papyrus;path="plugins/infra/discovery/org.eclipse.papyr
+ us.infra.discovery.ui.menu";commitId=96242d022297a7a6fece8fe6a25b5eab
+ 45b5708e
+Bundle-Vendor: %providerName
+Export-Package: org.eclipse.papyrus.infra.discovery.ui.menu,org.eclips
+ e.papyrus.infra.discovery.ui.menu.handler
+Bundle-Version: 1.2.0.201803070847
+Bundle-Name: %pluginName
+Bundle-Localization: plugin
+Bundle-Activator: org.eclipse.papyrus.infra.discovery.ui.menu.Activato
+ r
+Created-By: Apache Maven 3.5.2
+Build-Jdk: 1.8.0_162
+
+Name: about.html
+SHA-256-Digest: bfZTK5LN15EseTDjwHyfLbBfEqNWEMGdt+oFKsrN0B4=
+
+Name: plugin.xml
+SHA-256-Digest: r0ETRfJd+hGs+tzdofKQzao7HLXOlLV7swQcxyDll74=
+
+Name: intro/images/banner-discovery.png
+SHA-256-Digest: IWkd2C549R2jSfgC0+Q81YMWYOq0OUz/glttLtKgYOo=
+
+Name: icons/PapyrusLogo32x32.png
+SHA-256-Digest: 1VSdpTaHbxtiBmIVyqrXadHh5gsvqyCr+FAr/vPnI78=
+
+Name: intro/css/overview.css
+SHA-256-Digest: TH7KFVDxva9yRW/ZpiDWzBU9k5cA+v9UThRIaGuxb94=
+
+Name: doc/ToDo.txt
+SHA-256-Digest: 1AiklXdeKHV7lUcfQ+5v4aV4dfzybcu0Q+TH2iYfp0g=
+
+Name: intro/css/overview.properties
+SHA-256-Digest: IEn6dudb2NlxYi49Z/SYOzcvoH7XuJT6RP5iw0LVgeY=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/Activator.class
+SHA-256-Digest: OITx5siP/jTnstIWeZbe6UoAa5ba8EYMYcJ8lV04zQ4=
+
+Name: META-INF/maven/org.eclipse.papyrus/org.eclipse.papyrus.infra.dis
+ covery.ui.menu/pom.properties
+SHA-256-Digest: /QubSwjJR3ME4RJb6zTcbs5AsjmXNm+sVzBKlqwT25Q=
+
+Name: icons/papyrus.png
+SHA-256-Digest: ylqkDrr3XrI7RQHjnVfDX65+J7j+mWoOvjhtzFiD33I=
+
+Name: icons/Papyrus_32x32_t.gif
+SHA-256-Digest: ZkJIcj2/EwO2AiO+z0KTRKrpRQCe31pPdq0mox0ZO5k=
+
+Name: intro/images/banner-discovery-papyrus.png
+SHA-256-Digest: hw3G4ryrnAlpm2TlyzpQ7bahmWcUx/nT9cmC16HZ9/s=
+
+Name: icons/Papyrus_16x16.gif
+SHA-256-Digest: W/uEQqt6k85Zo2l7v8k5TKvDtbwPIwmsSRJ0BDYsb3Y=
+
+Name: plugin.properties
+SHA-256-Digest: PtAGIDf8j/04WklCdzrOlotw6bmVwD7YMDObwGV3ZQI=
+
+Name: META-INF/maven/org.eclipse.papyrus/org.eclipse.papyrus.infra.dis
+ covery.ui.menu/pom.xml
+SHA-256-Digest: 4SE/M9eM3qKzVCObq5x/Y+IkvF/+wJrZu5gBeMSz0eY=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/handler/PapyrusDisco
+ veryHandler.class
+SHA-256-Digest: 6upJaiJ+Cm00qZA4SxRIlND7gwppl/UKXXSHT4pW+EM=
+
+Name: org/eclipse/papyrus/infra/discovery/ui/menu/handler/PapyrusDisco
+ veryAction.class
+SHA-256-Digest: M5e35OjXS8vvVTLmi1HQZiIN1JehT1YW7Dj8zrvR5CA=
+
+Name: intro/papyrusDiscovery.xml
+SHA-256-Digest: gCFwvvIZWPE81YGqES+PKP2I/Uj/ruAh60mpuQlBAes=
+

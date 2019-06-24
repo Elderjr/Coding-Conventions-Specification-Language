@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module javaClassModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::elements::namedElement::complexType::complexTypeModule /]
-[import org::gen::ocl::strings::stringModule /]
+[import org::ccsl::gen::ocl::commom::stringModule /]
 
 [template public generateSelect(complexType: ComplexType, filters: OrderedSet(AtomicFilter)) overrides generateSelect]
 java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
@@ -10,9 +10,7 @@ java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
 
 
 [query public getAllJavaClassConditions(javaClass: JavaClass, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
-Set(String){
-
-}
+Set(String){}
 ->union(javaClass.getAllComplexTypeConditions(contextElement, varName, filters, exactMatch))
 /]
 
@@ -21,9 +19,8 @@ Set(String){
 [let conditions: Set(String) = javaClass.getAllJavaClassConditions(contextElement, varName.concat('.oclAsType(ClassDeclaration)'), filters, exactMatch)]
 ( -- JavaClass Conditions
   [varName /].oclIsKindOf(ClassDeclaration)[if conditions->size() > 0] and 
-[for (condition: String | conditions) separator('  and \n')]
-  [condition.printStringWithIdentation() /]
-[/for][/if]
+[for (condition: String | conditions) separator(' and \n')]
+  [condition.printStringWithIdentation() /][/for][/if]
 ) -- End JavaClass Conditions
 [/let]
 [else]
@@ -31,7 +28,6 @@ Set(String){
 [for (condition: String | javaClass.getAllJavaClassConditions(contextElement, varName, filters, exactMatch)) separator(' and \n')]
   [condition.printStringWithIdentation() /][/for]
 
-) -- End JavaClass Conditions
-[/if]
+) -- End JavaClass Conditions[/if]
 [/template]
 

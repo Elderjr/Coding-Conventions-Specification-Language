@@ -1,0 +1,9 @@
+
+public class TestB {
+
+	public int a;
+	
+	public void x() {
+		new Thread().run();
+	}
+}

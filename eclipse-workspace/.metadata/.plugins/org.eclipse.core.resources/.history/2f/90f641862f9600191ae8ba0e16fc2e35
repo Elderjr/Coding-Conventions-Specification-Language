@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module filterModule('http://www.example.org/ccsl')]
+
+
+[template public generateFilterConditions(anElement : Element)]
+
+[/template]

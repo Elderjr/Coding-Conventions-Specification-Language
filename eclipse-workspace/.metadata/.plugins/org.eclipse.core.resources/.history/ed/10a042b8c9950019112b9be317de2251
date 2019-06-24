@@ -1,0 +1,65 @@
+[comment encoding = UTF-8 /]
+[module mainGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule/]
+[import org::ccsl::gen::services::compositeFilterService::compositeFilterService /]
+
+[template public main(rule : Rule)]
+[comment @main/]
+[file ('gen',false, 'UTF-8')]
+[rule.generateOcl()/]
+[/file]
+[/template]
+
+[template private generateOcl(rule : Rule) /]
+ 
+[template private generateOcl(rule : AtomicRule) post(trim())] 
+[if not rule.filters->isEmpty()]
+[rule.filters->runContext(scope) /]
+[else]
+[rule.scope.callDefineSelectQuery(OrderedSet(AtomicFilter){}) /][/if]
+[/template]
+
+[template private operation(operator: LogicOperator)]
+[if operator = LogicOperator::AND]intersection[else]union[/if]
+[/template]
+
+
+
+[template private runContext(filters: OrderedSet(Filter), scope: Element)]
+[let atomicFilters: OrderedSet(AtomicFilter) = filters->select(f | f.oclIsKindOf(AtomicFilter))]
+[let compositeFilters: OrderedSet(CompositeFilter) = filters->select(f | f.oclIsKindOf(CompositeFilter))]
+[if not atomicFilters->isEmpty()]
+------------- Iteration -------------:
+  [scope.callDefineSelectQuery(atomicFilters) /]
+----------- End Iteration -----------;
+[if not compositeFilters->isEmpty()]->intersection([/if]
+[/if]
+[for (compositeFilter: CompositeFilter | compositeFilters) separator('->intersection(')]
+[compositeFilter.runContext(scope) /]
+[if i <> 1 or atomicFilters->size() > 0]
+)--close intersection
+[/if][/for][/let][/let]
+[/template]
+
+[template private runContext(filter: Filter, scope: Element) /]
+
+[template private runContext(atomicFilter: AtomicFilter, scope: Element)]
+------------- Iteration -------------:
+  [scope.callDefineSelectQuery(OrderedSet(AtomicFilter){atomicFilter}) /]
+----------- End Iteration -----------;
+[/template]
+
+[template private runContext(compositeFilter: CompositeFilter, scope: Element)]
+------- Composite Iteration --------
+[compositeFilter.setup() /][if compositeFilter.operator = LogicOperator::AND]
+  [compositeFilter.filters->runContext(scope) /]
+[else]
+[for (filter: Filter | compositeFilter.filters) separator('  ->union(\n')]
+  [filter.runContext(scope) /]
+[if i <> 1]
+  )--close union
+[/if]
+[/for]
+[/if]
+------- End Composite Iteration --------
+[/template]

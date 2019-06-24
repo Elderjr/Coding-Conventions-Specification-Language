@@ -1,0 +1,53 @@
+[comment encoding = UTF-8 /]
+[module filterModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+[import org::ccsl::gen::ocl::filters::propertyFilter::propertyFilterModule /]
+[import org::ccsl::gen::ocl::filters::namedElementRegexMatch::namedElementRegexMatchModule /]
+
+[query public getAllAtomicFilters(filters: OrderedSet(Filter)) : OrderedSet(AtomicFilter) =
+	filters->select(f | f.oclIsKindOf(AtomicFilter))
+/]
+
+[query public getAllCompositeFilters(filters: OrderedSet(Filter)) : OrderedSet(CompositeFilter) =
+	filters->select(f | f.oclIsKindOf(CompositeFilter))
+/]
+
+[template public symbol(operator: LogicOperators) ? (operator = LogicOperators::AND)]
+#AND
+[/template]
+
+[template public symbol(operator: LogicOperators) ? (operator = LogicOperators::OR)]
+#OR
+[/template]
+
+[template public startFilter(filter: Filter, element: Element)]
+[filter.conditionFilter(element) /]
+[/template]
+
+[template public process(filter : Filter, scope: Element) ? (filter.oclIsKindOf(AtomicFilter))]
+Atomic Filter's process
+[scope.createQuery(OrderedSet(AtomicFilter){filter.oclAsType(AtomicFilter)}) /]
+[/template]
+
+[template public process(filter : Filter, scope: Element) ? (filter.oclIsKindOf(CompositeFilter))]
+Composite Filter's process
+[let compositeFilter: CompositeFilter = filter.oclAsType(CompositeFilter)]
+[if compositeFilter.operator = LogicOperators::AND]
+[let atomicFilters: OrderedSet(AtomicFilter) = compositeFilter.filters->getAllAtomicFilters()]
+[let compositeFilters: OrderedSet(CompositeFilter) = compositeFilter.filters->getAllCompositeFilters()]
+[if not atomicFilters->isEmpty()]
+[scope.createQuery(atomicFilters) /]
+[/if]
+[for (filterTmp: CompositeFilter| compositeFilters) separator(compositeFilter.operator.symbol())]
+[filterTmp.process(scope)/] 
+[/for])
+[/let]
+[/let]
+[else]
+[for (filterTmp: Filter| compositeFilter.filters) separator(compositeFilter.operator.symbol())]
+Composite!!!
+[filterTmp.process(scope)/] 
+[/for])
+[/if]
+[/let]
+[/template]

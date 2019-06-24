@@ -1,0 +1,7 @@
+
+
+public class Test {
+
+	 public final int x = 5;
+	 private int y = 5;
+}

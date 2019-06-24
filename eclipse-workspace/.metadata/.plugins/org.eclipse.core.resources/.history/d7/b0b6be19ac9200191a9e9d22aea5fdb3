@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module namedElementRegexMatchModule('http://www.example.org/ccsl')]
+
+
+[template public conditionFilter(filter : Filter, element: Element) ? (oclIsTypeOf(NamedElementRegexMatch))]
+<<Regex Match Filter>>
+[/template]

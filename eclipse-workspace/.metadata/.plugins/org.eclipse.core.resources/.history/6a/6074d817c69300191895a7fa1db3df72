@@ -1,0 +1,24 @@
+package org.ccsl.gen.ocl.services.uniqueNameGeneratorService;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class UniqueNameGeneratorService {
+
+	private static final Map<String, Integer> COUNTER = new HashMap<>();
+	
+	public static String generateUniqueName(String baseName) {
+		Integer currentCount = COUNTER.get(baseName);
+		String uniqueName;
+		if(currentCount != null) {
+			uniqueName = baseName + "_" + currentCount;
+			COUNTER.put(baseName, currentCount + 1); 
+		} else {
+			uniqueName = baseName + "_" + 1;
+			COUNTER.put(baseName, 1);
+		}
+		if(COUNTER.containsKey(baseName)) {
+			
+		}
+	}
+}

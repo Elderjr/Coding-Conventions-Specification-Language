@@ -1,0 +1,21 @@
+[comment encoding = UTF-8 /]
+[module namedElementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::elements::elementModule /]
+[import org::gen::ocl::strings::stringModule /]
+
+[query public allConditionsNamedElement(namedElement: NamedElement, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
+Set(String){
+  	namedElement.defineNameQueryCondition(varName)
+}
+->select(condition: String | condition.trim().size() > 0)
+->union(namedElement.getAllConditionsElement(contextElement, varName, filters, exactMatch))
+/]
+
+[template public generateConditions(namedElement: NamedElement, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean, typeCheck: Boolean) post(trim())]
+[for (condition: String | namedElement.allConditionsNamedElement(contextElement, varName, filters, exactMatch)) separator(' and \n')]
+[condition.printStringWithIdentation() /][/for]
+[/template]
+
+[template private defineNameQueryCondition(namedElement: NamedElement, varName: String)]
+[if not namedElement.name.oclIsUndefined()][varName /].name='[namedElement.name/]'[/if]
+[/template]

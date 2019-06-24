@@ -1,0 +1,58 @@
+------- Composite Iteration --------
+  
+    ------------- Iteration -------------:
+    java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+      let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public) in
+      class_1_fields_2->size() > 0 and
+      class_1_fields_2->asOrderedSet()->size() >= 1 and 
+      not class.name.matches('Bean')
+    )->union(
+      java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+        let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public) in
+        class_1_fields_2->size() > 0 and
+        class_1_fields_2->asOrderedSet()->size() >= 1 and 
+        not interface.name.matches('Bean')
+      )
+    )
+    ----------- End Iteration -----------;
+    ->intersection(
+      ------- Composite Iteration --------
+      
+        ------------- Iteration -------------:
+        java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+          let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public and 
+          not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.static)) in
+          class_1_fields_2->size() > 0 and
+          class_1_fields_2->asOrderedSet()->size() >= 1
+        )->union(
+          java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+            let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public and 
+            not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.static)) in
+            class_1_fields_2->size() > 0 and
+            class_1_fields_2->asOrderedSet()->size() >= 1
+          )
+        )
+        ----------- End Iteration -----------;
+        
+      ->union(
+        ------------- Iteration -------------:
+        java::ClassDeclaration.allInstances()->select(class: java::ClassDeclaration |
+          let class_1_fields_2 = class.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public and 
+          not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.inheritance = java::InheritanceKind::final)) in
+          class_1_fields_2->size() > 0 and
+          class_1_fields_2->asOrderedSet()->size() >= 1
+        )->union(
+          java::InterfaceDeclaration.allInstances()->select(interface: java::InterfaceDeclaration |
+            let class_1_fields_2 = interface.bodyDeclarations->select(class_1_fieldToSelect_2| class_1_fieldToSelect_2.oclIsTypeOf(FieldDeclaration) and class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.visibility = java::VisibilityKind::public and 
+            not (class_1_fieldToSelect_2.oclAsType(FieldDeclaration).modifier.inheritance = java::InheritanceKind::final)) in
+            class_1_fields_2->size() > 0 and
+            class_1_fields_2->asOrderedSet()->size() >= 1
+          )
+        )
+        ----------- End Iteration -----------;
+        
+      )
+      ------- End Composite Iteration --------
+    )
+  
+  ------- End Composite Iteration --------

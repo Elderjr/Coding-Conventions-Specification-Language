@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module statementModule('http://www.example.org/ccsl')]
+
+
+[template public test(aStatement : Statement)]
+
+[/template]

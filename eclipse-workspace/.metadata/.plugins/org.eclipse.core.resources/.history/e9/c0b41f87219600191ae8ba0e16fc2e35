@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::dispatchers::dispatcherModule /]
+
+[template public test(anElement : Element)]
+
+[/template]

@@ -3,6 +3,6 @@
 
 
 [template public generateFilterConditions(regexFilter : NamedElementRegexMatch, target: Element, varName: String) overrides generateFilterConditions]
-[if regexFilter.negated](not [/if][varName /].name.matches('[regexFilter.regex /]')[if regexFilter.negated])[/if]
+[if regexFilter.negated]not ([/if][varName /].name.matches('[regexFilter.regex /]')[if regexFilter.negated])[/if]
 [/template]
 

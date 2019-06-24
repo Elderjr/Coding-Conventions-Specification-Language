@@ -1,0 +1,9 @@
+MethodInvocation.allInstances()
+  ->select(inv: MethodInvocation |
+    (inv.method.oclContainer().oclIsKindOf(ClassDeclaration) and 
+    inv.method.oclContainer()oclAsType(ClassDeclaration).name='Thread')
+     or 
+    (inv.method.oclContainer().oclIsKindOf(ClassDeclaration) and 
+    inv.method.oclContainer()oclAsType(InterfaceDeclaration).name='Thread') and 
+    inv.method.name='run'
+)

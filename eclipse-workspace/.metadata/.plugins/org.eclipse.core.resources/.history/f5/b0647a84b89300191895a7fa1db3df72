@@ -1,0 +1,7 @@
+
+public interface TestInterface {
+
+	public final int X = 5;
+	
+	public void interfaceMethod();
+}
