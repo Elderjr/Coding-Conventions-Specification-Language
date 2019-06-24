@@ -1,8 +1,0 @@
-[comment encoding = UTF-8 /]
-[module statementModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::elementModule /]
-
-[query public queryConditionStatement(statement: Statement, contextElement: Element, varName: String, filters: OrderedSet(AtomicFilter), exactMatch: Boolean): Set(String) =
-	namedElement.queryConditionElement(contextElement, varName, filters, exactMatch)
-/]
-

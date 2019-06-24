@@ -1,9 +1,0 @@
-[comment encoding = UTF-8 /]
-[module propertyFilterModule('http://www.example.org/ccsl')]
-
-
-[template public defineFilterConditions(filter : Filter, element: Element, varName: String) ? (filter.oclIsTypeOf(PropertyFilter)) post(trim())]
-[let propertyFilter: PropertyFilter = filter.oclAsType(PropertyFilter)]
-[ /]
-[/let]
-[/template]

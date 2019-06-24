@@ -1,9 +1,0 @@
-
-public class Test {
-
-	public static final int a = 5;
-	
-	public void x() {
-		new Thread().run();
-	}
-}

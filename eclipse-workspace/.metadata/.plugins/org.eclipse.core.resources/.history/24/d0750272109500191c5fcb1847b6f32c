@@ -1,9 +1,0 @@
-[comment encoding = UTF-8 /]
-[module propertyFilterModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::elements::elementModule /]
-
-[template public generateCondition(filter : Filter, element: Element, varName: String) ? (filter.oclIsTypeOf(PropertyFilter)) post(trim())]
-Hello!
-[let propertyFilter: PropertyFilter = filter.oclAsType(PropertyFilter)]
-[if filter.negated]not ([/if][element.callDefineQueryConditionsProperties(varName, propertyFilter.properties) /][if filter.negated])[/if][/let]
-[/template]

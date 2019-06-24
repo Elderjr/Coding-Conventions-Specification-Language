@@ -1,8 +1,0 @@
-[comment encoding = UTF-8 /]
-[module namedElementRegexMatchModule('http://www.example.org/ccsl') extends org::ccsl::gen::ocl::filters::filterModule /]
-
-
-[template public generateFilterConditions(filter : PropertyFilter, target: Element, varName: String) overrides generateFilterConditions]
-alou[if regexFilter.negated](not [/if][varName /].name.matches('[regexFilter.regex /]')[if regexFilter.negated])[/if]
-[/template]
-

@@ -1,9 +1,0 @@
-
-
-public class Test {
-
-	public final int x = 3;
-	int z = 5;
-	int k = 2;
-	
-}

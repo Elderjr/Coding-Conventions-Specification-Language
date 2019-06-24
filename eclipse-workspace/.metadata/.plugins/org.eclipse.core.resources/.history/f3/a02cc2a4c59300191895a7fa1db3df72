@@ -1,7 +1,0 @@
-package org.ccsl.gen.ocl.services.uniqueNameGeneratorService;
-
-public class UniqueNameGeneratorService {
-
-	private static final Map<String, Integer> counter;
-	
-}

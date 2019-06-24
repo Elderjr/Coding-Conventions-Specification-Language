@@ -1,7 +1,0 @@
-
-public interface TestInterface {
-
-	int x;
-	
-	public void interfaceMethod();
-}

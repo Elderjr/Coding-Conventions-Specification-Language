@@ -1,6 +1,0 @@
-import 'http://www.eclipse.org/MoDisco/Java/0.2.incubation/java'
-
-context java::Model
-def: oclDebuggerExpression() : OclAny = 
-	java::MethodInvocation.allInstances()->select(inv: java::MethodInvocation | 
-		java::MethodDeclaration.allInstances()->select(m: java::MethodDeclaration | m.oclContainer.oclAsType(ClassDeclaration).name='Thread')->exists(m | m = inv.method))

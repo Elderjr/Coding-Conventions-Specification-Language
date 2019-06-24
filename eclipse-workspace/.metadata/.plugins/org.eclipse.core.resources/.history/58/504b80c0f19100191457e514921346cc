@@ -1,7 +1,0 @@
-[comment encoding = UTF-8 /]
-[module propertyFilterModule('http://www.example.org/ccsl')]
-
-
-[template public conditionFilter(filter : PropertyFilter, element: Element)]
-<<FILTRO PROPRIEDADES>>
-[/template]

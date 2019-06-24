@@ -1,8 +1,0 @@
-[comment encoding = UTF-8 /]
-[module filterDispatcherModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::filters::namedElementRegexMatch::namedElementRegexMatchModule /]
-[import org::ccsl::gen::ocl::filters::propertyFilter::propertyFilterModule /]
-
-[template public callGenerateFilterConditions(filter : AtomicFilter, target: Element, varName: String)]
-chamou! [filter /][filter.generateFilterConditions(target, varName) /]
-[/template]

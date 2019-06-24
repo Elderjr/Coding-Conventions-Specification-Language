@@ -1,8 +1,0 @@
-
-
-public class Test {
-
-	private int x = 5;
-	private int y = 5;
-	
-}

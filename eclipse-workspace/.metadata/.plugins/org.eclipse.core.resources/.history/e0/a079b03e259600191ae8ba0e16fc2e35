@@ -1,7 +1,0 @@
-[comment encoding = UTF-8 /]
-[module moduleTest('http://www.example.org/ccsl')]
-
-
-[template public test(anElement : Element)]
-Test
-[/template]

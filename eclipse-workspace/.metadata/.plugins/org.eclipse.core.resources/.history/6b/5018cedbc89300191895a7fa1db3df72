@@ -1,7 +1,0 @@
-[comment encoding = UTF-8 /]
-[module elementIndentifierService('http://www.example.org/ccsl')/]
-
-[query public generateUniqueName(arg0 : String, arg1 : Element) : String
-	= invoke('org.ccsl.gen.ocl.services.uniqueNameGeneratorService.UniqueNameGeneratorService', 'generateUniqueName(java.lang.String, ccsl.elements.Element)', Sequence{arg0, arg1})
-/]
-
