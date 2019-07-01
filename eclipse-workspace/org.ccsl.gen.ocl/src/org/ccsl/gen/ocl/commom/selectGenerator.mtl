@@ -1,0 +1,35 @@
+[comment encoding = UTF-8 /]
+[module selectGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
+
+
+
+[template private generateFiltersConditions(filters: OrderedSet(Filter))]
+[let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s: String | s.trim().size() > 0)]
+[for(cond: String | filterConditions) separator(' and\n')]
+[cond.printStringWithIdentation() /][/for]
+[/let]
+[/template]
+
+[template public generateSelect(element : Element, filters: OrderedSet(Filter)) /]
+
+[template public generateSelect(complexType : ComplexType, filters: OrderedSet(Filter))]
+[let scopeConditions: String = complexType.generatesConditions(complexType.generateOclVariableName(), false, false)]
+[let filterConditions: String = filters->generateFiltersConditions()]
+ClassDeclaration.allInstances()->select([complexType.generateOclVariableName() /] |
+  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0]and
+[/if] [filterConditions.printStringWithIdentation() /]
+)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
+[/template]
+
+[template public generateSelect(methodInvocation : MethodInvocation, filters: OrderedSet(Filter))]
+[let scopeConditions: String = methodInvocation.generatesConditions(methodInvocation.generateOclVariableName(), false, false)]
+[let filterConditions: String = filters->generateFiltersConditions()]
+MethodInvocation.allInstances()->select([methodInvocation.generateOclVariableName() /] |
+  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0]and
+[/if] [filterConditions.printStringWithIdentation() /]
+)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
+[/template]

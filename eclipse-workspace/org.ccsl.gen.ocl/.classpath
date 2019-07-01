@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" output="bin" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.ccsl.metamodel"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

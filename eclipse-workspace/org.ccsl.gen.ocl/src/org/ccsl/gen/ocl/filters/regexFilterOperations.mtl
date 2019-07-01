@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module regexFilterOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+
+[template public generatesRegexFilterConditions(regexFilter: NamedElementRegexMatch, target: Element)]
+[target.generateOclVariableName() /].name.matches('[regexFilter.regex /]')
+[/template]

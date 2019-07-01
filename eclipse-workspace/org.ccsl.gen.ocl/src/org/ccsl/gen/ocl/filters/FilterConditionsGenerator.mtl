@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module FilterConditionsGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+
+[template public generateFilter(filter: Filter) /]
+
+
+
+[comment dispatchers /]
+[template private generateFilterConditions(f: AtomicFilter, target: Element) /]
+
+[template private generateFilterConditions(property : PropertyFilter, target: Element)]
+[property.generateFilterConditionsProperty(target) /]
+[/template]
+
+[template private generateFilterConditions(regex : NamedElementRegexMatch, target: Element)]
+[regex.generateFilterConditionsRegex(target) /]
+[/template]
+
+
+
+
+[template private generateFilterConditionsProperty(property : PropertyFilter, target: Element)]
+[/template]
+
+[template private generateFilterConditionsRegex(regexFilter : NamedElementRegexMatch, target: Element)]
+
+[/template]

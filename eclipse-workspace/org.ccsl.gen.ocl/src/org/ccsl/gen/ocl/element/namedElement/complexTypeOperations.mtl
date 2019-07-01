@@ -1,0 +1,36 @@
+[comment encoding = UTF-8 /]
+[module complexTypeOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[template private printAllConditionsComplexType(complexType: ComplexType, varName: String, exactMatch:Boolean)]
+[let allConditions: OrderedSet(String) = OrderedSet(String){
+  complexType.generatesConditionsForFields(varName),
+  complexType.generatesConditionsForMethods(varName),
+  complexType.generatesConditionsNamedElement(varName, exactMatch, false)
+}->select(s | s.trim().size() > 0)]
+[for (condition: String | allConditions) separator(' and\n')]
+[condition /][/for][/let]
+[/template]
+
+[template public generatesConditionsComplexType(complexType: ComplexType, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+[if typeCheck and complexType.oclIsTypeOf(ComplexType)]
+(
+[for (type: String | Sequence(String){'ClassDeclaration', 'InterfaceDeclaration'}) separator ('or\n')]
+[let conditions: String = complexType.printAllConditionsComplexType(varName.concat('.oclAsType(').concat(type).concat(')'), exactMatch)]
+  [varName /].oclIsKindOf([type /])[if conditions.trim().size() > 0] and
+  [conditions.printStringWithIdentation() /]
+[/if][/let][/for]
+)
+[else]
+[complexType.printAllConditionsComplexType(varName, exactMatch) /][/if]
+[/template]
+
+[template public generatesConditionsForFields(complexType: ComplexType, varName: String)]
+[complexType.generatesGenericConditionsForAttributes(complexType.fields, 'bodyDeclarations', true, varName, true) /]
+[/template]
+
+[template public generatesConditionsForMethods(complexType: ComplexType, varName: String)]
+[complexType.generatesGenericConditionsForAttributes(complexType.methods, 'bodyDeclarations', true, varName, true) /]
+[/template]

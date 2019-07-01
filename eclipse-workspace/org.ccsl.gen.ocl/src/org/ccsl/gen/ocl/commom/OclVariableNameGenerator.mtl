@@ -1,0 +1,19 @@
+[comment encoding = UTF-8 /]
+[module OclVariableNameGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+
+[template public generateOclVariableName(element : Element)]
+e[element.getId() /]
+[/template]
+
+[template public generateOclVariableName(element : ComplexType)]
+c[element.getId() /]
+[/template]
+
+[template public generateOclVariableName(element : Variable)]
+v[element.getId() /]
+[/template]
+
+[template public generateOclVariableName(element : Method)]
+m[element.getId() /]
+[/template]

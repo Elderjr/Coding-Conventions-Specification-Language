@@ -1,8 +1,10 @@
-package org.ccsl.gen.ocl.services.elementIdentifierService;
+package org.ccsl.gen.ocl.services;
+
 
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import ccsl.elements.Element;
 
@@ -19,4 +21,10 @@ public class ElementIdentifierService {
 		ID_MAP.put(element, countId);
 		return countId;
 	}
+	
+	public static Set<Element> getElementsWithId(){
+		return ID_MAP.keySet();
+	}
 }
+
+

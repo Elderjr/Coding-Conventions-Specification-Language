@@ -1,0 +1,53 @@
+[comment encoding = UTF-8 /]
+[module elementOperations('http://www.example.org/ccsl')  /]
+[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+
+[template public generatesConditionsElement(element : Element, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+[let allConditions: OrderedSet(String) = OrderedSet(String){
+  element.generatesConditionsForProperties(varName, element.properties, exactMatch),
+  element.generatesConditionsForAncestor(varName)
+}->select(s | s.trim().size() > 0)]
+[for (condition: String | allConditions) separator('and\n')]
+[condition /][/for][/let]
+[/template]
+
+[template public generatesConditionsForProperties(element: Element, varName: String, properties: OrderedSet(Property), exactMatch: Boolean) post(trim())]
+[for (property: Property | properties) separator (' and ')]
+[if property.name = 'public'] [varName /].modifier.visibility = java::VisibilityKind::public[elseif property.name = 'private']
+[varName /].modifier.visibility = java::VisibilityKind::private[elseif property.name = 'static']
+[varName /].modifier.static[elseif property.name = 'final']
+[varName /].modifier.inheritance = java::InheritanceKind::final[/if][/for]
+[/template]
+
+[template public generatesConditionsForAncestor(element: Element, varName: String)]
+[let container: Element = element.eContainer()]
+[if not getElementsWithId()->includes(container)]
+[element.generatesGenericConditionsForAttribute(container, 'oclContainer', false, varName, true) /][/if][/let]
+[/template]
+
+[template public generatesGenericConditionsForAttribute(element: Element, targetElement: Element, targetProperty: String, many: Boolean, varName: String, typeCheck: Boolean) post(trim())]
+[if not targetElement.oclIsUndefined()]
+[let targetHasAlreadyBeenGenerated: Boolean = getElementsWithId()->includes(targetElement)]
+[let oclName: String = targetElement.generateOclVariableName()]
+[if targetHasAlreadyBeenGenerated]
+[if not many][varName /].[targetProperty /] = [oclName /][else][varName /].[targetProperty /]->includes([oclName /])[/if][else]
+[varName /].[targetProperty /][if not many].oclAsSet()[/if]->exists([oclName /] | [for (e: Element | getElementsWithId()->select(x | x <> targetElement)) separator(' and ')]
+[oclName /] <> [e.generateOclVariableName() /][/for]
+[let targetElementCondition: String = targetElement.generatesConditions(oclName, false, typeCheck)]
+[if targetElementCondition.trim().size() > 0] and [/if]
+[targetElementCondition.printStringWithIdentation() /]
+[/let][/if][/let][/let][/if]
+[/template]
+
+[template public generatesGenericConditionsForAttributes(element: Element, targetElement: OrderedSet(Element), targetProperty: String, many: Boolean, varName: String, typeCheck: Boolean)]
+[if not targetElement->oclIsUndefined()]
+[for(e: Element | targetElement) separator('and\n')]
+[element.generatesGenericConditionsForAttribute(e, targetProperty, many, varName, typeCheck) /][/for][/if]
+[/template]
+
+
+
+

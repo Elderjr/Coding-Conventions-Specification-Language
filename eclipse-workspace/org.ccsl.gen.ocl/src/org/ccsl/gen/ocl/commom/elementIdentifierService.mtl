@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module elementIdentifierService('http://www.example.org/ccsl')/]
+
+[query public getId(arg0 : Element) : Integer
+	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'getId(ccsl.elements.Element)', Sequence{arg0})
+/]
+
+[query public getElementsWithId(anOclAny: OclAny) : Set(Element)
+	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'getElementsWithId()', Sequence{})
+/]
+

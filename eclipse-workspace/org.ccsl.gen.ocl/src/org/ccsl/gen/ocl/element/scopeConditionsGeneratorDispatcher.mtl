@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module scopeConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+
+[template public generatesConditions(element: Element, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+
+[/template]
+
+[template public generatesConditions(complexType: ComplexType, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[complexType.generatesConditionsComplexType(varName, exactMatch, typeCheck) /]
+[/template]
+
+[template public generatesConditions(variable: Variable, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+
+[/template]
+
+[template public generatesConditions(method: Method, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[method.generatesConditionsMethod(varName, exactMatch, typeCheck) /]
+[/template]
+
+[template public generatesConditions(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[methodInv.generatesConditionsMethodInvocation(varName, exactMatch, typeCheck) /]
+[/template]

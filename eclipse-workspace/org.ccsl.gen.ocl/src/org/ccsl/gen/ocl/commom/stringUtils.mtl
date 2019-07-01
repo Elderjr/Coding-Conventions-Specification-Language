@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module stringUtils('http://www.example.org/ccsl')]
+
+
+[query public countMatches(arg0 : String, arg1 : String) : Integer
+	= invoke('org.ccsl.gen.ocl.services.StringService', 'countMatches(java.lang.String, java.lang.String)', Sequence{arg0, arg1})
+/]
+
+[template public printStringWithIdentation(aString : String)]
+[aString /]
+[/template]
