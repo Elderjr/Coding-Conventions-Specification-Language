@@ -1,0 +1,4 @@
+InfixExpression.allInstances()->select(e1 |
+  e1.leftOperand->asOrderedSet()->append(e1.rightOperand)->append(e1.extendedOperands)->exists(e2 | e2 <> e1 and 
+    (e2.oclIsKindOf(StringLiteral) and e2.oclAsType(StringLiteral).escapedValue='""')  
+))

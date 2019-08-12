@@ -2,6 +2,7 @@
 [module filterConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::filters::propertyFilterOperations /]
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
+[import org::ccsl::gen::ocl::filters::definesMethodFilterOperations /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -31,6 +32,11 @@ not ([/if][for(f: Filter | compositeFilter.filters) separator(compositeFilter.op
 [propertyFilter.generatesPropertyFilterConditions(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(regexFilter: NamedElementRegexMatch, target: Element)]
+[template public generatesSpecificFilterConditions(regexFilter: RegexMatch, target: Element)]
 [regexFilter.generatesRegexFilterConditions(target) /]
 [/template]
+
+[template public generatesSpecificFilterConditions(definesMethodFilter: DefinesMethodFilter, target: Element)]
+[definesMethodFilter.generateDefinesMethodFilterConditions(target) /]
+[/template]
+

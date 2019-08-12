@@ -1,8 +1,13 @@
 [comment encoding = UTF-8 /]
 [module scopeConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
+[import org::ccsl::gen::ocl::java::javaClassOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
+
 
 [template public generatesConditions(element: Element, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
 
@@ -12,14 +17,28 @@
 [complexType.generatesConditionsComplexType(varName, exactMatch, typeCheck) /]
 [/template]
 
-[template public generatesConditions(variable: Variable, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[template public generatesConditions(javaClass: JavaClass, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[javaClass.generatesConditionsJavaClass(varName, exactMatch, typeCheck) /]
+[/template]
 
+[template public generatesConditions(variable: Variable, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[variable.generatesConditionsVariable(varName, exactMatch, typeCheck) /]
 [/template]
 
 [template public generatesConditions(method: Method, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
 [method.generatesConditionsMethod(varName, exactMatch, typeCheck) /]
 [/template]
 
+
+[comment statements/]
 [template public generatesConditions(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
 [methodInv.generatesConditionsMethodInvocation(varName, exactMatch, typeCheck) /]
+[/template]
+
+[template public generatesConditions(infixExp: InfixExp, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[infixExp.generateConditionsInfixExpression(varName, exactMatch, typeCheck) /]
+[/template]
+
+[template public generatesConditions(literal: LiteralValue, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[literal.generateConditionsLiteralValue(varName, typeCheck) /]
 [/template]

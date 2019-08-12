@@ -2,10 +2,12 @@
 [module methodInvocationOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 
 [template public generatesConditionsMethodInvocation(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
 [let allConditions: OrderedSet(String) = OrderedSet(String){
   methodInv.generatesConditionsForTo(varName),
+  generatesConditionsForArgs(varName),
   methodInv.generatesConditionsElement(varName, exactMatch, false)
 }->select(s | s.trim().size() > 0)]
 [for (condition: String | allConditions) separator(' and\n')]
@@ -13,5 +15,11 @@
 [/template]
 
 [template public generatesConditionsForTo(methodInv: MethodInvocation, varName: String)]
-[methodInv.generatesGenericConditionsForAttribute(methodInv.elementAccessed, 'method', false, varName, false) /]
+[if not methodInv.elementAccessed.oclIsUndefined()]
+[methodInv.generatesGenericConditionsForAttribute(methodInv.elementAccessed, 'method', false, varName, false) /][/if]
+[/template]
+
+[template public generatesConditionsForArgs(methodInv: MethodInvocation, varName: String)]
+[if methodInv.isSet('args')]
+[methodInv.generatesGenericConditionsForAttribute(methodInv.args, 'arguments', true, varName, true) /][/if]
 [/template]

@@ -1,0 +1,30 @@
+[comment encoding = UTF-8 /]
+[module infixExpressionOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getAllInfixExpMetaclasses(infixExp: InfixExp): Sequence(String)= 
+  Sequence(String){'InfixExpression'}
+/]
+
+[template public generateConditionsInfixExpression(infixExp: InfixExp, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+[let allConditions: OrderedSet(String) = OrderedSet(String){
+  infixExp.generateConditionsForOperator(varName),
+  infixExp.generateConditionsForOperands(varName, exactMatch)
+}->select(s | s.trim().size() > 0)]
+[for (condition: String | allConditions) separator(' and\n')]
+[condition.printStringWithIdentation() /][/for][/let]
+[/template]
+
+[template private getAllOperandsExpression(infixExp: InfixExp, varName: String)]
+leftOperand->asOrderedSet()->append([varName /].rightOperand)->append([varName /].extendedOperands)
+[/template]
+
+[template public generateConditionsForOperator(infixExp: InfixExp, varName: String)]
+[if not infixExp.operator.oclIsUndefined()][varName /].operator = '[infixExp.operator /]'[/if]
+[/template]
+
+[template public generateConditionsForOperands(infixExp: InfixExp, varName: String, exactMatch: Boolean)]
+[infixExp.generatesGenericConditionsForAttribute(infixExp.operands, infixExp.getAllOperandsExpression(varName), true, varName, true) /]
+[/template]
+

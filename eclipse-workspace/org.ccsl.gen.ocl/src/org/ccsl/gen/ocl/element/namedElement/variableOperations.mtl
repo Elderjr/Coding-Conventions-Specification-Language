@@ -1,0 +1,22 @@
+[comment encoding = UTF-8 /]
+[module variableOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[template public generatesConditionsVariable(var: Variable, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+[let allConditions: OrderedSet(String) = OrderedSet(String){
+  var.generatesConditionsNamedElement(varName, exactMatch, false),
+  var.generatesConditionsForType(varName)
+}->select(s | s.trim().size() > 0)]
+[for (condition: String | allConditions) separator(' and\n')]
+[condition.printStringWithIdentation() /][/for][/let]
+[/template]
+
+[template public generatesConditionsForType(var: Variable, varName: String)]
+--Variable Conditions
+[if not var.type.oclIsUndefined() and var.type.oclIsKindOf(ComplexType)]
+[var.generatesGenericConditionsForAttribute(var.type.oclAsType(ComplexType), 'type.type', false, varName, true) /][elseif not var.type.oclIsUndefined()]
+[varName /].type.type.name = '[var.type.oclAsType(PrimitiveType).name /]'[/if]
+[/template]
+

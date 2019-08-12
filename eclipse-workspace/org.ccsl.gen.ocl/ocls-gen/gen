@@ -1,14 +1,38 @@
-MethodInvocation.allInstances()->select(e1 |
-  e1.method.oclAsSet()->exists(m2 | m2 <> e1 and 
-  m2.name = 'run' and
-  m2.oclContainer.oclAsSet()->exists(c3 | c3 <> e1 and c3 <> m2 and 
-  (
-    c3.oclIsKindOf(ClassDeclaration) and
-    c3.oclAsType(ClassDeclaration).bodyDeclarations->includes(m2) and
-    c3.oclAsType(ClassDeclaration).name = 'Thread'
-  or
-    c3.oclIsKindOf(InterfaceDeclaration) and
-    c3.oclAsType(InterfaceDeclaration).bodyDeclarations->includes(m2) and
-    c3.oclAsType(InterfaceDeclaration).name = 'Thread'
-  )
-)))
+->select(c1 |
+  --Java Class Conditions
+  c1.bodyDeclarations->exists(m2 | m2 <> c1 and 
+    -- Method Conditions
+    m2.oclIsKindOf(MethodDeclaration) and
+    m2.oclAsType(MethodDeclaration).name = 'equals' and
+    m2.oclAsType(MethodDeclaration).returnType.type.name = 'boolean' and
+    m2.oclAsType(MethodDeclaration).parameters->exists(v3 | v3 <> m2 and v3 <> c1 and 
+      --Variable Conditions
+      v3.type.type.oclAsSet()->exists(c4 | c4 <> m2 and c4 <> c1 and c4 <> v3 and 
+        --Java Class Conditions
+        (
+          c4.oclIsKindOf(ClassDeclaration) and
+          let c4PackageHierarchy: Sequence(Package) = c4.oclAsType(ClassDeclaration).package->closure(package) in (
+            Sequence{1 .. c4PackageHierarchy->size() }->iterate(i: Integer; fullName: String = '' | 
+              	fullName.concat(c4PackageHierarchy->at(c4PackageHierarchy->size() - i + 1).name).concat('.')
+            ).concat(c4.oclAsType(ClassDeclaration).name) = 'java.lang.Object'
+          )
+          
+        ) and 
+    m2.oclAsType(MethodDeclaration).parameters->size() = 1 and
+  not (let c1InheritanceClasses: Set(ClassDeclaration) = c1->closure(c: ClassDeclaration |
+    if(not c.superClass.oclIsUndefined()) then
+      c.superClass.type
+    else
+      Set(ClassDeclaration){}
+    endif
+  ) in
+  c1InheritanceClasses->exists(c: ClassDeclaration |
+    c.bodyDeclarations->exists(m5 |
+      -- Method Conditions
+      m5.oclIsKindOf(MethodDeclaration) and
+      m5.oclAsType(MethodDeclaration).name = 'hashCode' and
+      m5.oclAsType(MethodDeclaration).returnType.type.name = 'int' and
+      m5.oclAsType(MethodDeclaration).parameters->size() = 0
+    )
+  ))
+))))

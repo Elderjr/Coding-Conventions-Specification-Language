@@ -2,16 +2,47 @@
 [module namedElementOperations('http://www.example.org/ccsl/elements/namedElements')]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 [template public generatesConditionsNamedElement(namedElement : NamedElement, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
 [let allConditions: OrderedSet(String) = OrderedSet(String){
-  namedElement.generatesConditionsForName(varName),
+  namedElement.generatesConditionsNamedElementForName(varName),
   namedElement.generatesConditionsElement(varName, exactMatch, false)
 }->select(s | s.trim().size() > 0)]
 [for (condition: String | allConditions) separator(' and\n')]
 [condition.printStringWithIdentation() /][/for][/let]
 [/template]
 
-[template public generatesConditionsForName(namedElement: NamedElement, varName: String)]
-[if not namedElement.name.oclIsUndefined()][varName /].name = '[namedElement.name /]'[/if]
+[template public generatesConditionsNamedElementForName(namedElement: NamedElement, varName: String)]
+[if not namedElement.name.oclIsUndefined()]
+[if namedElement.oclIsKindOf(ComplexType) and namedElement.name.contains('.')]
+[namedElement.generatesFullnameCondition(varName) /][else]
+[varName /].name = '[namedElement.name /]'[/if]
+[/if]
+[/template]
+
+[template private generatesFullnameCondition(namedElement: NamedElement, varName: String) /]
+
+[template private generatesFullnameCondition(complexType: ComplexType, varName: String)]
+[let packageHierarchy: String = complexType.generateOclVariableName().concat('PackageHierarchy')]
+let [packageHierarchy /]: Sequence(Package) = if [complexType.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
+  [complexType.generateOclVariableName() /].oclAsType(ClassDeclaration).package->closure(package)
+else
+  [complexType.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package->closure(package)
+endif in (
+  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
+    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
+  ).concat([complexType.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[complexType.name /]'
+)
+[/let]
+[/template]
+
+[template private generatesFullnameCondition(javaClass: JavaClass, varName: String)]
+[let packageHierarchy: String = javaClass.generateOclVariableName().concat('PackageHierarchy')]
+let [packageHierarchy /]: Sequence(Package) = [javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).package->closure(package) in (
+  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
+    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
+  ).concat([javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).name) = '[javaClass.name /]'
+)
+[/let]
 [/template]

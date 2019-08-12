@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 
 [template public main(rule : Rule)]
 [comment @main/]

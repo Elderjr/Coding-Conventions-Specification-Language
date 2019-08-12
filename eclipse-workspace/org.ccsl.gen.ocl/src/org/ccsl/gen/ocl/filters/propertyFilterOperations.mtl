@@ -4,5 +4,9 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 
 [template public generatesPropertyFilterConditions(propertyFilter: PropertyFilter, target: Element)]
+### PropertyFilterConditions is not supported for the type [target.eClass().name /] ###
+[/template]
+
+[template public generatesPropertyFilterConditions(propertyFilter: PropertyFilter, target: CodeElement)]
 [target.generatesConditionsForProperties(target.generateOclVariableName(), propertyFilter.properties, false) /]
 [/template]

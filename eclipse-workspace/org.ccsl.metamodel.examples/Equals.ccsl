@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements">
+  <auxiliaryElements xsi:type="statements:PrimitiveType" name="boolean"/>
+  <auxiliaryElements xsi:type="statements:PrimitiveType" name="int"/>
+  <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.Object"/>
+  <filters xsi:type="filters:DefinesMethodFilter" negated="true" targets="//@scope">
+    <methods exact="true" name="hashCode" returnType="//@auxiliaryElements.1" params=""/>
+  </filters>
+  <scope xsi:type="java:JavaClass">
+    <methods exact="true" name="equals" returnType="//@auxiliaryElements.0">
+      <params type="//@auxiliaryElements.2"/>
+    </methods>
+  </scope>
+</ccsl:AtomicRule>

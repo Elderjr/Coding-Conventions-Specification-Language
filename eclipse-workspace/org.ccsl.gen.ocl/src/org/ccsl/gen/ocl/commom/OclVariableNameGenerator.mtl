@@ -17,3 +17,7 @@ v[element.getId() /]
 [template public generateOclVariableName(element : Method)]
 m[element.getId() /]
 [/template]
+
+[template public generateOclVariableName(element : MethodInvocation)]
+mInv[element.getId() /]
+[/template]

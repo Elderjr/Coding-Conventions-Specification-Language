@@ -3,6 +3,7 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
 
 [template private printAllConditionsComplexType(complexType: ComplexType, varName: String, exactMatch:Boolean)]
 [let allConditions: OrderedSet(String) = OrderedSet(String){
@@ -16,6 +17,7 @@
 
 [template public generatesConditionsComplexType(complexType: ComplexType, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
 [if typeCheck and complexType.oclIsTypeOf(ComplexType)]
+--ComplexType Conditions
 (
 [for (type: String | Sequence(String){'ClassDeclaration', 'InterfaceDeclaration'}) separator ('or\n')]
 [let conditions: String = complexType.printAllConditionsComplexType(varName.concat('.oclAsType(').concat(type).concat(')'), exactMatch)]
@@ -28,9 +30,9 @@
 [/template]
 
 [template public generatesConditionsForFields(complexType: ComplexType, varName: String)]
-[complexType.generatesGenericConditionsForAttributes(complexType.fields, 'bodyDeclarations', true, varName, true) /]
+[complexType.generatesGenericConditionsForAttribute(complexType.fields, 'bodyDeclarations', true, varName, true) /]
 [/template]
 
 [template public generatesConditionsForMethods(complexType: ComplexType, varName: String)]
-[complexType.generatesGenericConditionsForAttributes(complexType.methods, 'bodyDeclarations', true, varName, true) /]
+[complexType.generatesGenericConditionsForAttribute(complexType.methods, 'bodyDeclarations', true, varName, true) /]
 [/template]

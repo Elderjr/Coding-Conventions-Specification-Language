@@ -1,7 +1,34 @@
 [comment encoding = UTF-8 /]
 [module regexFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: Element)]
+### RegexMatch is not supported for the type [target.eClass().name /] ###
+[/template]
 
-[template public generatesRegexFilterConditions(regexFilter: NamedElementRegexMatch, target: Element)]
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: NamedElement)]
 [target.generateOclVariableName() /].name.matches('[regexFilter.regex /]')
+[/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: ComplexType)]
+[let varName: String = target.generateOclVariableName()]
+let [varName /]Package: Package = if [varName /].oclIsKindOf(ClassDeclaration) then [varName /].oclAsType(ClassDeclaration).package else [varName /].oclAsType(InterfaceDeclaration) endif in (
+  [varName /]Package->closure(package)->iterate(p: Package; fullName: String = '' | 
+    if fullName <> '' then 
+      fullName.concat('.').concat(p.name) 
+    else 
+      fullName.concat(p.name) 
+    endif
+  ).concat('.').concat([varName /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
+)
+[/let]
+[/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
+[let varName:String = target.generateOclVariableName()]
+[if (not target.type.oclIsUndefined()) and (target.type.name = 'string')]
+[varName /].oclAsType(StringLiteral).[target.getValueFieldName() /].matches('"[regexFilter.regex /]"')[elseif target.type.oclIsUndefined()]
+[for (type: String | target.getAllLiteralMetaclasses()) separator('or')]
+([varName /].oclIsKindOf([type /]) and [varName /].[target.getValueFieldNameByJavaMetaclassName(type) /].matches('[regexFilter.regex /]'))[/for]
+[/if][/let]
 [/template]
