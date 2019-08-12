@@ -24,16 +24,6 @@
 )[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
 [/template]
 
-[template mock(element : Element, filters: OrderedSet(Filter))]
-[let scopeConditions: String = element.generatesConditions(element.generateOclVariableName(), false, false)]
-[let filterConditions: String = filters->generateFiltersConditions()]
-[element.getAllInstances() /]->select([element.generateOclVariableName() /] |
-  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
-[/if]
-  [filterConditions.printStringWithIdentation() /]
-)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
-[/template]
-
 [template public getAllInstances(element: Element) /]
 
 [template public getAllInstances(infixExp: InfixExp)]
@@ -42,6 +32,10 @@ InfixExpression.allInstances()
 
 [template public getAllInstances(methodInvocation: MethodInvocation)]
 MethodInvocation.allInstances()
+[/template]
+
+[template public getAllInstances(instanceCreation: InstanceCreation)]
+ClassInstanceCreation.allInstances()
 [/template]
 
 

@@ -5,6 +5,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::infixExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 
@@ -33,6 +34,10 @@
 [comment statements/]
 [template public generatesConditions(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
 [methodInv.generatesConditionsMethodInvocation(varName, exactMatch, typeCheck) /]
+[/template]
+
+[template public generatesConditions(instCreation: InstanceCreation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
+[instCreation.generatesConditionsInstanceCreation(varName, typeCheck) /]
 [/template]
 
 [template public generatesConditions(infixExp: InfixExp, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
