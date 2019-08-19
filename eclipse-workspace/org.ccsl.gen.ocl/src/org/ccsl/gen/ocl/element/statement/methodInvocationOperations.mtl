@@ -4,14 +4,35 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
-[template public generatesConditionsMethodInvocation(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+
+[query public getMethodInvocationMatchingJavaMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
+  if methodInv.oclIsTypeOf(MethodInvocation) then
+      OrderedSet(String){'MethodInvocation', 'ClassInstanceCreation'}
+  else if methodInv.oclIsTypeOf(InstanceCreation) then
+      OrderedSet(String){'ClassInstanceCreation'}
+  else
+      OrderedSet(String){}
+  endif endif
+/]
+
+[template private printAllMethodInvocationConditions(methodInv: MethodInvocation, varName: String)]
 [let allConditions: OrderedSet(String) = OrderedSet(String){
   methodInv.generatesConditionsForTo(varName),
-  generatesConditionsForArgs(varName),
-  methodInv.generatesConditionsElement(varName, exactMatch, false)
+  methodInv.generatesConditionsForArgs(varName),
+  methodInv.generatesConditionsForFrom(varName),
+  methodInv.generatesConditionsElement(varName, false, false)
 }->select(s | s.trim().size() > 0)]
 [for (condition: String | allConditions) separator(' and\n')]
 [condition.printStringWithIdentation() /][/for][/let]
+[/template]
+
+[template public generatesConditionsMethodInvocation(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
+[if typeCheck]
+([for(type: String | methodInv.getMethodInvocationMatchingJavaMetaclasses()) separator(' or ')]
+[varName /].oclIsKindOf([type /]) and [methodInv.printAllMethodInvocationConditions(varName.concat('.oclAsType(').concat(type).concat(')')) /]
+[/for])[else]
+[methodInv.printAllMethodInvocationConditions(varName) /]
+[/if]
 [/template]
 
 [template public generatesConditionsForTo(methodInv: MethodInvocation, varName: String)]
@@ -22,4 +43,9 @@
 [template public generatesConditionsForArgs(methodInv: MethodInvocation, varName: String)]
 [if methodInv.isSet('args')]
 [methodInv.generatesGenericConditionsForAttribute(methodInv.args, 'arguments', true, varName, true) /][/if]
+[/template]
+
+[template public generatesConditionsForFrom(methodInv: MethodInvocation, varName: String)]
+[if not methodInv.from.oclIsUndefined()]
+[methodInv.generatesGenericConditionsForAttribute(methodInv.from, 'expression', false, varName, true) /][/if]
 [/template]

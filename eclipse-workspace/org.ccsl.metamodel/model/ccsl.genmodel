@@ -20,7 +20,7 @@
     </genClasses>
     <genClasses ecoreClass="ccsl.ecore#//CompositeRule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//CompositeRule/operator"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//CompositeRule/rule"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//CompositeRule/rules"/>
     </genClasses>
     <genClasses ecoreClass="ccsl.ecore#//AtomicRule">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//AtomicRule/filters"/>
@@ -92,8 +92,9 @@
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ControlFlow/condition"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarAssignment">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/variable"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/assignment"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/variable"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/BranchControl"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/LoopControl"/>
@@ -106,9 +107,8 @@
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/SuperMethodInvocation"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarDeclaration">
-          <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarDeclaration/variable"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarDeclaration/assignment"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarDeclaration/variable"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/InstanceCreation">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"

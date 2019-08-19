@@ -19,3 +19,4 @@ MethodInvocation.allInstances()->select(mInv1 |
    and
   m2.name.matches('length|isEmpty')
 )))))
+

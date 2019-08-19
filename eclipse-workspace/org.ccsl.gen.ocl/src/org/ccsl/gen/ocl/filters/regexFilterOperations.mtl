@@ -11,34 +11,25 @@
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: ComplexType)]
-[let packageHierarchy: String = target.generateOclVariableName().concat('PackageHierarchy')]
-let [packageHierarchy /]: Sequence(Package) = if [target.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
-  [target.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asSequence()->closure(package)->asSequence()
+let [target.generateOclVariableName() /]Package: Package = if [target.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
+  [target.generateOclVariableName() /].oclAsType(ClassDeclaration).package
 else
-  [target.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package->asSequence()->closure(package)->asSequence()
-endif in (
-  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
-    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
-  ).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
-)
-[/let]
+  [target.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package
+endif in [target.generateOclVariableName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]') 
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JavaClass)]
-[let packageHierarchy: String = target.generateOclVariableName().concat('PackageHierarchy')]
-let [packageHierarchy /]: Sequence(Package) = [target.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asSequence()->closure(package)->asSequence() in (
-  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
-    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
-  ).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
-)
-[/let]
+[target.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
-[let varName:String = target.generateOclVariableName()]
-[if (not target.type.oclIsUndefined()) and (target.type.name = 'string')]
-[varName /].oclAsType(StringLiteral).[target.getValueFieldName() /].matches('"[regexFilter.regex /]"')[elseif target.type.oclIsUndefined()]
-[for (type: String | target.getAllLiteralMetaclasses()) separator('or')]
-([varName /].oclIsKindOf([type /]) and [varName /].[target.getValueFieldNameByJavaMetaclassName(type) /].matches('[regexFilter.regex /]'))[/for]
-[/if][/let]
+([for (type: String | target.getLiteralMatchingJavaMetaclasses()->excluding('NullLiteral')->excluding('BooleanLiteral')) separator(' or ')]
+([target.generateOclVariableName() /].oclIsKindOf([type /]) and [let fieldValueName: String = target.getLiteralValueMatchingFieldByJavaMetaclass(type)]
+[if fieldValueName = 'escapedValue']
+[target.generateOclVariableName() /].oclAsType([type /]).escapedValue.matches('[regexFilter.regex /]')[elseif fieldValueName = 'tokenValue']
+let stringValue: String = ''.concat([target.generateOclVariableName() /].oclAsType([type /]).tokenValue) in stringValue.matches('[regexFilter.regex /]')[/if][/let])[/for])
 [/template]

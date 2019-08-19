@@ -29,10 +29,10 @@
 [/template]
 
 [template public generatesGenericConditionsForAttribute(element: CodeElement, targetElement: Element, targetProperty: String, many: Boolean, varName: String, typeCheck: Boolean) post(trim())]
-[let targetHasAlreadyBeenGenerated: Boolean = getElementsWithId()->includes(targetElement)]
+ [let targetHasAlreadyBeenGenerated: Boolean = getElementsWithId()->includes(targetElement)]
 [let oclName: String = targetElement.generateOclVariableName()]
 [if targetHasAlreadyBeenGenerated]
-[if not many][if varName <> ''][varName /].[/if][targetProperty /] = [oclName /][else][varName /].[targetProperty /]->includes([oclName /])[/if][else]
+[if not many][varName /].[targetProperty /] = [oclName /][else][varName /].[targetProperty /]->includes([oclName /])[/if][else]
 [if varName <> ''][varName /].[/if][targetProperty /][if not many].oclAsSet()[/if]->exists([oclName /] | [for (e: Element | getElementsWithId()->select(x | x <> targetElement)) separator(' and ')]
 [oclName /] <> [e.generateOclVariableName() /][/for]
 [let targetElementCondition: String = targetElement.generatesConditions(oclName, false, typeCheck)]

@@ -8,7 +8,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeRule" eSuperTypes="#//Rule">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="2" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="2" upperBound="-1"
         eType="#//Rule" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicRule" eSuperTypes="#//Rule">
@@ -93,10 +93,9 @@
             containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"
-            containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="BranchControl" eSuperTypes="#//elements/statements/ControlFlow"/>
       <eClassifiers xsi:type="ecore:EClass" name="LoopControl" eSuperTypes="#//elements/statements/ControlFlow"/>
@@ -112,9 +111,10 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SuperMethodInvocation" eSuperTypes="#//elements/statements/MethodInvocation"/>
       <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"
+            containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="InstanceCreation" eSuperTypes="#//elements/statements/MethodInvocation">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/namedElements/ComplexType"/>

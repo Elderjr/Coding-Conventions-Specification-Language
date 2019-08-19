@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <auxiliaryElements xsi:type="statements:PrimitiveType" name="short" />
+  <rules xsi:type="ccsl:AtomicRule">
+    <scope xsi:type="namedElements:Variable" type="//@auxiliaryElements.0"/>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <scope xsi:type="namedElements:Method" returnType="//@auxiliaryElements.0"/>
+  </rules>
+</ccsl:CompositeRule>

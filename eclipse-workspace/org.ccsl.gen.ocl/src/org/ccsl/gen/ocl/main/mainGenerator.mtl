@@ -1,11 +1,11 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
-[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 
-[template public main(rule : Rule)]
+[template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
-[file ('gen',false, 'UTF-8')]
+[file ('gen', false, 'UTF-8')]
 [rule.generatesOcl() /]
 [/file]
 [/template]
@@ -13,8 +13,20 @@
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesOcl(rule: AtomicRule)]
-[rule.scope.generateSelect(rule.filters) /]
+[rule.clearAllContexts() /][rule.scope.generateSelect(rule.filters) /]
 [/template]
 
-[template private generatesOcl(rule: CompositeRule) /]
+[template private generatesOcl(compositeRule: CompositeRule)]
+(
+[for (rule: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]
+[if i = 1]  [else]    [/if][rule.generatesOcl() /]
+[if i <> 1]  )[/if][/for]
 
+)
+[/template]
+
+[template private operation(logicOperator: LogicOperator)]
+[if logicOperator = LogicOperator::AND]
+->intersect[elseif logicOperator = LogicOperator::OR]
+->union[/if]
+[/template]

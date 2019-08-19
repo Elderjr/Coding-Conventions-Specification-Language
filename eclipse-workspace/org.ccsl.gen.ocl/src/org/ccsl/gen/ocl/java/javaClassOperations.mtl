@@ -14,12 +14,10 @@
 [template public generatesConditionsJavaClass(javaClass: JavaClass, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
 --Java Class Conditions
 [if typeCheck and javaClass.oclIsTypeOf(JavaClass)]
-(
 [let conditions: String = javaClass.printAllConditionsJavaClass(varName.concat('.oclAsType(ClassDeclaration)'), javaClass.exact)]
-  [varName /].oclIsKindOf(ClassDeclaration)[if conditions.trim().size() > 0] and
-  [conditions.printStringWithIdentation() /]
+[varName /].oclIsKindOf(ClassDeclaration)[if conditions.trim().size() > 0] and
+[conditions.printStringWithIdentation() /]
 [/if][/let]
-)
 [else]
 [javaClass.printAllConditionsJavaClass(varName, exactMatch) /][/if]
 [/template]

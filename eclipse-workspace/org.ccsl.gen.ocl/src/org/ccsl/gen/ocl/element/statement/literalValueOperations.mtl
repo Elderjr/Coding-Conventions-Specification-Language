@@ -3,8 +3,36 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
-[query public getAllLiteralMetaclasses(literal: LiteralValue): Sequence(String)= 
-  Sequence(String){'CharacterLiteral', 'NumberLiteral', 'BooleanLiteral'}
+[query public getLiteralMatchingJavaMetaclasses(literal: LiteralValue): OrderedSet(String)= 
+  if not literal.type.oclIsUndefined() then
+    if literal.type.name = 'string' then
+      OrderedSet(String){'StringLiteral'}
+    else if literal.type.name = 'character' then
+      OrderedSet(String){'CharacterLiteral'}
+    else if literal.type.name.matches('short|int|long|float|double') then
+      OrderedSet(String){'NumberLiteral'}
+    else if literal.type.name = 'boolean' then
+      OrderedSet(String){'BooleanLiteral'}
+    else if literal.type.name = 'null' then
+      OrderedSet(String){'NullLiteral'}
+    else
+      OrderedSet(String){''}
+    endif endif endif endif endif
+  else
+    OrderedSet(String){'StringLiteral', 'CharacterLiteral', 'NumberLiteral', 'BooleanLiteral'}
+  endif
+/]
+
+[query public getLiteralValueMatchingFieldByJavaMetaclass(literal: LiteralValue, javaMetaclass: String): String = 
+  if javaMetaclass = 'CharacterLiteral' or javaMetaclass  = 'StringLiteral' then
+    'escapedValue'
+  else if javaMetaclass = 'NumberLiteral' then
+    'tokenValue'
+  else if javaMetaclass = 'BooleanLiteral' then
+    'value'
+  else
+    ''
+  endif endif endif
 /]
 
 [template public generateConditionsLiteralValue(literal: LiteralValue, varName: String, typeCheck: Boolean)]
@@ -14,55 +42,21 @@
 [/template]
 
 [template public generateConditionsWhenValueNotSpecified(literal: LiteralValue, varName: String)]
-[if not literal.type.oclIsUndefined()]
-[varName /].oclIsKindOf([literal.getLiteralType() /])[else]
-([for (type: String | getAllLiteralMetaclasses()) separator('or')]
+([for (type: String | literal.getLiteralMatchingJavaMetaclasses()) separator(' or ')]
 [varName /].oclIsKindOf([type /])[/for])
-[/if]
 [/template]
 
 [template public generateConditionsForValue(literal: LiteralValue, varName: String, typeCheck: Boolean)]
-[if not literal.type.oclIsUndefined()]
-[if not typeCheck]
-[varName /].[literal.getValueFieldName() /]=[literal.getValue() /][else]
-([varName /].oclIsKindOf([literal.getLiteralType() /]) and [varName /].oclAsType([literal.getLiteralType() /]).[literal.getValueFieldName() /]=[literal.getValue() /])[/if][else]
-[for (type: String | getAllLiteralMetaclasses()) separator('or')]
-([varName /].oclIsKindOf([type /]) and [varName /].[literal.getValueFieldNameByJavaMetaclassName(type) /] = [varName /].[literal.getValueByJavaMetaclassName(type) /])[/for][/if]
+[let matchingJavaMetaclasses: OrderedSet(String) = literal.getLiteralMatchingJavaMetaclasses()]
+[for (type: String | matchingJavaMetaclasses) separator('or')]
+([if typeCheck][varName /].oclIsKindOf([type /]) and [/if][varName /].[literal.getLiteralValueMatchingFieldByJavaMetaclass(type) /] = [varName /].[literal.generatesLiteralExpressionValue(type) /])[/for]
+[/let]
 [/template]
 
-[template public getValueFieldNameByJavaMetaclassName(literal: LiteralValue, metaclassName: String)]
-[if metaclassName = 'CharacterLiteral' or metaclassName = 'StringLiteral']
-escapedValue[elseif metaclassName = 'NumberLiteral']
-tokenValue[elseif metaclassName = 'BooleanLiteral']
-value[/if]
-[/template] 
-
-[template public getValueByJavaMetaclassName(literal: LiteralValue, metaclassName: String)]
-[if metaclassName = 'CharacterLiteral']
-'[literal.value /]'[elseif metaclassName = 'StringLiteral' and metaclassName.size() > 0]
-'"[literal.value /]"'[elseif metaclassName = 'StringLiteral' and metaclassName.size() = 0]
+[template public generatesLiteralExpressionValue(literal: LiteralValue, javaMetaclass: String)]
+[if javaMetaclass = 'CharacterLiteral']
+'[literal.value /]'[elseif javaMetaclass = 'StringLiteral' and literal.value.size() > 0]
+'"[literal.value /]"'[elseif javaMetaclass = 'StringLiteral' and literal.value.size() = 0]
 '""'[else][literal.value /][/if]
 [/template]
 
-[template public getValue(literal: LiteralValue)]
-[if literal.type.name = 'character']
-'[literal.value /]'[elseif literal.type.name = 'string' and literal.value.size() > 0]
-'"[literal.value /]"'[elseif literal.type.name = 'string' and literal.value.size() = 0]
-'""'[else][literal.value /][/if]
-[/template]
-
-[template public getValueFieldName(literal: LiteralValue)]
-[if literal.type.name = 'character' or literal.type.name = 'string']
-escapedValue[elseif literal.type.name.matches('short|int|long|float|double')]
-tokenValue[elseif literal.type.name = 'boolean']
-value[/if]
-[/template]
-
-[template public getLiteralType(literal: LiteralValue)]
-[if literal.type.name = 'character']
-CharacterLiteral[elseif literal.type.name = 'string']
-StringLiteral[elseif literal.type.name.matches('short|int|long|float|double')]
-NumberLiteral[elseif literal.type.name = 'boolean']
-BooleanLiteral[elseif literal.type.name = 'null']
-NullLiteral[/if]
-[/template]

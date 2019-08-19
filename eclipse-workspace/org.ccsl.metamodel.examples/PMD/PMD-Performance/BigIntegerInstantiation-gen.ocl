@@ -1,0 +1,20 @@
+ClassInstanceCreation.allInstances()->select(mInv1 |
+  mInv1.method.oclAsSet()->exists(m2 | m2 <> mInv1 and 
+    -- Method Conditions
+    m2.oclContainer().oclAsSet()->exists(c3 | c3 <> m2 and c3 <> mInv1 and 
+      --Java Class Conditions
+      (
+        c3.oclIsKindOf(ClassDeclaration) and
+        c3.oclAsType(ClassDeclaration).bodyDeclarations->includes(m2)
+      ) and
+    m2.parameters->exists(v4 | v4 <> m2 and v4 <> mInv1 and v4 <> c3 and 
+      --Variable Conditions and 
+    m2.parameters->size() = 1 and
+  mInv1.arguments->exists(e5 | e5 <> m2 and e5 <> v4 and e5 <> mInv1 and e5 <> c3 and 
+    (e5.oclIsKindOf(StringLiteral) or e5.oclIsKindOf(CharacterLiteral) or e5.oclIsKindOf(NumberLiteral) or e5.oclIsKindOf(BooleanLiteral)) and
+  c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(c3.oclAsType(BodyDeclaration).name).matches('java\\.math\\.Big(Integer|Decimal)') and
+  ((e5.oclIsKindOf(StringLiteral) and e5.oclAsType(StringLiteral).escapedValue.matches('(0|1|10|"0"|"1"|"10")')) or (e5.oclIsKindOf(CharacterLiteral) and e5.oclAsType(CharacterLiteral).escapedValue.matches('(0|1|10|"0"|"1"|"10")')) or (e5.oclIsKindOf(NumberLiteral) and let stringValue: String = ''.concat(e5.oclAsType(NumberLiteral).tokenValue) in stringValue.matches('(0|1|10|"0"|"1"|"10")')))
+)))))
+

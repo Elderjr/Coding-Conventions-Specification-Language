@@ -13,6 +13,11 @@ public class ElementIdentifierService {
 	private static int countId = 0;
 	private static final Map<Element, Integer> SCOPE_CONTEXT = new HashMap<>();
 	
+	public static void clearAllContexts() {
+		SCOPE_CONTEXT.clear();
+		countId = 0;
+	}
+	
 	public static int getId(Element element) {
 		Integer id = SCOPE_CONTEXT.get(element);
 		if(id != null) {

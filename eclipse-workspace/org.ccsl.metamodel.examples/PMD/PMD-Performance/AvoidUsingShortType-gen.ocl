@@ -1,0 +1,18 @@
+(
+  SingleVariableDeclaration.allInstances()->union(VariableDeclarationFragment.allInstances())->select(v1 |
+    --Variable Conditions
+    (
+      v1.oclIsKindOf(SingleVariableDeclaration)  and
+      v1.oclAsType(SingleVariableDeclaration).type.type.name = 'short'
+    ) or (
+      v1.oclIsKindOf(VariableDeclarationFragment)  and
+      v1.oclAsType(VariableDeclarationFragment).variablesContainer.type.type.name = 'short'
+    )  
+  )
+  ->union(
+    MethodDeclaration.allInstances()->select(m2 |
+      -- Method Conditions
+      m2.returnType.type.name = 'short'  
+    )
+  )
+)

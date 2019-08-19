@@ -9,3 +9,7 @@
 	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'getElementsWithId()', Sequence{})
 /]
 
+[query public clearAllContexts(anOclAny: OclAny) : OclVoid
+	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'clearAllContexts()', Sequence{})
+/]
+

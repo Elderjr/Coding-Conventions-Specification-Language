@@ -25,24 +25,18 @@
 
 [template private generatesFullnameCondition(complexType: ComplexType, varName: String)]
 [let packageHierarchy: String = complexType.generateOclVariableName().concat('PackageHierarchy')]
-let [packageHierarchy /]: Sequence(Package) = if [complexType.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
-  [complexType.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asSequence()->closure(package)->asSequence()
+let [complexType.generateOclVariableName() /]Package: Package = if [complexType.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
+  [complexType.generateOclVariableName() /].oclAsType(ClassDeclaration).package
 else
-  [complexType.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package->asSequence()->closure(package)->asSequence()
-endif in (
-  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
-    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
-  ).concat([complexType.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[complexType.name /]'
-)
+  [complexType.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package
+endif in [complexType.generateOclVariableName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat([complexType.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[complexType.name /]' 
 [/let]
 [/template]
 
 [template private generatesFullnameCondition(javaClass: JavaClass, varName: String)]
-[let packageHierarchy: String = javaClass.generateOclVariableName().concat('PackageHierarchy')]
-let [packageHierarchy /]: Sequence(Package) = [javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asSequence()->closure(package)->asSequence() in (
-  Sequence{1 .. [packageHierarchy /]->size() }->iterate(i: Integer; fullName: String = '' | 
-    	fullName.concat([packageHierarchy /]->at([packageHierarchy /]->size() - i + 1).name).concat('.')
-  ).concat([javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).name) = '[javaClass.name /]'
-)
-[/let]
+[javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat([javaClass.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[javaClass.name /]'
 [/template]
