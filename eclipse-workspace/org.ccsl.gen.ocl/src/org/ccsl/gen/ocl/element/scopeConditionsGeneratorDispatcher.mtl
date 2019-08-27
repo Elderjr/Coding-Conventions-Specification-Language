@@ -1,49 +1,97 @@
 [comment encoding = UTF-8 /]
 [module scopeConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils/]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 [import org::ccsl::gen::ocl::java::javaClassOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
-[import org::ccsl::gen::ocl::element::statement::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
+[import org::ccsl::gen::ocl::element::primitiveTypeOperations /]
 
-
-[template public generatesConditions(element: Element, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-
+[template private printConditions(element: Element, conditions: OrderedSet(String))]
+[for (condition: String | conditions) separator(' and\n')]
+[condition.printStringWithIdentation() /][/for]
 [/template]
 
-[template public generatesConditions(complexType: ComplexType, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[complexType.generatesConditionsComplexType(varName, exactMatch, typeCheck) /]
-[/template]
-
-[template public generatesConditions(javaClass: JavaClass, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[javaClass.generatesConditionsJavaClass(varName, exactMatch, typeCheck) /]
-[/template]
-
-[template public generatesConditions(variable: Variable, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[variable.generatesConditionsVariable(varName, typeCheck) /]
-[/template]
-
-[template public generatesConditions(method: Method, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[method.generatesConditionsMethod(varName, exactMatch, typeCheck) /]
+[template public generatesConditions(element: Element, varname: String, typecheck: Boolean) /]
+[template public generatesConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String)]
+[element.generatesConditions(varname, typecheck) /]
 [/template]
 
 
-[comment statements/]
-[template public generatesConditions(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[methodInv.generatesConditionsMethodInvocation(varName, exactMatch, typeCheck) /]
+[comment namedElement/Variable /]
+[template public generatesConditions(var: Variable, varname: String, typecheck: Boolean)]
+[var.printConditions(var.getVariableConditions(varname, typecheck)) /]
 [/template]
 
-[template public generatesConditions(instCreation: InstanceCreation, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[instCreation.generatesConditionsInstanceCreation(varName, typeCheck) /]
+[template public generatesConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.printConditions(var.getVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(infixExp: InfixExp, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[infixExp.generateConditionsInfixExpression(varName, exactMatch, typeCheck) /]
+[comment namedElement/Method /]
+[template public generatesConditions(method: Method, varname: String, typecheck: Boolean)]
+[method.printConditions(method.getMethodConditions(varname, typecheck)) /]
 [/template]
 
-[template public generatesConditions(literal: LiteralValue, varName: String, exactMatch: Boolean, typeCheck: Boolean)]
-[literal.generateConditionsLiteralValue(varName, typeCheck) /]
+[comment namedElement/MethodInvocation /]
+[template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
+[methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+
+[comment datatype/PrimitiveType /]
+[template public generatesConditions(primitiveType: PrimitiveType, varname: String, typecheck: Boolean)]
+[primitiveType.printConditions(primitiveType.getPrimitiveTypeConditions(varname)) /]
+[/template]
+
+[comment statements/InfixExp /]
+[template public generatesConditions(infix: InfixExp, varname: String, typecheck: Boolean)]
+[infix.printConditions(infix.getInfixConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/LiteralValue /]
+[template public generatesConditions(literal: LiteralValue, varname: String, typecheck: Boolean)]
+[literal.printConditions(literal.getLiteralConditions(varname)) /]
+[/template]
+
+[comment statements/StringConcatenation /]
+[template public generatesConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean)]
+[strConcat.printConditions(strConcat.getStringConcatenationConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/VarDeclaration /]
+[template public generatesConditions(varDecl: VarDeclaration, varname: String, typecheck: Boolean)]
+[varDecl.printConditions(varDecl.getVariableDeclarationConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(varDecl: VarDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[varDecl.printConditions(varDecl.getVariableDeclarationConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[comment statements/InstanceCreation /]
+[template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean)]
+[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean,  metaclass: String)]
+[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
+[/template]
+
+[comment namedElement/JavaClass /]
+[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean)]
+[javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String)]
+[javaClass.generatesConditions(varname, typecheck) /]
 [/template]

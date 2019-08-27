@@ -1,14 +1,8 @@
 (
   ClassInstanceCreation.allInstances()->select(mInv1 |
-    let c2 : OclAny = mInv1.type.type in 
-    c2.oclIsKindOf(ClassDeclaration) and
-    c2.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-      fullName.concat(p.name).concat('.')
-    ).concat(c2.oclAsType(ClassDeclaration).oclAsType(BodyDeclaration).name) = 'java.lang.StringBuffer' and
-    let mInv1Args: OrderedSet(OclAny) =  mInv1.arguments in
-    mInv1Args->exists(e3 | 
-      e3.oclIsKindOf(InfixExpression) and
-      e3.oclAsType(InfixExpression).extendedOperands->append(e3.oclAsType(InfixExpression).leftOperand)->append(e3.oclAsType(InfixExpression).rightOperand)->closure(x | 
+    mInv1.arguments->exists(e2 | e2 <> mInv1 and 
+      e2.oclIsKindOf(InfixExpression)  and
+      e2.oclAsType(InfixExpression).extendedOperands->append(e2.oclAsType(InfixExpression).leftOperand)->append(e2.oclAsType(InfixExpression).rightOperand)->closure(x | 
         if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
         else if x.oclIsKindOf(InfixExpression) then x.oclAsType(InfixExpression).extendedOperands->append(x.oclAsType(InfixExpression).leftOperand)->append(x.oclAsType(InfixExpression).rightOperand)
         else Set(OclAny){x} endif endif
@@ -17,44 +11,27 @@
         (stringStatement.oclIsKindOf(MethodInvocation) and 
         (not stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) and
         stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.name = 'String' ) or
+        (stringStatement.oclIsKindOf(StringLiteral) ) or
         (stringStatement.oclIsKindOf(SingleVariableAccess) and 
-        (let accessType: String = if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+        (let varname: String = if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
           stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type.name
         else if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
           stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type.name
         else
           ''
-        endif endif in accessType = 'String')) or
-        (stringStatement.oclIsKindOf(StringLiteral) )
-      
-  )))
-->union(
-    MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
-      let m2: MethodDeclaration = if mInv1.oclIsKindOf(MethodInvocation) then
-        mInv1.oclAsType(MethodInvocation).method
-      else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-        mInv1.oclAsType(ClassInstanceCreation).method
-      else
-        null
-      endif endif in
-      m2.name = 'append' and
-      let c3 : OclAny = m2.oclContainer() in 
-      c3.oclIsKindOf(ClassDeclaration) and
-      let c3Methods: OrderedSet(OclAny) =  c3.oclAsType(ClassDeclaration).bodyDeclarations in
-      c3Methods->exists(c3m2 | c3m2 = m2 and
+        endif endif in varname = 'String'))
+     and
+    mInv1.type.type.oclAsSet()->exists(c3 | c3 <> e2 and c3 <> mInv1 and 
+      --Java Class Conditions
       c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
         fullName.concat(p.name).concat('.')
-      ).concat(c3.oclAsType(ClassDeclaration).oclAsType(BodyDeclaration).name) = 'java.lang.StringBuffer' and
-      let mInv1Args: OrderedSet(OclAny) =  if mInv1.oclIsKindOf(MethodInvocation) then
-        mInv1.oclAsType(MethodInvocation).arguments
-      else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-        mInv1.oclAsType(ClassInstanceCreation).arguments
-      else
-        null 
-      endif endif in
-      mInv1Args->exists(e4 | 
-        e4.oclIsKindOf(InfixExpression) and
-        e4.oclAsType(InfixExpression).extendedOperands->append(e4.oclAsType(InfixExpression).leftOperand)->append(e4.oclAsType(InfixExpression).rightOperand)->closure(x | 
+      ).concat(c3.oclAsType(BodyDeclaration).name) = 'java.lang.StringBuffer'  
+  ))))
+->union(
+    MethodInvocation.allInstances()->select(mInv1 |
+      mInv1.arguments->exists(e2 | e2 <> mInv1 and 
+        e2.oclIsKindOf(InfixExpression)  and
+        e2.oclAsType(InfixExpression).extendedOperands->append(e2.oclAsType(InfixExpression).leftOperand)->append(e2.oclAsType(InfixExpression).rightOperand)->closure(x | 
           if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
           else if x.oclIsKindOf(InfixExpression) then x.oclAsType(InfixExpression).extendedOperands->append(x.oclAsType(InfixExpression).leftOperand)->append(x.oclAsType(InfixExpression).rightOperand)
           else Set(OclAny){x} endif endif
@@ -63,16 +40,17 @@
           (stringStatement.oclIsKindOf(MethodInvocation) and 
           (not stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) and
           stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.name = 'String' ) or
+          (stringStatement.oclIsKindOf(StringLiteral) ) or
           (stringStatement.oclIsKindOf(SingleVariableAccess) and 
-          (let accessType: String = if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+          (let varname: String = if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
             stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type.name
           else if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
             stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type.name
           else
             ''
-          endif endif in accessType = 'String')) or
-          (stringStatement.oclIsKindOf(StringLiteral) )
+          endif endif in varname = 'String'))
         
-    ))))
+    )))
   )
 )
+

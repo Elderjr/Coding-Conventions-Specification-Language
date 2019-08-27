@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="statements:PrimitiveType" name="boolean"/>
+    <scope xsi:type="statements:VarDeclaration">
+      <assignment xsi:type="statements:LiteralValue" type="//@rules.0/@auxiliaryElements.0"/>
+      <variable type="//@rules.0/@auxiliaryElements.0"/>
+    </scope>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="statements:PrimitiveType"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@auxiliaryElements.0" regex="byte|short|char|int|long|float|double"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@scope/@assignment.0" regex="0"/>
+    <scope xsi:type="statements:VarDeclaration">
+      <assignment xsi:type="statements:LiteralValue"/>
+      <variable type="//@rules.1/@auxiliaryElements.0"/>
+    </scope>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="statements:PrimitiveType" name="null"/>
+    <scope xsi:type="statements:VarDeclaration">
+      <assignment xsi:type="statements:LiteralValue"/>
+      <variable xsi:type="namedElements:VariableVector"/>
+    </scope>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="namedElements:ComplexType"/>
+    <auxiliaryElements xsi:type="statements:PrimitiveType" name="null"/>
+    <scope xsi:type="statements:VarDeclaration">
+      <assignment xsi:type="statements:LiteralValue" value="" type="//@rules.3/@auxiliaryElements.1"/>
+      <variable type="//@rules.3/@auxiliaryElements.0"/>
+    </scope>
+  </rules>
+</ccsl:CompositeRule>

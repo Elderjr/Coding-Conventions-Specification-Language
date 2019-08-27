@@ -62,6 +62,9 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="groupedElements" upperBound="-1"
             eType="#//elements/namedElements/NamedElement" containment="true"/>
       </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VariableVector" eSuperTypes="#//elements/namedElements/Variable">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensions" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+      </eClassifiers>
     </eSubpackages>
     <eSubpackages name="statements" nsURI="http://www.example.org/ccsl/elements/statements"
         nsPrefix="statements">
@@ -93,8 +96,8 @@
             containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
-            eType="#//elements/statements/Statement" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="#//elements/statements/Statement"
+            containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="BranchControl" eSuperTypes="#//elements/statements/ControlFlow"/>
@@ -111,8 +114,8 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SuperMethodInvocation" eSuperTypes="#//elements/statements/MethodInvocation"/>
       <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
-            eType="#//elements/statements/Statement" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="#//elements/statements/Statement"
+            containment="true"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"
             containment="true"/>
       </eClassifiers>
@@ -140,6 +143,7 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="operand" upperBound="-1"
               eType="#//elements/statements/Statement" containment="true"/>
         </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/statements/expressions/InfixExp"/>
       </eSubpackages>
     </eSubpackages>
     <eSubpackages name="datatype" nsURI="http://www.example.org/ccsl/elements/datatype"
@@ -235,6 +239,10 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="RegexMatch" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ChecksStatementTypeFilter" eSuperTypes="#//filters/AtomicFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//elements/datatype/DataType"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

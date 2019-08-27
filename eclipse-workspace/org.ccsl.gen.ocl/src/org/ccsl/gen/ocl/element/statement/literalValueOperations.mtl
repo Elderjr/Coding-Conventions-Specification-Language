@@ -1,6 +1,5 @@
 [comment encoding = UTF-8 /]
 [module literalValueOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [query public getLiteralMatchingJavaMetaclasses(literal: LiteralValue): OrderedSet(String)= 
@@ -16,7 +15,7 @@
     else if literal.type.name = 'null' then
       OrderedSet(String){'NullLiteral'}
     else
-      OrderedSet(String){''}
+      OrderedSet(String){}
     endif endif endif endif endif
   else
     OrderedSet(String){'StringLiteral', 'CharacterLiteral', 'NumberLiteral', 'BooleanLiteral'}
@@ -35,21 +34,23 @@
   endif endif endif
 /]
 
-[template public generateConditionsLiteralValue(literal: LiteralValue, varName: String, typeCheck: Boolean)]
-[if not literal.value.oclIsUndefined()]
-[literal.generateConditionsForValue(varName, typeCheck) /][else]
-[literal.generateConditionsWhenValueNotSpecified(varName) /][/if]
-[/template]
+[query public getLiteralConditions(literal: LiteralValue, varname: String): OrderedSet(String) = 
+if not literal.value.oclIsUndefined() then
+  OrderedSet(String){literal.generatesConditionForValue(varname)}
+else
+  OrderedSet(String){literal.generatesConditionWhenValueNotSpecified(varname)}
+endif
+/]
 
-[template public generateConditionsWhenValueNotSpecified(literal: LiteralValue, varName: String)]
+[template public generatesConditionWhenValueNotSpecified(literal: LiteralValue, varName: String)]
 ([for (type: String | literal.getLiteralMatchingJavaMetaclasses()) separator(' or ')]
 [varName /].oclIsKindOf([type /])[/for])
 [/template]
 
-[template public generateConditionsForValue(literal: LiteralValue, varName: String, typeCheck: Boolean)]
+[template public generatesConditionForValue(literal: LiteralValue, varName: String)]
 [let matchingJavaMetaclasses: OrderedSet(String) = literal.getLiteralMatchingJavaMetaclasses()]
-[for (type: String | matchingJavaMetaclasses) separator('or')]
-([if typeCheck][varName /].oclIsKindOf([type /]) and [/if][varName /].[literal.getLiteralValueMatchingFieldByJavaMetaclass(type) /] = [varName /].[literal.generatesLiteralExpressionValue(type) /])[/for]
+[for (type: String | matchingJavaMetaclasses) separator(' or ')]
+([varName.printKindOfCondition(type) /] and [varName.printWithCast(type) /].[literal.getLiteralValueMatchingFieldByJavaMetaclass(type) /] = [literal.generatesLiteralExpressionValue(type) /])[/for]
 [/let]
 [/template]
 

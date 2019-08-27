@@ -7,29 +7,29 @@
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: NamedElement)]
-[target.generateOclVariableName() /].name.matches('[regexFilter.regex /]')
+[target.getOclName() /].name.matches('[regexFilter.regex /]')
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: ComplexType)]
-let [target.generateOclVariableName() /]Package: Package = if [target.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
-  [target.generateOclVariableName() /].oclAsType(ClassDeclaration).package
+let [target.getOclName() /]Package: Package = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getOclName() /].oclAsType(ClassDeclaration).package
 else
-  [target.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package
-endif in [target.generateOclVariableName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  [target.getOclName() /].oclAsType(InterfaceDeclaration).package
+endif in [target.getOclName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]') 
+).concat([target.getOclName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]') 
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JavaClass)]
-[target.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+[target.getOclName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([target.generateOclVariableName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
+).concat([target.getOclName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
 ([for (type: String | target.getLiteralMatchingJavaMetaclasses()->excluding('NullLiteral')->excluding('BooleanLiteral')) separator(' or ')]
-([target.generateOclVariableName() /].oclIsKindOf([type /]) and [let fieldValueName: String = target.getLiteralValueMatchingFieldByJavaMetaclass(type)]
+([target.getOclName() /].oclIsKindOf([type /]) and [let fieldValueName: String = target.getLiteralValueMatchingFieldByJavaMetaclass(type)]
 [if fieldValueName = 'escapedValue']
-[target.generateOclVariableName() /].oclAsType([type /]).escapedValue.matches('[regexFilter.regex /]')[elseif fieldValueName = 'tokenValue']
-let stringValue: String = ''.concat([target.generateOclVariableName() /].oclAsType([type /]).tokenValue) in stringValue.matches('[regexFilter.regex /]')[/if][/let])[/for])
+[target.getOclName() /].oclAsType([type /]).escapedValue.matches('[regexFilter.regex /]')[elseif fieldValueName = 'tokenValue']
+let stringValue: String = ''.concat([target.getOclName() /].oclAsType([type /]).tokenValue) in stringValue.matches('[regexFilter.regex /]')[/if][/let])[/for])
 [/template]

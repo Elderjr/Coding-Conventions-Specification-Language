@@ -9,3 +9,15 @@
 [template public printStringWithIdentation(aString : String)]
 [aString /]
 [/template]
+
+[template public printVarname(varname: String, castNeeded: Boolean, javaMetaclass: String)]
+[varname /][if castNeeded].oclAsType([javaMetaclass /])[/if]
+[/template]
+
+[template public printWithCast(varname: String, cast: String)]
+[varname /].oclAsType([cast /])
+[/template]
+
+[template public printKindOfCondition(varname: String, cast: String)]
+[varname /].oclIsKindOf([cast /])
+[/template]

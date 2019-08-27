@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module elementUtils('http:///expansionmodel.ecore', 'http://www.example.org/ccsl')]
 
+
 [query public isSet(element: Element, propertyName: String): Boolean =  
   let properties: Sequence(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
   if properties->size() > 0 then 
@@ -9,3 +10,5 @@
     false
   endif
 /]
+
+

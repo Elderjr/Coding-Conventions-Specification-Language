@@ -2,22 +2,32 @@
 [module OclVariableNameGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 
-[template public generateOclVariableName(element : Element)]
+[template public getOclName(element : Element)]
 e[element.getId() /]
 [/template]
 
-[template public generateOclVariableName(element : ComplexType)]
+[template public getOclName(element : ComplexType)]
 c[element.getId() /]
 [/template]
 
-[template public generateOclVariableName(element : Variable)]
+[template public getOclName(element : Variable)]
 v[element.getId() /]
 [/template]
 
-[template public generateOclVariableName(element : Method)]
+[template public getOclName(element : Method)]
 m[element.getId() /]
 [/template]
 
-[template public generateOclVariableName(element : MethodInvocation)]
+[template public getOclName(element : MethodInvocation)]
 mInv[element.getId() /]
 [/template]
+
+[template public getOclName(element : PrimitiveType)]
+primitiveType[element.getId() /]
+[/template]
+
+[template public getOclName(element : VarDeclaration)]
+varDecl[element.getId() /]
+[/template]
+
+

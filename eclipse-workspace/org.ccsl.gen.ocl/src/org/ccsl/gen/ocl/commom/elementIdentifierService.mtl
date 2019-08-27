@@ -9,6 +9,10 @@
 	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'getElementsWithId()', Sequence{})
 /]
 
+[query public isElementRegistered(anOclAny: OclAny, element: Element): Boolean =
+  getElementsWithId()->includes(element)
+/]
+
 [query public clearAllContexts(anOclAny: OclAny) : OclVoid
 	= invoke('org.ccsl.gen.ocl.services.ElementIdentifierService', 'clearAllContexts()', Sequence{})
 /]

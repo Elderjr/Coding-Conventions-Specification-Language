@@ -62,6 +62,9 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Namespace">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Namespace/groupedElements"/>
         </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/VariableVector">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/VariableVector/dimensions"/>
+        </genClasses>
       </nestedGenPackages>
       <nestedGenPackages prefix="Statements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements">
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/Statement"/>
@@ -131,6 +134,7 @@
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/PostfixExp">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/expressions/PostfixExp/operand"/>
           </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/StringConcatenation"/>
         </nestedGenPackages>
       </nestedGenPackages>
       <nestedGenPackages prefix="Datatype" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/datatype">
@@ -211,6 +215,10 @@
       </genClasses>
       <genClasses ecoreClass="ccsl.ecore#//filters/RegexMatch">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/RegexMatch/regex"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/ChecksStatementTypeFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChecksStatementTypeFilter/type"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

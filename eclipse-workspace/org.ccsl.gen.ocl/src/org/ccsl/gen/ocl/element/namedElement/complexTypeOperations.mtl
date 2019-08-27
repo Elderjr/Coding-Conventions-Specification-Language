@@ -4,35 +4,30 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
-[template private printAllConditionsComplexType(complexType: ComplexType, varName: String, exactMatch:Boolean)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  complexType.generatesConditionsForFields(varName),
-  complexType.generatesConditionsForMethods(varName),
-  complexType.generatesConditionsNamedElement(varName, exactMatch, false)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition /][/for][/let]
+[query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = if typecheck then
+  varname.printWithCast(metaclass)
+else
+  varname
+endif in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  complexType.generatesConditionForFields(newVarname, metaclass),
+  complexType.generatesConditionForMethods(newVarname, metaclass)
+}->addAll(complexType.getNamedElementConditions(newVarname, false))
+->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+[template public generatesConditionForFields(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.fields->size() > 0)]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, complexType.getOclName().concat('Fields'), 'bodyDeclarations', 'OclAny') /]
 [/template]
 
-[template public generatesConditionsComplexType(complexType: ComplexType, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
-[if typeCheck and complexType.oclIsTypeOf(ComplexType)]
---ComplexType Conditions
-(
-[for (type: String | Sequence(String){'ClassDeclaration', 'InterfaceDeclaration'}) separator ('or\n')]
-[let conditions: String = complexType.printAllConditionsComplexType(varName.concat('.oclAsType(').concat(type).concat(')'), exactMatch)]
-  [varName /].oclIsKindOf([type /])[if conditions.trim().size() > 0] and
-  [conditions.printStringWithIdentation() /]
-[/if][/let][/for]
-)
-[else]
-[complexType.printAllConditionsComplexType(varName, exactMatch) /][/if]
-[/template]
-
-[template public generatesConditionsForFields(complexType: ComplexType, varName: String)]
-[complexType.generatesGenericConditionsForAttribute(complexType.fields, 'bodyDeclarations', true, varName, true) /]
-[/template]
-
-[template public generatesConditionsForMethods(complexType: ComplexType, varName: String)]
-[complexType.generatesGenericConditionsForAttribute(complexType.methods, 'bodyDeclarations', true, varName, true) /]
+[template public generatesConditionForMethods(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.methods->size() > 0)]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, complexType.getOclName().concat('Methods'), 'bodyDeclarations', 'OclAny') /]
 [/template]

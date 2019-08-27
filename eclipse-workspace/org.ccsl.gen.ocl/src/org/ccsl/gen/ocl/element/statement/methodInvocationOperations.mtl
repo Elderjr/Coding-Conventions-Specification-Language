@@ -3,49 +3,56 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 
-[query public getMethodInvocationMatchingJavaMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
-  if methodInv.oclIsTypeOf(MethodInvocation) then
-      OrderedSet(String){'MethodInvocation', 'ClassInstanceCreation'}
-  else if methodInv.oclIsTypeOf(InstanceCreation) then
-      OrderedSet(String){'ClassInstanceCreation'}
-  else
-      OrderedSet(String){}
-  endif endif
+[query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
+  OrderedSet(String){'MethodInvocation', 'ClassInstanceCreation'}
 /]
 
-[template private printAllMethodInvocationConditions(methodInv: MethodInvocation, varName: String)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  methodInv.generatesConditionsForTo(varName),
-  methodInv.generatesConditionsForArgs(varName),
-  methodInv.generatesConditionsForFrom(varName),
-  methodInv.generatesConditionsElement(varName, false, false)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for][/let]
+[query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  methodInv.generatesConditionForTo(varname),
+  methodInv.generatesConditionForArgs(varname),
+  methodInv.generatesConditionForFrom(varname)
+}->select(s | s.trim().size() > 0)
+/]
+
+[query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, metaclass) in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  methodInv.generatesConditionForTo(newVarname, metaclass),
+  methodInv.generatesConditionForFrom(newVarname, metaclass),
+  methodInv.generatesConditionForArgs(newVarname, metaclass)
+}->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (not methodInv.elementAccessed.oclIsUndefined())]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionsMethodInvocation(methodInv: MethodInvocation, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
-[if typeCheck]
-([for(type: String | methodInv.getMethodInvocationMatchingJavaMetaclasses()) separator(' or ')]
-[varName /].oclIsKindOf([type /]) and [methodInv.printAllMethodInvocationConditions(varName.concat('.oclAsType(').concat(type).concat(')')) /]
-[/for])[else]
-[methodInv.printAllMethodInvocationConditions(varName) /]
-[/if]
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.elementAccessed.oclIsUndefined())]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionsForTo(methodInv: MethodInvocation, varName: String)]
-[if not methodInv.elementAccessed.oclIsUndefined()]
-[methodInv.generatesGenericConditionsForAttribute(methodInv.elementAccessed, 'method', false, varName, false) /][/if]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.from.oclIsUndefined())]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny') /]
 [/template]
 
-[template public generatesConditionsForArgs(methodInv: MethodInvocation, varName: String)]
-[if methodInv.isSet('args')]
-[methodInv.generatesGenericConditionsForAttribute(methodInv.args, 'arguments', true, varName, true) /][/if]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (not methodInv.from.oclIsUndefined())]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionsForFrom(methodInv: MethodInvocation, varName: String)]
-[if not methodInv.from.oclIsUndefined()]
-[methodInv.generatesGenericConditionsForAttribute(methodInv.from, 'expression', false, varName, true) /][/if]
+[template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('args'))]
+[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, methodInv.getMethodInvocationMatchingMetaclasses(), methodInv.getOclName().concat('Args'), 'arguments', 'OclAny') /]
+[/template]
+
+[template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('args'))]
+[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, methodInv.getOclName().concat('Args'), 'arguments', 'OclAny') /]
 [/template]

@@ -1,12 +1,60 @@
 [comment encoding = UTF-8 /]
 [module selectGenerator('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
 
+[comment utils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
 
+[comment operations /]
+[import org::ccsl::gen::ocl::java::javaClassOperations /]
+[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
+[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+
+[template public generatesSelect(element: Element, filters: OrderedSet(Filter))]
+[/template]
+
+[comment statements/InstanceCreation /]
+[template public generatesSelect(inst: InstanceCreation, filters: OrderedSet(Filter))]
+[inst.generatesSelectPrivate(filters, inst.getInstanceCreationMatchingMetaclasses()) /]
+[/template]
+
+[comment statements/MethodInvocation /]
+[template public generatesSelect(methodInv: MethodInvocation, filters: OrderedSet(Filter))]
+[methodInv.generatesSelectPrivate(filters, methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[/template]
+
+
+[comment statements/StringConcatenation /]
+[template public generatesSelect(strConcat: StringConcatenation, filters: OrderedSet(Filter))]
+[strConcat.generatesSelectPrivate(filters, strConcat.getInfixMatchingMetaclasses()) /]
+[/template]
+
+[comment java/JavaClass /]
+[template public generatesSelect(javaClass: JavaClass, filters: OrderedSet(Filter))]
+[javaClass.generatesSelectPrivate(filters, javaClass.getJavaClassMatchingMetaclasses()) /]
+[/template]
+
+[template private generatesSelectPrivate(element: Element, filters: OrderedSet(Filter), matchingMetaclasses: OrderedSet(String))]
+[let scopeConditions: String = if matchingMetaclasses->size() > 1 then
+  element.generatesConditions(element.getOclName(), true)
+else
+  element.generatesConditions(element.getOclName(), false, matchingMetaclasses->first())
+endif]
+[let filterConditions: String = filters->generateFiltersConditions()]
+[element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->select([element.getOclName() /] |
+  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
+[/if]
+  [filterConditions.printStringWithIdentation() /]
+)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
+[/template]
+
+[template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]
+[for (metaclassesTarget: String | matchingJavaMetaclasses) separator('->union(')]
+[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
+[/template]
 
 
 [template private generateFiltersConditions(filters: OrderedSet(Filter))]
@@ -15,44 +63,3 @@
 [cond.printStringWithIdentation() /][/for]
 [/let]
 [/template]
-
-[template public generateSelect(element : Element, filters: OrderedSet(Filter))]
-[let scopeConditions: String = element.generatesConditions(element.generateOclVariableName(), false, false)]
-[let filterConditions: String = filters->generateFiltersConditions()]
-[element.getAllInstances() /]->select([element.generateOclVariableName() /] |
-  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
-[/if]
-  [filterConditions.printStringWithIdentation() /]
-)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
-[/template]
-
-[template public getAllInstances(element: Element) /]
-
-
-[template public getAllInstances(variable: Variable)]
-[for (metaclassesTarget: String | variable.getAllVariableMetaclasses()) separator('->union(')]
-[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
-[/template]
-
-[template public getAllInstances(method: Method)]
-MethodDeclaration.allInstances()
-[/template]
-
-
-[template public getAllInstances(javaClass: JavaClass)]
-ClassDeclaration.allInstances()
-[/template]
-
-[template public getAllInstances(infixExp: InfixExp)]
-InfixExpression.allInstances()
-[/template]
-
-[template public getAllInstances(methodInvocation: MethodInvocation)]
-MethodInvocation.allInstances()
-[/template]
-
-[template public getAllInstances(instanceCreation: InstanceCreation)]
-ClassInstanceCreation.allInstances()
-[/template]
-
-

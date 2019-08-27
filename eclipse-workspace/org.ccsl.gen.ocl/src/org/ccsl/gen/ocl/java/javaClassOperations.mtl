@@ -3,21 +3,20 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
 
-[template private printAllConditionsJavaClass(javaClass: JavaClass, varName: String, exactMatch:Boolean)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  javaClass.generatesConditionsComplexType(varName, exactMatch, false)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition /][/for][/let]
-[/template]
+[query public getJavaClassMatchingMetaclasses(javaClass: JavaClass): OrderedSet(String)=
+  OrderedSet(String){'ClassDeclaration'}
+/]
 
-[template public generatesConditionsJavaClass(javaClass: JavaClass, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
---Java Class Conditions
-[if typeCheck and javaClass.oclIsTypeOf(JavaClass)]
-[let conditions: String = javaClass.printAllConditionsJavaClass(varName.concat('.oclAsType(ClassDeclaration)'), javaClass.exact)]
-[varName /].oclIsKindOf(ClassDeclaration)[if conditions.trim().size() > 0] and
-[conditions.printStringWithIdentation() /]
-[/if][/let]
-[else]
-[javaClass.printAllConditionsJavaClass(varName, exactMatch) /][/if]
-[/template]
+[query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = if typecheck then
+  varname.printWithCast('ClassDeclaration')
+else
+  varname
+endif in
+let conditions: OrderedSet(String) = javaClass.getComplexTypeConditions(newVarname, false, 'ClassDeclaration') in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition('ClassDeclaration')}->addAll(conditions)
+else
+  conditions
+endif
+/]

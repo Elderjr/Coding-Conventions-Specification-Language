@@ -3,8 +3,12 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
-[query public getAllVariableMetaclasses(variable: Variable): OrderedSet(String)=
+[query public getVariableMatchingJavaMetaclasses(variable: Variable): OrderedSet(String)=
   if variable.eContainer().oclIsKindOf(ComplexType) then
     OrderedSet(String){'FieldDeclaration'}
   else if variable.eContainer().oclIsKindOf(Method) then
@@ -14,38 +18,45 @@
   endif endif
 /]
 
-[template private printAllConditionsVariable(var: Variable, varName: String, metaclassTarget: String)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  var.generatesConditionsNamedElement(varName, false, false),
-  var.generatesConditionsForType(varName, metaclassTarget)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for][/let]
+[query public getVariableFieldMatchingName(var: Variable, metaclass: String): String =
+ if metaclass = 'VariableDeclarationFragment' then
+  'variablesContainer.type.type'
+ else
+  'type.type' 
+ endif
+/]
+
+[query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean): OrderedSet(String) = 
+OrderedSet(String){
+  var.generatesConditionsForType(varname)
+}->select(s | s.trim().size() > 0)
+/]
+
+[query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = if typecheck then
+  varname.printWithCast(metaclass)
+else
+  varname
+endif in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  var.generatesConditionsForType(newVarname, metaclass)
+}->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+[template public generatesConditionsForType(var: Variable, varname: String) ? (not var.type.oclIsUndefined())]
+[var.generatesMonovaluedFieldConditions(varname, var.type, 'OclAny',
+OrderedSet(OrderedSet(String)){
+  OrderedSet(String){'FieldDeclaration', 'type.type'},
+  OrderedSet(String){'SingleVariableDeclaration', 'type.type'},
+  OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
+}) /]
 [/template]
 
-[template public generatesConditionsVariable(var: Variable, varName: String, typeCheck:Boolean)]
---Variable Conditions
-[let metaclassesTarget: OrderedSet(String) = var.getAllVariableMetaclasses()]
-[if metaclassesTarget->size() > 1]
-[for(metaclassTarget: String | metaclassesTarget) separator(' or ')]
-[let variableConditions: String = var.printAllConditionsVariable(varName.concat('.oclAsType(').concat(metaclassTarget).concat(')'), metaclassTarget)]
-(
-  [varName /].oclIsKindOf([metaclassTarget /]) [if variableConditions.trim().size() > 0 ] and
-  [variableConditions.printStringWithIdentation() /]
-)[/if][/let][/for][else]
-[let variableConditions: String = var.printAllConditionsVariable(varName.concat('.oclAsType(').concat(metaclassesTarget->first()).concat(')'), metaclassesTarget->first())]
-[if typeCheck][varName /].oclIsKindOf([metaclassesTarget->first() /][/if] [if variableConditions.trim().size() > 0 ] [if typeCheck] and [/if]
-[variableConditions.printStringWithIdentation() /])[/if][/let][/if][/let]
+[template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined())]
+[var.generatesMonovaluedFieldConditions(varname, var.type, var.getVariableFieldMatchingName(metaclass), 'OclAny') /]
 [/template]
-
-[template public getFieldTypeName(var: Variable, metaclassTarget: String)]
-[if(metaclassTarget = 'VariableDeclarationFragment')]
-variablesContainer.[/if]type.type
-[/template]
-
-[template public generatesConditionsForType(var: Variable, varName: String, metaclassTarget: String)]
-[if not var.type.oclIsUndefined() and var.type.oclIsKindOf(ComplexType)]
-[var.generatesGenericConditionsForAttribute(var.type.oclAsType(ComplexType), var.getFieldTypeName(metaclassTarget), false, varName, true) /][elseif not var.type.oclIsUndefined()]
-[varName /].[var.getFieldTypeName(metaclassTarget) /].name = '[var.type.oclAsType(PrimitiveType).name /]'[/if]
-[/template]
-

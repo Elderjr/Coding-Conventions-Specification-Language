@@ -4,18 +4,30 @@
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
-[template public generatesConditionsInstanceCreation(instCreation: InstanceCreation, varName: String, typeCheck:Boolean)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  instCreation.generatesConditionsMethodInvocation(varName, false, false),
-  instCreation.generatesConditionsForType(varName)}
-->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for][/let]
-[/template]
+[query public getInstanceCreationMatchingMetaclasses(inst: InstanceCreation): OrderedSet(String)=
+  OrderedSet(String){'ClassInstanceCreation'}
+/]
 
-[template public generatesConditionsForType(instCreation: InstanceCreation, varName: String)]
-[if not instCreation.type.oclIsUndefined()]
-[instCreation.generatesGenericConditionsForAttribute(instCreation.type, 'type.type', false, varName, false) /][/if]
+[query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = if typecheck then
+  varname.printWithCast('ClassInstanceCreation')
+else
+  varname
+endif in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  inst.generatesConditionsForType(newVarname)
+}->addAll(inst.getMethodInvocationConditions(newVarname, false, 'InstanceCreation'))
+->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition('InstanceCreation')}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+[template public generatesConditionsForType(instCreation: InstanceCreation, varname: String) ? (not instCreation.type.oclIsUndefined())]
+[instCreation.generatesMonovaluedFieldConditions(varname, instCreation.type, 'type.type', 'OclAny') /]
 [/template]
 

@@ -4,39 +4,19 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
-[template public generatesConditionsNamedElement(namedElement : NamedElement, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  namedElement.generatesConditionsNamedElementForName(varName),
-  namedElement.generatesConditionsElement(varName, exactMatch, false)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for][/let]
+[query public getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean): OrderedSet(String) = 
+OrderedSet(String){
+  namedElement.generatesConditionNamedElementForName(varname)
+}->addAll(namedElement.getElementConditions(varname, typecheck))
+->select(s | s.trim().size() > 0)
+/]
+
+[template public generatesConditionNamedElementForName(namedElement: NamedElement, varname: String) ? (not namedElement.name.oclIsUndefined())]
+[varname /].name = '[namedElement.name /]'
 [/template]
 
-[template public generatesConditionsNamedElementForName(namedElement: NamedElement, varName: String)]
-[if not namedElement.name.oclIsUndefined()]
-[if namedElement.oclIsKindOf(ComplexType) and namedElement.name.contains('.')]
-[namedElement.generatesFullnameCondition(varName) /][else]
-[varName /].name = '[namedElement.name /]'[/if]
-[/if]
-[/template]
-
-[template private generatesFullnameCondition(namedElement: NamedElement, varName: String) /]
-
-[template private generatesFullnameCondition(complexType: ComplexType, varName: String)]
-[let packageHierarchy: String = complexType.generateOclVariableName().concat('PackageHierarchy')]
-let [complexType.generateOclVariableName() /]Package: Package = if [complexType.generateOclVariableName() /].oclIsKindOf(ClassDeclaration) then
-  [complexType.generateOclVariableName() /].oclAsType(ClassDeclaration).package
-else
-  [complexType.generateOclVariableName() /].oclAsType(InterfaceDeclaration).package
-endif in [complexType.generateOclVariableName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+[template public generatesConditionNamedElementForName(javaClass: JavaClass, varname: String) ? ( (not javaClass.name.oclIsUndefined()) and (javaClass.name.contains('.')) )]
+[varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([complexType.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[complexType.name /]' 
-[/let]
-[/template]
-
-[template private generatesFullnameCondition(javaClass: JavaClass, varName: String)]
-[javaClass.generateOclVariableName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-  fullName.concat(p.name).concat('.')
-).concat([javaClass.generateOclVariableName() /].oclAsType(BodyDeclaration).name) = '[javaClass.name /]'
+).concat([varname /].oclAsType(BodyDeclaration).name) = '[javaClass.name /]'
 [/template]

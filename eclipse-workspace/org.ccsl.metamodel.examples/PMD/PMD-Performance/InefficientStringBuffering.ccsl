@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.StringBuffer"/>
+    <scope xsi:type="statements:InstanceCreation" type="//@rules.0/@auxiliaryElements.0">
+      <args xsi:type="expressions:StringConcatenation"/>
+    </scope>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.StringBuffer">
+      <methods name="append"/>
+    </auxiliaryElements>
+    <scope xsi:type="statements:MethodInvocation" elementAccessed="//@rules.1/@auxiliaryElements.0/@methods.0">
+      <args xsi:type="expressions:StringConcatenation"/>
+    </scope>
+  </rules>
+</ccsl:CompositeRule>

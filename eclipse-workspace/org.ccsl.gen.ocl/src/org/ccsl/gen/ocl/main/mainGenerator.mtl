@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::selectGenerator /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+[import org::ccsl::gen::ocl::commom::selectGenerator /]
 
 [template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
@@ -13,7 +13,7 @@
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesOcl(rule: AtomicRule)]
-[rule.clearAllContexts() /][rule.scope.generateSelect(rule.filters) /]
+[rule.clearAllContexts() /][rule.scope.generatesSelect(rule.filters) /]
 [/template]
 
 [template private generatesOcl(compositeRule: CompositeRule)]

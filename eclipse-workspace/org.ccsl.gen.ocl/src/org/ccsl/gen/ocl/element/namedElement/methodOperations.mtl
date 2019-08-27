@@ -4,38 +4,33 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /] 
 
-[template private printAllConditionsMethod(method: Method, varName: String, exactMatch: Boolean)]
-[let allConditions: OrderedSet(String) = OrderedSet(String){
-  method.generatesConditionsNamedElement(varName, exactMatch, false),
-  method.generatesConditionsForReturnType(varName),
-  method.generatesConditionsForParams(varName)
-}->select(s | s.trim().size() > 0)]
-[for (condition: String | allConditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for][/let]
+[query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
+OrderedSet(String){'MethodDeclaration'}
+/]
+
+
+[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let newVarname: String = varname.printVarname(typecheck, 'MethodDeclaration') in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  method.generatesConditionForReturnType(newVarname),
+  method.generatesConditionForParams(newVarname)
+}->addAll(method.getNamedElementConditions(newVarname, false))
+->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition('MethodDeclaration')}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+
+[template public generatesConditionForReturnType(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
+[method.generatesMonovaluedFieldConditions(varname, method.returnType, 'returnType.type', 'OclAny') /]
 [/template]
 
-[template public generatesConditionsMethod(method: Method, varName: String, exactMatch: Boolean, typeCheck:Boolean)]
--- Method Conditions
-[if not typeCheck]
-[method.printAllConditionsMethod(varName, exactMatch) /][else]
-[let newVarName: String = varName.concat('.oclAsType(MethodDeclaration)')]
-[let conditions: String = method.printAllConditionsMethod(newVarName, exactMatch)]
-[varName /].oclIsKindOf(MethodDeclaration)[if conditions.trim().size() > 0] and
-[conditions.printStringWithIdentation() /][/if][/let][/let][/if]
+[template public generatesConditionForParams(method: Method, varname: String) ? (method.isSet('params'))]
+[method.generatesMultivaluedFieldConditions(varname, method.params, method.getOclName().concat('params'), 'parameters', 'SingleVariableDeclaration') /]
 [/template]
-
-[template public generatesConditionsForReturnType(method: Method, varName: String)]
-[if (not method.returnType->oclIsUndefined()) and (method.returnType->size() > 0) ]
-[let returnType: DataType = method.returnType]
-[if returnType.oclIsKindOf(ComplexType)]
-[method.generatesGenericConditionsForAttribute(returnType.oclAsType(ComplexType), 'returnType.type', false, varName, false) /][else]
-[varName /].returnType.type.name = '[returnType.oclAsType(PrimitiveType).name /]'[/if][/let][/if]
-[/template]
-
-[template public generatesConditionsForParams(method: Method, varName: String)]
-[if method.isSet('params')]
-[method.generatesGenericConditionsForAttribute(method.params, 'parameters', true, varName, false) /] [if method.exact][if method.params->size() > 0] and 
-[/if][varName /].parameters->size() = [method.params->size() /][/if][/if]
-[/template]
-
