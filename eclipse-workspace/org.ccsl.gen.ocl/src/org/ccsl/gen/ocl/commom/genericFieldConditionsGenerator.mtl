@@ -4,13 +4,39 @@
 [import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 
+[template public generatesLetStatement(element: Element, varname: String, mappedFieldName: String, letOclName: String, letType: String)]
+let [letOclName /]: [letType /] = [varname /].[mappedFieldName /] in
+[/template]
+
+[template public generatesLetIfObject(element: Element, varname: String, mappedFieldName: String, mappedElementMetaclasses: OrderedSet(String), letOclName: String, letType: String)]
+let [letOclName /]: [letType /] = [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
+if [varname /].oclIsKindOf([metaclass /]) then
+  [varname /].oclAsType([metaclass /]).[mappedFieldName /]
+[/for]
+else
+  null
+[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
+(not [letOclName /].oclIsUndefined()) and
+[/template]
+
+[template public generatesLetIfObject(element: Element, varname: String, map: OrderedSet(OrderedSet(String)), letOclName: String, letType: String)]
+let [letOclName /]: [letType /] = [for(entry: OrderedSet(String) | map) separator('else ')]
+if [varname /].oclIsKindOf([entry->at(1) /]) then
+  [varname /].oclAsType([entry->at(1) /]).[entry->at(2) /]
+[/for]
+else
+  null
+[for (Sequence(Integer){1..map->size()}) separator(' ')]endif[/for] in
+(not [letOclName /].oclIsUndefined()) and
+[/template]
+
 [comment Gerar condições de atributo monovalorado com acesso direto /]
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (isElementRegistered(field))]
 [varname /].[mappedFieldName /] = [field.getOclName() /]
 [/template]
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (not isElementRegistered(field))]
-let [field.getOclName() /] : [mappedFieldMetaclass /] = [varname /].[mappedFieldName /] in 
+[element.generatesLetStatement(varname, mappedFieldName, field.getOclName(), mappedFieldMetaclass) /]
 [if mappedFieldMetaclass <> 'OclAny'][field.generatesConditions(field.getOclName(), false, mappedFieldMetaclass) /][else][field.generatesConditions(field.getOclName(), true) /][/if]
 [/template]
 
@@ -22,17 +48,10 @@ if [varname /].oclIsKindOf([metaclass /]) then
 [/for]
 else
   false
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for]
-[/template]
+[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for][/template]
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (not isElementRegistered(field))]
-let [field.getOclName() /]: [mappedFieldMetaclass /] = [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
-if [varname /].oclIsKindOf([metaclass /]) then
-  [varname /].oclAsType([metaclass /]).[mappedFieldName /]
-[/for]
-else
-  null
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getOclName(), mappedFieldMetaclass) /]
 [if mappedFieldMetaclass <> 'OclAny'][field.generatesConditions(field.getOclName(), false, mappedFieldMetaclass) /][else][field.generatesConditions(field.getOclName(), true) /][/if]
 [/template]
 
@@ -48,13 +67,7 @@ else
 [/template]
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (not isElementRegistered(field))]
-let [field.getOclName() /]: OclAny = [for(entry: OrderedSet(String) | map) separator('else ')]
-if [varname /].oclIsKindOf([entry->at(1) /]) then
-  [varname /].oclAsType([entry->at(1) /]).[entry->at(2) /]
-[/for]
-else
-  null
-[for (Sequence(Integer){1..map->size()}) separator(' ')]endif[/for] in
+[element.generatesLetIfObject(varname, map, field.getOclName(), mappedFieldMetaclass) /]
 [if mappedFieldMetaclass <> 'OclAny'][field.generatesConditions(field.getOclName(), false, mappedFieldMetaclass) /][else][field.generatesConditions(field.getOclName(), true) /][/if]
 [/template]
 
@@ -62,7 +75,7 @@ else
 
 [comment Gerar condições de atributo multivalorado com acesso direto /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-let [letOclName /]: OrderedSet([mappedFieldMetaclass /]) =  [varname /].[mappedFieldName /] in
+[element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
 [for (field: Element | fields) separator(' and ')]
 [if isElementRegistered(field)]
 [letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]
@@ -74,13 +87,7 @@ let [letOclName /]: OrderedSet([mappedFieldMetaclass /]) =  [varname /].[mappedF
 
 [comment Gerar condições de atributo multivalorado com lista de possíveis metaclasses /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-let [letOclName /]: OrderedSet([mappedFieldMetaclass /]) =  [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
-if [varname /].oclIsKindOf([metaclass /]) then
-  [varname /].oclAsType([metaclass /]).[mappedFieldName /]
-[/for]
-else
-  null 
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
 [for (field: Element | fields) separator(' and ')]
 [if isElementRegistered(field)]
 [letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]

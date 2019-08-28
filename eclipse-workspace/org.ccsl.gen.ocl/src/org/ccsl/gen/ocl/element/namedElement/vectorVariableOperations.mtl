@@ -1,15 +1,43 @@
 [comment encoding = UTF-8 /]
 [module vectorVariableOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
-[query public getVectorVariableConditions(var: VariableVector, varname: String, javaMetaclassTarget: String): OrderedSet(String) = 
-var.getVariableConditions(varname, false)
-->append(var.generatesConditionsForDimensions(varname))
+[query public getVectorVariableConditions(var: VariableVector, varname: String, typecheck: Boolean): OrderedSet(String) = 
+OrderedSet(String){
+  var.generatesConditionsForDimensions(varname)
+}->addAll(var.getVariableConditions(varname, typecheck))
 ->select(s | s.trim().size() > 0)
 /]
 
+[query public getVectorVariableConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = if typecheck then
+  varname.printWithCast(metaclass)
+else
+  varname
+endif in
+let conditions: OrderedSet(String) = OrderedSet(String){
+  var.generatesConditionsForDimensions(varname, metaclass)
+}->addAll(var.getVariableConditions(varname, typecheck))
+->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String)]
+[let letOclName: String = var.getOclName().concat('Dimensions')]
+[var.generatesLetIfObject(varname, 'extraDimensions', var.getVariableMatchingJavaMetaclasses(), letOclName, 'Integer') /]
 [if not var.dimensions.oclIsUndefined()]
-[varname /].extraDimensions [if not var.exact ]>[/if]= [var.dimensions /][else]
-[varname /].extraDimensions >= 1[/if]
+[letOclName /][if not var.exact ]>[/if]= [var.dimensions /][else][letOclName /] >= 1[/if][/let]
+[/template]
+
+[template public generatesConditionsForDimensions(var: VariableVector, varname: String, metaclass: String)]
+[if not var.dimensions.oclIsUndefined()]
+[varname /].extraArrayDimensions [if not var.exact ]>[/if]= [var.dimensions /][else]
+[varname /].extraArrayDimensions >= 1[/if]
 [/template]

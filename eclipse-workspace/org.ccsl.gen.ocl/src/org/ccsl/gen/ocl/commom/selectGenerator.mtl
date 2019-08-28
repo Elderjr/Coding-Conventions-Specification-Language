@@ -7,11 +7,17 @@
 [import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
 
-[comment operations /]
-[import org::ccsl::gen::ocl::java::javaClassOperations /]
+[comment statement /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
+
+[comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+
+[comment java /]
+[import org::ccsl::gen::ocl::java::javaClassOperations /]
+
 
 [template public generatesSelect(element: Element, filters: OrderedSet(Filter))]
 [/template]
@@ -32,10 +38,17 @@
 [strConcat.generatesSelectPrivate(filters, strConcat.getInfixMatchingMetaclasses()) /]
 [/template]
 
+[comment statements/VariableDeclaration /]
+[template public generatesSelect(varDecl: VarDeclaration, filters: OrderedSet(Filter))]
+[varDecl.generatesSelectPrivate(filters, varDecl.getVariableDeclarationMatchingJavaMetaclasses()) /]
+[/template]
+
 [comment java/JavaClass /]
 [template public generatesSelect(javaClass: JavaClass, filters: OrderedSet(Filter))]
 [javaClass.generatesSelectPrivate(filters, javaClass.getJavaClassMatchingMetaclasses()) /]
 [/template]
+
+
 
 [template private generatesSelectPrivate(element: Element, filters: OrderedSet(Filter), matchingMetaclasses: OrderedSet(String))]
 [let scopeConditions: String = if matchingMetaclasses->size() > 1 then
@@ -43,7 +56,7 @@
 else
   element.generatesConditions(element.getOclName(), false, matchingMetaclasses->first())
 endif]
-[let filterConditions: String = filters->generateFiltersConditions()]
+[let filterConditions: String = filters->generateFiltersConditions() ]
 [element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->select([element.getOclName() /] |
   [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
 [/if]

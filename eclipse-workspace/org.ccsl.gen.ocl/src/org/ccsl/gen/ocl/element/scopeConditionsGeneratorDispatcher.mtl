@@ -2,11 +2,15 @@
 [module scopeConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils/]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 [import org::ccsl::gen::ocl::java::javaClassOperations /]
+
+[comment element/namedElement /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
+
+[comment element/statement /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
@@ -24,6 +28,14 @@
 [element.generatesConditions(varname, typecheck) /]
 [/template]
 
+[comment namedElement/ComplexType /]
+[template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean)]
+[complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
+[complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck, metaclass)) /]
+[/template]
 
 [comment namedElement/Variable /]
 [template public generatesConditions(var: Variable, varname: String, typecheck: Boolean)]
@@ -32,6 +44,15 @@
 
 [template public generatesConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.printConditions(var.getVariableConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[comment namedElement/VariableVector /]
+[template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean)]
+[var.printConditions(var.getVectorVariableConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String)]
+[var.printConditions(var.getVectorVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
 
 [comment namedElement/Method /]

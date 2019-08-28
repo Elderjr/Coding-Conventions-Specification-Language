@@ -3,6 +3,14 @@
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
 
+
+[query public test(rule: Rule): OrderedSet(String) = OrderedSet(String){'a','b'} /]
+
+[query public map(rule: Rule): OrderedSet(OrderedSet(String)) = 
+  let map: OrderedSet(OrderedSet(String)) = OrderedSet(OrderedSet(String)){} in
+  if rule.test()->includes('a') then map->append(OrderedSet(String){'a','1'}) else false endif
+  
+/]
 [template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
 [file ('gen', false, 'UTF-8')]

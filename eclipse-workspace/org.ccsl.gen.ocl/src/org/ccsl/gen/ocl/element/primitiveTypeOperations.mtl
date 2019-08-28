@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module primitiveTypeOperations('http://www.example.org/ccsl')]
 
-[query public getPrimitiveTypeMatchingJavaMetaclasses(primitiveType: PrimitiveType): OrderedSet(String)=
+[query public getPrimitiveTypeMatchingMetaclasses(primitiveType: PrimitiveType): OrderedSet(String)=
   if not primitiveType.name.oclIsUndefined() then
     if primitiveType.name = 'boolean' then
       OrderedSet(String){'PrimitiveTypeBoolean'}
@@ -22,12 +22,10 @@
     else if primitiveType.name = 'void' then
       OrderedSet(String){'PrimitiveTypeVoid'}
     else
-      OrderedSet(String){'PrimitiveTypeBoolean', 'PrimitiveTypeByte', 'PrimitiveTypeChar', 
-'PrimitiveTypeDouble', 'PrimitiveTypeFloat', 'PrimitiveTypeInt', 'PrimitiveTypeLong', 'PrimitiveTypeShort', 'PrimitiveTypeVoid'}
+      OrderedSet(String){'PrimitiveType'}
     endif endif endif endif endif endif endif endif endif
   else
-    OrderedSet(String){'PrimitiveTypeBoolean', 'PrimitiveTypeByte', 'PrimitiveTypeChar', 
-'PrimitiveTypeDouble', 'PrimitiveTypeFloat', 'PrimitiveTypeInt', 'PrimitiveTypeLong', 'PrimitiveTypeShort', 'PrimitiveTypeVoid'}
+    OrderedSet(String){'PrimitiveType'}
   endif
 /]
 
@@ -38,6 +36,6 @@ OrderedSet(String){
 /]
 
 [template public generatesConditionsForName(primitiveType: PrimitiveType, varname: String)]
-[for (javaMetaclass: String | primitiveType.getPrimitiveTypeMatchingJavaMetaclasses()) separator (' or ')]
-[varname /].oclIsKindOf([javaMetaclass /])[/for]
+([for (javaMetaclass: String | primitiveType.getPrimitiveTypeMatchingMetaclasses()) separator (' or ')]
+[varname /].oclIsKindOf([javaMetaclass /])[/for])
 [/template]

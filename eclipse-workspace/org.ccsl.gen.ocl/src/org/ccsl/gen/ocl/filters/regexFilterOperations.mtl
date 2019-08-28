@@ -2,6 +2,9 @@
 [module regexFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
+[import org::ccsl::gen::ocl::element::primitiveTypeOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: Element)]
 ### RegexMatch is not supported for the type [target.eClass().name /] ###
 [/template]
@@ -27,9 +30,10 @@ endif in [target.getOclName() /]Package->asOrderedSet()->closure(package)->rever
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
-([for (type: String | target.getLiteralMatchingJavaMetaclasses()->excluding('NullLiteral')->excluding('BooleanLiteral')) separator(' or ')]
-([target.getOclName() /].oclIsKindOf([type /]) and [let fieldValueName: String = target.getLiteralValueMatchingFieldByJavaMetaclass(type)]
-[if fieldValueName = 'escapedValue']
-[target.getOclName() /].oclAsType([type /]).escapedValue.matches('[regexFilter.regex /]')[elseif fieldValueName = 'tokenValue']
-let stringValue: String = ''.concat([target.getOclName() /].oclAsType([type /]).tokenValue) in stringValue.matches('[regexFilter.regex /]')[/if][/let])[/for])
+[target.generatesLetStatementToGetLiteralValue(target.getOclName(), 'literalNameRegex') /]
+literalNameRegex.matches('[regexFilter.regex /]')
+[/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: PrimitiveType)]
+[target.getOclName() /].oclAsType(PrimitiveType).name.matches('[regexFilter.regex /]')
 [/template]
