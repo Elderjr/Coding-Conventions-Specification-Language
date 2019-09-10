@@ -1,6 +1,5 @@
 [comment encoding = UTF-8 /]
 [module variableOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]

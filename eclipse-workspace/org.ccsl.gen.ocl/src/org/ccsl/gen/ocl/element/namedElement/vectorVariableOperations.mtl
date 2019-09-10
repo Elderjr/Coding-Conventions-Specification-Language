@@ -1,6 +1,7 @@
 [comment encoding = UTF-8 /]
 [module vectorVariableOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
@@ -13,11 +14,7 @@ OrderedSet(String){
 /]
 
 [query public getVectorVariableConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = if typecheck then
-  varname.printWithCast(metaclass)
-else
-  varname
-endif in
+let newVarname: String = varname.printVarname(typecheck, metaclass) in
 let conditions: OrderedSet(String) = OrderedSet(String){
   var.generatesConditionsForDimensions(varname, metaclass)
 }->addAll(var.getVariableConditions(varname, typecheck))
@@ -31,13 +28,13 @@ endif
 
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String)]
 [let letOclName: String = var.getOclName().concat('Dimensions')]
-[var.generatesLetIfObject(varname, 'extraDimensions', var.getVariableMatchingJavaMetaclasses(), letOclName, 'Integer') /]
-[if not var.dimensions.oclIsUndefined()]
+[var.generatesLetIfObject(varname, 'extraDimensions', var.getVariableMatchingJavaMetaclasses(), letOclName, 'Integer', false) /]
+[if var.isSet('dimensions')]
 [letOclName /][if not var.exact ]>[/if]= [var.dimensions /][else][letOclName /] >= 1[/if][/let]
 [/template]
 
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String, metaclass: String)]
-[if not var.dimensions.oclIsUndefined()]
+[if var.isSet('dimensions')]
 [varname /].extraArrayDimensions [if not var.exact ]>[/if]= [var.dimensions /][else]
 [varname /].extraArrayDimensions >= 1[/if]
 [/template]

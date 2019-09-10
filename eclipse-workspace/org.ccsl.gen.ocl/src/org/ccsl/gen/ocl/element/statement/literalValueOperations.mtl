@@ -5,36 +5,23 @@
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 [query public isStringLiteral(literal: LiteralValue): Boolean = 
-(not literal.type.oclIsUndefined()) and (not literal.type.name.oclIsUndefined()) and 
-  (literal.type.name = 'string')
+literal.oclIsKindOf(StringLiteral)
 /]
 
 [query public isCharacterLiteral(literal: LiteralValue): Boolean = 
-(not literal.type.oclIsUndefined()) and (not literal.type.name.oclIsUndefined()) and 
-  (literal.type.name = 'character')
+literal.oclIsKindOf(CharacterLiteral)
 /]
 
 [query public isNumberLiteral(literal: LiteralValue): Boolean = 
-(not literal.type.oclIsUndefined()) and (not literal.type.name.oclIsUndefined()) and 
-  (literal.type.name.matches('(short|int|long|float|double)'))
+literal.oclIsKindOf(NumberLiteral)
 /]
 
 [query public isBooleanLiteral(literal: LiteralValue): Boolean = 
-(not literal.type.oclIsUndefined()) and (not literal.type.name.oclIsUndefined()) and 
-  (literal.type.name = 'boolean')
+literal.oclIsKindOf(BooleanLiteral)
 /]
 
 [query public isNullLiteral(literal: LiteralValue): Boolean = 
-(not literal.type.oclIsUndefined()) and (not literal.type.name.oclIsUndefined()) and 
-  (literal.type.name = 'null')
-/]
-
-[query public isUnknownLiteral(literal: LiteralValue): Boolean = 
-(not literal.isStringLiteral()) or
-(not literal.isCharacterLiteral()) or
-(not literal.isNumberLiteral()) or
-(not literal.isBooleanLiteral()) or
-(not literal.isNullLiteral())
+literal.oclIsKindOf(NullLiteral)
 /]
 
 [query public getLiteralMatchingMetaclasses(literal: LiteralValue): OrderedSet(String)= 
@@ -59,7 +46,7 @@ endif endif endif endif endif
   else if javaMetaclass = 'NumberLiteral' then
     'tokenValue'
   else if javaMetaclass = 'BooleanLiteral' then
-    'value'
+    'value.toString()'
   else
     ''
   endif endif endif
@@ -88,17 +75,29 @@ else
 endif endif endif endif endif
 /]
 
-[query public getLiteralConditions(literal: LiteralValue, varname: String): OrderedSet(String) = 
-if not literal.value.oclIsUndefined() then
-  OrderedSet(String){literal.generatesConditionForValue(varname)}
-else
-  OrderedSet(String){literal.generatesConditionWhenValueNotSpecified(varname)}
-endif
+[query public getLiteralConditions(literal: LiteralValue, varname: String, typecheck: Boolean): OrderedSet(String) = 
+OrderedSet(String) {
+  literal.generatesLiteralValueTypecheckCondition(varname, typecheck),
+  literal.generatesConditionForValue(varname, typecheck)
+}->select(s | s.trim().size() > 0)
 /]
 
-[template public generatesConditionWhenValueNotSpecified(literal: LiteralValue, varName: String)]
+[template public generatesLiteralValueTypecheckCondition(literal: LiteralValue, varName: String, typecheck: Boolean) ? (typecheck)]
 ([for (type: String | literal.getLiteralMatchingMetaclasses()) separator(' or ')]
 [varName /].oclIsKindOf([type /])[/for])
+[/template]
+
+[template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() > 1))]
+[let letOclName: String = literal.getOclName().concat('Value')]
+[literal.generatesLetStatementToGetLiteralValue(varname, letOclName) /]
+[letOclName /] = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if][/let]
+[/template]
+
+[template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() = 1))]
+[let matchingMetaclass: String = literal.getLiteralMatchingMetaclasses()->first()]
+[if matchingMetaclass <> 'NullLiteral']
+[varname.printVarname(typecheck, matchingMetaclass) /].[literal.getLiteralValueMatchingFieldByJavaMetaclass(matchingMetaclass) /] = [literal.generatesLiteralExpressionValue() /][elseif matchingMetaclass='NullLiteral' and (not typecheck)]
+[varname.printKindOfCondition('NullLiteral') /][/if][/let]
 [/template]
 
 [template public generatesLetStatementToGetLiteralValue(literal: LiteralValue, varname: String, letOclName: String)]
@@ -112,17 +111,10 @@ else
 (not [letOclName /].oclIsUndefined()) and
 [/template]
 
-[template public generatesConditionForValue(literal: LiteralValue, varname: String)]
-[let letOclName: String = literal.getOclName().concat('Value')]
-[literal.generatesLetStatementToGetLiteralValue(varname, letOclName) /]
-[letOclName /] = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if][/let]
-[/template]
-
-[template public generatesLiteralExpressionValue(literal: LiteralValue, javaMetaclass: String)]
-[if javaMetaclass = 'StringLiteral' and literal.value.size() > 0]
-'"[literal.value /]"'[elseif javaMetaclass = 'StringLiteral' and literal.value.size() = 0]
-'""'[elseif javaMetaclass = 'BooleanLiteral']
-[literal.value /][else]
+[template public generatesLiteralExpressionValue(literal: LiteralValue)]
+[if literal.isStringLiteral() and literal.value.size() >0]
+'"[literal.value /]"'[elseif literal.isStringLiteral() and literal.value.size() = 0]
+'""'[else]
 '[literal.value /]'[/if]
 [/template]
 

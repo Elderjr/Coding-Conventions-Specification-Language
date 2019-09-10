@@ -4,6 +4,7 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
+
 [query public getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean): OrderedSet(String) = 
 OrderedSet(String){
   namedElement.generatesConditionNamedElementForName(varname)

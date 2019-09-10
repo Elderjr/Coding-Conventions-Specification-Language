@@ -5,11 +5,11 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
-[query public getInfixMatchingMetaclasses(infixExp: InfixExp): OrderedSet(String)= 
+[query public getInfixMatchingMetaclasses(infixExp: InfixExpression): OrderedSet(String)= 
   OrderedSet(String){'InfixExpression'}
 /]
 
-[query public getInfixConditions(infix: InfixExp, varname: String, typecheck: Boolean): OrderedSet(String) = 
+[query public getInfixConditions(infix: InfixExpression, varname: String, typecheck: Boolean): OrderedSet(String) = 
 let newVarname: String = varname.printVarname(typecheck, 'InfixExpression') in
 let conditions: OrderedSet(String) =  OrderedSet(String){
   infix.generateConditionForOperator(newVarname),
@@ -22,15 +22,15 @@ else
 endif
 /]
 
-[template public getAllOperandsExpression(infixExp: InfixExp, varName: String)]
+[template public getAllOperandsExpression(infixExp: InfixExpression, varName: String)]
 leftOperand->asOrderedSet()->append([varName /].rightOperand)->append([varName /].extendedOperands)
 [/template]
 
-[template public generateConditionForOperator(infixExp: InfixExp, varName: String) ? (not infixExp.operator.oclIsUndefined())]
+[template public generateConditionForOperator(infixExp: InfixExpression, varName: String) ? (not infixExp.operator.oclIsUndefined())]
 [varName /].operator = '[infixExp.operator /]'
 [/template]
 
-[template public generateConditionForOperands(infixExp: InfixExp, varname: String) ? (infixExp.operands->size() > 0)]
+[template public generateConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.operands->size() > 0)]
 [infixExp.generatesMultivaluedFieldConditions(varname, infixExp.operands, infixExp.getOclName().concat('Operands'), infixExp.getAllOperandsExpression(varname), 'OclAny') /]
 [/template]
 

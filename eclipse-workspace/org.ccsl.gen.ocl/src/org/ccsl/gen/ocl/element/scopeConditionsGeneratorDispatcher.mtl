@@ -13,10 +13,13 @@
 [comment element/statement /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
-[import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
-[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::datatype::primitiveTypeOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
-[import org::ccsl::gen::ocl::element::primitiveTypeOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
+
+
+
 
 [template private printConditions(element: Element, conditions: OrderedSet(String))]
 [for (condition: String | conditions) separator(' and\n')]
@@ -60,7 +63,19 @@
 [method.printConditions(method.getMethodConditions(varname, typecheck)) /]
 [/template]
 
-[comment namedElement/MethodInvocation /]
+
+[comment datatype/PrimitiveType /]
+[template public generatesConditions(primitiveType: PrimitiveType, varname: String, typecheck: Boolean)]
+[primitiveType.printConditions(primitiveType.getPrimitiveTypeConditions(varname)) /]
+[/template]
+
+
+[comment statements/InfixExp /]
+[template public generatesConditions(infix: InfixExpression, varname: String, typecheck: Boolean)]
+[infix.printConditions(infix.getInfixConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/MethodInvocation /]
 [template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]
 [/template]
@@ -69,20 +84,9 @@
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-
-[comment datatype/PrimitiveType /]
-[template public generatesConditions(primitiveType: PrimitiveType, varname: String, typecheck: Boolean)]
-[primitiveType.printConditions(primitiveType.getPrimitiveTypeConditions(varname)) /]
-[/template]
-
-[comment statements/InfixExp /]
-[template public generatesConditions(infix: InfixExp, varname: String, typecheck: Boolean)]
-[infix.printConditions(infix.getInfixConditions(varname, typecheck)) /]
-[/template]
-
 [comment statements/LiteralValue /]
 [template public generatesConditions(literal: LiteralValue, varname: String, typecheck: Boolean)]
-[literal.printConditions(literal.getLiteralConditions(varname)) /]
+[literal.printConditions(literal.getLiteralConditions(varname, typecheck)) /]
 [/template]
 
 [comment statements/StringConcatenation /]

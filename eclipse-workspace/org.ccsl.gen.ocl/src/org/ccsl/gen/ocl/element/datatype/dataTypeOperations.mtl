@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module dataTypeOperations('http://www.example.org/ccsl')]
+
+
+
+[template public getDataTypeName(datatype: DataType) /]
+
+
+[template public getDataTypeName(datatype: ComplexType)]
+[datatype.name /]
+[/template]
+
+[template public getDataTypeName(datatype: BooleanPrimitiveType)]
+boolean
+[/template]

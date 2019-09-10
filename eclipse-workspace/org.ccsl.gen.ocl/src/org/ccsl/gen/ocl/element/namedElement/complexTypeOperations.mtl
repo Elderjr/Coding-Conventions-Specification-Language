@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module complexTypeOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
@@ -11,7 +11,7 @@
 /]
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String) {
-  complexType.generatesTypecheckCondition(varname, typecheck),
+  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck),
   complexType.generatesConditionForFields(varname),
   complexType.generatesConditionForMethods(varname)
 }->addAll(complexType.getNamedElementConditions(varname, typecheck))
@@ -25,18 +25,18 @@ else
   varname
 endif in
 OrderedSet(String) {
-  complexType.generatesTypecheckCondition(varname, typecheck, metaclass),
+  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, metaclass),
   complexType.generatesConditionForFields(newVarname, metaclass),
   complexType.generatesConditionForMethods(newVarname, metaclass)
 }->addAll(complexType.getNamedElementConditions(newVarname, false))
 ->select(s | s.trim().size() > 0)
 /]
 
-[template public generatesTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
+[template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
 ([varname.printKindOfCondition('ClassDeclaration') /] or [varname.printKindOfCondition('InterfaceDeclaration') /])
 [/template]
 
-[template public generatesTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
+[template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
 [varname.printKindOfCondition(metaclass) /]
 [/template]
 

@@ -35,7 +35,7 @@
 
 [comment statements/StringConcatenation /]
 [template public generatesSelect(strConcat: StringConcatenation, filters: OrderedSet(Filter))]
-[strConcat.generatesSelectPrivate(filters, strConcat.getInfixMatchingMetaclasses()) /]
+
 [/template]
 
 [comment statements/VariableDeclaration /]
@@ -58,10 +58,12 @@ else
 endif]
 [let filterConditions: String = filters->generateFiltersConditions() ]
 [element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->select([element.getOclName() /] |
+  -- Scope Conditions
   [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
 [/if]
+  --Filter Conditions
   [filterConditions.printStringWithIdentation() /]
-)[for(Sequence(Integer){1..scopeConditions.countMatches('->exists')}) ])[/for][/let][/let]
+)[for(Sequence(Integer){1..(scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT'))}) ])[/for][/let][/let]
 [/template]
 
 [template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]

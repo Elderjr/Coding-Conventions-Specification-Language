@@ -1,0 +1,8 @@
+[comment encoding = UTF-8 /]
+[module assignmentOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getAssignmentMathingMetaclasses(assignment: VarAssignment): OrderedSet(String)= 
+  OrderedSet(String){'Assignment'}
+/]
+

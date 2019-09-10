@@ -1,11 +1,10 @@
 [comment encoding = UTF-8 /]
 [module methodInvocationOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
   OrderedSet(String){'MethodInvocation', 'ClassInstanceCreation'}
@@ -16,7 +15,8 @@ OrderedSet(String) {
   methodInv.generatesConditionForTo(varname),
   methodInv.generatesConditionForArgs(varname),
   methodInv.generatesConditionForFrom(varname)
-}->select(s | s.trim().size() > 0)
+}
+->select(s | s.trim().size() > 0)
 /]
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -25,7 +25,9 @@ let conditions: OrderedSet(String) = OrderedSet(String) {
   methodInv.generatesConditionForTo(newVarname, metaclass),
   methodInv.generatesConditionForFrom(newVarname, metaclass),
   methodInv.generatesConditionForArgs(newVarname, metaclass)
-}->select(s | s.trim().size() > 0) in
+}
+->select(s | s.trim().size() > 0)
+in
 if typecheck then
   OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
 else
@@ -34,7 +36,7 @@ endif
 /]
 
 [template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (not methodInv.elementAccessed.oclIsUndefined())]
-[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
 [template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.elementAccessed.oclIsUndefined())]

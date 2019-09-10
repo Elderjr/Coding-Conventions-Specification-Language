@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module infixExpressionInfer('http://www.example.org/ccsl')]
+
+[template public generatesDeepCollectorForInfixExpression(obj: OclAny, varname: String, letOclName: String)]
+let [letOclName /]: OrderedSet(OclAny) = [obj.generatesDeepCollectorForInfixExpression(varname) /] in 
+[/template]
+
+
+[template public generatesDeepCollectorForInfixExpression(obj: OclAny, varname: String)]
+[varname /].extendedOperands->append([varname /].leftOperand)->append([varname /].rightOperand)->asOrderedSet()->closure(x | 
+  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
+  else if x.oclIsKindOf(InfixExpression) then x.oclAsType(InfixExpression).extendedOperands->append(x.oclAsType(InfixExpression).leftOperand)->append(x.oclAsType(InfixExpression).rightOperand)
+  else Set(OclAny){x} endif endif
+) 
+[/template]
+
+[template public generatesInferInfexExpressionCheckerForString(obj: OclAny, varname: String)]
+[varname /]->exists(stringStatement | --NOT_COUNT
+  ([obj.isStringTypeClassInstanceDeclaration('stringStatement') /]) or
+  ([obj.isStringTypeMethodInvocation('stringStatement') /]) or
+  ([obj.isStringTypeVariableAccess('stringStatement') /]) or
+  ([obj.isStringTypeLiteral('stringStatement') /])
+)
+[/template]
+
+[template private isStringTypeClassInstanceDeclaration(obj: OclAny, varName: String)]
+[varName /].oclIsKindOf(ClassInstanceCreation) and [varName /].oclAsType(ClassInstanceCreation).type.type.name = 'String'
+[/template]
+
+[template private isStringTypeMethodInvocation(obj: OclAny, varName: String)]
+[varName /].oclIsKindOf(MethodInvocation) and 
+(not [varName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) and
+[varName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.name = 'String' 
+[/template]
+
+[template private isStringTypeLiteral(obj: OclAny, varName: String)]
+[varName /].oclIsKindOf(StringLiteral) 
+[/template]
+
+[template private isStringTypeVariableAccess(obj: OclAny, varName: String)]
+[varName /].oclIsKindOf(SingleVariableAccess) and 
+(let accessType: String = if [varName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+  [varName /].oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type.name
+else if [varName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  [varName /].oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type.name
+else
+  ''
+endif endif in accessType = 'String')
+[/template]

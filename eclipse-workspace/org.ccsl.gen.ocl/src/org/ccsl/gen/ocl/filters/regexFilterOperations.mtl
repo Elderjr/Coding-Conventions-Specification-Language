@@ -2,8 +2,8 @@
 [module regexFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
-[import org::ccsl::gen::ocl::element::primitiveTypeOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: Element)]
 ### RegexMatch is not supported for the type [target.eClass().name /] ###
@@ -29,9 +29,14 @@ endif in [target.getOclName() /]Package->asOrderedSet()->closure(package)->rever
 ).concat([target.getOclName() /].oclAsType(BodyDeclaration).name).matches('[regexFilter.regex /]')
 [/template]
 
-[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() > 1)]
 [target.generatesLetStatementToGetLiteralValue(target.getOclName(), 'literalNameRegex') /]
 literalNameRegex.matches('[regexFilter.regex /]')
+[/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() = 1)]
+[let matchingMetaclass: String = target.getLiteralMatchingMetaclasses()->first()]
+[target.getOclName().printWithCast(matchingMetaclass) /].[target.getLiteralValueMatchingFieldByJavaMetaclass(matchingMetaclass) /].matches('[if target.isStringLiteral()]"[/if][regexFilter.regex /][if target.isStringLiteral()]"[/if]')[/let]
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: PrimitiveType)]

@@ -63,7 +63,8 @@
             eType="#//elements/namedElements/NamedElement" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="VariableVector" eSuperTypes="#//elements/namedElements/Variable">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensions" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensions" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+            unsettable="true"/>
       </eClassifiers>
     </eSubpackages>
     <eSubpackages name="statements" nsURI="http://www.example.org/ccsl/elements/statements"
@@ -78,27 +79,9 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="elementAccessed" eType="#//elements/namedElements/NamedElement"
-            derived="true"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/statements/Statement"/>
-      </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="LiteralValue" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/statements/PrimitiveType"/>
-      </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="CompositeExp" eSuperTypes="#//elements/statements/expressions/Expression">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
-            eType="#//elements/statements/expressions/Expression" containment="true"/>
-      </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="ControlFlow" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//elements/statements/Statement"
             containment="true"/>
-      </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="#//elements/statements/Statement"
-            containment="true"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="BranchControl" eSuperTypes="#//elements/statements/ControlFlow"/>
       <eClassifiers xsi:type="ecore:EClass" name="LoopControl" eSuperTypes="#//elements/statements/ControlFlow"/>
@@ -122,33 +105,47 @@
       <eClassifiers xsi:type="ecore:EClass" name="InstanceCreation" eSuperTypes="#//elements/statements/MethodInvocation">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/namedElements/ComplexType"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//elements/datatype/DataType">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="elementAccessed" eType="#//elements/namedElements/NamedElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/statements/Statement"
+            containment="true"/>
       </eClassifiers>
       <eSubpackages name="expressions" nsURI="http://www.example.org/ccsl/elements/statements/expressions"
           nsPrefix="expressions">
-        <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//elements/statements/Statement"/>
-        <eClassifiers xsi:type="ecore:EClass" name="AtomicExp" eSuperTypes="#//elements/statements/expressions/Expression">
-          <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
-        </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="PrefixExp" eSuperTypes="#//elements/statements/expressions/AtomicExp">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="operand" upperBound="-1"
-              eType="#//elements/statements/VariableAccess" containment="true"/>
-        </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="InfixExp" eSuperTypes="#//elements/statements/expressions/AtomicExp">
+        <eClassifiers xsi:type="ecore:EClass" name="OperatorExpression" eSuperTypes="#//elements/statements/Statement">
           <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
               eType="#//elements/statements/Statement" containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="PostfixExp" eSuperTypes="#//elements/statements/expressions/AtomicExp">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="operand" upperBound="-1"
-              eType="#//elements/statements/Statement" containment="true"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ParenthesizedExpression" eSuperTypes="#//elements/statements/Statement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//elements/statements/Statement"
+              containment="true"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/statements/expressions/InfixExp"/>
+        <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
+        <eClassifiers xsi:type="ecore:EClass" name="InfixExpression" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
+        <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/expressions/OperatorExpression">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
+        </eClassifiers>
+      </eSubpackages>
+      <eSubpackages name="literalValues" nsURI="http://www.example.org/ccsl/elements/statements/expressions/literalValues"
+          nsPrefix="literalValues">
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralValue" eSuperTypes="#//elements/statements/Statement">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="NullLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CharacterLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
+        <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
+        <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
+        <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
       </eSubpackages>
     </eSubpackages>
     <eSubpackages name="datatype" nsURI="http://www.example.org/ccsl/elements/datatype"
         nsPrefix="datatype">
       <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//elements/Element"/>
+      <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//elements/datatype/DataType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="NumberPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StringPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
     </eSubpackages>
   </eSubpackages>
   <eSubpackages name="java" nsURI="http://www.example.org/ccsl/java" nsPrefix="java">
@@ -181,11 +178,8 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//elements/namedElements/Variable"
           containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="InstanceOf" eSuperTypes="#//java/JElement #//elements/statements/Statement #//elements/statements/expressions/InfixExp"/>
-    <eClassifiers xsi:type="ecore:EClass" name="ThrowStatement" eSuperTypes="#//java/JElement">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="throws" eType="#//elements/statements/Access"
-          containment="true"/>
-    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InstanceOf" eSuperTypes="#//java/JElement #//elements/statements/Statement #//elements/statements/expressions/OperatorExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ThrowStatement" eSuperTypes="#//java/JElement"/>
     <eClassifiers xsi:type="ecore:EClass" name="JFor" eSuperTypes="#//elements/statements/Block #//java/JElement #//elements/statements/LoopControl">
       <eStructuralFeatures xsi:type="ecore:EReference" name="initializers" upperBound="-1"
           eType="#//elements/statements/Statement" containment="true"/>
@@ -240,7 +234,7 @@
     <eClassifiers xsi:type="ecore:EClass" name="RegexMatch" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="ChecksStatementTypeFilter" eSuperTypes="#//filters/AtomicFilter">
+    <eClassifiers xsi:type="ecore:EClass" name="TypedStatementFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
           eType="#//elements/datatype/DataType"/>
     </eClassifiers>

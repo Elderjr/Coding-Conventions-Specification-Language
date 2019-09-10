@@ -1,51 +1,105 @@
-(
-  VariableDeclarationFragment.allInstances()->select(varDecl1 |
-    let lit2: OclAny = varDecl1.initializer in
-    let lit2Value: String = if lit2.oclIsKindOf(BooleanLiteral) then
-      lit2.oclAsType(BooleanLiteral).value.toString()
+MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+  -- Scope Conditions
+  let m2: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
+    mInv1.oclAsType(MethodInvocation).method
+  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
+    mInv1.oclAsType(ClassInstanceCreation).method
+  else
+    null
+  endif endif in
+  (not m2.oclIsUndefined())  and
+  m2.oclIsKindOf(MethodDeclaration) and
+  let m2params: OrderedSet(SingleVariableDeclaration) = m2.oclAsType(MethodDeclaration).parameters in
+  m2params->size() = 0 and
+  m2.oclAsType(MethodDeclaration).name = 'toString' and
+  let e3: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
+    mInv1.oclAsType(MethodInvocation).expression
+  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
+    mInv1.oclAsType(ClassInstanceCreation).expression
+  else
+    null
+  endif endif in
+  (not e3.oclIsUndefined())  and
+  --Filter Conditions
+  let statement: OclAny = e3->asOrderedSet()->closure(x |
+    if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
+  )->last() in
+  let type: NamedElement = if statement.oclIsKindOf(Assignment) then
+    let e3Access: OclAny = statement.oclAsType(Assignment).leftHandSide->asOrderedSet()->closure(x | 
+      if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
+      else if x.oclIsKindOf(ArrayAccess) then
+        x.oclAsType(ArrayAccess).array 
+      else
+        x
+      endif endif
+    )->last() in
+    if e3Access.oclIsKindOf(SingleVariableAccess) and e3Access.oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+      e3Access.oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
+    else if e3Access.oclIsKindOf(SingleVariableAccess) and e3Access.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+      e3Access.oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+    else if e3Access.oclIsKindOf(MethodInvocation) and e3Access.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+      (not e3Access.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) 
+      and e3Access.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclIsKindOf(ArrayType) then
+      e3Access.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).elementType.type
     else
       null
-    endif in
-    (not lit2Value.oclIsUndefined()) and
-    lit2Value = 'false' and
-    let primitiveType3: OclAny = varDecl1.variablesContainer.type.type in
-    (primitiveType3.oclIsKindOf(PrimitiveTypeBoolean))  
-  )
-->union(
-    VariableDeclarationFragment.allInstances()->select(varDecl1 |
-      let lit2: OclAny = varDecl1.initializer in
-      (lit2.oclIsKindOf(StringLiteral) or lit2.oclIsKindOf(CharacterLiteral) or lit2.oclIsKindOf(NumberLiteral) or lit2.oclIsKindOf(BooleanLiteral)) and
-      let primitiveType3: OclAny = varDecl1.variablesContainer.type.type in
-      (primitiveType3.oclIsKindOf(PrimitiveType)) and
-      primitiveType3.oclAsType(PrimitiveType).name.matches('(byte|short|char|int|long|float|double)') and
-      let literalNameRegex: String = if lit2.oclIsKindOf(StringLiteral) then
-        lit2.oclAsType(StringLiteral).escapedValue
-      else if lit2.oclIsKindOf(CharacterLiteral) then
-        lit2.oclAsType(CharacterLiteral).escapedValue
-      else if lit2.oclIsKindOf(NumberLiteral) then
-        lit2.oclAsType(NumberLiteral).tokenValue
-      else if lit2.oclIsKindOf(BooleanLiteral) then
-        lit2.oclAsType(BooleanLiteral).value.toString()
-      else if lit2.oclIsKindOf(NullLiteral) then
-        'null'
-      else
-        null
-      endif endif endif endif endif in
-      (not literalNameRegex.oclIsUndefined()) and
-      literalNameRegex.matches('(0|\\.0f|0d)')
-    )
-  )->union(
-    VariableDeclarationFragment.allInstances()->select(varDecl1 |
-      let lit2: OclAny = varDecl1.initializer in
-      (lit2.oclIsKindOf(NullLiteral)) and
-      let c3: OclAny = varDecl1.variablesContainer.type.type in
-      (c3.oclIsKindOf(ClassDeclaration) or c3.oclIsKindOf(InterfaceDeclaration))  
-    )
-  )->union(
-    VariableDeclarationFragment.allInstances()->select(varDecl1 |
-      let lit2: OclAny = varDecl1.initializer in
-      (lit2.oclIsKindOf(NullLiteral)) and
-      varDecl1.extraDimensions >= 0  
-    )
-  )
+    endif endif endif
+  else if statement.oclIsKindOf(ClassInstanceCreation) then
+    statement.oclAsType(ClassInstanceCreation).type.type
+  else if statement.oclIsKindOf(MethodInvocation) then
+    if statement.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) then
+      statement.oclAsType(MethodInvocation).oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+    else
+     null
+    endif   
+  else if statement.oclIsKindOf(SingleVariableAccess) then
+    if statement.oclAsType(SingleVariableAccess).oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+      statement.oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
+    else if statement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+      statement.oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+    else
+     null
+    endif endif
+  else if statement.oclIsKindOf(InfixExpression) then
+    let infixElements: OrderedSet(OclAny) = statement.oclAsType(InfixExpression).extendedOperands->append(statement.oclAsType(InfixExpression).leftOperand)->append(statement.oclAsType(InfixExpression).rightOperand)->asOrderedSet()->closure(x | 
+      if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
+      else if x.oclIsKindOf(InfixExpression) then x.oclAsType(InfixExpression).extendedOperands->append(x.oclAsType(InfixExpression).leftOperand)->append(x.oclAsType(InfixExpression).rightOperand)
+      else Set(OclAny){x} endif endif
+    )  in 
+    if statement.oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS and
+       infixElements->exists(stringStatement | --NOT_COUNT
+         (stringStatement.oclIsKindOf(ClassInstanceCreation) and stringStatement.oclAsType(ClassInstanceCreation).type.type.name = 'String') or
+         (stringStatement.oclIsKindOf(MethodInvocation) and 
+         (not stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) and
+         stringStatement.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.name = 'String' ) or
+         (stringStatement.oclIsKindOf(SingleVariableAccess) and 
+         (let accessType: String = if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+           stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type.name
+         else if stringStatement.oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+           stringStatement.oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type.name
+         else
+           ''
+         endif endif in accessType = 'String')) or
+         (stringStatement.oclIsKindOf(StringLiteral) )
+       )   
+    then
+        ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+    else
+      null
+    endif
+  else if statement.oclIsKindOf(StringLiteral) then
+    ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+  else
+   null
+  endif endif endif endif endif endif in (not type.oclIsUndefined()) and
+  let typePackage: Package = if type.oclIsKindOf(ClassDeclaration) then 
+    type.oclAsType(ClassDeclaration).package 
+  else if type.oclIsKindOf(InterfaceDeclaration) then 
+    type.oclAsType(InterfaceDeclaration).package 
+  else 
+    null 
+  endif endif in (not typePackage.oclIsUndefined()) and
+  typePackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(type.name) = 'java.lang.String'
 )

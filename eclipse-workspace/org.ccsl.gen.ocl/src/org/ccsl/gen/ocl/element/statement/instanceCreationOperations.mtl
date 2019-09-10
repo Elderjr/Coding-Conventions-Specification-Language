@@ -16,18 +16,11 @@ let newVarname: String = if typecheck then
 else
   varname
 endif in
-let conditions: OrderedSet(String) = OrderedSet(String) {
-  inst.generatesConditionsForType(newVarname)
-}->addAll(inst.getMethodInvocationConditions(newVarname, false, 'InstanceCreation'))
-->select(s | s.trim().size() > 0) in
+let conditions: OrderedSet(String) = inst.getMethodInvocationConditions(newVarname, false, 'InstanceCreation') in
 if typecheck then
   OrderedSet(String){varname.printKindOfCondition('InstanceCreation')}->addAll(conditions)
 else
   conditions
 endif
 /]
-
-[template public generatesConditionsForType(instCreation: InstanceCreation, varname: String) ? (not instCreation.type.oclIsUndefined())]
-[instCreation.generatesMonovaluedFieldConditions(varname, instCreation.type, 'type.type', 'OclAny') /]
-[/template]
 

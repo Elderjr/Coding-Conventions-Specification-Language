@@ -1,0 +1,104 @@
+[comment encoding = UTF-8 /]
+[module typedStatementFilterOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::datatype::dataTypeOperations /]
+[import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
+
+[template public generatesTypedStatementFilterConditions(typedStatementFilter: TypedStatementFilter, target: Element)]
+### TypedStatementFilter is not supported for the type [target.eClass().name /] ###
+[/template]
+
+[template public generatesTypedStatementFilterConditions(typedStatementFilter: TypedStatementFilter, target: Statement)]
+let statement: OclAny = [target.getOclName() /]->asOrderedSet()->closure(x |
+  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
+)->last() in
+let type: NamedElement = if statement.oclIsKindOf(Assignment) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenAssignment(target, 'statement.oclAsType(Assignment)') /]
+else if statement.oclIsKindOf(ClassInstanceCreation) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenInstanceCreation(target, 'statement.oclAsType(ClassInstanceCreation)' ) /]
+else if statement.oclIsKindOf(MethodInvocation) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenMethodInvocation(target, 'statement.oclAsType(MethodInvocation)') /]
+else if statement.oclIsKindOf(SingleVariableAccess) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenVariableAccess(target, 'statement.oclAsType(SingleVariableAccess)') /]
+else if statement.oclIsKindOf(InfixExpression) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenInfixExpression(target, 'statement.oclAsType(InfixExpression)') /]
+else if statement.oclIsKindOf(StringLiteral) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenStringLiteral(target, 'statement.oclAsType(StringLiteral)') /]
+else
+ null
+endif endif endif endif endif endif in (not type.oclIsUndefined()) and
+[if typedStatementFilter.type.oclIsKindOf(ComplexType) and typedStatementFilter.type.oclAsType(ComplexType).name.contains('.')]
+let typePackage: Package = if type.oclIsKindOf(ClassDeclaration) then 
+  type.oclAsType(ClassDeclaration).package 
+else if type.oclIsKindOf(InterfaceDeclaration) then 
+  type.oclAsType(InterfaceDeclaration).package 
+else 
+  null 
+endif endif in (not typePackage.oclIsUndefined()) and
+typePackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat(type.name) = '[typedStatementFilter.type.getDataTypeName() /]'[else]
+type.name = '[typedStatementFilter.type.getDataTypeName() /]'[/if]
+[/template]
+
+
+[template public generatesTypedStatementFilterConditionsWhenAssignment(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+[let accessName: String = target.getOclName().concat('Access')]
+let [accessName /]: OclAny = [targetName /].leftHandSide->asOrderedSet()->closure(x | 
+  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
+  else if x.oclIsKindOf(ArrayAccess) then
+    x.oclAsType(ArrayAccess).array 
+  else
+    x
+  endif endif
+)->last() in
+if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
+else if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else if [accessName /].oclIsKindOf(MethodInvocation) and [accessName /].oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+  (not [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) 
+  and [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclIsKindOf(ArrayType) then
+  [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).elementType.type
+else
+  null
+endif endif endif[/let]
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenInstanceCreation(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+[targetName /].type.type
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenMethodInvocation(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+if [targetName /].method.oclIsKindOf(MethodDeclaration) then
+  [targetName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+else
+ null
+endif   
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenVariableAccess(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+if [targetName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  [targetName /].variable.oclAsType(SingleVariableDeclaration).type.type
+else if [targetName /].variable.oclIsKindOf(VariableDeclarationFragment) then
+  [targetName /].variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else
+ null
+endif endif
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenInfixExpression(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+[typedStatementFilter.generatesDeepCollectorForInfixExpression(targetName, 'infixElements') /]
+if [targetName /].operator = InfixExpressionKind::PLUS and
+   [typedStatementFilter.generatesInferInfexExpressionCheckerForString('infixElements') /]   
+then
+    ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+else
+  null
+endif
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenStringLiteral(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+[/template]

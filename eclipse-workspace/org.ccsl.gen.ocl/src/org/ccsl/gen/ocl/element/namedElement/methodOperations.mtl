@@ -1,11 +1,11 @@
 [comment encoding = UTF-8 /]
 [module methodOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /] 
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
 OrderedSet(String){'MethodDeclaration'}
@@ -28,6 +28,7 @@ endif
 
 
 [template public generatesConditionForReturnType(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
+(not [varname /].returnType.oclIsUndefined()) and
 [method.generatesMonovaluedFieldConditions(varname, method.returnType, 'returnType.type', 'OclAny') /]
 [/template]
 
