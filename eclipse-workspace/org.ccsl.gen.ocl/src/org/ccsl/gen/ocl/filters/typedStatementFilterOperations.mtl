@@ -11,11 +11,15 @@
 
 [template public generatesTypedStatementFilterConditions(typedStatementFilter: TypedStatementFilter, target: Statement)]
 let statement: OclAny = [target.getOclName() /]->asOrderedSet()->closure(x |
-  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
+  if x.oclIsKindOf(ParenthesizedExpression) then 
+    x.oclAsType(ParenthesizedExpression).expression 
+  else if x.oclIsKindOf(Assignment) then 
+    x.oclAsType(Assignment).leftHandSide
+  else
+    x
+  endif endif
 )->last() in
-let type: NamedElement = if statement.oclIsKindOf(Assignment) then
-  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenAssignment(target, 'statement.oclAsType(Assignment)') /]
-else if statement.oclIsKindOf(ClassInstanceCreation) then
+if statement.oclIsKindOf(ClassInstanceCreation) then
   [typedStatementFilter.generatesTypedStatementFilterConditionsWhenInstanceCreation(target, 'statement.oclAsType(ClassInstanceCreation)' ) /]
 else if statement.oclIsKindOf(MethodInvocation) then
   [typedStatementFilter.generatesTypedStatementFilterConditionsWhenMethodInvocation(target, 'statement.oclAsType(MethodInvocation)') /]
@@ -25,66 +29,62 @@ else if statement.oclIsKindOf(InfixExpression) then
   [typedStatementFilter.generatesTypedStatementFilterConditionsWhenInfixExpression(target, 'statement.oclAsType(InfixExpression)') /]
 else if statement.oclIsKindOf(StringLiteral) then
   [typedStatementFilter.generatesTypedStatementFilterConditionsWhenStringLiteral(target, 'statement.oclAsType(StringLiteral)') /]
+else if statement.oclIsKindOf(ArrayAccess) then
+  [typedStatementFilter.generatesTypedStatementFilterConditionsWhenArrayAccess(target, 'statement.oclAsType(ArrayAccess)') /]
+else
+ false
+endif endif endif endif endif endif
+[/template]
+
+[template public generatesTypedStatementFilterConditionsWhenArrayAccess(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
+let arrayAccesses: OrderedSet(OclAny) = [targetName /]->asOrderedSet()->closure(x |
+  if x.oclIsKindOf(ArrayAccess) then x.oclAsType(ArrayAccess).array else x endif
+) in
+let arrayDimensions: Integer = if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.extraArrayDimensions
+else if arrayAccesses->last().oclIsKindOf(MethodInvocation) and arrayAccesses->last().oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) 
+  and (not arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).dimensions
 else
  null
-endif endif endif endif endif endif in (not type.oclIsUndefined()) and
-[if typedStatementFilter.type.oclIsKindOf(ComplexType) and typedStatementFilter.type.oclAsType(ComplexType).name.contains('.')]
-let typePackage: Package = if type.oclIsKindOf(ClassDeclaration) then 
-  type.oclAsType(ClassDeclaration).package 
-else if type.oclIsKindOf(InterfaceDeclaration) then 
-  type.oclAsType(InterfaceDeclaration).package 
-else 
-  null 
-endif endif in (not typePackage.oclIsUndefined()) and
-typePackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-  fullName.concat(p.name).concat('.')
-).concat(type.name) = '[typedStatementFilter.type.getDataTypeName() /]'[else]
-type.name = '[typedStatementFilter.type.getDataTypeName() /]'[/if]
-[/template]
-
-
-[template public generatesTypedStatementFilterConditionsWhenAssignment(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
-[let accessName: String = target.getOclName().concat('Access')]
-let [accessName /]: OclAny = [targetName /].leftHandSide->asOrderedSet()->closure(x | 
-  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
-  else if x.oclIsKindOf(ArrayAccess) then
-    x.oclAsType(ArrayAccess).array 
-  else
-    x
-  endif endif
-)->last() in
-if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
-  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
-else if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
-  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
-else if [accessName /].oclIsKindOf(MethodInvocation) and [accessName /].oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
-  (not [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) 
-  and [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclIsKindOf(ArrayType) then
-  [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).elementType.type
+endif endif in (not arrayDimensions.oclIsUndefined()) and
+let arrayBaseType: OclAny = if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) and arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
+else if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) and arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type 
+else if arrayAccesses->last().oclIsKindOf(MethodInvocation) and arrayAccesses->last().oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) 
+  and (not arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).elementType.type
 else
   null
-endif endif endif[/let]
+endif endif endif in (not arrayBaseType.oclIsUndefined()) and
+if arrayDimensions = arrayAccesses->select(x | x.oclIsKindOf(ArrayAccess))->size() then
+  arrayBaseType = [typedStatementFilter.type.getOclName() /]  
+else
+  false
+endif
 [/template]
 
+
 [template public generatesTypedStatementFilterConditionsWhenInstanceCreation(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
-[targetName /].type.type
+[targetName /].type.type = [typedStatementFilter.type.getOclName() /]
 [/template]
 
 [template public generatesTypedStatementFilterConditionsWhenMethodInvocation(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
-if [targetName /].method.oclIsKindOf(MethodDeclaration) then
-  [targetName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+if [targetName /].method.oclIsKindOf(MethodDeclaration) and (not [targetName /].method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  [targetName /].method.oclAsType(MethodDeclaration).returnType.type = [typedStatementFilter.type.getOclName() /]
 else
- null
-endif   
+  false
+endif
 [/template]
 
 [template public generatesTypedStatementFilterConditionsWhenVariableAccess(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
 if [targetName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
-  [targetName /].variable.oclAsType(SingleVariableDeclaration).type.type
+  [targetName /].variable.oclAsType(SingleVariableDeclaration).type.type = [typedStatementFilter.type.getOclName() /]
 else if [targetName /].variable.oclIsKindOf(VariableDeclarationFragment) then
-  [targetName /].variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+  [targetName /].variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type = [typedStatementFilter.type.getOclName() /]
 else
- null
+ false
 endif endif
 [/template]
 
@@ -93,12 +93,12 @@ endif endif
 if [targetName /].operator = InfixExpressionKind::PLUS and
    [typedStatementFilter.generatesInferInfexExpressionCheckerForString('infixElements') /]   
 then
-    ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+  ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first() = [typedStatementFilter.type.getOclName() /]
 else
-  null
+  false
 endif
 [/template]
 
 [template public generatesTypedStatementFilterConditionsWhenStringLiteral(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
-ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first()
+ClassDeclaration.allInstances()->select(str | str.name = 'String')->asOrderedSet()->first() = [typedStatementFilter.type.getOclName() /]
 [/template]

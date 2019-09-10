@@ -19,38 +19,59 @@
 [import org::ccsl::gen::ocl::java::javaClassOperations /]
 
 
-[template public generatesSelect(element: Element, filters: OrderedSet(Filter))]
-[/template]
+[template public generatesSelect(element: Element) /]
+[template public generatesExist(element: Element) /]
 
 [comment statements/InstanceCreation /]
-[template public generatesSelect(inst: InstanceCreation, filters: OrderedSet(Filter))]
-[inst.generatesSelectPrivate(filters, inst.getInstanceCreationMatchingMetaclasses()) /]
+[template public generatesSelect(inst: InstanceCreation)]
+[inst.generatesSelectPrivate(inst.getInstanceCreationMatchingMetaclasses(), 'select') /]
+[/template]
+[template public generatesExist(inst: InstanceCreation)]
+[inst.generatesSelectPrivate(inst.getInstanceCreationMatchingMetaclasses(), 'exists') /]
 [/template]
 
 [comment statements/MethodInvocation /]
-[template public generatesSelect(methodInv: MethodInvocation, filters: OrderedSet(Filter))]
-[methodInv.generatesSelectPrivate(filters, methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[template public generatesSelect(methodInv: MethodInvocation)]
+[methodInv.generatesSelectPrivate(methodInv.getMethodInvocationMatchingMetaclasses(), 'select') /]
 [/template]
-
-
-[comment statements/StringConcatenation /]
-[template public generatesSelect(strConcat: StringConcatenation, filters: OrderedSet(Filter))]
-
+[template public generatesExist(methodInv: MethodInvocation)]
+[methodInv.generatesSelectPrivate(methodInv.getMethodInvocationMatchingMetaclasses(), 'exists') /]
 [/template]
 
 [comment statements/VariableDeclaration /]
-[template public generatesSelect(varDecl: VarDeclaration, filters: OrderedSet(Filter))]
-[varDecl.generatesSelectPrivate(filters, varDecl.getVariableDeclarationMatchingJavaMetaclasses()) /]
+[template public generatesSelect(varDecl: VarDeclaration)]
+[varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'select') /]
+[/template]
+
+[template public generatesExist(varDecl: VarDeclaration)]
+[varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'exists') /]
 [/template]
 
 [comment java/JavaClass /]
-[template public generatesSelect(javaClass: JavaClass, filters: OrderedSet(Filter))]
-[javaClass.generatesSelectPrivate(filters, javaClass.getJavaClassMatchingMetaclasses()) /]
+[template public generatesSelect(javaClass: JavaClass)]
+[javaClass.generatesSelectPrivate(javaClass.getJavaClassMatchingMetaclasses(), 'select') /]
 [/template]
 
+[template public generatesExist(javaClass: JavaClass)]
+[javaClass.generatesSelectPrivate(javaClass.getJavaClassMatchingMetaclasses(), 'exists') /]
+[/template]
 
+[template private generatesSelectPrivate(element: Element, matchingMetaclasses: OrderedSet(String), operator: String)]
+[let scopeConditions: String = if matchingMetaclasses->size() > 1 then
+  element.generatesConditions(element.getOclName(), true)
+else
+  element.generatesConditions(element.getOclName(), false, matchingMetaclasses->first())
+endif]
+[element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->[operator /]([element.getOclName() /] |
+  [scopeConditions.printStringWithIdentation() /][/let]
+[/template]
 
-[template private generatesSelectPrivate(element: Element, filters: OrderedSet(Filter), matchingMetaclasses: OrderedSet(String))]
+[template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]
+[for (metaclassesTarget: String | matchingJavaMetaclasses) separator('->union(')]
+[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
+[/template]
+
+[template private generatesSelectPrivate2(element: Element, filters: OrderedSet(Filter), matchingMetaclasses: OrderedSet(String))]
 [let scopeConditions: String = if matchingMetaclasses->size() > 1 then
   element.generatesConditions(element.getOclName(), true)
 else
@@ -66,15 +87,16 @@ endif]
 )[for(Sequence(Integer){1..(scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT'))}) ])[/for][/let][/let]
 [/template]
 
-[template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]
-[for (metaclassesTarget: String | matchingJavaMetaclasses) separator('->union(')]
-[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
-[/template]
-
-
-[template private generateFiltersConditions(filters: OrderedSet(Filter))]
+[template public generateFiltersConditions(filters: OrderedSet(Filter))]
 [let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s: String | s.trim().size() > 0)]
 [for(cond: String | filterConditions) separator(' and\n')]
+[cond.printStringWithIdentation() /][/for]
+[/let]
+[/template]
+
+[template public generatesElementExistConditions(elements: OrderedSet(Element))]
+[let elementConditions: Sequence(String) = elements.generatesExist()]
+[for(cond: String | elementConditions) separator(' and\n')]
 [cond.printStringWithIdentation() /][/for]
 [/let]
 [/template]

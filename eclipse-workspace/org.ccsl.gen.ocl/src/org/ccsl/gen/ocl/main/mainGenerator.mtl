@@ -1,8 +1,9 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
-
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
+
 
 
 [query public test(rule: Rule): OrderedSet(String) = OrderedSet(String){'a','b'} /]
@@ -22,7 +23,22 @@
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesOcl(rule: AtomicRule)]
-[rule.clearAllContexts() /][rule.scope.generatesSelect(rule.filters) /]
+[rule.clearAllContexts() /][let scopeConditions: String = rule.scope.generatesSelect()]
+[let remainingElementsConditions: String = rule.auxiliaryElements->select(e | not e.isElementRegistered())->generatesElementExistConditions()]
+[let filtersConditions: String = rule.filters->generateFiltersConditions()]
+--Scope Conditions
+[scopeConditions.printStringWithIdentation() /] [if remainingElementsConditions.trim().size() > 0] and
+  --Remaining Elements Conditions
+  [remainingElementsConditions.printStringWithIdentation() /][/if] [if filtersConditions.trim().size() > 0] and
+  --Filter Conditions
+  [filtersConditions.printStringWithIdentation() /]
+[/if][for(Sequence(Integer){1 ..
+  (
+    scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT') + 
+    remainingElementsConditions.countMatches('->exists') - remainingElementsConditions.countMatches('--NOT_COUNT') +
+    filtersConditions.countMatches('->exists') - filtersConditions.countMatches('--NOT_COUNT')
+  )
+})])[/for][/let][/let][/let])
 [/template]
 
 [template private generatesOcl(compositeRule: CompositeRule)]
