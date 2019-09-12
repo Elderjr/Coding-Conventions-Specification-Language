@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module definesMethodFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 
 
 [template public generateDefinesMethodFilterConditions(definesMethodFilter: DefinesMethodFilter, target: Element)]

@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module switchStatementOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getSwitchStatementMatchingMetaclasses(switch: SwitchStatement): OrderedSet(String) =
+OrderedSet(String) {'SwitchStatement'}
+/]
+
+[query public getSwitchStatementConditions(switch: SwitchStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'SwitchStatement') in
+let conditions: OrderedSet(String) = OrderedSet(String){
+''}->select(s: String | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition('SwitchStatement')}->addAll(conditions)
+else
+  conditions
+endif
+/]

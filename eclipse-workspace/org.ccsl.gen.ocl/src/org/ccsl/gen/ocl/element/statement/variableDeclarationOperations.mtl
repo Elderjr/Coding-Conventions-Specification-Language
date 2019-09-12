@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module variableDeclarationOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::element::elementOperations /]
-[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 

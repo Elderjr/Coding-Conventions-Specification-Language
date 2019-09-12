@@ -4,6 +4,7 @@
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
 [import org::ccsl::gen::ocl::filters::definesMethodFilterOperations /]
 [import org::ccsl::gen::ocl::filters::typedStatementFilterOperations /]
+[import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -43,4 +44,8 @@ not ([/if][for(f: Filter | compositeFilter.filters) separator(compositeFilter.op
 
 [template public generatesSpecificFilterConditions(typedStatementFilter: TypedStatementFilter, target: Element)]
 [typedStatementFilter.generatesTypedStatementFilterConditions(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(casesCounter: SwitchCaseStatementCount, target: Element)]
+[casesCounter.generatesSwitchStatementCaseCounterFilterConditions(target) /]
 [/template]

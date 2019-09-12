@@ -129,6 +129,14 @@
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/literalValues/NumberLiteral"/>
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/literalValues/BooleanLiteral"/>
         </nestedGenPackages>
+        <nestedGenPackages prefix="ControlFlow" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/controlFlow">
+          <genClasses ecoreClass="ccsl.ecore#//elements/statements/controlFlow/SwitchStatement">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/controlFlow/SwitchStatement/cases"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/statements/controlFlow/SwitchCaseBlock">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/controlFlow/SwitchCaseBlock/default"/>
+          </genClasses>
+        </nestedGenPackages>
       </nestedGenPackages>
       <nestedGenPackages prefix="Datatype" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/datatype">
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/DataType"/>
@@ -215,6 +223,11 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference ccsl.ecore#//filters/TypedStatementFilter/type"/>
       </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/SwitchCaseStatementCount">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SwitchCaseStatementCount/min"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SwitchCaseStatementCount/max"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/SwitchCaseStatementCount/cases"/>
+      </genClasses>
     </nestedGenPackages>
   </genPackages>
-</genmodel:GenModel>
+  </genmodel:GenModel>

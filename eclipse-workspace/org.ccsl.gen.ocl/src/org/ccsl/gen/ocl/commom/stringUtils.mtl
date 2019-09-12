@@ -6,6 +6,10 @@
 	= invoke('org.ccsl.gen.ocl.services.StringService', 'countMatches(java.lang.String, java.lang.String)', Sequence{arg0, arg1})
 /]
 
+[query public isNotEmpty(str: String): Boolean = not str.isEmpty() /]
+
+[query public isEmpty(str: String): Boolean = str.trim().size() = 0 /]
+
 [template public printStringWithIdentation(aString : String)]
 [aString /]
 [/template]
@@ -21,3 +25,4 @@
 [template public printKindOfCondition(varname: String, cast: String)]
 [varname /].oclIsKindOf([cast /])
 [/template]
+

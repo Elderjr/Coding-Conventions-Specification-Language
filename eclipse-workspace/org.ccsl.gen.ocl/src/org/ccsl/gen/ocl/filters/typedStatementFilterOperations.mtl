@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module typedStatementFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeOperations /]
 [import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
 
@@ -38,7 +38,15 @@ endif endif endif endif endif endif
 
 [template public generatesTypedStatementFilterConditionsWhenArrayAccess(typedStatementFilter: TypedStatementFilter, target: Statement, targetName: String)]
 let arrayAccesses: OrderedSet(OclAny) = [targetName /]->asOrderedSet()->closure(x |
-  if x.oclIsKindOf(ArrayAccess) then x.oclAsType(ArrayAccess).array else x endif
+  if x.oclIsKindOf(ArrayAccess) then 
+    x.oclAsType(ArrayAccess).array
+  else if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else if x.oclIsKindOf(Assignment) then 
+    x.oclAsType(Assignment).leftHandSide
+  else 
+    x 
+  endif endif endif
 ) in
 let arrayDimensions: Integer = if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) then
   arrayAccesses->last().oclAsType(SingleVariableAccess).variable.extraArrayDimensions

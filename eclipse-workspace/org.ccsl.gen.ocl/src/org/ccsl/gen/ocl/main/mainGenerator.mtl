@@ -2,17 +2,12 @@
 [module mainGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
+[import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
 
 
-
-[query public test(rule: Rule): OrderedSet(String) = OrderedSet(String){'a','b'} /]
-
-[query public map(rule: Rule): OrderedSet(OrderedSet(String)) = 
-  let map: OrderedSet(OrderedSet(String)) = OrderedSet(OrderedSet(String)){} in
-  if rule.test()->includes('a') then map->append(OrderedSet(String){'a','1'}) else false endif
-  
-/]
 [template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
 [file ('gen', false, 'UTF-8')]
@@ -22,17 +17,33 @@
 
 [template private generatesOcl(rule: Rule) /]
 
-[template private generatesOcl(rule: AtomicRule)]
-[rule.clearAllContexts() /][let scopeConditions: String = rule.scope.generatesSelect()]
-[let remainingElementsConditions: String = rule.auxiliaryElements->select(e | not e.isElementRegistered())->generatesElementExistConditions()]
-[let filtersConditions: String = rule.filters->generateFiltersConditions()]
---Scope Conditions
-[scopeConditions.printStringWithIdentation() /] [if remainingElementsConditions.trim().size() > 0] and
-  --Remaining Elements Conditions
-  [remainingElementsConditions.printStringWithIdentation() /][/if] [if filtersConditions.trim().size() > 0] and
-  --Filter Conditions
-  [filtersConditions.printStringWithIdentation() /]
-[/if][for(Sequence(Integer){1 ..
+[template private generatesScopeConditions(rule: AtomicRule) post(trim())]
+[rule.scope.generatesConditions(rule.scope.getOclName()) /]
+[/template]
+
+[template private generatesRemainingElementsConditions(rule: AtomicRule) post(trim())]
+[for(element: Element | rule.auxiliaryElements->select(e | not e.isElementRegistered())) separator( 'and\n')]
+[element.generatesExist() /]
+[element.generatesConditions(element.getOclName()) /][/for]
+[/template]
+
+[template private generatesFiltersConditions(rule: AtomicRule) post(trim())]
+[let filterConditions: Sequence(String) = rule.filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
+[for(cond: String | filterConditions) separator(' and\n')]
+[cond.printStringWithIdentation() /][/for][/let]
+[/template]
+
+[template private generatesOcl(rule: AtomicRule) post (trim())]
+[rule.clearAllContexts() /]
+[let scopeConditions: String = rule.generatesScopeConditions()]
+[let remainingElementsConditions: String = rule.generatesRemainingElementsConditions()]
+[let filtersConditions: String = rule.generatesFiltersConditions()]
+[rule.scope.generatesSelect() /]
+[for(conditions: String | OrderedSet(String){scopeConditions, remainingElementsConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( 'and\n')]
+  --[if conditions = scopeConditions]Scope Conditions[elseif conditions = remainingElementsConditions]Remaining Elements Conditions[else]Filters Conditions[/if]
+  [conditions.printStringWithIdentation() /][/for]
+
+[for(Sequence(Integer){1 ..
   (
     scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT') + 
     remainingElementsConditions.countMatches('->exists') - remainingElementsConditions.countMatches('--NOT_COUNT') +

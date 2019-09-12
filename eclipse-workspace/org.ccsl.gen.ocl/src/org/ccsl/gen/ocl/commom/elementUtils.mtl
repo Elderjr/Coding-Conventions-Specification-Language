@@ -2,10 +2,10 @@
 [module elementUtils('http:///expansionmodel.ecore', 'http://www.example.org/ccsl')]
 
 
-[query public isSet(element: Element, propertyName: String): Boolean =  
-  let properties: Sequence(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
+[query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  
+  let properties: Sequence(ecore::EStructuralFeature) = obj.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
   if properties->size() > 0 then 
-    element.eIsSet(properties->first())
+    obj.eIsSet(properties->first())
   else
     false
   endif

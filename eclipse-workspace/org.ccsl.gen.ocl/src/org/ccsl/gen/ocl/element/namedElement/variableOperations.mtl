@@ -4,7 +4,7 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
-[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getVariableMatchingJavaMetaclasses(variable: Variable): OrderedSet(String)=

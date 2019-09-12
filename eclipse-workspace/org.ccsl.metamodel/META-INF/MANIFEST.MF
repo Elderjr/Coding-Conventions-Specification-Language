@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.ccsl.metamodel;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -16,6 +16,9 @@ Export-Package: ccsl,
  ccsl.elements.namedElements.impl,
  ccsl.elements.namedElements.util,
  ccsl.elements.statements,
+ ccsl.elements.statements.controlFlow,
+ ccsl.elements.statements.controlFlow.impl,
+ ccsl.elements.statements.controlFlow.util,
  ccsl.elements.statements.expressions,
  ccsl.elements.statements.expressions.impl,
  ccsl.elements.statements.expressions.util,
@@ -33,7 +36,7 @@ Export-Package: ccsl,
  ccsl.java.impl,
  ccsl.java.util,
  ccsl.util
-Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy

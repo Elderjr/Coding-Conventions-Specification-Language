@@ -127,7 +127,7 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
         </eClassifiers>
       </eSubpackages>
-      <eSubpackages name="literalValues" nsURI="http://www.example.org/ccsl/elements/statements/expressions/literalValues"
+      <eSubpackages name="literalValues" nsURI="http://www.example.org/ccsl/elements/statements/literalValues"
           nsPrefix="literalValues">
         <eClassifiers xsi:type="ecore:EClass" name="LiteralValue" eSuperTypes="#//elements/statements/Statement">
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
@@ -137,6 +137,16 @@
         <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
         <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
         <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//elements/statements/literalValues/LiteralValue"/>
+      </eSubpackages>
+      <eSubpackages name="controlFlow" nsURI="http://www.example.org/ccsl/elements/statements/controlFlow"
+          nsPrefix="controlFlow">
+        <eClassifiers xsi:type="ecore:EClass" name="SwitchStatement" eSuperTypes="#//elements/statements/ControlFlow">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
+              eType="#//elements/statements/controlFlow/SwitchCaseBlock" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="SwitchCaseBlock" eSuperTypes="#//elements/statements/Block">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+        </eClassifiers>
       </eSubpackages>
     </eSubpackages>
     <eSubpackages name="datatype" nsURI="http://www.example.org/ccsl/elements/datatype"
@@ -237,6 +247,14 @@
     <eClassifiers xsi:type="ecore:EClass" name="TypedStatementFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
           eType="#//elements/datatype/DataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SwitchCaseStatementCount" eSuperTypes="#//filters/AtomicFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
+          eType="#//elements/statements/controlFlow/SwitchCaseBlock" containment="true"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

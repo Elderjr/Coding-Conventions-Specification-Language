@@ -4,7 +4,7 @@
 [comment utils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::element::scopeConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
 
 [comment statement /]
@@ -14,6 +14,9 @@
 
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+
+[comment statements/controlFlow /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
 
 [comment java /]
 [import org::ccsl::gen::ocl::java::javaClassOperations /]
@@ -47,6 +50,16 @@
 [varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'exists') /]
 [/template]
 
+[comment statements/controlFlow /]
+[template public generatesSelect(switch: SwitchStatement)]
+[switch.generatesSelectPrivate(switch.getSwitchStatementMatchingMetaclasses(), 'select') /]
+[/template]
+
+[template public generatesExist(switch: SwitchStatement)]
+[switch.generatesSelectPrivate(switch.getSwitchStatementMatchingMetaclasses(), 'exists') /]
+[/template]
+
+
 [comment java/JavaClass /]
 [template public generatesSelect(javaClass: JavaClass)]
 [javaClass.generatesSelectPrivate(javaClass.getJavaClassMatchingMetaclasses(), 'select') /]
@@ -57,13 +70,7 @@
 [/template]
 
 [template private generatesSelectPrivate(element: Element, matchingMetaclasses: OrderedSet(String), operator: String)]
-[let scopeConditions: String = if matchingMetaclasses->size() > 1 then
-  element.generatesConditions(element.getOclName(), true)
-else
-  element.generatesConditions(element.getOclName(), false, matchingMetaclasses->first())
-endif]
 [element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->[operator /]([element.getOclName() /] |
-  [scopeConditions.printStringWithIdentation() /][/let]
 [/template]
 
 [template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]
@@ -71,32 +78,7 @@ endif]
 [metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
 [/template]
 
-[template private generatesSelectPrivate2(element: Element, filters: OrderedSet(Filter), matchingMetaclasses: OrderedSet(String))]
-[let scopeConditions: String = if matchingMetaclasses->size() > 1 then
-  element.generatesConditions(element.getOclName(), true)
-else
-  element.generatesConditions(element.getOclName(), false, matchingMetaclasses->first())
-endif]
-[let filterConditions: String = filters->generateFiltersConditions() ]
-[element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->select([element.getOclName() /] |
-  -- Scope Conditions
-  [scopeConditions.printStringWithIdentation() /] [if scopeConditions.trim().size() > 0 and filterConditions.trim().size() > 0] and
-[/if]
-  --Filter Conditions
-  [filterConditions.printStringWithIdentation() /]
-)[for(Sequence(Integer){1..(scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT'))}) ])[/for][/let][/let]
-[/template]
-
-[template public generateFiltersConditions(filters: OrderedSet(Filter))]
-[let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s: String | s.trim().size() > 0)]
-[for(cond: String | filterConditions) separator(' and\n')]
-[cond.printStringWithIdentation() /][/for]
-[/let]
-[/template]
 
 [template public generatesElementExistConditions(elements: OrderedSet(Element))]
-[let elementConditions: Sequence(String) = elements.generatesExist()]
-[for(cond: String | elementConditions) separator(' and\n')]
-[cond.printStringWithIdentation() /][/for]
-[/let]
+
 [/template]
