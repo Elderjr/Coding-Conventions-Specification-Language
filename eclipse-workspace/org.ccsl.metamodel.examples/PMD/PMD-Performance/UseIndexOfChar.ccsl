@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements">
+  <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.String">
+    <methods xsi:type="java:JavaMethod" name="indexOf"/>
+  </auxiliaryElements>
+  <filters xsi:type="filters:RegexMatch" targets="//@scope/@args.0" regex="."/>
+  <scope xsi:type="statements:MethodInvocation" elementAccessed="//@auxiliaryElements.0/@methods.0">
+    <args xsi:type="literalValues:StringLiteral"/>
+  </scope>
+</ccsl:AtomicRule>

@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module elementUtils('http:///expansionmodel.ecore', 'http://www.example.org/ccsl')]
+[module elementUtils('http://www.example.org/ccsl')]
 
 
 [query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  

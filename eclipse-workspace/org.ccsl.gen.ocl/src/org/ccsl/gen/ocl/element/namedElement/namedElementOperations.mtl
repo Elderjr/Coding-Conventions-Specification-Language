@@ -13,11 +13,11 @@ OrderedSet(String){
 /]
 
 [template public generatesConditionNamedElementForName(namedElement: NamedElement, varname: String) ? (not namedElement.name.oclIsUndefined())]
-[varname /].name = '[namedElement.name /]'
+[varname /].oclAsType(NamedElement).name = '[namedElement.name /]'
 [/template]
 
 [template public generatesConditionNamedElementForName(javaClass: JavaClass, varname: String) ? ( (not javaClass.name.oclIsUndefined()) and (javaClass.name.contains('.')) )]
 [varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([varname /].oclAsType(BodyDeclaration).name) = '[javaClass.name /]'
+).concat([varname /].name) = '[javaClass.name /]'
 [/template]

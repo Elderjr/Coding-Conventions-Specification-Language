@@ -8,6 +8,7 @@
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
 
 
+
 [template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
 [file ('gen', false, 'UTF-8')]
@@ -39,7 +40,7 @@
 [let remainingElementsConditions: String = rule.generatesRemainingElementsConditions()]
 [let filtersConditions: String = rule.generatesFiltersConditions()]
 [rule.scope.generatesSelect() /]
-[for(conditions: String | OrderedSet(String){scopeConditions, remainingElementsConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( 'and\n')]
+[for(conditions: String | OrderedSet(String){scopeConditions, remainingElementsConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( ' and\n')]
   --[if conditions = scopeConditions]Scope Conditions[elseif conditions = remainingElementsConditions]Remaining Elements Conditions[else]Filters Conditions[/if]
   [conditions.printStringWithIdentation() /][/for]
 

@@ -39,7 +39,7 @@ else
 (not [letOclName /][if many]->[else].[/if]oclIsUndefined()) 
 [/template]
 
-[comment Gerar condições de atributo monovalorado com acesso direto /]
+[comment Gerar condicoes de atributo monovalorado com acesso direto /]
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (isElementRegistered(field))]
 [varname /].[mappedFieldName /] = [field.getOclName() /]
 [/template]
@@ -49,7 +49,7 @@ else
 [field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass) /]
 [/template]
 
-[comment Gerar condições de atributo monovalorado com lista de possíveis metaclasses /]
+[comment Gerar condicoes de atributo monovalorado com lista de possíveis metaclasses /]
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (isElementRegistered(field))]
 [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
 if [varname /].oclIsKindOf([metaclass /]) then
@@ -57,7 +57,8 @@ if [varname /].oclIsKindOf([metaclass /]) then
 [/for]
 else
   false
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for][/template]
+[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for]
+[/template]
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (not isElementRegistered(field))]
 [let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
@@ -65,7 +66,7 @@ else
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
-[comment Gerar condições de atributo monovalorado com um mapeamento(Metaclasse,Propriedade) /]
+[comment Gerar condicoes de atributo monovalorado com um mapeamento(Metaclasse,Propriedade) /]
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (isElementRegistered(field))]
 [for(entry: OrderedSet(String) | map) separator('else ')]
 if [varname /].oclIsKindOf([entry->at(1) /]) then
@@ -84,21 +85,21 @@ else
 
 
 
-[comment Gerar condições de atributo multivalorado com acesso direto /]
+[comment Gerar condicoes de atributo multivalorado com acesso direto /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
 [element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
-[for (field: Element | fields) separator(' and ')]
-[if isElementRegistered(field)]
-[letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]
-[letOclName /]->exists([field.getOclName() /] | 
-  [if mappedFieldMetaclass <> 'OclAny'][field.generatesConditions(field.getOclName(), false, mappedFieldMetaclass) /][else][field.generatesConditions(field.getOclName(), true) /][/if]
-[/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact] [if fields->size() > 0]and
-[/if][letOclName /]->size() = [fields->size() /][/if]
+[element.generatesMultivaluedFieldConditionsPrivate(letOclName, fields, mappedFieldMetaclass) /]
 [/template]
 
-[comment Gerar condições de atributo multivalorado com lista de possíveis metaclasses /]
+[comment Gerar condicoes de atributo multivalorado com lista de possiveis metaclasses /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /]
+[let fieldsConditions: String = element.generatesMultivaluedFieldConditionsPrivate(letOclName, fields, mappedFieldMetaclass)]
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /][if fieldsConditions.isNotEmpty()] and
+[fieldsConditions.printStringWithIdentation() /]
+[/if][/let]
+[/template]
+
+[template private generatesMultivaluedFieldConditionsPrivate(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
 [for (field: Element | fields) separator(' and ')]
 [if isElementRegistered(field)]
 [letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]
