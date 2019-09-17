@@ -15,6 +15,7 @@
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::assignmentOperations /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -49,6 +50,15 @@
 
 [template public generatesExist(varDecl: VarDeclaration)]
 [varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'exists') /]
+[/template]
+
+[comment statements/expression/Assignment /]
+[template public generatesSelect(assignment: Assignment)]
+[assignment.generatesSelectPrivate(assignment.getAssignmentMathingMetaclasses(), 'select') /]
+[/template]
+
+[template public generatesExist(assignment: Assignment)]
+[assignment.generatesSelectPrivate(assignment.getAssignmentMathingMetaclasses(), 'exists') /]
 [/template]
 
 [comment statements/expression/StringConcatenation /]

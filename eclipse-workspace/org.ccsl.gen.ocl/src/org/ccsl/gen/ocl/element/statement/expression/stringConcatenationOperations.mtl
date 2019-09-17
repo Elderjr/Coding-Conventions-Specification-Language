@@ -3,9 +3,9 @@
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
 [import org::ccsl::gen::ocl::commom::statementTypeGetterGenerator /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 
 [query public getStringConcatenationMatchingMetaclasses(strConcat: StringConcatenation): OrderedSet(String)=
   OrderedSet(String){'InfixExpression', 'Assignment'}
@@ -13,9 +13,8 @@
 
 [query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String): OrderedSet(String) = 
 OrderedSet(String) {
-  strConcat.generatesConditionForStringConcatenationTypecheck(varname),
-  strConcat.generatesConditionsForOperands(varname)
-}
+  strConcat.generatesConditionForStringConcatenationTypecheck(varname)
+}->addAll(strConcat.getOperatorExpressionConditions(varname, false))
 /]
 
 [template public generatesConditionForStringConcatenationTypecheck(strConcat: StringConcatenation, varname: String)]
@@ -24,19 +23,3 @@ OrderedSet(String) {
 [strConcat.getOclName().concat('Type') /] = strClass
 [/template]
 
-[template public generatesConditionsForOperands(strConcat: StringConcatenation, varname: String) ? (strConcat.operands->size() > 0)]
-[let operandsLetName: String = strConcat.getOclName().concat('operands')]
-[let operandsWithoutParenthesisLetName: String = strConcat.getOclName().concat('operandsWithoutParenthesis')]
-let [operandsLetName /]: OrderedSet(OclAny) = if [varname /].oclIsKindOf(InfixExpression) then
-  [varname /].oclAsType(InfixExpression).extendedOperands->asOrderedSet()->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
-else if [varname /].oclIsKindOf(Assignment) then
-  [varname /].oclAsType(Assignment).rightHandSide->asOrderedSet()
-else
- OrderedSet(OclAny){}
-endif endif in
-let [operandsWithoutParenthesisLetName /]: OrderedSet(OclAny) = [operandsLetName /]->asOrderedSet()->closure(x | 
-  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
-) in
-[strConcat.generatesMultivaluedFieldConditions(operandsWithoutParenthesisLetName, strConcat.operands, 'OclAny') /]
-[/let][/let]
-[/template]

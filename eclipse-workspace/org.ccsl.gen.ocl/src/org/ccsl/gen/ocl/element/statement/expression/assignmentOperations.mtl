@@ -1,8 +1,26 @@
 [comment encoding = UTF-8 /]
 [module assignmentOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 
-[query public getAssignmentMathingMetaclasses(assignment: VarAssignment): OrderedSet(String)= 
+[query public getAssignmentMathingMetaclasses(assignment: Assignment): OrderedSet(String)= 
   OrderedSet(String){'Assignment'}
 /]
 
+[query public getAssignmentConditions(assignment: Assignment, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let newVarname: String = varname.printVarname(typecheck, 'Assignment') in
+OrderedSet(String){
+  assignment.generatesConditionForAssignmentTypechecker(varname, typecheck),
+  assignment.generatesConditionForTarget(varname)
+}->select(s | s.isNotEmpty())
+->addAll(assignment.getOperatorExpressionConditions(varname, false))
+/]
+
+[template public generatesConditionForAssignmentTypechecker(assignment: Assignment, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Assignment)
+[/template]
+
+[template public generatesConditionForTarget(assignment: Assignment, varname: String)]
+[assignment.generatesMonovaluedFieldConditions(varname, assignment.target, 'leftHandSide', 'OclAny') /]
+[/template]

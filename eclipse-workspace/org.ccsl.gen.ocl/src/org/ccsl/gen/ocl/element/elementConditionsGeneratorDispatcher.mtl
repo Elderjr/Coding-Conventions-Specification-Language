@@ -19,6 +19,7 @@
 [comment element/statement/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::assignmentOperations /]
 
 [comment element/statement/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -97,14 +98,7 @@
 [/template]
 
 
-[comment statements/InfixExp /]
-[template public generatesConditions(infix: InfixExpression, varname: String)]
-[infix.generatesConditions(varname, false) /]
-[/template]
 
-[template public generatesConditions(infix: InfixExpression, varname: String, typecheck: Boolean)]
-[infix.printConditions(infix.getInfixConditions(varname, typecheck)) /]
-[/template]
 
 [comment statements/MethodInvocation /]
 [template public generatesConditions(methodInv: MethodInvocation, varname: String)]
@@ -128,13 +122,31 @@
 [literal.printConditions(literal.getLiteralConditions(varname, typecheck)) /]
 [/template]
 
-[comment statements/StringConcatenation /]
+[comment statements/expression/StringConcatenation /]
 [template public generatesConditions(strConcat: StringConcatenation, varname: String)]
 [strConcat.generatesConditions(varname, strConcat.getStringConcatenationMatchingMetaclasses()->size() > 1) /]
 [/template]
 
 [template public generatesConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean)]
 [strConcat.printConditions(strConcat.getStringConcatenationConditions(varname)) /]
+[/template]
+
+[comment statements/expression/InfixExp /]
+[template public generatesConditions(infix: InfixExpression, varname: String)]
+[infix.generatesConditions(varname, false) /]
+[/template]
+
+[template public generatesConditions(infix: InfixExpression, varname: String, typecheck: Boolean)]
+[infix.printConditions(infix.getInfixConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/expression/Assignment /]
+[template public generatesConditions(assignment: Assignment, varname: String)]
+[assignment.generatesConditions(varname, false) /]
+[/template]
+
+[template public generatesConditions(assignment: Assignment, varname: String, typecheck: Boolean)]
+[assignment.printConditions(assignment.getAssignmentConditions(varname, typecheck)) /]
 [/template]
 
 [comment statements/VarDeclaration /]

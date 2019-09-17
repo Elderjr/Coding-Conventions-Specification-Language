@@ -32,7 +32,7 @@ endif in
 let strTmp: OrderedSet(ClassDeclaration) = ClassDeclaration.allInstances()->select(str | str.name = 'String' and str.oclContainer().oclAsType(Package).name = 'lang')->asOrderedSet() in
 let strClass: ClassDeclaration = if strTmp->size() > 0 then strTmp->first() else null endif in
 let [statementTypeLetName /]: OclAny = statementsToAnalyse->iterate(statement: OclAny; type: OclAny = null |
-  if type.oclIsUndefined() then
+  if lastStatement.oclIsKindOf(InfixExpression) or type.oclIsUndefined() then
     let typeTmp: OclAny = if statement.oclIsKindOf(ClassInstanceCreation) then
       [any.generatesStatementTypeGetterWhenInstanceCreation('statement.oclAsType(ClassInstanceCreation)') /]
     else if statement.oclIsKindOf(MethodInvocation) then

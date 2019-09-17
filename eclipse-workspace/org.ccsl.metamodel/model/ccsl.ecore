@@ -123,8 +123,9 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
         <eClassifiers xsi:type="ecore:EClass" name="InfixExpression" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
-        <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/expressions/OperatorExpression">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//elements/statements/expressions/OperatorExpression">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//elements/statements/Statement"
+              containment="true"/>
         </eClassifiers>
       </eSubpackages>
       <eSubpackages name="literalValues" nsURI="http://www.example.org/ccsl/elements/statements/literalValues"
