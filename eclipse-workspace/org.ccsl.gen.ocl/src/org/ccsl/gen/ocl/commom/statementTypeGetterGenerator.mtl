@@ -1,0 +1,125 @@
+[comment encoding = UTF-8 /]
+[module statementTypeGetterGenerator('http://www.example.org/ccsl')/]
+[import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
+
+[template public generatesStatementTypeGetter(any : OclAny, varname: String, statementTypeLetName: String)]
+--Statement Type Getter
+let lastStatement: OclAny = [varname /]->asOrderedSet()->closure(x |
+  if x.oclIsKindOf(ParenthesizedExpression) then 
+    x.oclAsType(ParenthesizedExpression).expression 
+  else if x.oclIsKindOf(Assignment) then 
+    x.oclAsType(Assignment).leftHandSide
+  else
+    x
+  endif endif
+)->last() in
+let statementsToAnalyse: OrderedSet(OclAny) = if lastStatement.oclIsKindOf(InfixExpression) then
+  lastStatement.oclAsType(InfixExpression)->asOrderedSet()->closure(statement | 
+    if statement.oclIsKindOf(InfixExpression) then 
+      statement.oclAsType(InfixExpression).extendedOperands->append(statement.oclAsType(InfixExpression).leftOperand)->append(statement.oclAsType(InfixExpression).rightOperand)
+    else if statement.oclIsKindOf(ParenthesizedExpression) then 
+      statement.oclAsType(ParenthesizedExpression).expression 
+    else if statement.oclIsKindOf(Assignment) then 
+      statement.oclAsType(Assignment).leftHandSide
+    else 
+      statement 
+    endif endif endif
+  )->select(statement | (not statement.oclIsKindOf(InfixExpression)) or (not statement.oclIsKindOf(ParenthesizedExpression)) or (not statement.oclIsKindOf(Assignment))
+) 
+else
+  lastStatement->asOrderedSet()
+endif in
+let strTmp: OrderedSet(ClassDeclaration) = ClassDeclaration.allInstances()->select(str | str.name = 'String' and str.oclContainer().oclAsType(Package).name = 'lang')->asOrderedSet() in
+let strClass: ClassDeclaration = if strTmp->size() > 0 then strTmp->first() else null endif in
+let [statementTypeLetName /]: OclAny = statementsToAnalyse->iterate(statement: OclAny; type: OclAny = null |
+  if type.oclIsUndefined() then
+    let typeTmp: OclAny = if statement.oclIsKindOf(ClassInstanceCreation) then
+      [any.generatesStatementTypeGetterWhenInstanceCreation('statement.oclAsType(ClassInstanceCreation)') /]
+    else if statement.oclIsKindOf(MethodInvocation) then
+      [any.generatesStatementTypeGetterWhenMethodInvocation('statement.oclAsType(MethodInvocation)') /]
+    else if statement.oclIsKindOf(SingleVariableAccess) then
+      [any.generatesStatementTypeGetterWhenVariableAccess('statement.oclAsType(SingleVariableAccess)') /]
+    else if statement.oclIsKindOf(StringLiteral) then
+      [any.generatesStatementTypeGetterWhenStringLiteral('statement.oclAsType(StringLiteral)') /]
+    else if statement.oclIsKindOf(ArrayAccess) then
+      [any.generatesStatementTypeGetterWhenArrayAccess('statement.oclAsType(ArrayAccess)') /]
+    else
+      null
+    endif endif endif endif endif in if (lastStatement.oclIsKindOf(InfixExpression) and typeTmp = strClass) or (not lastStatement.oclIsKindOf(InfixExpression)) then
+      typeTmp
+    else
+      null
+    endif
+  else
+    type
+  endif
+) in (not [statementTypeLetName /].oclIsUndefined())
+[/template]
+
+[template private generatesStatementTypeGetterWhenArrayAccess(any : OclAny, varname: String)]
+let arrayAccesses: OrderedSet(OclAny) = [varname /]->asOrderedSet()->closure(x |
+  if x.oclIsKindOf(ArrayAccess) then 
+    x.oclAsType(ArrayAccess).array
+  else if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else if x.oclIsKindOf(Assignment) then 
+    x.oclAsType(Assignment).leftHandSide
+  else 
+    x 
+  endif endif endif
+) in
+let arrayDimensions: Integer = if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.extraArrayDimensions
+else if arrayAccesses->last().oclIsKindOf(MethodInvocation) and arrayAccesses->last().oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) 
+  and (not arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).dimensions
+else
+ null
+endif endif in
+let arrayBaseType: OclAny = if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) and arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
+else if arrayAccesses->last().oclIsKindOf(SingleVariableAccess) and arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
+  arrayAccesses->last().oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type 
+else if arrayAccesses->last().oclIsKindOf(MethodInvocation) and arrayAccesses->last().oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) 
+  and (not arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  arrayAccesses->last().oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type.oclAsType(ArrayType).elementType.type
+else
+  null
+endif endif endif in
+if (not arrayDimensions.oclIsUndefined()) and (not arrayBaseType.oclIsUndefined()) then
+  if arrayDimensions = arrayAccesses->select(x | x.oclIsKindOf(ArrayAccess))->size() then
+    arrayBaseType
+  else
+    null
+  endif
+else
+  null
+endif
+[/template]
+
+
+[template private generatesStatementTypeGetterWhenInstanceCreation(any: ecore::EObject, targetName: String)]
+[targetName /].type.type
+[/template]
+
+[template private generatesStatementTypeGetterWhenMethodInvocation(any: ecore::EObject, targetName: String)]
+if [targetName /].method.oclIsKindOf(MethodDeclaration) and (not [targetName /].method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+  [targetName /].method.oclAsType(MethodDeclaration).returnType.type
+else
+  null
+endif
+[/template]
+
+[template private generatesStatementTypeGetterWhenVariableAccess(any: ecore::EObject, targetName: String)]
+if [targetName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
+  [targetName /].variable.oclAsType(SingleVariableDeclaration).type.type
+else if [targetName /].variable.oclIsKindOf(VariableDeclarationFragment) then
+  [targetName /].variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else
+ false
+endif endif
+[/template]
+
+[template private generatesStatementTypeGetterWhenStringLiteral(any: ecore::EObject, targetName: String)]
+strClass
+[/template]

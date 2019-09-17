@@ -10,16 +10,24 @@ let [letOclName /]: OrderedSet(OclAny) = [obj.generatesDeepCollectorForInfixExpr
 [varname /].extendedOperands->append([varname /].leftOperand)->append([varname /].rightOperand)->asOrderedSet()->closure(x | 
   if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression 
   else if x.oclIsKindOf(InfixExpression) then x.oclAsType(InfixExpression).extendedOperands->append(x.oclAsType(InfixExpression).leftOperand)->append(x.oclAsType(InfixExpression).rightOperand)
-  else Set(OclAny){x} endif endif
+  else x endif endif
 ) 
 [/template]
 
 [template public generatesInferInfexExpressionCheckerForString(obj: OclAny, varname: String)]
 [varname /]->exists(stringStatement | --NOT_COUNT
-  ([obj.isStringTypeClassInstanceDeclaration('stringStatement') /]) or
-  ([obj.isStringTypeMethodInvocation('stringStatement') /]) or
-  ([obj.isStringTypeVariableAccess('stringStatement') /]) or
-  ([obj.isStringTypeLiteral('stringStatement') /])
+  (
+    [obj.isStringTypeClassInstanceDeclaration('stringStatement') /]
+  ) or
+  (
+    [obj.isStringTypeMethodInvocation('stringStatement') /]
+  ) or
+  (
+    [obj.isStringTypeVariableAccess('stringStatement') /]
+  ) or
+  (
+    [obj.isStringTypeLiteral('stringStatement') /]
+  )
 )
 [/template]
 

@@ -88,18 +88,18 @@ else
 [comment Gerar condicoes de atributo multivalorado com acesso direto /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
 [element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
-[element.generatesMultivaluedFieldConditionsPrivate(letOclName, fields, mappedFieldMetaclass) /]
+[element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass) /]
 [/template]
 
 [comment Gerar condicoes de atributo multivalorado com lista de possiveis metaclasses /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-[let fieldsConditions: String = element.generatesMultivaluedFieldConditionsPrivate(letOclName, fields, mappedFieldMetaclass)]
+[let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
 [element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /][if fieldsConditions.isNotEmpty()] and
 [fieldsConditions.printStringWithIdentation() /]
 [/if][/let]
 [/template]
 
-[template private generatesMultivaluedFieldConditionsPrivate(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
+[template public generatesMultivaluedFieldConditions(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
 [for (field: Element | fields) separator(' and ')]
 [if isElementRegistered(field)]
 [letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]

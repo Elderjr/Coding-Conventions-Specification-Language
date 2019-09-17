@@ -4,49 +4,39 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
-
+[import org::ccsl::gen::ocl::commom::statementTypeGetterGenerator /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getStringConcatenationMatchingMetaclasses(strConcat: StringConcatenation): OrderedSet(String)=
-  OrderedSet(String){'InfixExpression'}
+  OrderedSet(String){'InfixExpression', 'Assignment'}
 /]
 
-[query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean): OrderedSet(String) = 
-let newVarname: String = varname.printVarname(typecheck, 'InfixExpression') in
-let conditions: OrderedSet(String) =  strConcat.getStringConcatenationConditions(newVarname, false)
-->append(strConcat.generatesStringConcatenationCheckerWhenInfixExpression(newVarname))
-->select(s | s.trim().size() > 0) in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition('InfixExpression')}->addAll(conditions)
-else
-  conditions
-endif
+[query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String): OrderedSet(String) = 
+OrderedSet(String) {
+  strConcat.generatesConditionForStringConcatenationTypecheck(varname),
+  strConcat.generatesConditionsForOperands(varname)
+}
 /]
 
-[template public generatesStringConcatenationCheckerWhenInfixExpression(strConcat: StringConcatenation, varname: String)]
-[strConcat.generatesDeepCollectorForInfixExpression(varname, strConcat.getOclName().concat('AllElements')) /]
-[strConcat.generatesInferInfexExpressionCheckerForString(strConcat.getOclName().concat('AllElements')) /]
+[template public generatesConditionForStringConcatenationTypecheck(strConcat: StringConcatenation, varname: String)]
+( ([varname /].oclIsKindOf(Assignment) and [varname /].oclAsType(Assignment).operator = AssignmentKind::PLUS_ASSIGN) or ([varname /].oclIsKindOf(InfixExpression)) ) and
+[strConcat.generatesStatementTypeGetter(varname, strConcat.getOclName().concat('Type')) /] and
+[strConcat.getOclName().concat('Type') /] = strClass
 [/template]
 
-[template public generatesStringConcatenationCheckerWhenAssignment(strConcat: StringConcatenation, varname: String)]
-[let accessName: String = strConcat.getOclName().concat('Access')]
-[let typeName: String = strConcat.getOclName().concat('Type')]
-let [accessName /]: OclAny = if [varname /].leftHandSide.oclIsKindOf(SingleVariableAccess) then
-  [varname /].leftHandSide
-else if [varname /].leftHandSide.oclIsKindOf(ArrayAcess) then
-  [varname /].leftHandSide.oclAsType(ArrayAccess).array
+[template public generatesConditionsForOperands(strConcat: StringConcatenation, varname: String) ? (strConcat.operands->size() > 0)]
+[let operandsLetName: String = strConcat.getOclName().concat('operands')]
+[let operandsWithoutParenthesisLetName: String = strConcat.getOclName().concat('operandsWithoutParenthesis')]
+let [operandsLetName /]: OrderedSet(OclAny) = if [varname /].oclIsKindOf(InfixExpression) then
+  [varname /].oclAsType(InfixExpression).extendedOperands->asOrderedSet()->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
+else if [varname /].oclIsKindOf(Assignment) then
+  [varname /].oclAsType(Assignment).rightHandSide->asOrderedSet()
 else
-  null
-endif endif in (not [accessName /].oclIsUndefined()) and
-let [typeName /]: NamedElement = if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(SingleVariableDeclaration) then
-  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(SingleVariableDeclaration).type.type
-else if [accessName /].oclIsKindOf(SingleVariableAccess) and [accessName /].oclAsType(SingleVariableAccess).variable.oclIsKindOf(VariableDeclarationFragment) then
-  [accessName /].oclAsType(SingleVariableAccess).variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
-else if [accessName /].oclIsKindOf(MethodInvocation) and [accessName /].oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) then
-  [accessName /].oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
-else
-  null
+ OrderedSet(OclAny){}
 endif endif in
-[typeName /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-  fullName.concat(p.name).concat('.')
-).concat([typeName /].name) = 'java.lang.String'[/let][/let]
+let [operandsWithoutParenthesisLetName /]: OrderedSet(OclAny) = [operandsLetName /]->asOrderedSet()->closure(x | 
+  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
+) in
+[strConcat.generatesMultivaluedFieldConditions(operandsWithoutParenthesisLetName, strConcat.operands, 'OclAny') /]
+[/let][/let]
 [/template]

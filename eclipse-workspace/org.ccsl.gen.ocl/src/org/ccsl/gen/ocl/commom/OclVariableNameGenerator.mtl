@@ -34,4 +34,6 @@ lit[element.getId() /]
 varDecl[element.getId() /]
 [/template]
 
-
+[template public getOclName(element : StringConcatenation)]
+strConcat[element.getId() /]
+[/template]

@@ -134,7 +134,7 @@
 [/template]
 
 [template public generatesConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean)]
-[strConcat.printConditions(strConcat.getStringConcatenationConditions(varname, typecheck)) /]
+[strConcat.printConditions(strConcat.getStringConcatenationConditions(varname)) /]
 [/template]
 
 [comment statements/VarDeclaration /]
