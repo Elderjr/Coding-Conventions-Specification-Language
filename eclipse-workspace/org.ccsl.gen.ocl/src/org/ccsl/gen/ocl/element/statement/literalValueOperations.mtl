@@ -89,7 +89,7 @@ OrderedSet(String) {
 
 [template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() > 1))]
 [let letOclName: String = literal.getOclName().concat('Value')]
-[literal.generatesLetStatementToGetLiteralValue(varname, letOclName) /]
+[literal.generatesLetStatementToGetLiteralValue(varname, letOclName) /] and
 [letOclName /] = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if][/let]
 [/template]
 
@@ -108,7 +108,7 @@ if [varname /].oclIsKindOf([entry->at(1) /]) then
 else
   null
 [for (Sequence(Integer){1..literal.getLiteralFieldMapping()->size()}) separator(' ')]endif[/for] in
-(not [letOclName /].oclIsUndefined()) and
+(not [letOclName /].oclIsUndefined())
 [/template]
 
 [template public generatesLiteralExpressionValue(literal: LiteralValue)]

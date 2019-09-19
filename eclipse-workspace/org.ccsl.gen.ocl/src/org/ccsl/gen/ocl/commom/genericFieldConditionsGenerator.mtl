@@ -13,8 +13,8 @@ else
 endif
 /]
 
-[template public generatesLetStatement(element: Element, varname: String, mappedFieldName: String, letOclName: String, letType: String)]
-let [letOclName /]: [letType /] = [varname /].[mappedFieldName /] in (not [letOclName /].oclIsUndefined())
+[template public generatesLetStatement(element: Element, varname: String, mappedFieldName: String, letOclName: String, letType: String, many: Boolean)]
+let [letOclName /]: [letType /] = [varname /].[mappedFieldName /] in (not [letOclName /][if many]->[else].[/if]oclIsUndefined())
 [/template]
 
 [template public generatesLetIfObject(element: Element, varname: String, mappedFieldName: String, mappedElementMetaclasses: OrderedSet(String), letOclName: String, letType: String, many: Boolean)]
@@ -24,8 +24,7 @@ if [varname /].oclIsKindOf([metaclass /]) then
 [/for]
 else
   null
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
-(not [letOclName /][if many]->[else].[/if]oclIsUndefined()) 
+[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in (not [letOclName /][if many]->[else].[/if]oclIsUndefined()) 
 [/template]
 
 [template public generatesLetIfObject(element: Element, varname: String, map: OrderedSet(OrderedSet(String)), letOclName: String, letType: String, many: Boolean)]
@@ -46,7 +45,7 @@ else
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (not isElementRegistered(field))]
 [let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetStatement(varname, mappedFieldName, field.getOclName(), mappedFieldMetaclass) /][if fieldConditions.isNotEmpty()] and
+[element.generatesLetStatement(varname, mappedFieldName, field.getOclName(), mappedFieldMetaclass, false) /][if fieldConditions.isNotEmpty()] and
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
@@ -63,7 +62,7 @@ else
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (not isElementRegistered(field))]
 [let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.trim().size() > 0] and
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.isNotEmpty()] and
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
@@ -80,15 +79,13 @@ else
 
 [template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (not isElementRegistered(field))]
 [let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, map, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.trim().size() > 0] and
-[fieldConditions /][/if][/let]
+[element.generatesLetIfObject(varname, map, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.isNotEmpty()] and
+[fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
-
-
 
 [comment Gerar condicoes de atributo multivalorado com acesso direto /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-[element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
+[element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /] and
 [element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass) /]
 [/template]
 
@@ -96,8 +93,7 @@ else
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
 [let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
 [element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /][if fieldsConditions.isNotEmpty()] and
-[fieldsConditions.printStringWithIdentation() /]
-[/if][/let]
+[fieldsConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
 [template public generatesMultivaluedFieldConditions(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
@@ -105,7 +101,6 @@ else
 [if isElementRegistered(field)]
 [letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]
 [letOclName /]->exists([field.getOclName() /] | 
-  [if mappedFieldMetaclass <> 'OclAny'][field.generatesConditions(field.getOclName(), false, mappedFieldMetaclass) /][else][field.generatesConditions(field.getOclName(), true) /][/if]
-[/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact] [if fields->size() > 0]and
+[let fieldCondition: String = field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass)][if fieldCondition.isNotEmpty()]  [fieldCondition.printStringWithIdentation() /][else]  true[/if][/let][/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and
 [/if][letOclName /]->size() = [fields->size() /][/if]
 [/template]

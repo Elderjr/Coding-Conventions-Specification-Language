@@ -97,8 +97,3 @@
 [for (metaclassesTarget: String | matchingJavaMetaclasses) separator('->union(')]
 [metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
 [/template]
-
-
-[template public generatesElementExistConditions(elements: OrderedSet(Element))]
-
-[/template]

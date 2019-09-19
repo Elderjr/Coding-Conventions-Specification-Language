@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:java="http://www.example.org/ccsl/java" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.StringBuffer">
+      <methods exact="true" name="toString"/>
+    </auxiliaryElements>
+    <auxiliaryElements xsi:type="java:JavaMethod" exact="true" name="equals">
+      <params/>
+    </auxiliaryElements>
+    <scope xsi:type="statements:MethodInvocation" elementAccessed="//@rules.0/@auxiliaryElements.1">
+      <from xsi:type="statements:MethodInvocation" elementAccessed="//@rules.0/@auxiliaryElements.0/@methods.0"/>
+      <args xsi:type="literalValues:StringLiteral" value=""/>
+    </scope>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule">
+    <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.StringBuffer">
+      <methods exact="true" name="toString"/>
+    </auxiliaryElements>
+    <auxiliaryElements xsi:type="java:JavaMethod" exact="true" name="length" params=""/>
+    <scope xsi:type="statements:MethodInvocation" elementAccessed="//@rules.1/@auxiliaryElements.1">
+      <from xsi:type="statements:MethodInvocation" elementAccessed="//@rules.1/@auxiliaryElements.0/@methods.0"/>
+    </scope>
+  </rules>
+</ccsl:CompositeRule>

@@ -34,9 +34,8 @@
 [cond.printStringWithIdentation() /][/for][/let]
 [/template]
 
-[template private generatesOcl(rule: AtomicRule) post (trim())]
-[rule.clearAllContexts() /]
-[let scopeConditions: String = rule.generatesScopeConditions()]
+[template private generatesOcl(rule: AtomicRule)]
+[rule.clearAllContexts() /][let scopeConditions: String = rule.generatesScopeConditions()]
 [let remainingElementsConditions: String = rule.generatesRemainingElementsConditions()]
 [let filtersConditions: String = rule.generatesFiltersConditions()]
 [rule.scope.generatesSelect() /]
@@ -56,8 +55,7 @@
 [template private generatesOcl(compositeRule: CompositeRule)]
 (
 [for (rule: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]
-[if i = 1]  [else]    [/if][rule.generatesOcl() /]
-[if i <> 1]  )[/if][/for]
+[if i = 1]  [rule.generatesOcl() /][else]    [rule.generatesOcl() /])[/if][/for]
 
 )
 [/template]
