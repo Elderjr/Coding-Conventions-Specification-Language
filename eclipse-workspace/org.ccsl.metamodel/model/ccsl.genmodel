@@ -140,9 +140,9 @@
       <nestedGenPackages prefix="Datatype" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/datatype">
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/DataType"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/PrimitiveType"/>
-        <genClasses ecoreClass="ccsl.ecore#//elements/datatype/NumberPrimitiveType"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/StringPrimitiveType"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/BooleanPrimitiveType"/>
+        <genClasses ecoreClass="ccsl.ecore#//elements/datatype/ShortPrimitiveType"/>
       </nestedGenPackages>
     </nestedGenPackages>
     <nestedGenPackages prefix="Java" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//java">

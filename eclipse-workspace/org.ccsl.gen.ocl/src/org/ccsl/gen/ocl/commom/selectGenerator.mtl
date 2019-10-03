@@ -7,6 +7,10 @@
 [import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
 
+[comment namedElements/]
+[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
+
 [comment statement /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
@@ -26,6 +30,25 @@
 
 [template public generatesSelect(element: Element) /]
 [template public generatesExist(element: Element) /]
+
+[comment namedElements/Method /]
+[template public generatesSelect(method: Method)]
+[method.generatesSelectPrivate(method.getMethodMatchingJavaMetaclasses(), 'select') /]
+[/template]
+
+[template public generatesExist(method: Method)]
+[method.generatesSelectPrivate(method.getMethodMatchingJavaMetaclasses(), 'exists') /]
+[/template]
+
+[comment namedElements/Variable /]
+[template public generatesSelect(var: Variable)]
+[var.generatesSelectPrivate(var.getVariableMatchingJavaMetaclasses(), 'select') /]
+[/template]
+
+[template public generatesExist(var: Variable)]
+[var.generatesSelectPrivate(var.getVariableMatchingJavaMetaclasses(), 'exists') /]
+[/template]
+
 
 [comment statements/InstanceCreation /]
 [template public generatesSelect(inst: InstanceCreation)]

@@ -154,9 +154,9 @@
         nsPrefix="datatype">
       <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//elements/Element"/>
       <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//elements/datatype/DataType"/>
-      <eClassifiers xsi:type="ecore:EClass" name="NumberPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="StringPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="BooleanPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ShortPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
     </eSubpackages>
   </eSubpackages>
   <eSubpackages name="java" nsURI="http://www.example.org/ccsl/java" nsPrefix="java">

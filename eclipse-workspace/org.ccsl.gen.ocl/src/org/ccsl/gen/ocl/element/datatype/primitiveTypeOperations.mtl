@@ -4,8 +4,8 @@
 [query public getPrimitiveTypeMatchingMetaclasses(primitiveType: PrimitiveType): OrderedSet(String)=
 if primitiveType.oclIsKindOf(BooleanPrimitiveType) then
   OrderedSet(String){'PrimitiveTypeBoolean'}
-else if primitiveType.oclIsKindOf(NumberPrimitiveType) then
-  OrderedSet(String){'PrimitiveTypeByte'}
+else if primitiveType.oclIsKindOf(ShortPrimitiveType) then
+  OrderedSet(String){'PrimitiveTypeShort'}
 else
   OrderedSet(String){'PrimitiveType'}
 endif endif

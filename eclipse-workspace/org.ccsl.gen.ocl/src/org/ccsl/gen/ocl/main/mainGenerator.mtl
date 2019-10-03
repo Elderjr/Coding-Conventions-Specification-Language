@@ -19,13 +19,17 @@
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesScopeConditions(rule: AtomicRule) post(trim())]
-[rule.scope.generatesConditions(rule.scope.getOclName()) /]
+[let scopeConditions: String = rule.scope.generatesConditions(rule.scope.getOclName())]
+(not [rule.scope.getOclName() /].originalCompilationUnit.oclIsUndefined())[if scopeConditions.isNotEmpty()] and
+[/if][scopeConditions /][/let]
 [/template]
 
 [template private generatesRemainingElementsConditions(rule: AtomicRule) post(trim())]
 [for(element: Element | rule.auxiliaryElements->select(e | not e.isElementRegistered())) separator( 'and\n')]
 [element.generatesExist() /]
-[element.generatesConditions(element.getOclName()) /][/for]
+[let elementConditions: String = element.generatesConditions(element.getOclName())]
+(not [element.getOclName() /].originalCompilationUnit.oclIsUndefined())[if elementConditions.isNotEmpty()] and
+[/if][elementConditions /][/let][/for]
 [/template]
 
 [template private generatesFiltersConditions(rule: AtomicRule) post(trim())]

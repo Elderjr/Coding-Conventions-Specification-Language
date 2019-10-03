@@ -1,88 +1,24 @@
 (
-  MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+  MethodDeclaration.allInstances()->select(m1 |
     --Scope Conditions
-    let m2: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
-      mInv1.oclAsType(MethodInvocation).method
-    else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-      mInv1.oclAsType(ClassInstanceCreation).method
-    else
-      null
-    endif endif in (not m2.oclIsUndefined())  and
-    m2.oclIsKindOf(MethodDeclaration) and
-    let m2params: OrderedSet(SingleVariableDeclaration) = m2.oclAsType(MethodDeclaration).parameters in (not m2params->oclIsUndefined()) and
-    m2params->exists(v3 | 
-      true and
-    m2params->size() = 1 and
-    m2.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'equals' and
-    let mInv1Args: OrderedSet(OclAny) = if mInv1.oclIsKindOf(MethodInvocation) then
-      mInv1.oclAsType(MethodInvocation).arguments
-    else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-      mInv1.oclAsType(ClassInstanceCreation).arguments
-    else
-      null
-    endif endif in (not mInv1Args->oclIsUndefined())  and
-    mInv1Args->exists(lit4 | 
-      (lit4.oclIsKindOf(StringLiteral)) and
-      lit4.oclAsType(StringLiteral).escapedValue = '""' and
-    let mInv5: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
-        mInv1.oclAsType(MethodInvocation).expression
-      else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-        mInv1.oclAsType(ClassInstanceCreation).expression
-      else
-        null
-      endif endif in (not mInv5.oclIsUndefined())  and
-      let m6: OclAny = if mInv5.oclIsKindOf(MethodInvocation) then
-        mInv5.oclAsType(MethodInvocation).method
-      else if mInv5.oclIsKindOf(ClassInstanceCreation) then
-        mInv5.oclAsType(ClassInstanceCreation).method
-      else
-        null
-      endif endif in (not m6.oclIsUndefined())  and
-      m6.oclIsKindOf(MethodDeclaration) and
-      m6.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'toString' and
-      let c7: OclAny = m6.oclAsType(MethodDeclaration).oclContainer() in (not c7.oclIsUndefined()) and
-      c7.oclIsKindOf(ClassDeclaration) and
-      let c7Methods: OrderedSet(OclAny) = c7.oclAsType(ClassDeclaration).bodyDeclarations in (not c7Methods->oclIsUndefined()) and
-      c7Methods->exists(c7m6 | c7m6 = m6 and
-      c7.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-        fullName.concat(p.name).concat('.')
-      ).concat(c7.oclAsType(ClassDeclaration).name) = 'java.lang.StringBuffer'
-  ))))->union(
-    MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+    (not m1.originalCompilationUnit.oclIsUndefined())  and
+    (not m1.returnType.oclIsUndefined()) and
+    let primitiveType2: OclAny = m1.returnType.type in (not primitiveType2.oclIsUndefined()) and
+    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
+  )->union(
+    SingleVariableDeclaration.allInstances()->union(VariableDeclarationFragment.allInstances())->select(v1 |
     --Scope Conditions
-    let m2: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
-      mInv1.oclAsType(MethodInvocation).method
-    else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-      mInv1.oclAsType(ClassInstanceCreation).method
+    (not v1.originalCompilationUnit.oclIsUndefined())  and
+    let primitiveType2: OclAny = if v1.oclIsKindOf(FieldDeclaration) then
+      v1.oclAsType(FieldDeclaration).type.type
+    else if v1.oclIsKindOf(SingleVariableDeclaration) then
+      v1.oclAsType(SingleVariableDeclaration).type.type
+    else if v1.oclIsKindOf(VariableDeclarationFragment) then
+      v1.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
     else
       null
-    endif endif in (not m2.oclIsUndefined())  and
-    m2.oclIsKindOf(MethodDeclaration) and
-    let m2params: OrderedSet(SingleVariableDeclaration) = m2.oclAsType(MethodDeclaration).parameters in (not m2params->oclIsUndefined()) and
-    m2params->size() = 0 and
-    m2.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'length' and
-    let mInv3: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
-      mInv1.oclAsType(MethodInvocation).expression
-    else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-      mInv1.oclAsType(ClassInstanceCreation).expression
-    else
-      null
-    endif endif in (not mInv3.oclIsUndefined())  and
-    let m4: OclAny = if mInv3.oclIsKindOf(MethodInvocation) then
-      mInv3.oclAsType(MethodInvocation).method
-    else if mInv3.oclIsKindOf(ClassInstanceCreation) then
-      mInv3.oclAsType(ClassInstanceCreation).method
-    else
-      null
-    endif endif in (not m4.oclIsUndefined())  and
-    m4.oclIsKindOf(MethodDeclaration) and
-    m4.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'toString' and
-    let c5: OclAny = m4.oclAsType(MethodDeclaration).oclContainer() in (not c5.oclIsUndefined()) and
-    c5.oclIsKindOf(ClassDeclaration) and
-    let c5Methods: OrderedSet(OclAny) = c5.oclAsType(ClassDeclaration).bodyDeclarations in (not c5Methods->oclIsUndefined()) and
-    c5Methods->exists(c5m4 | c5m4 = m4 and
-    c5.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-      fullName.concat(p.name).concat('.')
-    ).concat(c5.oclAsType(ClassDeclaration).name) = 'java.lang.StringBuffer'
-  )))
+    endif endif endif in
+    (not primitiveType2.oclIsUndefined())  and
+    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
+  ))
 )
