@@ -9,6 +9,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::constructorOperations /]
 
 [comment element/statement /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
@@ -87,6 +88,14 @@
 [method.printConditions(method.getMethodConditions(varname, typecheck)) /]
 [/template]
 
+[comment namedElement/Constructor /]
+[template public generatesConditions(constructor: Constructor, varname: String)]
+[constructor.generatesConditions(varname, constructor.getConstructorMatchingJavaMetaclasses()->size() > 1) /]
+[/template]
+
+[template public generatesConditions(constructor: Constructor, varname: String, typecheck: Boolean)]
+[constructor.printConditions(constructor.getConstructorConditions(varname, typecheck)) /]
+[/template]
 
 [comment datatype/PrimitiveType /]
 [template public generatesConditions(primitiveType: PrimitiveType, varname: String)]

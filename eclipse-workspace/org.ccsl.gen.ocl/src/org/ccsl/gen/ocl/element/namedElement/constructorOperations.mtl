@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module constructorOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getConstructorMatchingJavaMetaclasses(constructor: Constructor): OrderedSet(String)= 
+OrderedSet(String){'ConstructorDeclaration'}
+/]
+
+
+[query public getConstructorConditions(constructor: Constructor, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let newVarname: String = varname.printVarname(typecheck, 'ConstructorDeclaration') in
+let conditions: OrderedSet(String) = OrderedSet(String) {
+  constructor.generatesConstructorTypecheckCondition(varname, typecheck),
+  constructor.generatesConditionForParams(newVarname)
+}->addAll(constructor.getElementConditions(varname, false))
+->select(s | s.trim().size() > 0) in
+if typecheck then
+  OrderedSet(String){varname.printKindOfCondition('MethodDeclaration')}->addAll(conditions)
+else
+  conditions
+endif
+/]
+
+[template public generatesConstructorTypecheckCondition(constructor: Constructor, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ConstructorDeclaration)
+[/template]

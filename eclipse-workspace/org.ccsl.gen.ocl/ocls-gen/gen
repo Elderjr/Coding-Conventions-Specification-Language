@@ -1,24 +1,35 @@
-(
-  MethodDeclaration.allInstances()->select(m1 |
-    --Scope Conditions
-    (not m1.originalCompilationUnit.oclIsUndefined())  and
-    (not m1.returnType.oclIsUndefined()) and
-    let primitiveType2: OclAny = m1.returnType.type in (not primitiveType2.oclIsUndefined()) and
-    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
-  )->union(
-    SingleVariableDeclaration.allInstances()->union(VariableDeclarationFragment.allInstances())->select(v1 |
-    --Scope Conditions
-    (not v1.originalCompilationUnit.oclIsUndefined())  and
-    let primitiveType2: OclAny = if v1.oclIsKindOf(FieldDeclaration) then
-      v1.oclAsType(FieldDeclaration).type.type
-    else if v1.oclIsKindOf(SingleVariableDeclaration) then
-      v1.oclAsType(SingleVariableDeclaration).type.type
-    else if v1.oclIsKindOf(VariableDeclarationFragment) then
-      v1.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
-    else
-      null
-    endif endif endif in
-    (not primitiveType2.oclIsUndefined())  and
-    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
-  ))
-)
+ClassInstanceCreation.allInstances()->select(mInv1 |
+  --Scope Conditions
+  (not mInv1.originalCompilationUnit.oclIsUndefined()) and
+  let m2: MethodDeclaration = mInv1.method in (not m2.oclIsUndefined()) and
+  
+  let m2params: OrderedSet(SingleVariableDeclaration) = m2.parameters in (not m2params->oclIsUndefined()) and
+  m2params->exists(v3 | 
+    true and
+  m2params->size() = 1 and
+  let c4: OclAny = m2.oclContainer() in (not c4.oclIsUndefined()) and
+  c4.oclIsKindOf(ClassDeclaration) and
+  let c4Methods: OrderedSet(OclAny) = c4.oclAsType(ClassDeclaration).bodyDeclarations in (not c4Methods->oclIsUndefined()) and
+  c4Methods->exists(c4m2 | c4m2 = m2 and
+  let lit5: OclAny = mInv1.expression in (not lit5.oclIsUndefined()) and
+  (lit5.oclIsKindOf(StringLiteral) or lit5.oclIsKindOf(CharacterLiteral) or lit5.oclIsKindOf(NumberLiteral) or lit5.oclIsKindOf(BooleanLiteral)) and
+  --Filters Conditions
+  c4.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(c4.oclAsType(NamedElement).name).matches('java\\.math.Big(Integer|Decimal)') and
+  let literalNameRegex: String = if lit5.oclIsKindOf(StringLiteral) then
+    lit5.oclAsType(StringLiteral).escapedValue
+  else if lit5.oclIsKindOf(CharacterLiteral) then
+    lit5.oclAsType(CharacterLiteral).escapedValue
+  else if lit5.oclIsKindOf(NumberLiteral) then
+    lit5.oclAsType(NumberLiteral).tokenValue
+  else if lit5.oclIsKindOf(BooleanLiteral) then
+    lit5.oclAsType(BooleanLiteral).value.toString()
+  else if lit5.oclIsKindOf(NullLiteral) then
+    'null'
+  else
+    null
+  endif endif endif endif endif in
+  (not literalNameRegex.oclIsUndefined())
+  literalNameRegex.matches('(0|1|10|"0"|"1"|"10")')
+)))
