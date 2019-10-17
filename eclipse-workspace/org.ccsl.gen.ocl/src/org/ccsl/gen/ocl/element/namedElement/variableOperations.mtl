@@ -1,15 +1,17 @@
 [comment encoding = UTF-8 /]
 [module variableOperations('http://www.example.org/ccsl')]
+
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
-[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator/]
+
+
 
 [query public getVariableMatchingJavaMetaclasses(variable: Variable): OrderedSet(String)=
   if variable.eContainer().oclIsKindOf(ComplexType) then
-    OrderedSet(String){'FieldDeclaration'}
+    OrderedSet(String){'VariableDeclarationFragment'}
   else if variable.eContainer().oclIsKindOf(Method) then
     OrderedSet(String){'SingleVariableDeclaration'}
   else
@@ -17,45 +19,64 @@
   endif endif
 /]
 
-[query public getVariableFieldMatchingName(var: Variable, metaclass: String): String =
- if metaclass = 'VariableDeclarationFragment' then
-  'variablesContainer.type.type'
- else
-  'type.type' 
- endif
-/]
-
 [query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean): OrderedSet(String) = 
-OrderedSet(String){
-  var.generatesConditionsForType(varname)
-}->select(s | s.trim().size() > 0)
-/]
-
-[query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = if typecheck then
-  varname.printWithCast(metaclass)
+if var.getVariableMatchingJavaMetaclasses()->size() > 1 then
+  OrderedSet(String){
+    var.generatesVariableTypecheckCondition(varname, typecheck),
+    var.generatesConditionsForType(varname),
+    var.generatesConditionsForInitialValue(varname)
+  }->select(s | s.trim().size() > 0)
+  ->addAll(var.getNamedElementConditions(varname, typecheck))
 else
-  varname
-endif in
-let conditions: OrderedSet(String) = OrderedSet(String) {
-  var.generatesConditionsForType(newVarname, metaclass)
-}->select(s | s.trim().size() > 0) in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
-else
-  conditions
+  var.getVariableConditions(varname, typecheck, var.getVariableMatchingJavaMetaclasses()->first())
 endif
 /]
 
+[query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, metaclass) in
+OrderedSet(String) {
+  var.generatesVariableTypecheckCondition(varname, typecheck, metaclass),
+  var.generatesConditionsForType(newVarname, metaclass),
+  var.generatesConditionsForInitialValue(varname, metaclass)
+}->select(s | s.trim().size() > 0)
+->addAll(var.getNamedElementConditions(varname, typecheck, metaclass))
+/]
+
+[comment Type Check Conditions /]
+[template public generatesVariableTypecheckCondition(var: Variable, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | var.getVariableMatchingJavaMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template public generatesVariableTypecheckCondition(var: Variable, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname.printKindOfCondition(metaclass) /]
+[/template]
+
+[comment conditions for 'type' /]
 [template public generatesConditionsForType(var: Variable, varname: String) ? (not var.type.oclIsUndefined())]
 [var.generatesMonovaluedFieldConditions(varname, var.type, 'OclAny',
 OrderedSet(OrderedSet(String)){
-  OrderedSet(String){'FieldDeclaration', 'type.type'},
   OrderedSet(String){'SingleVariableDeclaration', 'type.type'},
   OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
 }) /]
 [/template]
 
 [template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined())]
-[var.generatesMonovaluedFieldConditions(varname, var.type, var.getVariableFieldMatchingName(metaclass), 'OclAny') /]
+[if metaclass = 'VariableDeclarationFragment']
+[var.generatesMonovaluedFieldConditions(varname, var.type, 'variablesContainer.type.type', 'OclAny') /][else]
+[var.generatesMonovaluedFieldConditions(varname, var.type, 'type.type', 'OclAny') /][/if]
+[/template]
+
+[comment conditions for 'initialValue' /]
+[template public generatesConditionsForInitialValue(var: Variable, varname: String) ? (not var.initialValue.oclIsUndefined())]
+[var.generatesMonovaluedFieldConditions(varname, var.initialValue, 'OclAny',
+OrderedSet(OrderedSet(String)){
+  OrderedSet(String){'SingleVariableDeclaration', 'variablesContainer.fragments->asOrderedSet()->last().initializer'}
+}) /]
+[/template]
+
+[template public generatesConditionsForInitialValue(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and metaclass = 'VariableDeclarationFragment')]
+[if metaclass = 'VariableDeclarationFragment']
+[var.generatesMonovaluedFieldConditions(varname, var.initialValue, 'variablesContainer.fragments->asOrderedSet()->last().initializer', 'OclAny') /][else]
+false[/if]
 [/template]

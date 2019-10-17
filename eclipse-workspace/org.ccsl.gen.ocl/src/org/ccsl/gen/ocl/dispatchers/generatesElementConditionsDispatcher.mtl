@@ -1,0 +1,102 @@
+[comment encoding = UTF-8 /]
+[module generatesElementConditionsDispatcher('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils/]
+
+
+[comment element/datatype /]
+[import org::ccsl::gen::ocl::element::datatype::objectTypeOperations /]
+
+[comment element/namedElements /]
+[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
+[import org::ccsl::gen::ocl::java::javaClassOperations /]
+
+[comment statements /]
+[import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
+[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
+
+[comment statements/controlFlow /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
+
+
+[template private printConditions(element: Element, conditions: OrderedSet(String))]
+[for (condition: String | conditions) separator(' and\n')]
+[condition.printStringWithIdentation() /][/for]
+[/template]
+
+[template public generatesConditions(element: Element, varname: String, typecheck: Boolean) /]
+[template public generatesConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String) /]
+
+
+[template public generatesConditions(obj: ObjectType, varname: String, typecheck: Boolean)]
+[obj.printConditions(obj.getObjectTypeConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(obj: ObjectType, varname: String, typecheck: Boolean, metaclass: String)]
+[obj.printConditions(obj.getObjectTypeConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[template public generatesConditions(method: Method, varname: String, typecheck: Boolean)]
+[method.printConditions(method.getMethodConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String)]
+[method.printConditions(method.getMethodConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean)]
+[complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
+[complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean)]
+[javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String)]
+[javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(var: Variable, varname: String, typecheck: Boolean)]
+[var.printConditions(var.getVariableConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.printConditions(var.getVariableConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean)]
+[var.printConditions(var.getVectorVariableConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String)]
+[var.printConditions(var.getVectorVariableConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
+[methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean)]
+[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean, metaclass: String)]
+[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(lit: LiteralValue, varname: String, typecheck: Boolean)]
+[lit.printConditions(lit.getLiteralConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(lit: LiteralValue, varname: String, typecheck: Boolean, metaclass: String)]
+[lit.printConditions(lit.getLiteralConditions(varname, typecheck)) /]
+[/template]
+
+[template public generatesConditions(switch: SwitchStatement, varname: String, typecheck: Boolean)]
+[switch.printConditions(switch.getSwitchStatementConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(switch: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[switch.printConditions(switch.getSwitchStatementConditions(varname, typecheck)) /]
+[/template]

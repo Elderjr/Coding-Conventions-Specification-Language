@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:filters="http://www.example.org/ccsl/filters">
-  <filters xsi:type="filters:SwitchCaseStatementCount" targets="//@scope" min="3"/>
-  <scope xsi:type="controlFlow:SwitchStatement"/>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:filters="http://www.example.org/ccsl/filters" violator="//@ruleElements.0">
+  <ruleElements xsi:type="controlFlow:SwitchStatement"/>
+  <filters xsi:type="filters:SwitchCaseStatementCount" targets="//@ruleElements.0" max="2"/>
 </ccsl:AtomicRule>

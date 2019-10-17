@@ -1,0 +1,21 @@
+MethodInvocation.allInstances()->select(mInv1 |
+  mInv1.method.oclAsSet()->exists(m2 | m2 <> mInv1 and 
+    -- Method Conditions
+    m2.oclContainer().oclAsSet()->exists(c3 | c3 <> mInv1 and c3 <> m2 and 
+      --Java Class Conditions
+      c3.oclIsKindOf(ClassDeclaration) and
+      c3.oclAsType(ClassDeclaration).bodyDeclarations->exists(m4 | m4 <> mInv1 and m4 <> m2 and m4 <> c3 and 
+        -- Method Conditions
+        m4.oclIsKindOf(MethodDeclaration) and
+        m4.oclAsType(MethodDeclaration).name = 'trim' and
+      c3.oclAsType(ClassDeclaration).bodyDeclarations->includes(m2) and
+      c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(c3.oclAsType(BodyDeclaration).name) = 'java.lang.String' and
+  mInv1.expression.oclAsSet()->exists(mInv5 | mInv5 <> mInv1 and mInv5 <> m2 and mInv5 <> m4 and mInv5 <> c3 and 
+    (mInv5.oclIsKindOf(MethodInvocation) and mInv5.oclAsType(MethodInvocation).method = m4
+     or mInv5.oclIsKindOf(ClassInstanceCreation) and mInv5.oclAsType(ClassInstanceCreation).method = m4
+    )
+   and
+  m2.name.matches('length|isEmpty')
+)))))

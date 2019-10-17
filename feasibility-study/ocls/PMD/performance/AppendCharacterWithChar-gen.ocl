@@ -1,0 +1,27 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->select(mInv1 |
+  mInv1.method.oclAsSet()->exists(m2 | m2 <> mInv1 and 
+    -- Method Conditions
+    m2.name = 'append' and
+    m2.oclContainer().oclAsSet()->exists(c3 | c3 <> m2 and c3 <> mInv1 and 
+      --Java Class Conditions
+      (
+        c3.oclIsKindOf(ClassDeclaration) and
+        c3.oclAsType(ClassDeclaration).bodyDeclarations->includes(m2)
+      ) and
+  mInv1.arguments->exists(e4 | e4 <> m2 and e4 <> c3 and e4 <> mInv1 and 
+    e4.oclIsKindOf(StringLiteral) and
+  c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(c3.oclAsType(BodyDeclaration).name).matches('java\\.lang\\.String(Buffer|Builder)') and
+  e4.oclAsType(StringLiteral).escapedValue.matches('"(.|\\\\n)"')
+)))) in violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

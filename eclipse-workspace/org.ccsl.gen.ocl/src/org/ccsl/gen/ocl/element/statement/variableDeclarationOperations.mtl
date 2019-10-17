@@ -2,20 +2,15 @@
 [module variableDeclarationOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getVariableDeclarationMatchingJavaMetaclasses(varDecl: VarDeclaration): OrderedSet(String)=
-  if not varDecl.assignment.oclIsUndefined() then
-    OrderedSet(String){'VariableDeclarationFragment'}
-  else
-    OrderedSet(String){'SingleVariableDeclaration', 'VariableDeclarationFragment'}
-  endif
+  OrderedSet(String){'SingleVariableDeclaration', 'VariableDeclarationFragment'}
 /]
 
 [query public getVariableDeclarationConditions(varDecl: VarDeclaration, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String){
-  varDecl.generatesConditionForAssignment(varname, typecheck),
   varDecl.generatesConditionForVariable(varname, typecheck)
 }->select(s | s.trim().size() > 0)
 /]
@@ -34,13 +29,4 @@ endif
 
 [template public generatesConditionForVariable(varDecl: VarDeclaration, varname: String, typecheck: Boolean) ? ((not varDecl.variable.oclIsUndefined()) and varDecl.getVariableDeclarationMatchingJavaMetaclasses()->size() = 1)]
 [varDecl.variable.generatesConditions(varname, typecheck, 'VariableDeclarationFragment') /]
-[/template]
-
-[template public generatesConditionForAssignment(varDecl: VarDeclaration, varname: String, typecheck: Boolean) ? (varDecl.getVariableDeclarationMatchingJavaMetaclasses()->size() = 1)]
-[let newVarname: String = if typecheck then
-  varname.printWithCast('VariableDeclarationFragment')
-else
-  varname
-endif][if typecheck] and
-[/if][varDecl.variable.generatesMonovaluedFieldConditions(newVarname, varDecl.assignment, 'initializer', 'OclAny') /][/let]
 [/template]

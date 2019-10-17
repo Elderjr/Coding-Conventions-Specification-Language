@@ -86,4 +86,12 @@
             genModel="model/ccsl.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/nonElements"
+            class="ccsl.nonElements.NonElementsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
 </plugin>

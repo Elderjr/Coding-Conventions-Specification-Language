@@ -1,0 +1,38 @@
+MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+  --Scope Conditions
+  let m2: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
+    mInv1.oclAsType(MethodInvocation).method
+  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
+    mInv1.oclAsType(ClassInstanceCreation).method
+  else
+    null
+  endif endif in
+  (not m2.oclIsUndefined())  and
+  m2.oclIsKindOf(MethodDeclaration) and
+  let c3: OclAny = m2.oclAsType(MethodDeclaration).oclContainer() in
+  c3.oclIsKindOf(ClassDeclaration) and
+  let c3Methods: OrderedSet(OclAny) = c3.oclAsType(ClassDeclaration).bodyDeclarations->select(m | m.oclIsKindOf(MethodDeclaration)) in
+  c3Methods->exists(m4 | 
+    m4.oclIsKindOf(MethodDeclaration) and
+    m4.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'valueOf' and
+  let mInv5: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
+     mInv1.oclAsType(MethodInvocation).expression
+   else if mInv1.oclIsKindOf(ClassInstanceCreation) then
+     mInv1.oclAsType(ClassInstanceCreation).expression
+   else
+     null
+   endif endif in
+   (not mInv5.oclIsUndefined())  and
+   if mInv5.oclIsKindOf(MethodInvocation) then
+     mInv5.oclAsType(MethodInvocation).method = m4
+   else if mInv5.oclIsKindOf(ClassInstanceCreation) then
+     mInv5.oclAsType(ClassInstanceCreation).method = m4
+   else
+     false
+   endif endif and
+  --Filters Conditions
+  c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(c3.oclAsType(NamedElement).name).matches('java.lang.(Byte|Short|Integer|Long|Float|Double|Character)') and
+  m2.oclAsType(NamedElement).name.matches('(toString|byteValue|shortValue|intValue|longValue|floatValue|doubleValue|charValue)')
+))

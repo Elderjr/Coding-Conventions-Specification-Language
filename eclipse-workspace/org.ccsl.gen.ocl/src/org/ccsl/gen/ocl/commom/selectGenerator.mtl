@@ -1,119 +1,17 @@
 [comment encoding = UTF-8 /]
 [module selectGenerator('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 
-[comment utils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
-[import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
-
-[comment namedElements/]
-[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
-
-[comment statement /]
-[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
-[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
-[import org::ccsl::gen::ocl::element::statement::variableDeclarationOperations /]
-
-[comment statements/expression /]
-[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
-[import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
-[import org::ccsl::gen::ocl::element::statement::expression::assignmentOperations /]
-
-[comment statements/controlFlow /]
-[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
-
-[comment java /]
-[import org::ccsl::gen::ocl::java::javaClassOperations /]
-
-
-[template public generatesSelect(element: Element) /]
-[template public generatesExist(element: Element) /]
-
-[comment namedElements/Method /]
-[template public generatesSelect(method: Method)]
-[method.generatesSelectPrivate(method.getMethodMatchingJavaMetaclasses(), 'select') /]
+[template public generatesSelect(element: Element, varname: String)]
+[element.generatesSelectPrivate(varname, element.getMatchingJavaMetaclasses(), 'select') /]
 [/template]
 
-[template public generatesExist(method: Method)]
-[method.generatesSelectPrivate(method.getMethodMatchingJavaMetaclasses(), 'exists') /]
+[template public generatesExist(element: Element, varname: String)]
+[element.generatesSelectPrivate(varname, element.getMatchingJavaMetaclasses(), 'exists') /]
 [/template]
 
-[comment namedElements/Variable /]
-[template public generatesSelect(var: Variable)]
-[var.generatesSelectPrivate(var.getVariableMatchingJavaMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(var: Variable)]
-[var.generatesSelectPrivate(var.getVariableMatchingJavaMetaclasses(), 'exists') /]
-[/template]
-
-
-[comment statements/InstanceCreation /]
-[template public generatesSelect(inst: InstanceCreation)]
-[inst.generatesSelectPrivate(inst.getInstanceCreationMatchingMetaclasses(), 'select') /]
-[/template]
-[template public generatesExist(inst: InstanceCreation)]
-[inst.generatesSelectPrivate(inst.getInstanceCreationMatchingMetaclasses(), 'exists') /]
-[/template]
-
-[comment statements/MethodInvocation /]
-[template public generatesSelect(methodInv: MethodInvocation)]
-[methodInv.generatesSelectPrivate(methodInv.getMethodInvocationMatchingMetaclasses(), 'select') /]
-[/template]
-[template public generatesExist(methodInv: MethodInvocation)]
-[methodInv.generatesSelectPrivate(methodInv.getMethodInvocationMatchingMetaclasses(), 'exists') /]
-[/template]
-
-[comment statements/VariableDeclaration /]
-[template public generatesSelect(varDecl: VarDeclaration)]
-[varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(varDecl: VarDeclaration)]
-[varDecl.generatesSelectPrivate(varDecl.getVariableDeclarationMatchingJavaMetaclasses(), 'exists') /]
-[/template]
-
-[comment statements/expression/Assignment /]
-[template public generatesSelect(assignment: Assignment)]
-[assignment.generatesSelectPrivate(assignment.getAssignmentMathingMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(assignment: Assignment)]
-[assignment.generatesSelectPrivate(assignment.getAssignmentMathingMetaclasses(), 'exists') /]
-[/template]
-
-[comment statements/expression/StringConcatenation /]
-[template public generatesSelect(strConcat: StringConcatenation)]
-[strConcat.generatesSelectPrivate(strConcat.getStringConcatenationMatchingMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(strConcat: StringConcatenation)]
-[strConcat.generatesSelectPrivate(strConcat.getStringConcatenationMatchingMetaclasses(), 'exists') /]
-[/template]
-
-[comment statements/controlFlow /]
-[template public generatesSelect(switch: SwitchStatement)]
-[switch.generatesSelectPrivate(switch.getSwitchStatementMatchingMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(switch: SwitchStatement)]
-[switch.generatesSelectPrivate(switch.getSwitchStatementMatchingMetaclasses(), 'exists') /]
-[/template]
-
-
-[comment java/JavaClass /]
-[template public generatesSelect(javaClass: JavaClass)]
-[javaClass.generatesSelectPrivate(javaClass.getJavaClassMatchingMetaclasses(), 'select') /]
-[/template]
-
-[template public generatesExist(javaClass: JavaClass)]
-[javaClass.generatesSelectPrivate(javaClass.getJavaClassMatchingMetaclasses(), 'exists') /]
-[/template]
-
-[template private generatesSelectPrivate(element: Element, matchingMetaclasses: OrderedSet(String), operator: String)]
-[element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->[operator /]([element.getOclName() /] |
+[template private generatesSelectPrivate(element: Element, varname: String, matchingMetaclasses: OrderedSet(String), operator: String)]
+[element.generatesAllInstancesStatementPrivate(matchingMetaclasses) /]->[operator /]([varname /] |
 [/template]
 
 [template private generatesAllInstancesStatementPrivate(element: Element, matchingJavaMetaclasses: OrderedSet(String))]

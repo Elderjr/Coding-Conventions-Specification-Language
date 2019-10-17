@@ -1,0 +1,51 @@
+[comment encoding = UTF-8 /]
+[module getMatchingJavaMetaclassesDispatcher('http://www.example.org/ccsl')]
+
+[comment variable, vector variable, complextype, literal  /]
+
+[comment element/datatype /]
+[import org::ccsl::gen::ocl::element::datatype::objectTypeOperations /]
+
+[comment element/namedElements /]
+[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
+[import org::ccsl::gen::ocl::java::javaClassOperations /]
+
+[comment statements /]
+[import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
+[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
+
+[comment statements/controlFlow /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
+
+
+[query public getMatchingJavaMetaclasses (element : Element) : OrderedSet(String) =
+--element/datatype
+if element.oclIsTypeOf(ObjectType) then 
+  element.oclAsType(ObjectType).getObjectTypeMatchingMetaclasses()
+--element/namedElements
+else if element.oclIsTypeOf(Method) then
+  element.oclAsType(Method).getMethodMatchingJavaMetaclasses()
+else if element.oclIsTypeOf(ComplexType) then
+  element.oclAsType(ComplexType).getComplexTypeMatchingMetaclasses()
+else if element.oclIsTypeOf(JavaClass) then
+  element.oclAsType(JavaClass).getJavaClassMatchingMetaclasses()
+else if element.oclIsKindOf(Variable) then
+  element.oclAsType(Variable).getVariableMatchingJavaMetaclasses()
+--element/statements
+else if element.oclIsKindOf(LiteralValue) then
+  element.oclAsType(LiteralValue).getLiteralMatchingMetaclasses()
+else if element.oclIsTypeOf(MethodInvocation) then
+  element.oclAsType(MethodInvocation).getMethodInvocationMatchingMetaclasses()
+else if element.oclIsTypeOf(InstanceCreation) then
+  element.oclAsType(InstanceCreation).getInstanceCreationMatchingMetaclasses()
+--element/statements/controlFow
+else if element.oclIsTypeOf(SwitchStatement) then
+  element.oclAsType(SwitchStatement).getSwitchStatementMatchingMetaclasses()
+else
+  OrderedSet(String){'FIX GET MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
+endif endif endif endif endif endif endif endif endif
+/]

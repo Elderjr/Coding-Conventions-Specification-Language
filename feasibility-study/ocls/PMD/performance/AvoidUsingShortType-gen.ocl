@@ -1,0 +1,34 @@
+let violations: Set(ASTNode) = (
+  MethodDeclaration.allInstances()->select(m1 |
+    --Scope Conditions
+    (not m1.originalCompilationUnit.oclIsUndefined())  and
+    (not m1.returnType.oclIsUndefined()) and
+    let primitiveType2: OclAny = m1.returnType.type in (not primitiveType2.oclIsUndefined()) and
+    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
+  )->union(
+    SingleVariableDeclaration.allInstances()->union(VariableDeclarationFragment.allInstances())->select(v1 |
+    --Scope Conditions
+    (not v1.originalCompilationUnit.oclIsUndefined())  and
+    let primitiveType2: OclAny = if v1.oclIsKindOf(FieldDeclaration) then
+      v1.oclAsType(FieldDeclaration).type.type
+    else if v1.oclIsKindOf(SingleVariableDeclaration) then
+      v1.oclAsType(SingleVariableDeclaration).type.type
+    else if v1.oclIsKindOf(VariableDeclarationFragment) then
+      v1.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+    else
+      null
+    endif endif endif in
+    (not primitiveType2.oclIsUndefined())  and
+    (primitiveType2.oclIsKindOf(PrimitiveTypeShort))
+  ))
+) in violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

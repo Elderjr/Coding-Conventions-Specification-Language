@@ -2,28 +2,66 @@
 [module elementOperations('http://www.example.org/ccsl')  /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 
 
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean): OrderedSet(String) = 
 OrderedSet(String){
-  element.generatesConditionForAncestor(varname)
+  element.generatesConditionForAncestor(varname),
+  element.generatesConditionForProperties(varname, element.oclAsType(CodeElement).properties)
 }->select(s | s.trim().size() > 0)
 /]
 
-[template public generatesConditionForAncestor(element: Element, varname: String) ? 
-((not element.eContainer().oclIsUndefined()) and (element.eContainer().oclIsKindOf(Element)) and (not isElementRegistered(element.eContainer().oclAsType(Element))))]
+[query public getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
+OrderedSet(String){
+  element.generatesConditionForAncestor(varname),
+  element.generatesConditionForProperties(varname, element.oclAsType(CodeElement).properties)
+}->select(s | s.trim().size() > 0)
+/]
+
+[comment conditions for the ancestor /]
+[query private isAncestorNotRegistered(element: Element): Boolean = 
+  (not element.eContainer().oclIsUndefined()) and 
+  (element.eContainer().oclIsKindOf(Element)) and 
+  (not isElementRegistered(element.eContainer().oclAsType(Element)))
+/]
+
+[template public generatesConditionForAncestor(element: Element, varname: String) ? (element.isAncestorNotRegistered())]
 [element.generatesMonovaluedFieldConditions(varname, element.eContainer().oclAsType(Element), 'oclContainer()', 'OclAny') /]
 [/template]
 
-
-[template public generatesConditionForProperties(element: CodeElement, varname: String, properties: OrderedSet(Property)) post(trim())]
-[for (property: Property | properties) separator (' and ')]
-[if property.name = 'public'] [varname /].modifier.visibility = java::VisibilityKind::public[elseif property.name = 'private']
-[varname /].modifier.visibility = java::VisibilityKind::private[elseif property.name = 'static']
-[varname /].modifier.static[elseif property.name = 'final']
-[varname /].modifier.inheritance = java::InheritanceKind::final[/if][/for]
+[template public generatesConditionForAncestor(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered())]
+[element.generatesConditionForAncestor(varname) /]
 [/template]
 
+[template public generatesConditionForAncestor(var: Variable, varname: String) ? (var.isAncestorNotRegistered())]
+[var.generatesMonovaluedFieldConditions(varname, var.eContainer().oclAsType(Element), 'oclContainer().oclContainer()', 'OclAny') /]
+[/template]
 
+[template public generatesConditionForAncestor(var: Variable, varname: String, metaclass: String) ? (var.isAncestorNotRegistered())]
+[var.generatesMonovaluedFieldConditions(varname, var.eContainer().oclAsType(Element), 'oclContainer().oclContainer()', 'OclAny') /]
+[/template]
 
+[comment conditions for properties /]
+[template public generatesConditionForProperties(element: Element, varname: String, properties: OrderedSet(Property))  ? (properties->size() > 0)]
+[/template]
+
+[template public generatesConditionForProperties(var: Variable, varname: String, properties: OrderedSet(Property)) ? (properties->size() > 0)]
+let [var.getOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(VariableDeclarationFragment) and 
+ [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
+else if [varname /].oclIsKindOf(VariableDeclarationFragment) and
+ [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
+else if [varname /].oclIsKindOf(SingleVariableDeclaration) then
+  [varname /].oclAsType(SingleVariableDeclaration).modifier
+else
+  null
+endif endif endif in (not [var.getOclName() /]Modifier.oclIsUndefined()) and
+[for (prop: Property | properties) separator(' and ')]
+[if prop.name ='public']
+[var.getOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='static']
+[var.getOclName() /]Modifier.static[elseif prop.name ='final']
+[var.getOclName() /]Modifier.inheritance = InheritanceKind::final[/if][/for]
+[/template]

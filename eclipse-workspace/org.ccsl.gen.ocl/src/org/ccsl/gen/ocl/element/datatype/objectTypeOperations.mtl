@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[module objectTypeOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getObjectTypeMatchingMetaclasses(obj: ObjectType): OrderedSet(String)=
+  OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'ParameterizedType', 'AnonymousClassDeclaration', 'TypeParameter'}
+/]
+
+[query public getObjectTypeConditions(obj: ObjectType, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String){
+  obj.generatesObjectTypeTypecheckConditions(varname, typecheck)
+}->select(s | s.trim().size() > 0)
+/]
+
+[query public getObjectTypeConditions(obj: ObjectType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+OrderedSet(String){
+  obj.generatesObjectTypeTypecheckConditions(varname, typecheck, metaclass)
+}->select(s | s.trim().size() > 0)
+/]
+
+[template private generatesObjectTypeTypecheckConditions(obj: ObjectType, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | obj.getObjectTypeMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template private generatesObjectTypeTypecheckConditions(obj: ObjectType, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname.printKindOfCondition(metaclass) /]
+[/template]

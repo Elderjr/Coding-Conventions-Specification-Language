@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module genericFieldConditionsGenerator('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
@@ -85,8 +85,10 @@ else
 
 [comment Gerar condicoes de atributo multivalorado com acesso direto /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
+[let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
+[if fieldsConditions.isNotEmpty()]
 [element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /] and
-[element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass) /]
+[fieldsConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
 [comment Gerar condicoes de atributo multivalorado com lista de possiveis metaclasses /]
@@ -97,10 +99,11 @@ else
 [/template]
 
 [template public generatesMultivaluedFieldConditions(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
-[for (field: Element | fields) separator(' and ')]
-[if isElementRegistered(field)]
-[letOclName /]->exists([element.getOclName() /][field.getOclName() /] | [element.getOclName() /][field.getOclName() /] = [field.getOclName() /][else]
+[for (field: Element | fields->select(f | not f.isElementRegistered())) separator(' and ')]
 [letOclName /]->exists([field.getOclName() /] | 
-[let fieldCondition: String = field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass)][if fieldCondition.isNotEmpty()]  [fieldCondition.printStringWithIdentation() /][else]  true[/if][/let][/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and
+[let fieldCondition: String = field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass)]
+[if fieldCondition.isNotEmpty()]
+  [fieldCondition.printStringWithIdentation() /][else]
+  true[/if][/let][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and
 [/if][letOclName /]->size() = [fields->size() /][/if]
 [/template]

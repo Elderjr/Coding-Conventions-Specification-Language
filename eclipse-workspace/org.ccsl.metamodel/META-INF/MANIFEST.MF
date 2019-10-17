@@ -36,6 +36,9 @@ Export-Package: ccsl,
  ccsl.java,
  ccsl.java.impl,
  ccsl.java.util,
+ ccsl.nonElements,
+ ccsl.nonElements.impl,
+ ccsl.nonElements.util,
  ccsl.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport

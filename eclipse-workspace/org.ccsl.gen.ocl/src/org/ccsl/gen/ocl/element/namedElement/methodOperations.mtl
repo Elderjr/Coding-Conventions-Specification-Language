@@ -14,18 +14,19 @@ OrderedSet(String){'MethodDeclaration'}
 
 [query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) = 
 let newVarname: String = varname.printVarname(typecheck, 'MethodDeclaration') in
-let conditions: OrderedSet(String) = OrderedSet(String) {
+OrderedSet(String) {
+  method.generatesMethodTypecheckCondition(varname, typecheck),
   method.generatesConditionForReturnType(newVarname),
   method.generatesConditionForParams(newVarname)
 }->addAll(method.getNamedElementConditions(newVarname, false))
-->select(s | s.trim().size() > 0) in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition('MethodDeclaration')}->addAll(conditions)
-else
-  conditions
-endif
+->select(s | s.trim().size() > 0)
 /]
 
+
+[template public generatesMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | method.getMethodMatchingJavaMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
 
 [template public generatesConditionForReturnType(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
 (not [varname /].returnType.oclIsUndefined()) and

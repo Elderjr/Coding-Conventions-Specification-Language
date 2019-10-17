@@ -1,9 +1,11 @@
 [comment encoding = UTF-8 /]
 [module constructorOperations('http://www.example.org/ccsl')]
 
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
+
 
 [query public getConstructorMatchingJavaMetaclasses(constructor: Constructor): OrderedSet(String)= 
 OrderedSet(String){'ConstructorDeclaration'}

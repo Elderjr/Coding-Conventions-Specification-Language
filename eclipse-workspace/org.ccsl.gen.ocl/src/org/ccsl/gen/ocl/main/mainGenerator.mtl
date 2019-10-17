@@ -1,33 +1,43 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
-[import org::ccsl::gen::ocl::filters::filterConditionsGeneratorDispatcher /]
-[import org::ccsl::gen::ocl::element::elementConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::selectGenerator /]
-
-
 
 [template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
 [file ('gen', false, 'UTF-8')]
-[rule.generatesOcl() /]
+let violations: Set(ASTNode) = [rule.generatesOcl() /] in
+violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))
 [/file]
 [/template]
 
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesScopeConditions(rule: AtomicRule) post(trim())]
-[let scopeConditions: String = rule.scope.generatesConditions(rule.scope.getOclName())]
-(not [rule.scope.getOclName() /].originalCompilationUnit.oclIsUndefined())[if scopeConditions.isNotEmpty()] and
+[let scopeConditions: String = rule.violator.generatesConditions(rule.violator.getOclName(), false)]
+(not [rule.violator.getOclName() /].originalCompilationUnit.oclIsUndefined())[if scopeConditions.isNotEmpty()] and
 [/if][scopeConditions /][/let]
 [/template]
 
 [template private generatesRemainingElementsConditions(rule: AtomicRule) post(trim())]
-[for(element: Element | rule.auxiliaryElements->select(e | not e.isElementRegistered())) separator( 'and\n')]
-[element.generatesExist() /]
-[let elementConditions: String = element.generatesConditions(element.getOclName())]
+[for(element: Element | rule.ruleElements->select(e | not e.isElementRegistered())) separator( 'and\n')]
+[element.generatesExist(element.getOclName()) /]
+[let elementConditions: String = element.generatesConditions(element.getOclName(), false)]
 (not [element.getOclName() /].originalCompilationUnit.oclIsUndefined())[if elementConditions.isNotEmpty()] and
 [/if][elementConditions /][/let][/for]
 [/template]
@@ -42,7 +52,7 @@
 [rule.clearAllContexts() /][let scopeConditions: String = rule.generatesScopeConditions()]
 [let remainingElementsConditions: String = rule.generatesRemainingElementsConditions()]
 [let filtersConditions: String = rule.generatesFiltersConditions()]
-[rule.scope.generatesSelect() /]
+[rule.violator.generatesSelect(rule.violator.getOclName()) /]
 [for(conditions: String | OrderedSet(String){scopeConditions, remainingElementsConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( ' and\n')]
   --[if conditions = scopeConditions]Scope Conditions[elseif conditions = remainingElementsConditions]Remaining Elements Conditions[else]Filters Conditions[/if]
   [conditions.printStringWithIdentation() /][/for]

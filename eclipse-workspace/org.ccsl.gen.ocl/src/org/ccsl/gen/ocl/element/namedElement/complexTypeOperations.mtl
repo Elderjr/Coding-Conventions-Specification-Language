@@ -7,7 +7,7 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
-  OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration'}
+  OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
 /]
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String) {
@@ -33,7 +33,8 @@ OrderedSet(String) {
 /]
 
 [template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
-([varname.printKindOfCondition('ClassDeclaration') /] or [varname.printKindOfCondition('InterfaceDeclaration') /])
+([for (metaclass: String | complexType.getComplexTypeMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
 [template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
