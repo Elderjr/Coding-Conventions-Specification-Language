@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module arrayTypeOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+
+[query public getArrayTypeMatchingMetaclasses(arrayType: ArrayType): OrderedSet(String)=
+  OrderedSet(String){'ArrayType'}
+/]
+
+[query public getArrayTypeConditions(arrayType: ArrayType, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'ArrayType') in
+OrderedSet(String) {
+  arrayType.generatesArraTypeTypecheckCondition(varname, typecheck),
+  arrayType.generatesConditionsForType(newVarname)
+}->select(cond: String | cond.isNotEmpty())
+/]
+
+[template public generatesArraTypeTypecheckCondition(parameterizedType: ArrayType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayType)
+[/template]
+
+[template public generatesConditionsForType(arrayType: ArrayType, varname: String) ? (not arrayType.type.oclIsUndefined())]
+[arrayType.generatesMonovaluedFieldConditions(varname, arrayType.type, 'elementType.type', 'ASTNode') /]
+[/template]

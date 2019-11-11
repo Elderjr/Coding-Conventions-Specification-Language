@@ -1,40 +1,22 @@
-let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+let violations: Set(ASTNode) = Block.allInstances()->select(block1 |
   --Scope Conditions
-  (not mInv1.originalCompilationUnit.oclIsUndefined()) and
-  let m2: OclAny = if mInv1.oclIsKindOf(MethodInvocation) then
-    mInv1.oclAsType(MethodInvocation).method
-  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-    mInv1.oclAsType(ClassInstanceCreation).method
-  else
-    null
-  endif endif in (not m2.oclIsUndefined())  and
-  (m2.oclIsKindOf(MethodDeclaration)) and
-  let c3: OclAny = m2.oclAsType(MethodDeclaration).oclContainer() in (not c3.oclIsUndefined()) and
-  c3.oclIsKindOf(ClassDeclaration) and
-  c3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-    fullName.concat(p.name).concat('.')
-  ).concat(c3.oclAsType(ClassDeclaration).name) = 'java.lang.String' and
-  let mInv1Args: OrderedSet(OclAny) = if mInv1.oclIsKindOf(MethodInvocation) then
-    mInv1.oclAsType(MethodInvocation).arguments
-  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
-    mInv1.oclAsType(ClassInstanceCreation).arguments
-  else
-    null
-  endif endif in (not mInv1Args->oclIsUndefined())  and
-  mInv1Args->exists(lit4 | 
-    (lit4.oclIsKindOf(StringLiteral)) and
-  --Filters Conditions
-  m2.oclAsType(NamedElement).name.matches('(indexOf|lastIndexOf)') and
-  lit4.oclAsType(StringLiteral).escapedValue.matches('"."')
-)) in
+  let ifStatement2: OclAny = block1.oclContainer() in (not ifStatement2.oclIsUndefined()) and
+  ifStatement2.oclIsKindOf(IfStatement) and
+  ifStatement2.oclAsType(IfStatement).elseStatement = block1
+)
+->reject(node | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) 
+->select(node: ASTNode | not node.originalCompilationUnit.oclIsUndefined()) in
 violations->collect(node: ASTNode | 
 	let container: NamedElement = node->asOrderedSet()->closure(x |
-		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+        if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
 		  x
 		else
 		  x.oclContainer()
 	    endif
-	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
-)->asSequence()
+	)->last() in if (not container.oclIsUndefined()) and (not container.originalCompilationUnit.oclIsUndefined()) then
+      'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+    else
+      ''
+    endif
+)->asSequence()->select(violation | violation.size() > 0)
 ->append('#violations: '.concat(violations->size().toString()))
-->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

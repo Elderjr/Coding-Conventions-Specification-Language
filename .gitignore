@@ -9,4 +9,5 @@
 eclipse-workspace/org.ccsl.gen.ocl/.classpath
 /eclipse-workspace/.metadata/
 /eclipse-workspace/sampleProject/
+/eclipse-workspace/org.eclipse.*/
 /old/

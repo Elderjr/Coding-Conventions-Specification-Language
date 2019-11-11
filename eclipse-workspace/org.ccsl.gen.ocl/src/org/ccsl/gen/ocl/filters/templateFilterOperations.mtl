@@ -1,0 +1,9 @@
+[comment encoding = UTF-8 /]
+[module templateFilterOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+
+
+[template public generatesTemplateFilterConditions(templ: TemplateFilter, target: Element)]
+[templ.subject.generatesConditions(target.getOclName(), true) /]
+[/template]

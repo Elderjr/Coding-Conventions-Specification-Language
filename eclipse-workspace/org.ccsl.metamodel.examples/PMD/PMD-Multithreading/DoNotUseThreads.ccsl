@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@ruleElements.1">
+  <ruleElements xsi:type="namedElements:ComplexType"/>
+  <ruleElements xsi:type="statements:DataTypeAccess" elementAccessed="//@ruleElements.0"/>
+  <filters xsi:type="filters:RegexMatch" targets="//@ruleElements.0" regex="java\\.lang\\.(Thread|Runnable)"/>
+  <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@ruleElements.1" subject="//@filters.1/@templateElements.0/@from">
+    <templateElements xsi:type="statements:MethodInvocation">
+      <from xsi:type="statements:DataTypeAccess"/>
+    </templateElements>
+  </filters>
+</ccsl:AtomicRule>

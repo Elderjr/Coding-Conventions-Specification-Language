@@ -1,0 +1,21 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->union(ConstructorDeclaration.allInstances())->select(m1 |
+  --Scope Conditions
+  (not m1.originalCompilationUnit.oclIsUndefined()) and
+  let m1Modifier: Modifier = if m1.oclIsKindOf(BodyDeclaration) then
+    m1.oclAsType(BodyDeclaration).modifier
+  else
+    null
+  endif in (not m1Modifier.oclIsUndefined()) and
+  m1Modifier.synchronized
+) in
+violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

@@ -14,28 +14,30 @@
 let violations: Set(ASTNode) = [rule.generatesOcl() /] in
 violations->collect(node: ASTNode | 
 	let container: NamedElement = node->asOrderedSet()->closure(x |
-		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+        if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
 		  x
 		else
 		  x.oclContainer()
 	    endif
-	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
-)->asSequence()
+	)->last() in if (not container.oclIsUndefined()) and (not container.originalCompilationUnit.oclIsUndefined()) then
+      'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+    else
+      ''
+    endif
+)->asSequence()->select(violation | violation.size() > 0)
 ->append('#violations: '.concat(violations->size().toString()))
-->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))
 [/file]
 [/template]
 
 [template private generatesOcl(rule: Rule) /]
 
 [template private generatesScopeConditions(rule: AtomicRule) post(trim())]
-[let scopeConditions: String = rule.violator.generatesConditions(rule.violator.getOclName(), false)]
-(not [rule.violator.getOclName() /].originalCompilationUnit.oclIsUndefined())[if scopeConditions.isNotEmpty()] and
-[/if][scopeConditions /][/let]
+[let scopeConditions: String = rule.subject.generatesConditions(rule.subject.getOclName(), false)]
+[scopeConditions /][/let]
 [/template]
 
 [template private generatesRemainingElementsConditions(rule: AtomicRule) post(trim())]
-[for(element: Element | rule.ruleElements->select(e | not e.isElementRegistered())) separator( 'and\n')]
+[for(element: Element | rule.ruleElements->select(e | not getElementsWithId()->includes(e))) separator( 'and\n')]
 [element.generatesExist(element.getOclName()) /]
 [let elementConditions: String = element.generatesConditions(element.getOclName(), false)]
 (not [element.getOclName() /].originalCompilationUnit.oclIsUndefined())[if elementConditions.isNotEmpty()] and
@@ -52,7 +54,7 @@ violations->collect(node: ASTNode |
 [rule.clearAllContexts() /][let scopeConditions: String = rule.generatesScopeConditions()]
 [let remainingElementsConditions: String = rule.generatesRemainingElementsConditions()]
 [let filtersConditions: String = rule.generatesFiltersConditions()]
-[rule.violator.generatesSelect(rule.violator.getOclName()) /]
+[rule.subject.generatesSelect(rule.subject.getOclName()) /]
 [for(conditions: String | OrderedSet(String){scopeConditions, remainingElementsConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( ' and\n')]
   --[if conditions = scopeConditions]Scope Conditions[elseif conditions = remainingElementsConditions]Remaining Elements Conditions[else]Filters Conditions[/if]
   [conditions.printStringWithIdentation() /][/for]
@@ -64,8 +66,34 @@ violations->collect(node: ASTNode |
     filtersConditions.countMatches('->exists') - filtersConditions.countMatches('--NOT_COUNT')
   )
 })])[/for][/let][/let][/let])
+->reject(node | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) 
+[rule.generatesIteratorToSelectContext(rule.subject) /]
 [/template]
 
+[template private generatesIteratorToSelectContext(rule: AtomicRule, subject: Element)]
+->select(node: ASTNode | not node.originalCompilationUnit.oclIsUndefined())
+[/template]
+[template private generatesIteratorToSelectContext(rule: AtomicRule, subject: DataTypeAccess)]
+->iterate(typeAccess: TypeAccess; acc: OrderedSet(ASTNode) = OrderedSet(ASTNode){} |
+  if typeAccess.oclContainer().oclIsKindOf(ASTNode) and (not typeAccess.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined()) then
+    acc->append(typeAccess.oclContainer())
+  else if typeAccess.oclContainer().oclIsKindOf(Type) and typeAccess.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
+    acc->append(
+      typeAccess.oclContainer().oclAsType(Type).usagesInTypeAccess->closure(accessRec: TypeAccess |
+        if accessRec.oclContainer().oclIsKindOf(Type) and accessRec.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
+          accessRec.oclContainer().oclAsType(Type).usagesInTypeAccess
+        else if accessRec.oclContainer().oclIsKindOf(AbstractVariablesContainer) or accessRec.oclContainer().oclIsKindOf(ClassInstanceCreation) or accessRec.oclContainer().oclIsKindOf(ArrayCreation) then
+          accessRec.oclContainer()
+        else
+          null
+        endif endif
+      )->select(x | x <> null and not x.oclIsKindOf(TypeAccess))
+    )->flatten()
+  else
+    acc
+  endif endif
+)
+[/template]
 [template private generatesOcl(compositeRule: CompositeRule)]
 (
 [for (rule: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]

@@ -15,8 +15,7 @@ OrderedSet(String){'ConstructorDeclaration'}
 [query public getConstructorConditions(constructor: Constructor, varname: String, typecheck: Boolean): OrderedSet(String) = 
 let newVarname: String = varname.printVarname(typecheck, 'ConstructorDeclaration') in
 let conditions: OrderedSet(String) = OrderedSet(String) {
-  constructor.generatesConstructorTypecheckCondition(varname, typecheck),
-  constructor.generatesConditionForParams(newVarname)
+  constructor.generatesConstructorTypecheckCondition(varname, typecheck)
 }->addAll(constructor.getElementConditions(varname, false))
 ->select(s | s.trim().size() > 0) in
 if typecheck then

@@ -1,0 +1,27 @@
+[comment encoding = UTF-8 /]
+[module parameterizedTypeOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+
+[query public getParameterizedTypeMatchingMetaclasses(parameterizedType: ParameterizedType): OrderedSet(String)=
+  OrderedSet(String){'ParameterizedType'}
+/]
+
+[query public getParameterizedTypeConditions(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'ParameterizedType') in
+OrderedSet(String) {
+  parameterizedType.generatesParameterizedType(varname, typecheck),
+  parameterizedType.generatesConditionsForTypeParameters(varname)
+}->select(cond: String | cond.isNotEmpty())
+/]
+
+[template public generatesParameterizedType(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ParameterizedType)
+[/template]
+
+[template public generatesConditionsForTypeParameters(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
+let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
+[parameterizedType.generatesMultivaluedFieldConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
+[/template]

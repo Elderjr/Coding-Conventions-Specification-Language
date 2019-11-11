@@ -16,17 +16,34 @@
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: ComplexType)]
 let [target.getOclName() /]Package: Package = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
   [target.getOclName() /].oclAsType(ClassDeclaration).package
-else
+else if [target.getOclName() /].oclIsKindOf(InterfaceDeclaration) then
   [target.getOclName() /].oclAsType(InterfaceDeclaration).package
-endif in [target.getOclName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+else
+  null
+endif endif in (not [target.getOclName() /]Package.oclIsUndefined()) and
+[target.getOclName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
 ).concat([target.getOclName() /].oclAsType(NamedElement).name).matches('[regexFilter.regex /]') 
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JavaClass)]
-[target.getOclName() /].oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+let className: String = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getOclName() /].oclAsType(ClassDeclaration).name
+else if [target.getOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
+  [target.getOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+else
+  null
+endif endif in (not className.oclIsUndefined()) and
+let classPackage: Package = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getOclName() /].oclAsType(ClassDeclaration).package
+else if [target.getOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
+  [target.getOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+else
+  null
+endif endif in (not className.oclIsUndefined()) and
+classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([target.getOclName() /].oclAsType(NamedElement).name).matches('[regexFilter.regex /]')
+).concat(className).matches('[regexFilter.regex /]')
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() > 1)]

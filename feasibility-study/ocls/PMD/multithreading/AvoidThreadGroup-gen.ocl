@@ -1,0 +1,42 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(ClassInstanceCreation.allInstances())->select(mInv1 |
+  --Scope Conditions
+  (not mInv1.originalCompilationUnit.oclIsUndefined()) and
+  let m2: ASTNode = if mInv1.oclIsKindOf(MethodInvocation) then
+    mInv1.oclAsType(MethodInvocation).method
+  else if mInv1.oclIsKindOf(ClassInstanceCreation) then
+    mInv1.oclAsType(ClassInstanceCreation).method
+  else
+    null
+  endif endif in (not m2.oclIsUndefined())  and
+  (m2.oclIsKindOf(MethodDeclaration) or m2.oclIsKindOf(ConstructorDeclaration)) and
+  let c3: OclAny = m2.oclContainer() in (not c3.oclIsUndefined()) and
+  (c3.oclIsKindOf(ClassDeclaration) or c3.oclIsKindOf(AnonymousClassDeclaration)) and
+  let className: String = if c3.oclIsKindOf(ClassDeclaration) then
+    c3.oclAsType(ClassDeclaration).name
+  else if c3.oclIsKindOf(AnonymousClassDeclaration) then
+    c3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if c3.oclIsKindOf(ClassDeclaration) then
+    c3.oclAsType(ClassDeclaration).package
+  else if c3.oclIsKindOf(AnonymousClassDeclaration) then
+    c3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className) = 'java.lang.ThreadGroup'
+) in
+violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

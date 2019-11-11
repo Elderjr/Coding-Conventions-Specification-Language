@@ -21,7 +21,7 @@ import junit.framework.Test;
 import org.apache.commons.collections4.BulkTest;
 
 /**
- * Unit tests.
+ * Unit tests
  * {@link StaticBucketMap}.
  *
  */

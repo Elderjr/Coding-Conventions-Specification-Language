@@ -45,9 +45,25 @@ OrderedSet(String){
 
 [comment conditions for properties /]
 [template public generatesConditionForProperties(element: Element, varname: String, properties: OrderedSet(Property))  ? (properties->size() > 0)]
+[element.generatesGetModifierLetStatement(varname, properties) /] and
+[for (prop: Property | properties) separator(' and ')]
+[if prop.name ='public']
+[element.getOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='final']
+[element.getOclName() /]Modifier.inheritance = InheritanceKind::final[elseif prop.name ='synchronized']
+[element.getOclName() /]Modifier.synchronized[elseif prop.name ='volatile']
+[element.getOclName() /]Modifier.volatile[elseif prop.name ='static']
+[element.getOclName() /]Modifier.static[/if][/for]
 [/template]
 
-[template public generatesConditionForProperties(var: Variable, varname: String, properties: OrderedSet(Property)) ? (properties->size() > 0)]
+[template private generatesGetModifierLetStatement(element: Element, varname: String, properties: OrderedSet(Property))]
+let [element.getOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(BodyDeclaration) then
+  [varname /].oclAsType(BodyDeclaration).modifier
+else
+  null
+endif in (not [element.getOclName() /]Modifier.oclIsUndefined())
+[/template]
+
+[template private generatesGetModifierLetStatement(var: Variable, varname: String, properties: OrderedSet(Property))]
 let [var.getOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(VariableDeclarationFragment) and 
  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
   [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
@@ -58,10 +74,5 @@ else if [varname /].oclIsKindOf(SingleVariableDeclaration) then
   [varname /].oclAsType(SingleVariableDeclaration).modifier
 else
   null
-endif endif endif in (not [var.getOclName() /]Modifier.oclIsUndefined()) and
-[for (prop: Property | properties) separator(' and ')]
-[if prop.name ='public']
-[var.getOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='static']
-[var.getOclName() /]Modifier.static[elseif prop.name ='final']
-[var.getOclName() /]Modifier.inheritance = InheritanceKind::final[/if][/for]
+endif endif endif in (not [var.getOclName() /]Modifier.oclIsUndefined())
 [/template]

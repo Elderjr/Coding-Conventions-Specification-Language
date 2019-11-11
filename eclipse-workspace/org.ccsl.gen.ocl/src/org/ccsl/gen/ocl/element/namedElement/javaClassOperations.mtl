@@ -1,0 +1,52 @@
+[comment encoding = UTF-8 /]
+[module javaClassOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+
+[query public getJavaClassMatchingMetaclasses(javaClass: JavaClass): OrderedSet(String)=
+  OrderedSet(String){'ClassDeclaration', 'AnonymousClassDeclaration'}
+/]
+
+[query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  javaClass.generatesClassTypecheckCondition(varname, typecheck),
+  javaClass.generatesConditionsForImplements(varname)
+}->select(cond | cond.isNotEmpty())
+->addAll(javaClass.getComplexTypeConditions(varname, typecheck))
+/]
+
+[query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+OrderedSet(String) {
+  javaClass.generatesClassTypecheckCondition(varname, typecheck, metaclass),
+  javaClass.generatesConditionsForImplements(varname)
+}->select(cond | cond.isNotEmpty())
+->addAll(javaClass.getComplexTypeConditions(varname, typecheck, metaclass))
+/]
+
+[template public generatesClassTypecheckCondition(class: JavaClass, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | class.getJavaClassMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template public generatesClassTypecheckCondition(class: JavaClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname.printKindOfCondition(metaclass) /]
+[/template]
+
+[template public generatesConditionsForImplements(class: JavaClass, varname: String) ? (class.implements->size() > 0)]
+let interfacesImplemented: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(ClassDeclaration) then
+  [varname /].oclAsType(ClassDeclaration).superInterfaces->collect(type)->asOrderedSet()
+else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
+  if [varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclIsKindOf(InterfaceDeclaration) then
+    OrderedSet(ASTNode){[varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type}
+  else if [varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclIsKindOf(ParameterizedType) then
+    OrderedSet(ASTNode){[varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(ParameterizedType).type.type}
+  else
+    null
+  endif endif
+else
+  null
+endif endif in (not interfacesImplemented->oclIsUndefined()) and
+[class.generatesMultivaluedFieldConditions('interfacesImplemented', class.implements, 'ASTNode') /]
+[/template]

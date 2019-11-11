@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module interfaceOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
+
+[query public getInterfaceMatchingMetaclasses(interface: JavaInterface): OrderedSet(String)=
+  OrderedSet(String){'InterfaceDeclaration'}
+/]
+
+[query public getInterfaceConditions(interface: JavaInterface, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  interface.generatesClassTypecheckCondition(varname, typecheck)
+}->select(cond | cond.isNotEmpty())
+->addAll(interface.getComplexTypeConditions(varname, typecheck))
+/]
+
+[template public generatesClassTypecheckCondition(interface: JavaInterface, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | interface.getInterfaceMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]

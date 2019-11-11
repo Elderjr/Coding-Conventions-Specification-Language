@@ -4,6 +4,7 @@
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
@@ -12,6 +13,7 @@
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String) {
+  methodInv.generatesMethodInvocationTypecheckConditions(varname, typecheck),
   methodInv.generatesConditionForTo(varname),
   methodInv.generatesConditionForArgs(varname),
   methodInv.generatesConditionForFrom(varname)
@@ -21,33 +23,36 @@ OrderedSet(String) {
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let newVarname: String = varname.printVarname(typecheck, metaclass) in
-let conditions: OrderedSet(String) = OrderedSet(String) {
+OrderedSet(String) {
+  methodInv.generatesMethodInvocationTypecheckConditions(varname, typecheck, metaclass),
   methodInv.generatesConditionForTo(newVarname, metaclass),
   methodInv.generatesConditionForFrom(newVarname, metaclass),
   methodInv.generatesConditionForArgs(newVarname, metaclass)
-}
-->select(s | s.trim().size() > 0)
-in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition(metaclass)}->addAll(conditions)
-else
-  conditions
-endif
+}->select(s | s.trim().size() > 0)
 /]
 
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (not methodInv.elementAccessed.oclIsUndefined())]
+[template public generatesMethodInvocationTypecheckConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | methodInv.getMethodInvocationMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template public generatesMethodInvocationTypecheckConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname.printKindOfCondition(metaclass) /]
+[/template]
+
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (not methodInv.elementAccessed.oclIsUndefined() and getElementsWithId()->includes(methodInv.elementAccessed))]
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.elementAccessed.oclIsUndefined())]
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.elementAccessed.oclIsUndefined() and getElementsWithId()->includes(methodInv.elementAccessed))]
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.from.oclIsUndefined())]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.from.oclIsUndefined() and getElementsWithId()->includes(methodInv.from))]
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny') /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (not methodInv.from.oclIsUndefined())]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (not methodInv.from.oclIsUndefined() and getElementsWithId()->includes(methodInv.from))]
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 

@@ -1,5 +1,6 @@
 [comment encoding = UTF-8 /]
 [module instanceCreationOperations('http://www.example.org/ccsl')]
+
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
@@ -20,7 +21,7 @@ else
 endif in
 let conditions: OrderedSet(String) = OrderedSet(String) {
   inst.generatesConditionsForType(varname)
-}->addAll(inst.getMethodInvocationConditions(newVarname, false, 'InstanceCreation'))
+}
 ->select(s | s.isNotEmpty()) in
 if typecheck then
   OrderedSet(String){varname.printKindOfCondition('InstanceCreation')}->addAll(conditions)

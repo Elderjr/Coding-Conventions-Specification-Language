@@ -1,0 +1,32 @@
+[comment encoding = UTF-8 /]
+[module arrayCreationOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+
+
+[query public getArrayCreationMatchingMetaclasses(inst: ArrayCreation): OrderedSet(String)=
+  OrderedSet(String){'ArrayCreation'}
+/]
+
+[query public getArrayCreationConditions(inst: ArrayCreation, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'ArrayCreation') in
+OrderedSet(String) {
+  inst.generatesArrayCreationTypecheckCondition(varname, typecheck),
+  inst.generatesConditionsForType(newVarname)
+}->select(cond | cond.isNotEmpty())
+/]
+
+[template private generatesArrayCreationTypecheckCondition(inst: ArrayCreation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayCreation)
+[/template]
+
+[template private generatesConditionsForType(inst: ArrayCreation, varname: String) ? (not inst.type.oclIsUndefined())]
+let [inst.type.getOclName() /]: ASTNode = [varname /].type.type in
+[inst.type.generatesConditions(inst.type.getOclName(), true) /]
+[/template]
+

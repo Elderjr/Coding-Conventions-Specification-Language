@@ -5,6 +5,7 @@
 [import org::ccsl::gen::ocl::filters::definesMethodFilterOperations /]
 [import org::ccsl::gen::ocl::filters::typedStatementFilterOperations /]
 [import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
+[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -56,4 +57,8 @@ not (
 
 [template public generatesSpecificFilterConditions(casesCounter: SwitchCaseStatementCount, target: Element)]
 [casesCounter.generatesSwitchStatementCaseCounterFilterConditions(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(templFilter: TemplateFilter, target: Element)]
+[templFilter.generatesTemplateFilterConditions(target) /]
 [/template]

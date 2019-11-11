@@ -1,0 +1,55 @@
+let violations: Set(ASTNode) = TypeAccess.allInstances()->select(element1 |
+  --Scope Conditions
+  let complexType2: ASTNode = element1.type in (not complexType2.oclIsUndefined()) and
+  (complexType2.oclIsKindOf(ClassDeclaration) or complexType2.oclIsKindOf(InterfaceDeclaration) or complexType2.oclIsKindOf(AnonymousClassDeclaration)) and
+  --Filters Conditions
+  let complexType2Package: Package = if complexType2.oclIsKindOf(ClassDeclaration) then
+    complexType2.oclAsType(ClassDeclaration).package
+  else if complexType2.oclIsKindOf(InterfaceDeclaration) then
+    complexType2.oclAsType(InterfaceDeclaration).package
+  else
+    null
+  endif endif in (not complexType2Package.oclIsUndefined()) and
+  complexType2Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(complexType2.oclAsType(NamedElement).name).matches('java\\.lang\\.(Thread|Runnable)')  and
+  not (
+    element1.oclIsKindOf(TypeAccess) and
+    let methodInv3: OclAny = element1.oclContainer() in (not methodInv3.oclIsUndefined()) and
+    (methodInv3.oclIsKindOf(MethodInvocation) or methodInv3.oclIsKindOf(ClassInstanceCreation))
+  )
+)
+->reject(node | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) 
+->iterate(typeAccess: TypeAccess; acc: OrderedSet(ASTNode) = OrderedSet(ASTNode){} |
+  if typeAccess.oclContainer().oclIsKindOf(ASTNode) and (not typeAccess.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined()) then
+    acc->append(typeAccess.oclContainer())
+  else if typeAccess.oclContainer().oclIsKindOf(Type) and typeAccess.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
+    acc->append(
+      typeAccess.oclContainer().oclAsType(Type).usagesInTypeAccess->closure(accessRec: TypeAccess |
+        if accessRec.oclContainer().oclIsKindOf(Type) and accessRec.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
+          accessRec.oclContainer().oclAsType(Type).usagesInTypeAccess
+        else if accessRec.oclContainer().oclIsKindOf(AbstractVariablesContainer) or accessRec.oclContainer().oclIsKindOf(ClassInstanceCreation) or accessRec.oclContainer().oclIsKindOf(ArrayCreation) then
+          accessRec.oclContainer()
+        else
+          null
+        endif endif
+      )->select(x | x <> null and not x.oclIsKindOf(TypeAccess))
+    )->flatten()
+  else
+    acc
+  endif endif
+) in
+violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+        if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in if (not container.oclIsUndefined()) and (not container.originalCompilationUnit.oclIsUndefined()) then
+      'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+    else
+      ''
+    endif
+)->asSequence()->select(violation | violation.size() > 0)
+->append('#violations: '.concat(violations->size().toString()))

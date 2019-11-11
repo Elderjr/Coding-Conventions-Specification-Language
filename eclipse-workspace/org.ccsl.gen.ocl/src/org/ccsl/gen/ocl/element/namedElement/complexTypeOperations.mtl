@@ -4,16 +4,19 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
   OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
 /]
+
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String) {
   complexType.generatesComplexTypeTypecheckCondition(varname, typecheck),
   complexType.generatesConditionForFields(varname),
-  complexType.generatesConditionForMethods(varname)
+  complexType.generatesConditionForMethods(varname),
+  complexType.generatesConditionForSuperTypes(varname)
 }->addAll(complexType.getNamedElementConditions(varname, typecheck))
 ->select(s | s.trim().size() > 0)
 /]
@@ -27,8 +30,9 @@ endif in
 OrderedSet(String) {
   complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, metaclass),
   complexType.generatesConditionForFields(newVarname, metaclass),
-  complexType.generatesConditionForMethods(newVarname, metaclass)
-}->addAll(complexType.getNamedElementConditions(newVarname, false))
+  complexType.generatesConditionForMethods(newVarname, metaclass),
+  complexType.generatesConditionForSuperTypes(varname)
+}->addAll(complexType.getNamedElementConditions(newVarname, false, metaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
@@ -55,4 +59,16 @@ OrderedSet(String) {
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String) ? (complexType.methods->size() > 0)]
 [complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, complexType.getOclName().concat('Methods'), 'bodyDeclarations', 'OclAny') /]
+[/template]
+
+[template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String) ? (complexType.superTypes->size() > 0 and complexType.oclIsTypeOf(JavaClass))]
+let superType: ASTNode = if [varname /].oclIsKindOf(ClassDeclaration) then
+  [varname /].oclAsType(ClassDeclaration).superClass.type
+else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
+  [varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type
+else
+  null
+endif endif in (not superType.oclIsUndefined()) and
+let [complexType.superTypes->first().getOclName() /]: ASTNode = superType in
+[complexType.superTypes->first().generatesConditions(complexType.superTypes->first().getOclName(), true, 'ClassDeclaration') /]
 [/template]

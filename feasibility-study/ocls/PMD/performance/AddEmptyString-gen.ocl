@@ -1,0 +1,15 @@
+let violations: Set(ASTNode) = InfixExpression.allInstances()->select(e1 |
+  e1.leftOperand->asOrderedSet()->append(e1.rightOperand)->union(e1.extendedOperands)->exists(e2 | e2 <> e1 and 
+    (e2.oclIsKindOf(StringLiteral) and e2.oclAsType(StringLiteral).escapedValue='""')  
+)) in
+violations->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+		if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in 'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+)->asSequence()
+->append('#violations: '.concat(violations->size().toString()))
+->append('#files: '.concat(violations.originalCompilationUnit.originalFilePath->asOrderedSet()->size().toString()))

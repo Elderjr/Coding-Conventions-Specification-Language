@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@ruleElements.1">
+  <ruleElements xsi:type="java:JavaClass" name="java.lang.ThreadGroup">
+    <methods/>
+  </ruleElements>
+  <ruleElements xsi:type="statements:MethodInvocation" elementAccessed="//@ruleElements.0/@methods.0"/>
+</ccsl:AtomicRule>

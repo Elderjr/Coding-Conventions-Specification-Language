@@ -8,17 +8,16 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
-OrderedSet(String){'MethodDeclaration'}
+OrderedSet(String){'MethodDeclaration', 'ConstructorDeclaration'}
 /]
 
 
 [query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) = 
-let newVarname: String = varname.printVarname(typecheck, 'MethodDeclaration') in
 OrderedSet(String) {
   method.generatesMethodTypecheckCondition(varname, typecheck),
-  method.generatesConditionForReturnType(newVarname),
-  method.generatesConditionForParams(newVarname)
-}->addAll(method.getNamedElementConditions(newVarname, false))
+  method.generatesConditionForReturnType(varname),
+  method.generatesConditionForParams(varname, typecheck)
+}->addAll(method.getNamedElementConditions(varname, typecheck))
 ->select(s | s.trim().size() > 0)
 /]
 
@@ -33,6 +32,8 @@ OrderedSet(String) {
 [method.generatesMonovaluedFieldConditions(varname, method.returnType, 'returnType.type', 'OclAny') /]
 [/template]
 
-[template public generatesConditionForParams(method: Method, varname: String) ? (method.isSet('params'))]
-[method.generatesMultivaluedFieldConditions(varname, method.params, method.getOclName().concat('params'), 'parameters', 'SingleVariableDeclaration') /]
+[template public generatesConditionForParams(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
+[if typecheck]
+[method.generatesMultivaluedFieldConditions(varname, method.params, method.getMethodMatchingJavaMetaclasses(), method.getOclName().concat('Params'), 'parameters', 'SingleVariableDeclaration') /][else]
+[method.generatesMultivaluedFieldConditions(varname, method.params, method.getOclName().concat('Params'), 'parameters', 'SingleVariableDeclaration') /][/if]
 [/template]

@@ -3,23 +3,31 @@
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 
 [template public getOclName(element : Element)]
-e[element.getId() /]
+element[element.getId() /]
 [/template]
 
 [template public getOclName(element : ComplexType)]
-c[element.getId() /]
+complexType[element.getId() /]
+[/template]
+
+[template public getOclName(element : JavaClass)]
+javaClass[element.getId() /]
+[/template]
+
+[template public getOclName(element : JavaInterface)]
+javaInterface[element.getId() /]
 [/template]
 
 [template public getOclName(element : Variable)]
-v[element.getId() /]
+var[element.getId() /]
 [/template]
 
 [template public getOclName(element : Method)]
-m[element.getId() /]
+method[element.getId() /]
 [/template]
 
 [template public getOclName(element : MethodInvocation)]
-mInv[element.getId() /]
+methodInv[element.getId() /]
 [/template]
 
 [template public getOclName(element : PrimitiveType)]
@@ -36,4 +44,12 @@ varDecl[element.getId() /]
 
 [template public getOclName(element : StringConcatenation)]
 strConcat[element.getId() /]
+[/template]
+
+[template public getOclName(element : Block)]
+block[element.getId() /]
+[/template]
+
+[template public getOclName(element : IfStatement)]
+ifStatement[element.getId() /]
 [/template]

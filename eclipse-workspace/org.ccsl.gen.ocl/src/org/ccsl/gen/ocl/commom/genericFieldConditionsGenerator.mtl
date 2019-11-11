@@ -6,10 +6,10 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [query private generatesFieldConditions(element: Element, varname: String, mappedMetaclass: String): String = 
-if(mappedMetaclass <> 'OclAny') then
-  element.generatesConditions(element.getOclName(), false, mappedMetaclass)
-else
+if(mappedMetaclass = 'OclAny' or mappedMetaclass = 'ASTNode') then
   element.generatesConditions(element.getOclName(), true)
+else
+  element.generatesConditions(element.getOclName(), false, mappedMetaclass)
 endif
 /]
 
@@ -98,12 +98,14 @@ else
 [fieldsConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
-[template public generatesMultivaluedFieldConditions(element: Element,  letOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
-[for (field: Element | fields->select(f | not f.isElementRegistered())) separator(' and ')]
-[letOclName /]->exists([field.getOclName() /] | 
+[template public generatesMultivaluedFieldConditions(element: Element,  letOclFieldName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
+[for (field: Element | fields) separator(' and ')]
+[if getElementsWithId()->includes(field)]
+[letOclFieldName /]->exists(x | x = [field.getOclName() /]) --NOT_COUNT[else]
+[letOclFieldName /]->exists([field.getOclName() /] | 
 [let fieldCondition: String = field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass)]
 [if fieldCondition.isNotEmpty()]
   [fieldCondition.printStringWithIdentation() /][else]
-  true[/if][/let][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and
-[/if][letOclName /]->size() = [fields->size() /][/if]
+  true[/if][/let][/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and
+[/if][letOclFieldName /]->size() = [fields->size() /][/if]
 [/template]

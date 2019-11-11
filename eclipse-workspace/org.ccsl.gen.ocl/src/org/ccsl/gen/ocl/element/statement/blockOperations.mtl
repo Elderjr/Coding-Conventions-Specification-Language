@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module blockOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getBlockMatchingMetaclasses(block: Block): OrderedSet(String)= 
+  OrderedSet(String){'Block'}
+/]
+
+[query public getBlockConditions(block: Block, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  block.generatesBlockTypecheckConditions(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(block.getElementConditions(varname, false))
+/]
+
+[template public generatesBlockTypecheckConditions(block: Block, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Block)
+[/template]
