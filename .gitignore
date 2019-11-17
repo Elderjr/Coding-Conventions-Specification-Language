@@ -1,13 +1,13 @@
 #ignore generated files
-/eclipse-workspace/org.ccsl.metamodel.edit/
-/eclipse-workspace/org.ccsl.metamodel.editor/
-/eclipse-workspace/org.ccsl.metamodel/src-gen/
-/eclipse-workspace/org.ccsl.metamodel/bin/
+/ccsl-workspace/org.ccsl.metamodel.edit/
+/ccsl-workspace/org.ccsl.metamodel.editor/
+/ccsl-workspace/org.ccsl.metamodel/src-gen/
+/ccsl-workspace/org.ccsl.metamodel/bin/
 /runtime-EclipseApplication/
-/eclipse-workspace/org.ccsl.gen.ocl/ocls-gen/
-/eclipse-workspace/org.ccsl.gen.ocl/bin/
-eclipse-workspace/org.ccsl.gen.ocl/.classpath
-/eclipse-workspace/.metadata/
-/eclipse-workspace/sampleProject/
-/eclipse-workspace/org.eclipse.*/
-/old/
+/ccsl-workspace/org.ccsl.gen.ocl/ocls-gen/
+/ccsl-workspace/org.ccsl.gen.ocl/bin/
+/ccsl-workspace/org.ccsl.gen.ocl/.classpath
+/ccsl-workspace/.metadata/
+/ccsl-workspace/sampleProject/
+/faultTypeRuleExecutor-workspace/.metadata/
+/faultTypeRuleExecutor-workspace/org.eclipse.*/

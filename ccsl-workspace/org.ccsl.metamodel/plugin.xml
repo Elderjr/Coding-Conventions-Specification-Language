@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl"
+            class="ccsl.ccslPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements"
+            class="ccsl.elements.ElementsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/namedElements"
+            class="ccsl.elements.namedElements.NamedElementsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/statements"
+            class="ccsl.elements.statements.StatementsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/statements/expressions"
+            class="ccsl.elements.statements.expressions.ExpressionsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/statements/literalValues"
+            class="ccsl.elements.statements.literalValues.LiteralValuesPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/statements/controlFlow"
+            class="ccsl.elements.statements.controlFlow.ControlFlowPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/datatype"
+            class="ccsl.elements.datatype.DatatypePackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/java"
+            class="ccsl.java.JavaPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/filters"
+            class="ccsl.filters.FiltersPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/nonElements"
+            class="ccsl.nonElements.NonElementsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultType"
+            class="ccsl.faultType.FaultTypePackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+</plugin>

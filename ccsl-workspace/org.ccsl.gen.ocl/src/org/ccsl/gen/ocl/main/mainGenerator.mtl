@@ -1,0 +1,24 @@
+[comment encoding = UTF-8 /]
+[module mainGenerator('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::main::recommendationRuleToOcl /]
+[import org::ccsl::gen::ocl::main::faultTypeRuleToOcl /]
+
+[template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
+[comment @main/]
+[rule.generatesFile() /]
+[/template]
+
+[template private generatesFile(rule: Rule) /]
+
+[template private generatesFile(rule: RecommendationRule)]
+[file ('ocl-gen', false, 'UTF-8')]
+[rule.toOcl() /]
+[/file]
+[/template]
+
+[template private generatesFile(rule: FaultTypeRule)]
+[file ('faultTypeConfig', false, 'UTF-8')]
+[rule.generatesConfigFaultTypeRuleFile() /]
+[/file]
+[/template]
