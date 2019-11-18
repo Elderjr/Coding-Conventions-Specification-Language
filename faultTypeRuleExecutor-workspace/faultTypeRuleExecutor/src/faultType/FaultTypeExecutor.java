@@ -3,14 +3,24 @@ package faultType;
 import java.util.Collection;
 import java.util.List;
 
-import faultInjector.Injector;
 import faultInjectorStrategy.FaultInjectorStrategy;
+import main.Main;
+
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.Model;
+import org.eclipse.gmt.modisco.java.emf.JavaPackage;
+import org.eclipse.ocl.pivot.ExpressionInOCL;
+import org.eclipse.ocl.pivot.utilities.OCL;
 import org.eclipse.ocl.pivot.utilities.ParserException;
+import org.eclipse.ocl.pivot.utilities.Query;
 
 public class FaultTypeExecutor {
 
@@ -23,20 +33,25 @@ public class FaultTypeExecutor {
 		return INSTANCE;
 	}
 
-	public Model executeFaultType(FaultType faultType, FaultInjectorStrategy strategy, String xmiPathFile) {
-		Resource r = Injector.getInstance().loadXMIResource(xmiPathFile);
+	public Model executeFaultType(FaultTypeDescription faultType, String xmiPathFile) {
+		ResourceSet rs = new ResourceSetImpl();
+		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+		Resource r = rs.getResource(URI.createURI(xmiPathFile), true);
 		TreeIterator<EObject> contents = r.getAllContents();
 		Model modiscoModel = (Model) contents.next();
-		executeFaultType(faultType, strategy, modiscoModel);
+		OCL oclInstance = OCL.newInstance(rs);
+		executeFaultType(faultType, modiscoModel, oclInstance);
 		return modiscoModel;
 	}
 
-	public void executeFaultType(FaultType faultType, FaultInjectorStrategy strategy, Model modiscoModel) {
-		Object result = null;
+	private void executeFaultType(FaultTypeDescription faultType, Model modiscoModel, OCL oclInstance) {
 		try {
-			result = Injector.getInstance().executeQuery(faultType.getOcl(), modiscoModel);
+			EClass context = JavaPackage.eINSTANCE.getASTNode();
+			ExpressionInOCL expression = oclInstance.createQuery(context, faultType.getOcl());
+			Query queryEval = oclInstance.createQuery(expression);
+			Object result = queryEval.evaluateEcore(modiscoModel);
 			if (result != null && result instanceof Collection) {
-				List<ASTNode> nodes = strategy.selectNodes((Collection<?>) result);
+				List<ASTNode> nodes = faultType.getStrategy().selectNodes((Collection<?>) result);
 				for (Object node : nodes) {
 					faultType.getAction().doCommand((ASTNode) node);
 				}

@@ -5,7 +5,7 @@
 [import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
-[query private generatesFieldConditions(element: Element, varname: String, mappedMetaclass: String): String = 
+[query private generatesFieldConditions(element: Element, mappedMetaclass: String): String = 
 if(mappedMetaclass = 'OclAny' or mappedMetaclass = 'ASTNode') then
   element.generatesConditions(element.getOclName(), true)
 else
@@ -13,21 +13,17 @@ else
 endif
 /]
 
-[template public generatesLetStatement(element: Element, varname: String, mappedFieldName: String, letOclName: String, letType: String, many: Boolean)]
-let [letOclName /]: [letType /] = [varname /].[mappedFieldName /] in (not [letOclName /][if many]->[else].[/if]oclIsUndefined())
-[/template]
-
-[template public generatesLetIfObject(element: Element, varname: String, mappedFieldName: String, mappedElementMetaclasses: OrderedSet(String), letOclName: String, letType: String, many: Boolean)]
+[template public generatesLetIfObject(element: Element, varname: String, mappedFieldName: String, mappedElementMetaclasses: OrderedSet(String), letOclName: String, letType: String)]
 let [letOclName /]: [letType /] = [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
 if [varname /].oclIsKindOf([metaclass /]) then
   [varname /].oclAsType([metaclass /]).[mappedFieldName /]
 [/for]
 else
   null
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in (not [letOclName /][if many]->[else].[/if]oclIsUndefined()) 
+[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
 [/template]
 
-[template public generatesLetIfObject(element: Element, varname: String, map: OrderedSet(OrderedSet(String)), letOclName: String, letType: String, many: Boolean)]
+[template public generatesLetIfObject(element: Element, varname: String, map: OrderedSet(OrderedSet(String)), letOclName: String, letType: String)]
 let [letOclName /]: [letType /] = [for(entry: OrderedSet(String) | map) separator('else ')]
 if [varname /].oclIsKindOf([entry->at(1) /]) then
   [varname /].oclAsType([entry->at(1) /]).[entry->at(2) /]
@@ -35,51 +31,50 @@ if [varname /].oclIsKindOf([entry->at(1) /]) then
 else
   null
 [for (Sequence(Integer){1..map->size()}) separator(' ')]endif[/for] in
-(not [letOclName /][if many]->[else].[/if]oclIsUndefined()) 
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado com acesso direto /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (isElementRegistered(field))]
+[comment Gerar condicoes de atributo monovalorado (apenas uma metaclasse mapeada) /]
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field = null)]
+[varname /].[mappedFieldName /] = null
+[/template]
+
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field <> null and isElementRegistered(field))]
 [varname /].[mappedFieldName /] = [field.getOclName() /]
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (not isElementRegistered(field))]
-[let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetStatement(varname, mappedFieldName, field.getOclName(), mappedFieldMetaclass, false) /][if fieldConditions.isNotEmpty()] and
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field <> null and not isElementRegistered(field))]
+[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)] 
+let [field.getOclName() /] : [mappedFieldMetaclass /] = [varname /].[mappedFieldName /] in (not [field.getOclName() /].oclIsUndefined())[if fieldConditions.isNotEmpty()] and
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado com lista de possiveis metaclasses /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (isElementRegistered(field))]
-[for(metaclass: String | mappedElementMetaclasses) separator('else ')]
-if [varname /].oclIsKindOf([metaclass /]) then
-  [varname /].oclAsType([metaclass /]).[mappedFieldName /] = [field.getOclName() /]
-[/for]
-else
-  false
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for]
+[comment Gerar condicoes de atributo monovalorado (varias metaclasses mapeadas) /]
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (field = null)]
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, 'tmp', mappedFieldMetaclass) /] tmp = null
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (not isElementRegistered(field))]
-[let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.isNotEmpty()] and
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (field <> null and isElementRegistered(field))]
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, 'tmp', mappedFieldMetaclass) /] tmp = [field.getOclName() /] 
+[/template]
+
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (field <> null and not isElementRegistered(field))]
+[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)]
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getOclName(), mappedFieldMetaclass)/] (not [field.getOclName() /].oclIsUndefined()) [if fieldConditions.isNotEmpty()] and
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado com um mapeamento(Metaclasse,Propriedade) /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (isElementRegistered(field))]
-[for(entry: OrderedSet(String) | map) separator('else ')]
-if [varname /].oclIsKindOf([entry->at(1) /]) then
-  [varname /].oclAsType([entry->at(1) /]).[entry->at(2) /] = [field.getOclName() /]
-[/for]
-else
-  false
-[for (Sequence(Integer){1..map->size()}) separator(' ')]endif[/for]
+[comment Gerar condicoes de atributo monovalorado (com mapeamento de metaclasse e atributo) /]
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field = null)]
+[element.generatesLetIfObject(varname, map, 'tmp', mappedFieldMetaclass) /] tmp = null
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (not isElementRegistered(field))]
-[let fieldConditions: String = field.generatesFieldConditions(varname, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, map, field.getOclName(), mappedFieldMetaclass, false) /] [if fieldConditions.isNotEmpty()] and
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field <> null and isElementRegistered(field))]
+[element.generatesLetIfObject(varname, map, 'tmp', mappedFieldMetaclass) /] tmp = [field.getOclName() /]
+[/template]
+
+[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field <> null and not isElementRegistered(field))]
+[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)]
+[element.generatesLetIfObject(varname, map, field.getOclName(), mappedFieldMetaclass) /] (not [field.getOclName() /].oclIsUndefined()) [if fieldConditions.isNotEmpty()] and
 [fieldConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
@@ -87,23 +82,23 @@ else
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
 [let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
 [if fieldsConditions.isNotEmpty()]
-[element.generatesLetStatement(varname, mappedFieldName, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /] and
+let [letOclName /]: OrderedSet([mappedFieldMetaclass /]) = [varname /].[mappedFieldName /] in (not [letOclName /]->oclIsUndefined()) and
 [fieldsConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
 [comment Gerar condicoes de atributo multivalorado com lista de possiveis metaclasses /]
 [template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
 [let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), true) /][if fieldsConditions.isNotEmpty()] and
+[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /][if fieldsConditions.isNotEmpty()] and
 [fieldsConditions.printStringWithIdentation() /][/if][/let]
 [/template]
 
 [template public generatesMultivaluedFieldConditions(element: Element,  letOclFieldName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
 [for (field: Element | fields) separator(' and ')]
 [if getElementsWithId()->includes(field)]
-[letOclFieldName /]->exists(x | x = [field.getOclName() /]) --NOT_COUNT[else]
+[letOclFieldName /]->exists(tmp | tmp = [field.getOclName() /]) --NOT_COUNT[else]
 [letOclFieldName /]->exists([field.getOclName() /] | 
-[let fieldCondition: String = field.generatesFieldConditions(field.getOclName(), mappedFieldMetaclass)]
+[let fieldCondition: String = field.generatesFieldConditions(mappedFieldMetaclass)]
 [if fieldCondition.isNotEmpty()]
   [fieldCondition.printStringWithIdentation() /][else]
   true[/if][/let][/if][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if fields->size() > 0] and

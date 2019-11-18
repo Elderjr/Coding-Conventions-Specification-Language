@@ -6,23 +6,25 @@
 
 
 [template public generatesConfigFaultTypeRuleFile(rule: FaultTypeRule)]
-{
-  ocl: "[rule.generatesOCL() /]",
-  strategy: "[rule.generatesStrategy() /]",
-  action: "[rule.generatesAction() /]"
-}
+<faultTypeRule>
+  [rule.generatesOCL() /]
+  [rule.generatesStrategy() /]
+  [rule.generatesAction() /]
+</faultTypeRule>
 [/template]
 
 [template private generatesOCL(rule: FaultTypeRule)]
-[rule.subject.generatesSelectOCL(rule.filters) /]
-[rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
-[rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+<ocl>
+  [rule.subject.generatesSelectOCL(rule.filters) /]
+  [rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
+  [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+</ocl>
 [/template]
 
 [template private generatesStrategy(rule: FaultTypeRule) ? (rule.strategy.oclIsTypeOf(AllStrategy))]
-All
+<strategy name="All" custom="false" />
 [/template]
 
 [template private generatesAction(rule: FaultTypeRule) ? (rule.action.oclIsTypeOf(DeleteAction))]
-Delete
+<action name="Delete" custom="false" />
 [/template]

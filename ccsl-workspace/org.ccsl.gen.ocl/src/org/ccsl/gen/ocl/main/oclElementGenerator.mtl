@@ -30,7 +30,7 @@
     scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT') + 
     filtersConditions.countMatches('->exists') - filtersConditions.countMatches('--NOT_COUNT')
   )
-})])[/for][/let][/let])
+})])[/for][/let][/let]
 [/template]
 
 [template public generatesPostConditionToRemoveJavadocRelatedElements(element: Element)]

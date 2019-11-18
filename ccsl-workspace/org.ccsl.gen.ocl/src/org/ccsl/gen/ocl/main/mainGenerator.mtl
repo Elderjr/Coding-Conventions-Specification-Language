@@ -18,7 +18,7 @@
 [/template]
 
 [template private generatesFile(rule: FaultTypeRule)]
-[file ('faultTypeConfig', false, 'UTF-8')]
+[file ('faultTypeRuleConfig.xml', false, 'UTF-8')]
 [rule.generatesConfigFaultTypeRuleFile() /]
 [/file]
 [/template]

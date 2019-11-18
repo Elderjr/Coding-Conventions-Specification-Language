@@ -8,7 +8,7 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
-  OrderedSet(String){'MethodInvocation', 'ClassInstanceCreation'}
+  OrderedSet(String){'MethodInvocation'}
 /]
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean): OrderedSet(String) =
@@ -48,12 +48,12 @@ OrderedSet(String) {
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.from.oclIsUndefined() and getElementsWithId()->includes(methodInv.from))]
-[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny') /]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('from'))]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (not methodInv.from.oclIsUndefined() and getElementsWithId()->includes(methodInv.from))]
-[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('from'))]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.from, 'expression', 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('args'))]

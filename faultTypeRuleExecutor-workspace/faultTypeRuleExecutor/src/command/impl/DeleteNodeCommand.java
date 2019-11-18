@@ -5,12 +5,17 @@ import java.util.Collection;
 
 import command.InjectionCommand;
 import org.eclipse.gmt.modisco.java.ASTNode;
+import org.eclipse.gmt.modisco.java.ExpressionStatement;
 
 public class DeleteNodeCommand implements InjectionCommand {
 
 	@Override
 	public void doCommand(ASTNode target) {
 		Object container = target.eContainer();
+		if (container instanceof ExpressionStatement) {
+			target = (ASTNode) container;
+			container = target.eContainer();
+		}
 		Object fieldValue = null;
 		boolean accessibleHasBeenChanged;
 		for (Field containerField : container.getClass().getDeclaredFields()) {

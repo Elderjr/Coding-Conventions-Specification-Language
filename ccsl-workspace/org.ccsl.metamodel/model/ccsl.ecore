@@ -105,7 +105,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="elementAccessed" eType="#//elements/Element"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/statements/Statement"
-            containment="true"/>
+            unsettable="true" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="ArrayCreation" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/ObjectType"/>
