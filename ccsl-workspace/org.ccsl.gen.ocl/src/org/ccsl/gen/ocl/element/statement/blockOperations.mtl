@@ -9,10 +9,11 @@
 /]
 
 [query public getBlockConditions(block: Block, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'Block') in
 OrderedSet(String) {
   block.generatesBlockTypecheckConditions(varname, typecheck)
 }->select(s: String | s.isNotEmpty())
-->addAll(block.getElementConditions(varname, false))
+->addAll(block.getElementConditions(newVarname, false))
 /]
 
 [template public generatesBlockTypecheckConditions(block: Block, varname: String, typecheck: Boolean) ? (typecheck)]

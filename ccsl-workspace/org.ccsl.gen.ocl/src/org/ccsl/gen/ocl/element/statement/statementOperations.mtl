@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module statementOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[query public getStatementMatchingMetaclasses(stmt: Statement): OrderedSet(String)= 
+  OrderedSet(String){'Statement'}
+/]
+
+[query public getStatementConditions(stmt: Statement, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  stmt.generatesStatementTypecheckConditions(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(stmt.getElementConditions(varname, false))
+/]
+
+[template public generatesStatementTypecheckConditions(stmt: Statement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Statement)
+[/template]

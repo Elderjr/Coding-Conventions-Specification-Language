@@ -16,6 +16,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
 
 [comment statements /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
@@ -100,6 +101,15 @@
 [template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String)]
 [var.printConditions(var.getVectorVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
+
+[comment element/statement /]
+[template public generatesConditions(stmt: Statement, varname: String, typecheck: Boolean)]
+[stmt.printConditions(stmt.getStatementConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(stmt: Statement, varname: String, typecheck: Boolean, metaclass: String)]
+[stmt.printConditions(stmt.getStatementConditions(varname, typecheck)) /]
+[/template]
+
 
 [template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]

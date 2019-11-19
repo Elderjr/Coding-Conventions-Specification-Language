@@ -26,6 +26,10 @@ var[element.getId() /]
 method[element.getId() /]
 [/template]
 
+[template public getOclName(element : Statement)]
+stmt[element.getId() /]
+[/template]
+
 [template public getOclName(element : MethodInvocation)]
 methodInv[element.getId() /]
 [/template]

@@ -1,0 +1,15 @@
+<faultTypeRule>
+  <ocl>
+    Statement.allInstances()->select(stmt1 |
+      --Scope Conditions
+      let block2 : OclAny = stmt1.oclContainer() in (not block2.oclIsUndefined()) and
+      block2.oclIsKindOf(Block) and
+      let ifStatement3 : OclAny = block2.oclAsType(Block).oclContainer() in (not ifStatement3.oclIsUndefined()) and
+      ifStatement3.oclIsKindOf(IfStatement) and
+      ifStatement3.oclAsType(IfStatement).thenStatement = block2)
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <action name="Delete" custom="false" />
+</faultTypeRule>

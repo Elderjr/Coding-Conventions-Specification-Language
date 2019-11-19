@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ccsl:FaultTypeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:faultType="http://www.example.org/ccsl/faultType" subject="//@ruleElements.0/@elseStatement">
-  <ruleElements xsi:type="controlFlow:IfStatement">
-    <elseStatement/>
-  </ruleElements>
-  <strategy xsi:type="faultType:AllStrategy"/>
-  <action xsi:type="faultType:DeleteAction"/>
-</ccsl:FaultTypeRule>

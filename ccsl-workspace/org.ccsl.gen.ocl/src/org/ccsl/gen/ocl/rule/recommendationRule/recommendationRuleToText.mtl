@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
-[module recommendationRuleToOcl('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::main::oclElementGenerator /]
+[module recommendationRuleToText('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::elementToOcl /]
 
 [template private operation(logicOperator: LogicOperator)]
 [if logicOperator = LogicOperator::AND]
@@ -8,8 +8,8 @@
 ->union[/if]
 [/template]
 
-[template public toOcl(rule: RecommendationRule)]
-let violations: Set(ASTNode) = [rule.generatesOCL() /] in
+[template public generatesOCL(rule: RecommendationRule)]
+let violations: Set(ASTNode) = [rule.generatesOCLToSelectElements() /] in
 violations->collect(node: ASTNode | 
 	let container: NamedElement = node->asOrderedSet()->closure(x |
         if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
@@ -26,16 +26,16 @@ violations->collect(node: ASTNode |
 ->append('#violations: '.concat(violations->size().toString()))
 [/template]
 
-[template private generatesOCL(rule: RecommendationRule) /]
+[template private generatesOCLToSelectElements(rule: RecommendationRule) /]
 
-[template private generatesOCL(rule: AtomicRecommendationRule)]
+[template private generatesOCLToSelectElements(rule: AtomicRecommendationRule)]
 [rule.subject.generatesSelectOCL(rule.filters) /]
 [rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
 [rule.subject.generatesPostConditionToSelectClosestContext() /]
 [/template]
 
-[template private generatesOCL(rule: CompositeRule)]
+[template private generatesOCLToSelectElements(rule: RecommendationCompositeRule)]
 (
 [for (rule: RecommendationRule | rule.rules) separator(rule.operator.operation().concat('(\n'))]
 [if i = 1]  [rule.generatesOCL() /][else]    [rule.generatesOCL() /])[/if][/for]

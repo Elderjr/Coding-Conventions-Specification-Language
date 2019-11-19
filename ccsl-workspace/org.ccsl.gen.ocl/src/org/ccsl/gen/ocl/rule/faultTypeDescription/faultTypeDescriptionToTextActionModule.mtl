@@ -1,0 +1,13 @@
+[comment encoding = UTF-8 /]
+[module faultTypeDescriptionToTextActionModule('http://www.example.org/ccsl')/]
+
+
+[template public generatesAction(fault: FaultTypeDescription)]
+[fault.generatesAction(fault.action) /]
+[/template]
+
+[template private generatesAction(fault: FaultTypeDescription, action: InjectionAction) /]
+
+[template private generatesAction(fault: FaultTypeDescription, action: DeleteAction)]
+<action name="Delete" custom="false" />
+[/template]

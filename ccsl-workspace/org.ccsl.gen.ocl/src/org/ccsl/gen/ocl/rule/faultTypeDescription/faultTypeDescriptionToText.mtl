@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module faultTypeDescriptionToText('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextOCLModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextStrategyModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextActionModule /]
+
+
+
+[template public generatesConfigFaultTypeRuleFile(faultType: FaultTypeDescription)]
+<faultTypeRule>
+  <ocl>
+    [faultType.rule.generatesOCL() /]
+  </ocl>
+  [faultType.generatesStrategy() /]
+  [faultType.generatesAction() /]
+</faultTypeRule>
+[/template]
+
+

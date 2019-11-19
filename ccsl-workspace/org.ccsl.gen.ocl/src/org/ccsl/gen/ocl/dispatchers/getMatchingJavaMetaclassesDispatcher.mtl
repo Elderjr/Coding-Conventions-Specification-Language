@@ -15,6 +15,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
 
 [comment statements /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
@@ -47,6 +48,8 @@ else if element.oclIsTypeOf(JavaInterface) then
 else if element.oclIsKindOf(Variable) then
   element.oclAsType(Variable).getVariableMatchingJavaMetaclasses()
 --element/statements
+else if element.oclIsKindOf(Statement) then
+  element.oclAsType(Statement).getStatementMatchingMetaclasses()
 else if element.oclIsKindOf(LiteralValue) then
   element.oclAsType(LiteralValue).getLiteralMatchingMetaclasses()
 else if element.oclIsTypeOf(MethodInvocation) then
@@ -66,5 +69,5 @@ else if element.oclIsTypeOf(IfStatement) then
   element.oclAsType(IfStatement).getIfStatementMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
-endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
 /]

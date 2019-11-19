@@ -11,12 +11,17 @@ OrderedSet(String) {'IfStatement'}
 let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
 OrderedSet(String){
   ifStatement.generatesIfStatementTypecheckerCondition(varname, typecheck),
-  ifStatement.generatesConditionForElse(newVarname)
+  ifStatement.generatesConditionForElse(newVarname),
+  ifStatement.generatesConditionForThen(newVarname)
 }->select(s: String | s.isNotEmpty())
 /]
 
 [template private generatesIfStatementTypecheckerCondition(ifStatement: IfStatement, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(IfStatement)
+[/template]
+
+[template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (not ifStatement.thenStatement.oclIsUndefined())]
+[ifStatement.generatesMonovaluedFieldConditions(varname, ifStatement.thenStatement, 'thenStatement', 'ASTNode') /]
 [/template]
 
 [template private generatesConditionForElse(ifStatement: IfStatement, varname: String) ? (not ifStatement.elseStatement.oclIsUndefined())]

@@ -1,0 +1,13 @@
+[comment encoding = UTF-8 /]
+[module faultTypeDescriptionToTextStrategyModule('http://www.example.org/ccsl')/]
+
+
+[template public generatesStrategy(fault: FaultTypeDescription)]
+[fault.generatesStrategy(fault.strategy) /]
+[/template]
+
+[template private generatesStrategy(fault: FaultTypeDescription, strategy: Strategy) /]
+
+[template private generatesStrategy(fault: FaultTypeDescription, strategy: AllStrategy)]
+<strategy name="All" custom="false" />
+[/template]

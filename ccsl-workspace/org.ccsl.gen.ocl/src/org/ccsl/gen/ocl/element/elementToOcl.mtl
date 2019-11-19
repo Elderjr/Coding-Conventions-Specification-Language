@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module oclElementGenerator('http://www.example.org/ccsl')]
+[module elementToOcl('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]

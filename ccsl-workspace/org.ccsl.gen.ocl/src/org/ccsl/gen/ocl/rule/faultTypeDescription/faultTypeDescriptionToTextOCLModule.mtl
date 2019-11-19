@@ -1,0 +1,21 @@
+[comment encoding = UTF-8 /]
+[module faultTypeDescriptionToTextOCLModule('http://www.example.org/ccsl')/]
+[import org::ccsl::gen::ocl::element::elementToOcl /]
+
+[template public generatesOCL(rule: FaultTypeRule) /]
+
+[template public generatesOCL(atomicRule: AtomicFaultTypeRule)]
+[atomicRule.subject.generatesSelectOCL(atomicRule.filters) /]
+[atomicRule.subject.generatesPostConditionToRemoveNonSourceElements() /]
+[atomicRule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+[/template]
+
+[template public generatesOCL(compositeRule: CompositeFaultTypeRule)]
+(
+[for (rule: FaultTypeRule | compositeRule.rules) separator('\n->union(\n')]
+  [rule.generatesOCL() /][if i <> 1]
+  
+  )
+  [/if]
+[/for])
+[/template]
