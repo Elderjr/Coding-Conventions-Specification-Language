@@ -11,3 +11,11 @@
 [template private generatesAction(fault: FaultTypeDescription, action: DeleteAction)]
 <action name="Delete" custom="false" />
 [/template]
+
+[template private generatesAction(fault: FaultTypeDescription, action: MiaAction)]
+<action name="Mia" custom="false" />
+[/template]
+
+[template private generatesAction(fault: FaultTypeDescription, action: MiebAction)]
+<action name="Mieb" custom="false" />
+[/template]

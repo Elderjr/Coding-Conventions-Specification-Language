@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module getOclElementReferenceModule('http://www.example.org/ccsl')]
+
+
+[template public getOclReferenceExpression(element : Element, varname: String)]
+[varname /]
+[/template]
+
+[template public getOclReferenceExpression(element : MethodInvocation, varname: String)]
+if [varname /].oclIsKindOf(ExpressionStatement) then
+  [varname /].oclAsType(ExpressionStatement).expression
+else
+  [varname /]
+endif
+[/template]

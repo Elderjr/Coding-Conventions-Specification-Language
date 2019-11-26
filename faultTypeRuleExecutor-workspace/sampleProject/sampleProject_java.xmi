@@ -11,28 +11,25 @@
             <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0">
               <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
                 <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.1/@ownedPackages.1/@ownedElements.1/@bodyDeclarations.0">
-                  <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;hiii&quot;"/>
+                  <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;blabla&quot;"/>
                   <expression xsi:type="java:SingleVariableAccess" variable="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@bodyDeclarations.0/@fragments.0">
                     <qualifier xsi:type="java:TypeAccess" type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
                   </expression>
                 </expression>
               </statements>
-              <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
-                <type type="//@orphanTypes.0"/>
-                <fragments originalCompilationUnit="//@compilationUnits.0" name="a">
-                  <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
-                </fragments>
-                <modifier/>
-              </statements>
             </thenStatement>
-            <elseStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0">
-              <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
-                <type type="//@orphanTypes.0"/>
-                <fragments originalCompilationUnit="//@compilationUnits.0" name="b">
-                  <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
-                </fragments>
-                <modifier/>
-              </statements>
+            <elseStatement xsi:type="java:IfStatement" originalCompilationUnit="//@compilationUnits.0">
+              <expression xsi:type="java:BooleanLiteral" originalCompilationUnit="//@compilationUnits.0" value="true"/>
+              <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0">
+                <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
+                  <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.1/@ownedPackages.1/@ownedElements.1/@bodyDeclarations.0">
+                    <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;I'am else block!&quot;"/>
+                    <expression xsi:type="java:SingleVariableAccess" variable="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@bodyDeclarations.0/@fragments.0">
+                      <qualifier xsi:type="java:TypeAccess" type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+                    </expression>
+                  </expression>
+                </statements>
+              </thenStatement>
             </elseStatement>
           </statements>
         </body>
@@ -42,9 +39,9 @@
   </ownedElements>
   <ownedElements name="java" proxy="true">
     <ownedPackages name="lang" proxy="true">
-      <ownedElements xsi:type="java:ClassDeclaration" name="System" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression/@expression/@qualifier">
+      <ownedElements xsi:type="java:ClassDeclaration" name="System" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression/@expression/@qualifier //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@elseStatement/@thenStatement/@statements.0/@expression/@expression/@qualifier">
         <bodyDeclarations xsi:type="java:FieldDeclaration" proxy="true">
-          <fragments name="out" proxy="true" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression/@expression"/>
+          <fragments name="out" proxy="true" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression/@expression //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@elseStatement/@thenStatement/@statements.0/@expression/@expression"/>
         </bodyDeclarations>
       </ownedElements>
       <ownedElements xsi:type="java:ClassDeclaration" name="String" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.1/@bodyDeclarations.0/@parameters.0/@type">
@@ -62,7 +59,7 @@
     <ownedPackages name="io" proxy="true">
       <ownedElements xsi:type="java:InterfaceDeclaration" name="Serializable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.1/@superInterfaces.0"/>
       <ownedElements xsi:type="java:ClassDeclaration" name="PrintStream" proxy="true">
-        <bodyDeclarations xsi:type="java:MethodDeclaration" name="println" proxy="true" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression">
+        <bodyDeclarations xsi:type="java:MethodDeclaration" name="println" proxy="true" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.0/@expression //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@elseStatement/@thenStatement/@statements.0/@expression">
           <parameters name="arg0" proxy="true">
             <type type="//@ownedElements.1/@ownedPackages.0/@ownedElements.1"/>
           </parameters>
@@ -84,7 +81,7 @@
       <ownedElements xsi:type="java:InterfaceDeclaration" name="Flushable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.3/@superInterfaces.1"/>
     </ownedPackages>
   </ownedElements>
-  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@thenStatement/@statements.1/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@elseStatement/@statements.0/@type"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int"/>
   <orphanTypes xsi:type="java:PrimitiveTypeLong" name="long"/>
   <orphanTypes xsi:type="java:PrimitiveTypeFloat" name="float"/>
   <orphanTypes xsi:type="java:PrimitiveTypeDouble" name="double"/>

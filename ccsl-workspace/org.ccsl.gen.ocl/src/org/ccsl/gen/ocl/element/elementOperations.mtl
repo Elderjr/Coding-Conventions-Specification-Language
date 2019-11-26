@@ -1,9 +1,10 @@
 [comment encoding = UTF-8 /]
 [module elementOperations('http://www.example.org/ccsl')  /]
-[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::element::ancestorModule /]
 
 
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean): OrderedSet(String) = 
@@ -20,51 +21,31 @@ OrderedSet(String){
 }->select(s | s.trim().size() > 0)
 /]
 
-[comment conditions for the ancestor /]
-[query private isAncestorNotRegistered(element: Element): Boolean = 
-  (not element.eContainer().oclIsUndefined()) and 
-  (element.eContainer().oclIsKindOf(Element)) and 
-  (not isElementRegistered(element.eContainer().oclAsType(Element)))
-/]
 
-[template public generatesConditionForAncestor(element: Element, varname: String) ? (element.isAncestorNotRegistered())]
-[element.generatesMonovaluedFieldConditions(varname, element.eContainer().oclAsType(Element), 'oclContainer()', 'OclAny') /]
-[/template]
 
-[template public generatesConditionForAncestor(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered())]
-[element.generatesConditionForAncestor(varname) /]
-[/template]
-
-[template public generatesConditionForAncestor(var: Variable, varname: String) ? (var.isAncestorNotRegistered())]
-[var.generatesMonovaluedFieldConditions(varname, var.eContainer().oclAsType(Element), 'oclContainer().oclContainer()', 'OclAny') /]
-[/template]
-
-[template public generatesConditionForAncestor(var: Variable, varname: String, metaclass: String) ? (var.isAncestorNotRegistered())]
-[var.generatesMonovaluedFieldConditions(varname, var.eContainer().oclAsType(Element), 'oclContainer().oclContainer()', 'OclAny') /]
-[/template]
 
 [comment conditions for properties /]
 [template public generatesConditionForProperties(element: Element, varname: String, properties: OrderedSet(Property))  ? (properties->size() > 0)]
 [element.generatesGetModifierLetStatement(varname, properties) /] and
 [for (prop: Property | properties) separator(' and ')]
 [if prop.name ='public']
-[element.getOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='final']
-[element.getOclName() /]Modifier.inheritance = InheritanceKind::final[elseif prop.name ='synchronized']
-[element.getOclName() /]Modifier.synchronized[elseif prop.name ='volatile']
-[element.getOclName() /]Modifier.volatile[elseif prop.name ='static']
-[element.getOclName() /]Modifier.static[/if][/for]
+[element.getUniqueOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='final']
+[element.getUniqueOclName() /]Modifier.inheritance = InheritanceKind::final[elseif prop.name ='synchronized']
+[element.getUniqueOclName() /]Modifier.synchronized[elseif prop.name ='volatile']
+[element.getUniqueOclName() /]Modifier.volatile[elseif prop.name ='static']
+[element.getUniqueOclName() /]Modifier.static[/if][/for]
 [/template]
 
 [template private generatesGetModifierLetStatement(element: Element, varname: String, properties: OrderedSet(Property))]
-let [element.getOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(BodyDeclaration) then
+let [element.getUniqueOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(BodyDeclaration) then
   [varname /].oclAsType(BodyDeclaration).modifier
 else
   null
-endif in (not [element.getOclName() /]Modifier.oclIsUndefined())
+endif in (not [element.getUniqueOclName() /]Modifier.oclIsUndefined())
 [/template]
 
 [template private generatesGetModifierLetStatement(var: Variable, varname: String, properties: OrderedSet(Property))]
-let [var.getOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(VariableDeclarationFragment) and 
+let [var.getUniqueOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(VariableDeclarationFragment) and 
  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
   [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
 else if [varname /].oclIsKindOf(VariableDeclarationFragment) and
@@ -74,5 +55,5 @@ else if [varname /].oclIsKindOf(SingleVariableDeclaration) then
   [varname /].oclAsType(SingleVariableDeclaration).modifier
 else
   null
-endif endif endif in (not [var.getOclName() /]Modifier.oclIsUndefined())
+endif endif endif in (not [var.getUniqueOclName() /]Modifier.oclIsUndefined())
 [/template]

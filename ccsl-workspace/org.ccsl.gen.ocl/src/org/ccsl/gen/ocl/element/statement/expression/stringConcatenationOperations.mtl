@@ -2,7 +2,6 @@
 [module stringConcatenationOperations('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::statementTypeGetterGenerator /]
 
 [import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
@@ -19,7 +18,7 @@ OrderedSet(String) {
 
 [template public generatesConditionForStringConcatenationTypecheck(strConcat: StringConcatenation, varname: String)]
 ( ([varname /].oclIsKindOf(Assignment) and [varname /].oclAsType(Assignment).operator = AssignmentKind::PLUS_ASSIGN) or ([varname /].oclIsKindOf(InfixExpression)) ) and
-[strConcat.generatesStatementTypeGetter(varname, strConcat.getOclName().concat('Type')) /] and
-[strConcat.getOclName().concat('Type') /] = strClass
+[strConcat.generatesStatementTypeGetter(varname, 'tmpType') /] and
+tmpType = strClass
 [/template]
 

@@ -1,3 +1,4 @@
+
 [comment encoding = UTF-8 /]
 [module filterConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::filters::propertyFilterOperations /]
@@ -6,6 +7,7 @@
 [import org::ccsl::gen::ocl::filters::typedStatementFilterOperations /]
 [import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+[import org::ccsl::gen::ocl::filters::closureOperationFilterModule /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -13,14 +15,26 @@
 
 [template public generatesFilterConditions(filter : Filter) /]
 
-[template public generatesFilterConditions(compositeFilter : CompositeFilter)]
-[if compositeFilter.negated]
-not ([/if][for(f: Filter | compositeFilter.filters) separator(compositeFilter.operator.oclOperator().concat('\n'))]
-[if f.oclIsKindOf(CompositeFilter)]
-(
-  [f.generatesFilterConditions() /]
-)[else]
-[f.generatesFilterConditions() /][/if][/for][if compositeFilter.negated])[/if]
+[template public generatesFilterConditions(compositeFilter : CompositeFilter) ? (not compositeFilter.negated)]
+( -- Composite Filter ([compositeFilter.operator /])
+[for(f: Filter | compositeFilter.filters) separator(compositeFilter.operator.oclOperator().concat('\n'))]
+  (
+    [f.generatesFilterConditions() /]
+  )[/for]
+
+) -- End Composite Filter ([compositeFilter.operator /])
+[/template]
+
+[template public generatesFilterConditions(compositeFilter : CompositeFilter) ? (compositeFilter.negated)]
+(  -- Composite Filter ([compositeFilter.operator /])
+  not (
+[for(f: Filter | compositeFilter.filters) separator(compositeFilter.operator.oclOperator().concat('\n'))]
+    (
+      [f.generatesFilterConditions() /]
+    )[/for]
+  
+  )
+)  -- End Composite Filter ([compositeFilter.operator /])
 [/template]
 
 [template public generatesFilterConditions(atomicFilter : AtomicFilter) ? (atomicFilter.negated)]
@@ -61,4 +75,8 @@ not (
 
 [template public generatesSpecificFilterConditions(templFilter: TemplateFilter, target: Element)]
 [templFilter.generatesTemplateFilterConditions(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(closureFilter: ClosureFilter, target: Element)]
+[closureFilter.generateClosureOperationFilterConditions(target) /]
 [/template]

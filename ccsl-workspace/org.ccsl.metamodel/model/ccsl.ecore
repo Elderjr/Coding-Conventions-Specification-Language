@@ -9,14 +9,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="2" upperBound="-1"
         eType="#//RecommendationRule" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AtomicRule" abstract="true" eSuperTypes="#//Rule">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
-        eType="#//filters/Filter" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
-        eType="#//elements/Element"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ruleElements" upperBound="-1"
-        eType="#//elements/Element" containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicRule" abstract="true" eSuperTypes="#//Rule #//Context"/>
   <eClassifiers xsi:type="ecore:EEnum" name="LogicOperator">
     <eLiterals name="AND"/>
     <eLiterals name="OR" value="1"/>
@@ -33,6 +26,14 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicRecommendationRule" eSuperTypes="#//RecommendationRule #//AtomicRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Context" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
+        eType="#//elements/Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextElements" upperBound="-1"
+        eType="#//elements/Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+        eType="#//filters/Filter" containment="true"/>
+  </eClassifiers>
   <eSubpackages name="elements" nsURI="http://www.example.org/ccsl/elements" nsPrefix="elements">
     <eClassifiers xsi:type="ecore:EClass" name="CodeElement" eSuperTypes="#//elements/Element">
       <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
@@ -43,7 +44,10 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Element"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Element">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="uniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+          iD="true"/>
+    </eClassifiers>
     <eSubpackages name="namedElements" nsURI="http://www.example.org/ccsl/elements/namedElements"
         nsPrefix="namedElements">
       <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//elements/CodeElement">
@@ -152,9 +156,13 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//elements/statements/ControlFlow">
           <eStructuralFeatures xsi:type="ecore:EReference" name="thenStatement" eType="#//elements/statements/Statement"
-              containment="true"/>
+              unsettable="true" containment="true"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="elseStatement" eType="#//elements/statements/Statement"
-              containment="true"/>
+              unsettable="true" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LoopStatement" eSuperTypes="#//elements/statements/ControlFlow">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//elements/statements/Statement"
+              unsettable="true" containment="true"/>
         </eClassifiers>
       </eSubpackages>
     </eSubpackages>
@@ -237,12 +245,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="properties" lowerBound="1"
           upperBound="-1" eType="#//elements/Property" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="TemplateFilter" eSuperTypes="#//filters/AtomicFilter">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="templateElements" upperBound="-1"
-          eType="#//elements/Element" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
-          eType="#//elements/Element"/>
-    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateFilter" eSuperTypes="#//filters/AtomicFilter #//Context"/>
     <eClassifiers xsi:type="ecore:EClass" name="DefinesMethodFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="methods" lowerBound="1"
           upperBound="-1" eType="#//elements/namedElements/Method" containment="true"/>
@@ -280,6 +283,10 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
           eType="#//elements/statements/controlFlow/SwitchCaseBlock" containment="true"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClosureFilter" eSuperTypes="#//filters/TemplateFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="closureRelation" lowerBound="1"
+          eType="#//elements/Element"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="nonElements" nsURI="http://www.example.org/ccsl/nonElements"
       nsPrefix="nonElements">
@@ -299,5 +306,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="2"
           upperBound="-1" eType="#//faultType/FaultTypeRule" containment="true"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MiaAction" eSuperTypes="#//faultType/InjectionAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MiebAction" eSuperTypes="#//faultType/InjectionAction"/>
   </eSubpackages>
 </ecore:EPackage>

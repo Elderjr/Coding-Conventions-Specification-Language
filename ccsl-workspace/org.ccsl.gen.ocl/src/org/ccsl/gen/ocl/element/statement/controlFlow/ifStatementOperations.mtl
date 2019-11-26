@@ -1,5 +1,6 @@
 [comment encoding = UTF-8 /]
 [module ifStatementOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
@@ -11,8 +12,8 @@ OrderedSet(String) {'IfStatement'}
 let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
 OrderedSet(String){
   ifStatement.generatesIfStatementTypecheckerCondition(varname, typecheck),
-  ifStatement.generatesConditionForElse(newVarname),
-  ifStatement.generatesConditionForThen(newVarname)
+  ifStatement.generatesConditionForThen(newVarname),
+  ifStatement.generatesConditionForElse(newVarname)
 }->select(s: String | s.isNotEmpty())
 /]
 
@@ -20,10 +21,10 @@ OrderedSet(String){
 [varname /].oclIsKindOf(IfStatement)
 [/template]
 
-[template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (not ifStatement.thenStatement.oclIsUndefined())]
+[template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('thenStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(varname, ifStatement.thenStatement, 'thenStatement', 'ASTNode') /]
 [/template]
 
-[template private generatesConditionForElse(ifStatement: IfStatement, varname: String) ? (not ifStatement.elseStatement.oclIsUndefined())]
+[template private generatesConditionForElse(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('elseStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(varname, ifStatement.elseStatement, 'elseStatement', 'ASTNode') /]
 [/template]

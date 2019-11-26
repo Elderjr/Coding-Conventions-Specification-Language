@@ -2,7 +2,6 @@
 [module dataTypeAccessOperations('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 

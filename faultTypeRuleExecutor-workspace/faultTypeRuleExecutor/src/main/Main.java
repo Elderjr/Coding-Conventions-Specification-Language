@@ -28,7 +28,7 @@ public final class Main {
 		EssentialOCLStandaloneSetup.doSetup();
 		try {
 			FaultTypeDescription faultTypeDescription = FaultTypeLoader.getInstance().loadFaultTypeDescription(
-					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatements.xml");
+					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatementsPlusElseBeforeStatements.xml");
 			Model modiscoModel = FaultTypeExecutor.getInstance().executeFaultType(faultTypeDescription,
 					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi");
 			GenerateJavaExtended javaGenerator = new GenerateJavaExtended(modiscoModel, new File("./"),

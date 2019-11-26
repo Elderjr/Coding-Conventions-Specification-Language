@@ -3,7 +3,6 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 [query public getInfixMatchingMetaclasses(infixExp: InfixExpression): OrderedSet(String)= 
   OrderedSet(String){'InfixExpression'}
@@ -31,6 +30,6 @@ leftOperand->asOrderedSet()->append([varName /].rightOperand)->append([varName /
 [/template]
 
 [template public generateConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.operands->size() > 0)]
-[infixExp.generatesMultivaluedFieldConditions(varname, infixExp.operands, infixExp.getOclName().concat('Operands'), infixExp.getAllOperandsExpression(varname), 'OclAny') /]
+[infixExp.generatesMultivaluedFieldConditions(varname, infixExp.operands, 'tmpOperands', infixExp.getAllOperandsExpression(varname), 'OclAny') /]
 [/template]
 

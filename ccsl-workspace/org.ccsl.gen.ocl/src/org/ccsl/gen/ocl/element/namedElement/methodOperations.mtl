@@ -4,7 +4,6 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
@@ -34,6 +33,6 @@ OrderedSet(String) {
 
 [template public generatesConditionForParams(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
 [if typecheck]
-[method.generatesMultivaluedFieldConditions(varname, method.params, method.getMethodMatchingJavaMetaclasses(), method.getOclName().concat('Params'), 'parameters', 'SingleVariableDeclaration') /][else]
-[method.generatesMultivaluedFieldConditions(varname, method.params, method.getOclName().concat('Params'), 'parameters', 'SingleVariableDeclaration') /][/if]
+[method.generatesMultivaluedFieldConditions(varname, method.params, method.getMethodMatchingJavaMetaclasses(), 'tmpParams', 'parameters', 'SingleVariableDeclaration') /][else]
+[method.generatesMultivaluedFieldConditions(varname, method.params, 'tmpParams', 'parameters', 'SingleVariableDeclaration') /][/if]
 [/template]

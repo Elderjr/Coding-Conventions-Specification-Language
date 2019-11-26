@@ -1,7 +1,9 @@
 [comment encoding = UTF-8 /]
 [module switchStatementOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [query public getSwitchStatementMatchingMetaclasses(switch: SwitchStatement): OrderedSet(String) =
 OrderedSet(String) {'SwitchStatement'}
 /]
@@ -16,3 +18,33 @@ else
   conditions
 endif
 /]
+
+
+[query public getSwitchCaseBlockMatchingMetaclasses(switchBlock: SwitchCaseBlock): OrderedSet(String) =
+OrderedSet(String) {'SwitchStatement'}
+/] 
+
+[query public getSwitchCaseBlockConditions(switchBlock: SwitchCaseBlock, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'SwitchStatement') in
+OrderedSet(String){
+  switchBlock.generatesSwitchCaseBlockTypecheckCondition(varname, typecheck),
+  switchBlock.generatesConditionsForStatements(newVarname)
+}->select(s: String | s.trim().size() > 0)
+/]
+
+[template private generatesSwitchCaseBlockTypecheckCondition(switchBlock: SwitchCaseBlock, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(SwitchStatement)
+[/template]
+
+[template private generatesConditionsForStatements(switchBlock: SwitchCaseBlock, varname: String)]
+let [switchBlock.getUniqueOclName() /]Blocks: OrderedSet(OrderedSet(Statement)) = [varname /].statements->iterate(tmpStmt: Statement; acc: OrderedSet(OrderedSet(Statement)) = OrderedSet(OrderedSet(Statement)){} |
+	if(tmpStmt.oclIsKindOf(SwitchCase)) then
+	  acc->append(OrderedSet(Statement){tmpStmt})
+	else 
+	  let lastSetAcc: OrderedSet(Statement) = acc->last()->append(tmpStmt) in
+	  acc->excluding(acc->last())->including(lastSetAcc)
+	endif
+) in
+[switchBlock.getUniqueOclName() /]Blocks->exists(switchBlockCaseTmp: OrderedSet(Statement) | [switchBlock.addElementExistsDeclaration() /]
+[switchBlock.generatesMultivaluedFieldConditions('switchBlockCaseTmp', switchBlock.statements, 'ASTNode') /]
+[/template]

@@ -3,6 +3,8 @@
 
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getBlockMatchingMetaclasses(block: Block): OrderedSet(String)= 
   OrderedSet(String){'Block'}
@@ -11,11 +13,16 @@
 [query public getBlockConditions(block: Block, varname: String, typecheck: Boolean): OrderedSet(String) =
 let newVarname: String = varname.printVarname(typecheck, 'Block') in
 OrderedSet(String) {
-  block.generatesBlockTypecheckConditions(varname, typecheck)
+  block.generatesBlockTypecheckConditions(varname, typecheck),
+  block.generatesConditionsForStatements(newVarname)
 }->select(s: String | s.isNotEmpty())
 ->addAll(block.getElementConditions(newVarname, false))
 /]
 
 [template public generatesBlockTypecheckConditions(block: Block, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(Block)
+[/template]
+
+[template public generatesConditionsForStatements(block: Block, varname: String) ? (block.isSet('statements'))]
+[block.generatesMultivaluedFieldConditions(varname, block.statements, 'tmpStatements', 'statements', 'ASTNode') /]
 [/template]

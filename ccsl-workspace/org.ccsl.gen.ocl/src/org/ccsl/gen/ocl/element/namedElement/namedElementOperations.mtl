@@ -2,7 +2,6 @@
 [module namedElementOperations('http://www.example.org/ccsl/elements/namedElements')]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 
 
 [query public getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean): OrderedSet(String) = 

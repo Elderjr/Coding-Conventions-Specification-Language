@@ -1,10 +1,10 @@
 [comment encoding = UTF-8 /]
 [module methodInvocationOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::elementIdentifierService /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
@@ -19,6 +19,7 @@ OrderedSet(String) {
   methodInv.generatesConditionForFrom(varname)
 }
 ->select(s | s.trim().size() > 0)
+->addAll(methodInv.getStatementConditions(varname, false))
 /]
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -29,6 +30,7 @@ OrderedSet(String) {
   methodInv.generatesConditionForFrom(newVarname, metaclass),
   methodInv.generatesConditionForArgs(newVarname, metaclass)
 }->select(s | s.trim().size() > 0)
+->addAll(methodInv.getStatementConditions(newVarname, false, metaclass))
 /]
 
 [template public generatesMethodInvocationTypecheckConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
@@ -40,11 +42,11 @@ OrderedSet(String) {
 [varname.printKindOfCondition(metaclass) /]
 [/template]
 
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (not methodInv.elementAccessed.oclIsUndefined() and getElementsWithId()->includes(methodInv.elementAccessed))]
-[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'OclAny', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('elementAccessed'))]
+[methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.elementAccessed.oclIsUndefined() and getElementsWithId()->includes(methodInv.elementAccessed))]
+[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('elementAccessed'))]
 [methodInv.generatesMonovaluedFieldConditions(varname, methodInv.elementAccessed, 'method', 'MethodDeclaration') /]
 [/template]
 
@@ -57,9 +59,9 @@ OrderedSet(String) {
 [/template]
 
 [template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('args'))]
-[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, methodInv.getMethodInvocationMatchingMetaclasses(), methodInv.getOclName().concat('Args'), 'arguments', 'OclAny') /]
+[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, methodInv.getMethodInvocationMatchingMetaclasses(), 'tmpArgs', 'arguments', 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('args'))]
-[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, methodInv.getOclName().concat('Args'), 'arguments', 'OclAny') /]
+[methodInv.generatesMultivaluedFieldConditions(varname, methodInv.args, 'tmpArgs', 'arguments', 'ASTNode') /]
 [/template]

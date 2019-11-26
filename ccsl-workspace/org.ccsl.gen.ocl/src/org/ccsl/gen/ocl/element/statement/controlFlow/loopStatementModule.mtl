@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module loopStatementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[query public getLoopStatementMatchingMetaclasses(loopStmt: LoopStatement): OrderedSet(String) =
+OrderedSet(String) {'EnhancedForStatement', 'ForStatement', 'WhileStatement', 'DoStatement'}
+/]
+
+[query public getLoopStatementConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String){
+  loopStmt.generatesLoopStatementTypecheckerCondition(varname, typecheck),
+  loopStmt.generatesConditionForBody(varname)
+}->select(s: String | s.isNotEmpty())
+/]
+
+[template private generatesLoopStatementTypecheckerCondition(loopStmt: LoopStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | loopStmt.getLoopStatementMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template private generatesConditionForBody(loopStmt: LoopStatement, varname: String) ? (loopStmt.isSet('body'))]
+[loopStmt.generatesMonovaluedFieldConditions(varname, loopStmt._body, 'body', 'ASTNode', loopStmt.getLoopStatementMatchingMetaclasses()) /]
+[/template]

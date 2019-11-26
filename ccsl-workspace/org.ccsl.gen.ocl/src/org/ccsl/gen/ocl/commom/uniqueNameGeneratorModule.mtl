@@ -1,0 +1,63 @@
+[comment encoding = UTF-8 /]
+[module uniqueNameGeneratorModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[template public getUniqueOclName(element : Element)]
+[element.getUniqueName('e') /]
+[/template]
+
+[template public getUniqueOclName(element : ComplexType)]
+[element.getUniqueName('complexType') /]
+[/template]
+
+[template public getUniqueOclName(element : JavaClass)]
+[element.getUniqueName('clazz') /]
+[/template]
+
+[template public getUniqueOclName(element : JavaInterface)]
+[element.getUniqueName('interface') /]
+[/template]
+
+[template public getUniqueOclName(element : Variable)]
+[element.getUniqueName('var') /]
+[/template]
+
+[template public getUniqueOclName(element : Method)]
+[element.getUniqueName('method') /]
+[/template]
+
+[template public getUniqueOclName(element : Statement)]
+[element.getUniqueName('stmt') /]
+[/template]
+
+[template public getUniqueOclName(element : MethodInvocation)]
+[element.getUniqueName('mInv') /]
+[/template]
+
+[template public getUniqueOclName(element : PrimitiveType)]
+[element.getUniqueName('primitiveType') /]
+[/template]
+
+[template public getUniqueOclName(element : LiteralValue)]
+[element.getUniqueName('literal') /]
+[/template]
+
+[template public getUniqueOclName(element : VarDeclaration)]
+[element.getUniqueName('varDecl') /]
+[/template]
+
+[template public getUniqueOclName(element : StringConcatenation)]
+[element.getUniqueName('strConcat') /]
+[/template]
+
+[template public getUniqueOclName(element : Block)]
+[element.getUniqueName('block') /]
+[/template]
+
+[template public getUniqueOclName(element : SwitchCaseBlock)]
+[element.getUniqueName('switchBlock') /]
+[/template]
+
+[template public getUniqueOclName(element : IfStatement)]
+[element.getUniqueName('ifStmt') /]
+[/template]

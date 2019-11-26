@@ -1,13 +1,10 @@
 [comment encoding = UTF-8 /]
 [module arrayCreationOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
-
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getArrayCreationMatchingMetaclasses(inst: ArrayCreation): OrderedSet(String)=
   OrderedSet(String){'ArrayCreation'}
@@ -26,7 +23,6 @@ OrderedSet(String) {
 [/template]
 
 [template private generatesConditionsForType(inst: ArrayCreation, varname: String) ? (not inst.type.oclIsUndefined())]
-let [inst.type.getOclName() /]: ASTNode = [varname /].type.type in
-[inst.type.generatesConditions(inst.type.getOclName(), true) /]
+[inst.generatesMonovaluedFieldConditions(varname, inst.type, 'type.type', 'ASTNode') /]
 [/template]
 

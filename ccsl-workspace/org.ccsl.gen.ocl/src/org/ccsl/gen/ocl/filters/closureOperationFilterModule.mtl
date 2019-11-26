@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module closureOperationFilterModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+
+
+[query private getRelationName(element: Element, elementRelated: Element): String =
+let relatedFeature: OrderedSet(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->asOrderedSet()->select(feature: ecore::EStructuralFeature |
+  let featureValue: OclAny = element.eGet(feature) in if(not featureValue.oclIsUndefined()) then
+    featureValue->includes(elementRelated)
+  else
+    false
+  endif
+) in if relatedFeature->size() > 0 then
+  relatedFeature->first().name
+else
+  null
+endif
+/]
+
+[template public generateClosureOperationFilterConditions(closureOperation: ClosureFilter, target: Element)]
+[let relationName: String = closureOperation.subject.getRelationName(closureOperation.closureRelation)]
+[if relationName <> null]
+[closureOperation.subject.generatesClosureCondition(closureOperation.closureRelation, target.getUniqueOclName(), relationName) /]
+[/if][/let]
+[/template]
+
+[template private generatesClosureCondition(element: Element, field: Element, varname: String, relation: String) /]
+
+[template private generatesClosureCondition(methodInv: MethodInvocation, field: Element, varname: String, relation: String) ? (relation = 'from')]
+[varname /].oclAsType(MethodInvocation).expression->closure(node: ASTNode |
+  if(node.oclIsKindOf(ParenthesizedExpression)) then
+    node.oclAsType(ParenthesizedExpression).expression
+  else if(node.oclIsKindOf(MethodInvocation)) then
+    node.oclAsType(MethodInvocation).expression
+  else if(node.oclIsKindOf(SingleVariableAccess)) then
+    node.oclAsType(SingleVariableAccess).qualifier
+  else if(node.oclIsKindOf(TypeAccess)) then
+    node.oclAsType(TypeAccess).qualifier
+  else if(node.oclIsKindOf(TypeLiteral)) then
+    node.oclAsType(TypeLiteral).type
+  else
+    null
+  endif endif endif endif endif
+)->exists([field.getUniqueOclName() /] | --NOT_COUNT
+  [field.generatesConditions(field.getUniqueOclName(), true) /] and
+  [methodInv.generatesConditions(varname, true) /]
+)
+[/template]

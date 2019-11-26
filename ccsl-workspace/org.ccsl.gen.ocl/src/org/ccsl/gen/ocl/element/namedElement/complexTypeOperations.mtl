@@ -3,7 +3,7 @@
 
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /] 
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
@@ -46,19 +46,19 @@ OrderedSet(String) {
 [/template]
 
 [template public generatesConditionForFields(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.fields->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, complexType.getOclName().concat('Fields'), 'bodyDeclarations', 'OclAny') /]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, 'tmpFields', 'bodyDeclarations', 'OclAny') /]
 [/template]
 
 [template public generatesConditionForFields(complexType: ComplexType, varname: String) ? (complexType.fields->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, complexType.getOclName().concat('Fields'), 'bodyDeclarations', 'OclAny') /]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, 'tmpFields', 'bodyDeclarations', 'OclAny') /]
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.methods->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, complexType.getOclName().concat('Methods'), 'bodyDeclarations', 'OclAny') /]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, 'tmpMethods', 'bodyDeclarations', 'OclAny') /]
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String) ? (complexType.methods->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, complexType.getOclName().concat('Methods'), 'bodyDeclarations', 'OclAny') /]
+[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, 'tmpMethods', 'bodyDeclarations', 'OclAny') /]
 [/template]
 
 [template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String) ? (complexType.superTypes->size() > 0 and complexType.oclIsTypeOf(JavaClass))]
@@ -69,6 +69,6 @@ else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
 else
   null
 endif endif in (not superType.oclIsUndefined()) and
-let [complexType.superTypes->first().getOclName() /]: ASTNode = superType in
-[complexType.superTypes->first().generatesConditions(complexType.superTypes->first().getOclName(), true, 'ClassDeclaration') /]
+let [complexType.superTypes->first().getUniqueOclName() /]: ASTNode = superType in
+[complexType.superTypes->first().generatesConditions(complexType.superTypes->first().getUniqueOclName(), true, 'ClassDeclaration') /]
 [/template]

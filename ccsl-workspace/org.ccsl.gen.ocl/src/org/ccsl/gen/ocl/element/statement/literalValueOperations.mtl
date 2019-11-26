@@ -3,7 +3,7 @@
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+
 
 [query public isStringLiteral(literal: LiteralValue): Boolean = 
 literal.oclIsKindOf(StringLiteral)
@@ -89,9 +89,8 @@ OrderedSet(String) {
 [/template]
 
 [template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() > 1))]
-[let letOclName: String = literal.getOclName().concat('Value')]
-[literal.generatesLetStatementToGetLiteralValue(varname, letOclName) /] and
-[letOclName /] = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if][/let]
+[literal.generatesLetStatementToGetLiteralValue(varname, 'tmpValue') /] and
+tmpValue = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if]
 [/template]
 
 [template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() = 1))]

@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module switchStatementCasesCounterOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
 [template public generatesSwitchStatementCaseCounterFilterConditions(filter : SwitchCaseStatementCount, target: Element)]
@@ -8,7 +8,7 @@
 [/template]
 
 [template public generatesSwitchStatementCaseCounterFilterConditions(filter : SwitchCaseStatementCount, target: SwitchStatement)]
-let totalOfSwitchCases: Integer = [target.getOclName() /].statements->select(case | case.oclIsKindOf(SwitchCaseStatement))->size() in
+let totalOfSwitchCases: Integer = [target.getUniqueOclName() /].statements->select(case | case.oclIsKindOf(SwitchCaseStatement))->size() in
 [if filter.isSet('min') and filter.isSet('max')]
 totalOfSwitchCases >= [filter.min /] and totalOfSwitchCases <= [filter.max /][elseif filter.isSet('min')]
 totalOfSwitchCases >= [filter.min /][elseif filter.isSet('max')]

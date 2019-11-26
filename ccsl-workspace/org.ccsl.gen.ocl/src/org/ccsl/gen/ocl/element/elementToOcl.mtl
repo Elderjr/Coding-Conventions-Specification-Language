@@ -1,8 +1,9 @@
 [comment encoding = UTF-8 /]
 [module elementToOcl('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
@@ -18,19 +19,20 @@
 [cond.printStringWithIdentation() /][/for][/let]
 [/template]
 
-[template public generatesSelectOCL(element: Element, filters: OrderedSet(Filter))]
-[let scopeConditions: String = element.generatesConditions(element.getOclName(), element.getMatchingJavaMetaclasses()->size() > 1)]
+[template public generatesSelectOCL(atomicRule: Context, element: Element, filters: OrderedSet(Filter))]
+[let scopeConditions: String = element.generatesConditions(element.getUniqueOclName(), element.getMatchingJavaMetaclasses()->size() > 1)]
 [let filtersConditions: String = filters->generatesFiltersConditions()]
-[element.generatesAllInstances() /]->select([element.getOclName() /] |
-  [for(conditions: String | OrderedSet(String){scopeConditions, filtersConditions}->select(s | s.isNotEmpty())) separator( ' and\n')]
-  --[if i = 1]Scope Conditions[else]Filters Conditions[/if]
-  [conditions.printStringWithIdentation() /][/for]
-)[for(Sequence(Integer){1 ..
-  (
-    scopeConditions.countMatches('->exists') - scopeConditions.countMatches('--NOT_COUNT') + 
-    filtersConditions.countMatches('->exists') - filtersConditions.countMatches('--NOT_COUNT')
-  )
-})])[/for][/let][/let]
+[element.generatesAllInstances() /]->select([element.getUniqueOclName() /] |
+  --Scope Conditions
+  [if scopeConditions.isNotEmpty()]
+  [scopeConditions.printStringWithIdentation() /] [if filtersConditions.isNotEmpty()] and
+
+  [/if][/if]
+  [if filtersConditions.isNotEmpty()]
+  --Filters Conditions
+  [filtersConditions.printStringWithIdentation() /]
+  [/if]
+)[for(Sequence(Integer){1 ..atomicRule.getTotalElementsDeclaredInExists()})])[/for][/let][/let]
 [/template]
 
 [template public generatesPostConditionToRemoveJavadocRelatedElements(element: Element)]

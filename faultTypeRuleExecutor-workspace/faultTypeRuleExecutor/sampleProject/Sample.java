@@ -3,8 +3,7 @@ package sampleProject;
 public class Sample {
 	public void foo() {
 		if (true) {
-		} else {
-			int b = 5;
+			System.out.println("I'am else block!");
 		}
 
 	}

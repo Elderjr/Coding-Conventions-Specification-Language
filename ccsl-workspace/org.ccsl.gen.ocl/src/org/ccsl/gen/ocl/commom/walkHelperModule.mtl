@@ -1,0 +1,26 @@
+[comment encoding = Cp1252 /]
+[module walkHelperModule('http://www.example.org/ccsl')/]
+
+[query public clearAllContexts(anOclAny: OclAny) : OclVoid
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'clearAllContexts()', Sequence{})
+/]
+
+[query public getUniqueName(arg0 : Element, arg1 : String) : String
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'getUniqueName(ccsl.elements.Element, java.lang.String)', Sequence{arg0, arg1})
+/]
+
+[query public getElementsVisited(anOclAny: OclAny) : Set(OclAny)
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'getElementsVisited()', Sequence{})
+/]
+
+[query public addElementExistsDeclaration(arg0 : Element) : OclVoid
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'addElementExistsDeclaration(ccsl.elements.Element)', Sequence{arg0})
+/]
+
+[query public addCustomExistsDeclaration(arg0 : Context) : OclVoid
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'addCustomExistsDeclaration(ccsl.Context)', Sequence{arg0})
+/]
+
+[query public getTotalElementsDeclaredInExists(arg0 : Context) : Integer
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'getTotalElementsDeclaredInExists(ccsl.Context)', Sequence{arg0})
+/]

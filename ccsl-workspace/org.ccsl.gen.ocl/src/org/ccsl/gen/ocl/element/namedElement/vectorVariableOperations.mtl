@@ -2,7 +2,6 @@
 [module vectorVariableOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
@@ -29,10 +28,9 @@ endif
 /]
 
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String)]
-[let letOclName: String = var.getOclName().concat('Dimensions')]
-[var.generatesLetIfObject(varname, 'extraArrayDimensions', var.getVariableMatchingJavaMetaclasses(), letOclName, 'Integer', false) /] and
+[var.generatesLetIfObject(varname, 'extraArrayDimensions', var.getVariableMatchingJavaMetaclasses(), 'tmpDimensions', 'Integer') /] and
 [if var.isSet('dimensions')]
-[letOclName /][if not var.exact ]>[/if]= [var.dimensions /][else][letOclName /] >= 1[/if][/let]
+tmpDimensions[if not var.exact ]>[/if]= [var.dimensions /][else]tmpDimensions >= 1[/if]
 [/template]
 
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String, metaclass: String)]

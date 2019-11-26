@@ -23,10 +23,12 @@
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
+[import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::ifStatementOperations /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
 
 [template private printConditions(element: Element, conditions: OrderedSet(String))]
@@ -156,6 +158,14 @@
 [lit.printConditions(lit.getLiteralConditions(varname, typecheck)) /]
 [/template]
 
+[comment statement/access /]
+[template public generatesConditions(access: Access, varname: String, typecheck: Boolean)]
+[access.printConditions(access.getAccessConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(access: Access, varname: String, typecheck: Boolean, metaclass: String)]
+[access.printConditions(access.getAccessConditions(varname, typecheck, metaclass)) /]
+[/template]
+
 [comment statements/controlFlow/SwitchStatement /]
 [template public generatesConditions(switch: SwitchStatement, varname: String, typecheck: Boolean)]
 [switch.printConditions(switch.getSwitchStatementConditions(varname, typecheck)) /]
@@ -164,10 +174,26 @@
 [switch.printConditions(switch.getSwitchStatementConditions(varname, typecheck)) /]
 [/template]
 
+[comment statements/controlFlow/SwitchCaseBlock /]
+[template public generatesConditions(switch: SwitchCaseBlock, varname: String, typecheck: Boolean)]
+[switch.printConditions(switch.getSwitchCaseBlockConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(switch: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String)]
+[switch.printConditions(switch.getSwitchCaseBlockConditions(varname, typecheck)) /]
+[/template]
+
 [comment statements/controlFlow/IfStatement /]
 [template public generatesConditions(ifStatement: IfStatement, varname: String, typecheck: Boolean)]
 [ifStatement.printConditions(ifStatement.getIfStatementConditions(varname, typecheck)) /]
 [/template]
 [template public generatesConditions(ifStatement: IfStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [ifStatement.printConditions(ifStatement.getIfStatementConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/controlFlow/LoopStatement /]
+[template public generatesConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean)]
+[loopStmt.printConditions(loopStmt.getLoopStatementConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[loopStmt.printConditions(loopStmt.getLoopStatementConditions(varname, typecheck)) /]
 [/template]

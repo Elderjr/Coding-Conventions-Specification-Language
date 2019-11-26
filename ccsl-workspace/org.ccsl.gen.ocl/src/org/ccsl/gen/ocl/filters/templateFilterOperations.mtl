@@ -1,9 +1,15 @@
 [comment encoding = UTF-8 /]
 [module templateFilterOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
-
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [template public generatesTemplateFilterConditions(templ: TemplateFilter, target: Element)]
-[templ.subject.generatesConditions(target.getOclName(), true) /]
+-- Template Filter
+let [templ.subject.getUniqueOclName() /]: ASTNode = [target.getUniqueOclName() /] in 
+[let subjectCondition: String = templ.subject.generatesConditions(templ.subject.getUniqueOclName(), true)]
+[subjectCondition.printStringWithIdentation() /]
+[for(Sequence(Integer){1 ..templ.getTotalElementsDeclaredInExists()})])[/for][/let]
+-- End Template Filter
 [/template]

@@ -1,6 +1,5 @@
 [comment encoding = UTF-8 /]
 [module operatorExpressionOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
@@ -32,9 +31,9 @@ let [letName /]: OrderedSet(OclAny) = [varname /].rightHandSide->asOrderedSet()
 [/template]
 
 [template public generatesConditionForOperands(operatorExpression: OperatorExpression, varname: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(StringConcatenation))]
-[operatorExpression.generatesOperandsLetStatement(varname, operatorExpression.getOclName().concat('Operands')) /]->closure(x | 
+[operatorExpression.generatesOperandsLetStatement(varname, 'tmpOperands') /]->closure(x | 
   if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
 ) in
-[operatorExpression.generatesMultivaluedFieldConditions(operatorExpression.getOclName().concat('Operands'), operatorExpression.operands, 'OclAny') /]
+[operatorExpression.generatesMultivaluedFieldConditions('tmpOperands', operatorExpression.operands, 'OclAny') /]
 [/template]
 

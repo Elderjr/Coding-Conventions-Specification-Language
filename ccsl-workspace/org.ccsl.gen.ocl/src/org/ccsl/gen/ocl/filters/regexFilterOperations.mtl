@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module regexFilterOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
@@ -10,34 +10,34 @@
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: NamedElement)]
-[target.getOclName() /].oclAsType(NamedElement).name.matches('[regexFilter.regex /]')
+[target.getUniqueOclName() /].oclAsType(NamedElement).name.matches('[regexFilter.regex /]')
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: ComplexType)]
-let [target.getOclName() /]Package: Package = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
-  [target.getOclName() /].oclAsType(ClassDeclaration).package
-else if [target.getOclName() /].oclIsKindOf(InterfaceDeclaration) then
-  [target.getOclName() /].oclAsType(InterfaceDeclaration).package
+let [target.getUniqueOclName() /]Package: Package = if [target.getUniqueOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(ClassDeclaration).package
+else if [target.getUniqueOclName() /].oclIsKindOf(InterfaceDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(InterfaceDeclaration).package
 else
   null
-endif endif in (not [target.getOclName() /]Package.oclIsUndefined()) and
-[target.getOclName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+endif endif in (not [target.getUniqueOclName() /]Package.oclIsUndefined()) and
+[target.getUniqueOclName() /]Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([target.getOclName() /].oclAsType(NamedElement).name).matches('[regexFilter.regex /]') 
+).concat([target.getUniqueOclName() /].oclAsType(NamedElement).name).matches('[regexFilter.regex /]') 
 [/template]
 
 [template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JavaClass)]
-let className: String = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
-  [target.getOclName() /].oclAsType(ClassDeclaration).name
-else if [target.getOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
-  [target.getOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+let className: String = if [target.getUniqueOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(ClassDeclaration).name
+else if [target.getUniqueOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
 else
   null
 endif endif in (not className.oclIsUndefined()) and
-let classPackage: Package = if [target.getOclName() /].oclIsKindOf(ClassDeclaration) then
-  [target.getOclName() /].oclAsType(ClassDeclaration).package
-else if [target.getOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
-  [target.getOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+let classPackage: Package = if [target.getUniqueOclName() /].oclIsKindOf(ClassDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(ClassDeclaration).package
+else if [target.getUniqueOclName() /].oclIsKindOf(AnonymousClassDeclaration) then
+  [target.getUniqueOclName() /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
 else
   null
 endif endif in (not className.oclIsUndefined()) and
@@ -47,15 +47,15 @@ classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; f
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() > 1)]
-[target.generatesLetStatementToGetLiteralValue(target.getOclName(), 'literalNameRegex') /]
+[target.generatesLetStatementToGetLiteralValue(target.getUniqueOclName(), 'literalNameRegex') /]
 literalNameRegex.matches('[regexFilter.regex /]')
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() = 1)]
 [let matchingMetaclass: String = target.getLiteralMatchingMetaclasses()->first()]
-[target.getOclName().printWithCast(matchingMetaclass) /].[target.getLiteralValueMatchingFieldByJavaMetaclass(matchingMetaclass) /].matches('[if target.isStringLiteral()]"[/if][regexFilter.regex /][if target.isStringLiteral()]"[/if]')[/let]
+[target.getUniqueOclName().printWithCast(matchingMetaclass) /].[target.getLiteralValueMatchingFieldByJavaMetaclass(matchingMetaclass) /].matches('[if target.isStringLiteral()]"[/if][regexFilter.regex /][if target.isStringLiteral()]"[/if]')[/let]
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: PrimitiveType)]
-[target.getOclName() /].oclAsType(PrimitiveType).name.matches('[regexFilter.regex /]')
+[target.getUniqueOclName() /].oclAsType(PrimitiveType).name.matches('[regexFilter.regex /]')
 [/template]

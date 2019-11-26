@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module propertyFilterOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
 
 [template public generatesPropertyFilterConditions(propertyFilter: PropertyFilter, target: Element)]
@@ -8,5 +8,5 @@
 [/template]
 
 [template public generatesPropertyFilterConditions(propertyFilter: PropertyFilter, target: CodeElement)]
-[target.generatesConditionForProperties(target.getOclName(), propertyFilter.properties) /]
+[target.generatesConditionForProperties(target.getUniqueOclName(), propertyFilter.properties) /]
 [/template]

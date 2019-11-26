@@ -1,13 +1,13 @@
 package sampleProject;
 
 public class Sample {
-
 	public void foo() {
+		
 		if(true) {
-			System.out.println("hiii");
-			int a = 5;
-		}else {
-			int b = 5;
+			System.out.println("blabla");
+		} else if(true){
+			System.out.println("I'am else block!");
 		}
 	}
+	
 }

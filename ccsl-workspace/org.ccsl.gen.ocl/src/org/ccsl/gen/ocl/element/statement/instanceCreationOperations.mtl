@@ -5,7 +5,7 @@
 [import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::OclVariableNameGenerator /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 
@@ -31,11 +31,11 @@ endif
 /]
 
 [template private generatesConditionsForType(inst: InstanceCreation, varname: String) ? (not inst.type.oclIsUndefined())]
-let [inst.type.getOclName() /]: ASTNode = if [varname /].type.type.oclIsKindOf(ParameterizedType) then
+let [inst.type.getUniqueOclName() /]: ASTNode = if [varname /].type.type.oclIsKindOf(ParameterizedType) then
   [varname /].type.type.oclAsType(ParameterizedType).type.type
 else
   [varname /].type.type
-endif in (not [inst.type.getOclName() /].oclIsUndefined()) and
-[inst.type.generatesConditions(inst.type.getOclName(), true) /]
+endif in (not [inst.type.getUniqueOclName() /].oclIsUndefined()) and
+[inst.type.generatesConditions(inst.type.getUniqueOclName(), true) /]
 [/template]
 

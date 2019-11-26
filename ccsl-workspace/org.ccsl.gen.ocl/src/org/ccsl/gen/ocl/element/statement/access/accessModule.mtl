@@ -1,0 +1,55 @@
+[comment encoding = UTF-8 /]
+[module accessModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[query public getAccessMatchingMetaclasses(access: Access): OrderedSet(String)=
+  OrderedSet(String){'TypeAccess', 'MethodInvocation', 'SingleVariableAccess'}
+/]
+
+[query public getAccessConditions(access: Access, varname: String, typecheck: Boolean): OrderedSet(String) =
+OrderedSet(String) {
+  access.generatesAccessTypecheckCondition(varname, typecheck),
+  access.generatesConditionsForFrom(varname)
+}->addAll(access.getElementConditions(varname, typecheck))
+->select(s | s.isNotEmpty())
+/]
+
+[query public getAccessConditions(access: Access, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, metaclass) in 
+OrderedSet(String) {
+  access.generatesAccessTypecheckCondition(varname, typecheck, metaclass),
+  access.generatesConditionsForFrom(newVarname, metaclass)
+}->addAll(access.getElementConditions(newVarname, typecheck, metaclass))
+->select(s | s.isNotEmpty())
+/]
+
+[template private generatesAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (metaclass: String | access.getAccessMatchingMetaclasses()) separator(' or ')]
+[varname.printKindOfCondition(metaclass) /][/for])
+[/template]
+
+[template private generatesAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname.printKindOfCondition(metaclass) /]
+[/template]
+
+[template private generatesConditionsForFrom(access: Access, varname: String) ? (access.isSet('from'))]
+[let map: OrderedSet(OrderedSet(String)) = OrderedSet(OrderedSet(String)) {
+  OrderedSet(String){'TypeAccess', 'qualifier'},
+  OrderedSet(String){'SingleVariableAccess', 'qualifier'},  
+  OrderedSet(String){'MethodInvocation', 'expression'}
+}]
+[access.generatesMonovaluedFieldConditions(varname, access.from, 'ASTNode', map) /]
+[/let]
+[/template]
+
+[template private generatesConditionsForFrom(access: Access, varname: String, metaclass: String) ? (metaclass = 'SingleVariableAccess' or metaclass = 'TypeAccess')]
+[access.generatesMonovaluedFieldConditions(varname, access.from, 'qualifier', 'ASTNode') /]
+[/template]
+
+[template private generatesConditionsForFrom(access: Access, varname: String, metaclass: String) ? (metaclass = 'MethodInvocation')]
+[access.generatesMonovaluedFieldConditions(varname, access.from, 'expression', 'ASTNode') /]
+[/template]
