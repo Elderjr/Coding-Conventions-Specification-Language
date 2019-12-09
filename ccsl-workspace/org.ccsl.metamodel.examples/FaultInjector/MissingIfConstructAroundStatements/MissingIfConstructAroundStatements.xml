@@ -1,0 +1,19 @@
+<faultTypeRule>
+  <ocl>
+    IfStatement.allInstances()->select(ifWithoutElse |
+      --Scope Conditions
+      let stmtToIncreaseScope: ASTNode = ifWithoutElse.thenStatement in
+      stmtToIncreaseScope &lt;&gt; null and
+      (stmtToIncreaseScope.oclIsKindOf(Statement) or stmtToIncreaseScope.oclIsKindOf(Expression)) and
+      let nullTmp: ASTNode = ifWithoutElse.elseStatement in
+      nullTmp = null 
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingIfConstructAroundStatementsAction" custom="true" />
+    <action name="delete" custom="false" />
+  </actions>
+</faultTypeRule>

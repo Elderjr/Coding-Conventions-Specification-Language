@@ -8,125 +8,116 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
-[query private generatesFieldConditions(element: Element, mappedMetaclass: String): String = 
-if(mappedMetaclass = 'OclAny' or mappedMetaclass = 'ASTNode') then
-  element.generatesConditions(element.getUniqueOclName(), true)
-else
-  element.generatesConditions(element.getUniqueOclName(), false, mappedMetaclass)
-endif
-/]
 
-[template public generatesLetIfObject(element: Element, varname: String, mappedFieldName: String, mappedElementMetaclasses: OrderedSet(String), letOclName: String, letType: String)]
-let [letOclName /]: [letType /] = [for(metaclass: String | mappedElementMetaclasses) separator('else ')]
-if [varname /].oclIsKindOf([metaclass /]) then
-  [varname /].oclAsType([metaclass /]).[mappedFieldName /]
+[template public getFieldName(field: Element)]
+[if field = null]
+nullTmp[elseif getElementsVisited()->includes(field)]
+[field.getBaseName() /]Tmp[else]
+[field.getUniqueOclName() /][/if]
+[/template]
+
+[comment generates get field expression /]
+[template public generatesGetFieldExpression(element: Element, elementOclVarname: String, fieldOclVarname: String, mappedFieldPropertyName: String, mappedFieldMetaclass: String) post(trim())]
+let [fieldOclVarname /]: [mappedFieldMetaclass /] = [elementOclVarname /].[mappedFieldPropertyName /] in
+[/template]
+
+[template public generatesGetFieldExpression(element: Element, elementOclVarname: String, fieldOclVarname: String, mappedFieldPropertyName: String, mappedFieldMetaclass: String, elementMetaclasses: OrderedSet(String)) post(trim())]
+let [fieldOclVarname /]: [mappedFieldMetaclass /] = [for(metaclass: String | elementMetaclasses) separator('else ')]
+if [elementOclVarname /].oclIsKindOf([metaclass /]) then
+  [elementOclVarname /].oclAsType([metaclass /]).[mappedFieldPropertyName /]
 [/for]
 else
   null
-[for (Sequence(Integer){1..mappedElementMetaclasses->size()}) separator(' ')]endif[/for] in
+[for (Sequence(Integer){1..elementMetaclasses->size()}) separator(' ')]endif[/for] in
 [/template]
 
-[template public generatesLetIfObject(element: Element, varname: String, map: OrderedSet(OrderedSet(String)), letOclName: String, letType: String)]
-let [letOclName /]: [letType /] = [for(entry: OrderedSet(String) | map) separator('else ')]
-if [varname /].oclIsKindOf([entry->at(1) /]) then
-  [varname /].oclAsType([entry->at(1) /]).[entry->at(2) /]
+[template public generatesGetFieldExpression(element: Element, elementOclVarname: String, fieldOclVarname: String, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String)))]
+let [fieldOclVarname /]: [mappedFieldMetaclass /] = [for(entry: OrderedSet(String) | map) separator('else ')]
+if [elementOclVarname /].oclIsKindOf([entry->at(1) /]) then
+  [elementOclVarname /].oclAsType([entry->at(1) /]).[entry->at(2) /]
 [/for]
 else
   null
 [for (Sequence(Integer){1..map->size()}) separator(' ')]endif[/for] in
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado (apenas uma metaclasse mapeada) /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field = null)]
-[varname /].[mappedFieldName /] = null
+[template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String, mappedFieldMetaclass: String) ? (field = null)]
+[fieldOclVarname /] = null
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field <> null and getElementsVisited()->includes(field) and not field.isElementPartOfClosureOperation())]
-let tmp: [mappedFieldMetaclass /] = [varname /].[mappedFieldName /] in (not tmp.oclIsUndefined()) and
-let tmp: [mappedFieldMetaclass /] = [field.getOclReferenceExpression('tmp') /] in
-tmp = [field.getUniqueOclName() /]
+[template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and getElementsVisited()->includes(field))]
+[fieldOclVarname /] = [field.getUniqueOclName() /]
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String) ? (field <> null and (not getElementsVisited()->includes(field)) and not field.isElementPartOfClosureOperation())]
-let [field.getUniqueOclName() /] : [mappedFieldMetaclass /] = [varname /].[mappedFieldName /] in (not [field.getUniqueOclName() /].oclIsUndefined()) and
-let [field.getUniqueOclName() /] = [field.getOclReferenceExpression(field.getUniqueOclName()) /] in
-[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)] 
-[if fieldConditions.isNotEmpty()]
-[fieldConditions.printStringWithIdentation() /][else]
-true[/if][/let]
+[template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
+[fieldOclVarname /] <> null and
+[if mappedFieldMetaclass = 'ASTNode' or mappedFieldMetaclass = 'OclAny']
+[field.generatesConditions(field.getUniqueOclName(), true) /][else]
+[field.generatesConditions(field.getUniqueOclName(), false, mappedFieldMetaclass) /][/if]
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado (varias metaclasses mapeadas) /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (field = null)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, 'tmp', mappedFieldMetaclass) /] tmp = null
+[template public generatesFieldCondition(element: Element, field: Element, fieldOclVarname: String, mappedFieldMetaclass: String) ? (not element.isClosureRelation(field))]
+[let fieldRef: String = if field <> null then
+    field.getOclReferenceExpression(fieldOclVarname, mappedFieldMetaclass)
+  else
+    ''
+  endif
+]
+[if fieldRef.isNotEmpty()]
+[fieldRef.printStringWithIdentation() /]
+[/if][/let][element.generatesFieldConditionPrvt(field, fieldOclVarname, mappedFieldMetaclass) /]
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String))  ? (field <> null and getElementsVisited()->includes(field) and not field.isElementPartOfClosureOperation())]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, 'tmp', mappedFieldMetaclass) /] 
-let tmp: [mappedFieldMetaclass /] = [field.getOclReferenceExpression('tmp') /] in
-tmp = [field.getUniqueOclName() /] 
+[comment generates get field expression for monovalued values /]
+[template public generatesMonovaluedFieldConditions(element: Element, field: Element, elementOclVarname: String, mappedFieldPropertyName: String, mappedFieldMetaclass: String) ? (not element.isClosureRelation(field)) post(trim()) ]
+[let fieldOclVarname: String = field.getFieldName()]
+[element.generatesGetFieldExpression(elementOclVarname, fieldOclVarname, mappedFieldPropertyName, mappedFieldMetaclass) /]
+[element.generatesFieldCondition(field, fieldOclVarname, mappedFieldMetaclass) /][/let]
 [/template]
 
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldName: String, mappedFieldMetaclass: String, mappedElementMetaclasses: OrderedSet(String)) ? (field <> null and not getElementsVisited()->includes(field) and not field.isElementPartOfClosureOperation())]
-[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, field.getUniqueOclName(), mappedFieldMetaclass)/] (not [field.getUniqueOclName() /].oclIsUndefined()) and
-let [field.getUniqueOclName() /]: [mappedFieldMetaclass /] = [field.getOclReferenceExpression(field.getUniqueOclName()) /] in [if fieldConditions.isNotEmpty()]
-[fieldConditions.printStringWithIdentation() /][else]true[/if][/let]
+[template public generatesMonovaluedFieldConditions(element: Element, field: Element, elementOclVarname: String, mappedFieldPropertyName: String, mappedFieldMetaclass: String, elementMetaclasses: OrderedSet(String)) ? (not element.isClosureRelation(field)) post(trim())]
+[let fieldOclVarname: String = field.getFieldName()]
+[element.generatesGetFieldExpression(elementOclVarname, fieldOclVarname, mappedFieldPropertyName, mappedFieldMetaclass, elementMetaclasses) /]
+[element.generatesFieldCondition(field, fieldOclVarname, mappedFieldMetaclass) /][/let]
 [/template]
 
-[comment Gerar condicoes de atributo monovalorado (com mapeamento de metaclasse e atributo) /]
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field = null)]
-[element.generatesLetIfObject(varname, map, 'tmp', mappedFieldMetaclass) /] tmp = null
-[/template]
-
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field <> null and getElementsVisited()->includes(field) and not field.isElementPartOfClosureOperation())]
-[element.generatesLetIfObject(varname, map, 'tmp', mappedFieldMetaclass) /] 
-let tmp: [mappedFieldMetaclass /] = [field.getOclReferenceExpression('tmp') /] in
-tmp = [field.getUniqueOclName() /]
-[/template]
-
-[template public generatesMonovaluedFieldConditions(element: Element, varname: String, field: Element, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (field <> null and not getElementsVisited()->includes(field) and not field.isElementPartOfClosureOperation())]
-[let fieldConditions: String = field.generatesFieldConditions(mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, map, field.getUniqueOclName(), mappedFieldMetaclass) /] (not [field.getUniqueOclName() /].oclIsUndefined())
-let [field.getUniqueOclName() /]: [mappedFieldMetaclass /] = [field.getOclReferenceExpression(field.getUniqueOclName()) /] in [if fieldConditions.isNotEmpty()]
-[fieldConditions.printStringWithIdentation() /][else]true[/if][/let]
+[template public generatesMonovaluedFieldConditions(element: Element, field: Element, elementOclVarname: String, mappedFieldMetaclass: String, map: OrderedSet(OrderedSet(String))) ? (not element.isClosureRelation(field)) post(trim())]
+[let fieldOclVarname: String = field.getFieldName()]
+[element.generatesGetFieldExpression(elementOclVarname, fieldOclVarname, mappedFieldMetaclass, map) /]
+[element.generatesFieldCondition(field, fieldOclVarname, mappedFieldMetaclass) /][/let]
 [/template]
 
 [comment Gerar condicoes de atributo multivalorado com acesso direto /]
-[template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-[let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
-[if fieldsConditions.isNotEmpty()]
-let [letOclName /]: OrderedSet([mappedFieldMetaclass /]) = [varname /].[mappedFieldName /] in (not [letOclName /]->oclIsUndefined()) and
-[fieldsConditions.printStringWithIdentation() /][/if][/let]
+[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String, mappedPropertyFieldName: String, mappedFieldMetaclass: String)]
+[element.generatesGetFieldExpression(elementOclVarname, fieldsOclVarname, mappedPropertyFieldName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
+[element.generatesSetConditions(fieldsOclVarname, fields, mappedFieldMetaclass) /]
 [/template]
 
-[comment Gerar condicoes de atributo multivalorado com lista de possiveis metaclasses /]
-[template public generatesMultivaluedFieldConditions(element: Element, varname: String, fields: OrderedSet(Element), mappedElementMetaclasses: OrderedSet(String), letOclName: String, mappedFieldName: String, mappedFieldMetaclass: String)]
-[let fieldsConditions: String = element.generatesMultivaluedFieldConditions(letOclName, fields, mappedFieldMetaclass)]
-[element.generatesLetIfObject(varname, mappedFieldName, mappedElementMetaclasses, letOclName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /][if fieldsConditions.isNotEmpty()] and
-[fieldsConditions.printStringWithIdentation() /][/if][/let]
+[**
+ * Generates conditions for a multivalue property of @element.
+*/]
+[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String , mappedPropertyFieldName: String, mappedFieldMetaclass: String, elementMetaclasses: OrderedSet(String))]
+[element.generatesGetFieldExpression(elementOclVarname, fieldsOclVarname, mappedPropertyFieldName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), elementMetaclasses) /]
+[element.generatesSetConditions(fieldsOclVarname, fields, mappedFieldMetaclass) /]
 [/template]
 
-[template public generatesMultivaluedFieldConditions(element: Element,  letOclFieldName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
-[let tmpFields: OrderedSet(Element) = fields->select(element: Element | not element.isElementPartOfClosureOperation())]
+[template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
+[let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and ')]
-  [field.generatesMultivaluedFieldCondition(letOclFieldName, mappedFieldMetaclass) /]
+  [setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /]
 [/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if tmpFields->size() > 0] and
-[/if][letOclFieldName /]->size() = [tmpFields->size() /][/if][/let]
+[/if][setOclName /]->size() = [tmpFields->size() /][/if][/let]
 [/template]
 
-[template public generatesMultivaluedFieldCondition(field: Element, letSetName: String, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
-[letSetName /]->exists(tmp |
-  let tmp: [mappedFieldMetaclass /] = [field.getOclReferenceExpression('tmp') /] in
-  tmp = [field.getUniqueOclName() /]
-)
+[template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
+[let fieldName: String = field.getFieldName()]
+exists([fieldName /] |
+  [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /]
+)[/let]
 [/template]
 
-[template public generatesMultivaluedFieldCondition(field: Element, letSetName: String, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]
-[letSetName /]->exists(tmp | [field.addElementExistsDeclaration() /]
-let [field.getUniqueOclName() /]: [mappedFieldMetaclass /] = [field.getOclReferenceExpression('tmp') /] in
-[let fieldCondition: String = field.generatesFieldConditions(mappedFieldMetaclass)]
-[if fieldCondition.isNotEmpty()]
-  [fieldCondition.printStringWithIdentation() /][else]
-  true[/if][/let]
+[template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]
+[let fieldName: String = field.getUniqueOclName()]
+exists([fieldName /] | [field.addElementExistsDeclaration() /]
+  [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /][/let]
 [/template]

@@ -22,5 +22,5 @@ OrderedSet(String){
 [/template]
 
 [template public generatesConditionForTarget(assignment: Assignment, varname: String)]
-[assignment.generatesMonovaluedFieldConditions(varname, assignment.target, 'leftHandSide', 'OclAny') /]
+[assignment.generatesMonovaluedFieldConditions(assignment.target, varname, 'leftHandSide', 'ASTNode') /]
 [/template]

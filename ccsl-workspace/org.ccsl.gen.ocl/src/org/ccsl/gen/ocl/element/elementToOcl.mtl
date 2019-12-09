@@ -25,10 +25,8 @@
 [element.generatesAllInstances() /]->select([element.getUniqueOclName() /] |
   --Scope Conditions
   [if scopeConditions.isNotEmpty()]
-  [scopeConditions.printStringWithIdentation() /] [if filtersConditions.isNotEmpty()] and
-
-  [/if][/if]
-  [if filtersConditions.isNotEmpty()]
+  [scopeConditions.printStringWithIdentation() /] [if filtersConditions.isNotEmpty()] and [/if]
+  [/if][if filtersConditions.isNotEmpty()]
   --Filters Conditions
   [filtersConditions.printStringWithIdentation() /]
   [/if]
@@ -37,6 +35,11 @@
 
 [template public generatesPostConditionToRemoveJavadocRelatedElements(element: Element)]
 ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+[/template]
+
+[comment condition to fix MoDisco Bug /]
+[template public generatesPostConditionToRemoveNonSourceElements(element: Element) ? (element.eContainer().oclIsKindOf(VarAssignment))]
+->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
 [/template]
 
 [template public generatesPostConditionToRemoveNonSourceElements(element: Element)]

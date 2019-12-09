@@ -42,14 +42,14 @@ OrderedSet(String) {
   OrderedSet(String){'SingleVariableAccess', 'qualifier'},  
   OrderedSet(String){'MethodInvocation', 'expression'}
 }]
-[access.generatesMonovaluedFieldConditions(varname, access.from, 'ASTNode', map) /]
+[access.generatesMonovaluedFieldConditions( access.from, varname, 'ASTNode', map) /]
 [/let]
 [/template]
 
 [template private generatesConditionsForFrom(access: Access, varname: String, metaclass: String) ? (metaclass = 'SingleVariableAccess' or metaclass = 'TypeAccess')]
-[access.generatesMonovaluedFieldConditions(varname, access.from, 'qualifier', 'ASTNode') /]
+[access.generatesMonovaluedFieldConditions(access.from, varname, 'qualifier', 'ASTNode') /]
 [/template]
 
 [template private generatesConditionsForFrom(access: Access, varname: String, metaclass: String) ? (metaclass = 'MethodInvocation')]
-[access.generatesMonovaluedFieldConditions(varname, access.from, 'expression', 'ASTNode') /]
+[access.generatesMonovaluedFieldConditions(access.from, varname, 'expression', 'ASTNode') /]
 [/template]

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:filters="http://www.example.org/ccsl/filters">
+  <strategy xsi:type="faultType:AllStrategy"/>
+  <action xsi:type="faultType:DeleteAction"/>
+  <rule xsi:type="faultType:AtomicFaultTypeRule" subject="infixWithANDOperator">
+    <contextElements xsi:type="expressions:InfixExpression" uniqueName="infixWithANDOperator" operator="||"/>
+    <filters xsi:type="filters:ImplicityContainer" targets="infixWithANDOperator" subject="infixTemplate" maxDepth="-1" minDepth="-1" closureElement="ifContainer">
+      <contextElements xsi:type="controlFlow:IfStatement" uniqueName="ifContainer">
+        <condition xsi:type="expressions:InfixExpression" uniqueName="infixTemplate"/>
+      </contextElements>
+    </filters>
+  </rule>
+</ccsl:FaultTypeDescription>

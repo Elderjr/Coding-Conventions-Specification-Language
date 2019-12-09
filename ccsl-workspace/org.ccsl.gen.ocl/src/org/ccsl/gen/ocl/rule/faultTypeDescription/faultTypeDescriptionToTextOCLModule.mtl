@@ -5,7 +5,7 @@
 [template public generatesOCL(rule: FaultTypeRule) /]
 
 [template public generatesOCL(atomicRule: AtomicFaultTypeRule)]
-[atomicRule.generatesSelectOCL(atomicRule.subject, atomicRule.filters) /]
+[atomicRule.generatesSelectOCL(atomicRule.subject, atomicRule.filters).replaceAll('<>', '&lt;&gt;') /]
 [atomicRule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [atomicRule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
 [/template]

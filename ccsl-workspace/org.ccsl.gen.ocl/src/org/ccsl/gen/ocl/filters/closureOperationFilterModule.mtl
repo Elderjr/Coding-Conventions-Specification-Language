@@ -2,33 +2,43 @@
 [module closureOperationFilterModule('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 
 
-[query private getRelationName(element: Element, elementRelated: Element): String =
-let relatedFeature: OrderedSet(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->asOrderedSet()->select(feature: ecore::EStructuralFeature |
-  let featureValue: OclAny = element.eGet(feature) in if(not featureValue.oclIsUndefined()) then
-    featureValue->includes(elementRelated)
-  else
-    false
-  endif
-) in if relatedFeature->size() > 0 then
-  relatedFeature->first().name
-else
-  null
-endif
+[query private isIntegerSetted(x: Integer): Boolean = 
+  (not x.oclIsUndefined()) and x <> -1
 /]
 
-[template public generateClosureOperationFilterConditions(closureOperation: ClosureFilter, target: Element)]
-[let relationName: String = closureOperation.subject.getRelationName(closureOperation.closureRelation)]
-[if relationName <> null]
-[closureOperation.subject.generatesClosureCondition(closureOperation.closureRelation, target.getUniqueOclName(), relationName) /]
-[/if][/let]
+
+[template public generatesClosureOperationFilterConditions(filter: ClosureFilter, target: Element)]
+let [filter.subject.getUniqueOclName() /]:ASTNode = [target.getUniqueOclName() /] in
+[filter.subject.generatesConditions(filter.subject.getUniqueOclName(), true) /] and
+[filter.generatesClosureSet(filter.subject, filter.closureElement, filter.subject.getUniqueOclName(), 'closureSet') /]
+[filter.generatesSubClosureSet('closureSet') /][filter.generatesClosureSetCondition('closureSet') /]
 [/template]
 
-[template private generatesClosureCondition(element: Element, field: Element, varname: String, relation: String) /]
+[template private generatesSubClosureSet(filter: ClosureFilter, setOclVarname: String) ? (filter.minDepth.isIntegerSetted() and filter.maxDepth.isIntegerSetted())]
+let [setOclVarname /]: OrderedSet(ASTNode) = [setOclVarname /]->subOrderedSet([filter.minDepth /], [filter.maxDepth /]) in 
+[/template]
 
-[template private generatesClosureCondition(methodInv: MethodInvocation, field: Element, varname: String, relation: String) ? (relation = 'from')]
-[varname /].oclAsType(MethodInvocation).expression->closure(node: ASTNode |
+[template private generatesSubClosureSet(filter: ClosureFilter, setOclVarname: String) ? (filter.minDepth.isIntegerSetted() and not filter.maxDepth.isIntegerSetted())]
+let [setOclVarname /]: OrderedSet(ASTNode) = [setOclVarname /]->subOrderedSet([filter.minDepth /], [setOclVarname /]->size()) in 
+[/template]
+
+[template private generatesSubClosureSet(filter: ClosureFilter, setOclVarname: String) ? ((not filter.minDepth.isIntegerSetted()) and filter.maxDepth.isIntegerSetted())]
+let [setOclVarname /]: OrderedSet(ASTNode) = [setOclVarname /]->subOrderedSet(1, [filter.maxDepth /]) in 
+[/template]
+
+[template private generatesClosureSetCondition(filter: ClosureFilter, setOclVarname: String)]
+[setOclVarname /]->exists([filter.closureElement.getUniqueOclName() /]:ASTNode |
+  [filter.closureElement.generatesConditions(filter.closureElement.getUniqueOclName(), true) /]
+)
+[/template]
+
+[template private generatesClosureSet(f: ClosureFilter, container: Element, field: Element, containerOclVarname: String, relation: String) /]
+
+[template private generatesClosureSet(f: ClosureFilter, container: MethodInvocation, field: Element, containerOclVarname: String, setOclVarname: String) ? (container.getRelationName(field) = 'from')]
+let [setOclVarname /]: OrderedSet(ASTNode) = [containerOclVarname /].oclAsType(MethodInvocation).expression->closure(node: ASTNode |
   if(node.oclIsKindOf(ParenthesizedExpression)) then
     node.oclAsType(ParenthesizedExpression).expression
   else if(node.oclIsKindOf(MethodInvocation)) then
@@ -42,8 +52,22 @@ endif
   else
     null
   endif endif endif endif endif
-)->exists([field.getUniqueOclName() /] | --NOT_COUNT
-  [field.generatesConditions(field.getUniqueOclName(), true) /] and
-  [methodInv.generatesConditions(varname, true) /]
 )
+[/template]
+
+[template private generatesClosureSet(f: ClosureFilter, container: InfixExpression, field: Element, containerOclVarname: String, setOclVarname: String) ? (container.getRelationName(field) = 'operands')]
+let [setOclVarname /]: OrderedSet(ASTNode) = [containerOclVarname /].oclAsType(InfixExpression).extendedOperands
+->append([containerOclVarname /].oclAsType(InfixExpression).leftOperand)
+->append([containerOclVarname /].oclAsType(InfixExpression).rightOperand)
+->closure(node: ASTNode |
+  if (node.oclIsKindOf(ParenthesizedExpression)) then
+    node.oclAsType(ParenthesizedExpression).expression
+  else if (node.oclIsKindOf(InfixExpression)) then
+    node.oclAsType(InfixExpression).extendedOperands
+    ->append(node.oclAsType(InfixExpression).leftOperand)
+    ->append(node.oclAsType(InfixExpression).rightOperand)
+  else
+    null
+  endif endif
+) in
 [/template]

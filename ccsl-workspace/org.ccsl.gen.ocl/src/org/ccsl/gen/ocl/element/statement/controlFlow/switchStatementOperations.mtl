@@ -46,5 +46,5 @@ let [switchBlock.getUniqueOclName() /]Blocks: OrderedSet(OrderedSet(Statement)) 
 	endif
 ) in
 [switchBlock.getUniqueOclName() /]Blocks->exists(switchBlockCaseTmp: OrderedSet(Statement) | [switchBlock.addElementExistsDeclaration() /]
-[switchBlock.generatesMultivaluedFieldConditions('switchBlockCaseTmp', switchBlock.statements, 'ASTNode') /]
+[switchBlock.generatesSetConditions('switchBlockCaseTmp', switchBlock.statements, 'ASTNode')/]
 [/template]

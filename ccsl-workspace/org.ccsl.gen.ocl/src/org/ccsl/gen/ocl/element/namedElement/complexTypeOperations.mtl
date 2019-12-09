@@ -46,19 +46,23 @@ OrderedSet(String) {
 [/template]
 
 [template public generatesConditionForFields(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.fields->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, 'tmpFields', 'bodyDeclarations', 'OclAny') /]
+let fields: OrderedSet(FieldDeclaration) = [varname /].bodyDeclarations->collect(field: ASTNode | field.oclIsKindOf(FieldDeclaration)->asOrderedSet() in
+[complexType.generatesSetConditions('fields', complexType.fields, 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForFields(complexType: ComplexType, varname: String) ? (complexType.fields->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.fields, 'tmpFields', 'bodyDeclarations', 'OclAny') /]
+let fields: OrderedSet(FieldDeclaration) = [varname /].bodyDeclarations->collect(field: ASTNode | field.oclIsKindOf(FieldDeclaration)->asOrderedSet() in
+[complexType.generatesSetConditions('fields', complexType.fields, 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.methods->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, 'tmpMethods', 'bodyDeclarations', 'OclAny') /]
+let methods: OrderedSet(MethodDeclaration) = [varname /].bodyDeclarations->collect(method: ASTNode | method.oclIsKindOf(MethodDeclaration)->asOrderedSet() in
+[complexType.generatesSetConditions('methods', complexType.fields, 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String) ? (complexType.methods->size() > 0)]
-[complexType.generatesMultivaluedFieldConditions(varname, complexType.methods, 'tmpMethods', 'bodyDeclarations', 'OclAny') /]
+let methods: OrderedSet(MethodDeclaration) = [varname /].bodyDeclarations->collect(method: ASTNode | method.oclIsKindOf(MethodDeclaration)->asOrderedSet() in
+[complexType.generatesSetConditions('methods', complexType.fields, 'ASTNode') /]
 [/template]
 
 [template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String) ? (complexType.superTypes->size() > 0 and complexType.oclIsTypeOf(JavaClass))]

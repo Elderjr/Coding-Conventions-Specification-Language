@@ -28,7 +28,7 @@ endif
 /]
 
 [template public generatesConditionsForDimensions(var: VariableVector, varname: String)]
-[var.generatesLetIfObject(varname, 'extraArrayDimensions', var.getVariableMatchingJavaMetaclasses(), 'tmpDimensions', 'Integer') /] and
+[var.generatesGetFieldExpression(varname, 'tmpDimensions', 'extraArrayDimensions', 'Integer', var.getVariableMatchingJavaMetaclasses()) /]
 [if var.isSet('dimensions')]
 tmpDimensions[if not var.exact ]>[/if]= [var.dimensions /][else]tmpDimensions >= 1[/if]
 [/template]

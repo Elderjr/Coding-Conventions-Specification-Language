@@ -23,6 +23,6 @@ OrderedSet(String) {
 [/template]
 
 [template private generatesConditionsForElementAccessed(typeAccess: DataTypeAccess, varname: String) ? (not typeAccess.elementAccessed.oclIsUndefined())]
-[typeAccess.generatesMonovaluedFieldConditions(varname, typeAccess.elementAccessed, 'type', 'ASTNode') /]
+[typeAccess.generatesMonovaluedFieldConditions(typeAccess.elementAccessed, varname, 'type', 'ASTNode') /]
 [/template]
 

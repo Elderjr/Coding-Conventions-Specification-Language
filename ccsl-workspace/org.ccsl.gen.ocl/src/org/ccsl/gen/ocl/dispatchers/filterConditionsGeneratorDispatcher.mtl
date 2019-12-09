@@ -8,6 +8,7 @@
 [import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::closureOperationFilterModule /]
+[import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -77,6 +78,6 @@ not (
 [templFilter.generatesTemplateFilterConditions(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(closureFilter: ClosureFilter, target: Element)]
-[closureFilter.generateClosureOperationFilterConditions(target) /]
+[template public generatesSpecificFilterConditions(implicityContainerFilter: ImplicityContainer, target: Element)]
+[implicityContainerFilter.generatesImplicityContainerFilter(target) /]
 [/template]

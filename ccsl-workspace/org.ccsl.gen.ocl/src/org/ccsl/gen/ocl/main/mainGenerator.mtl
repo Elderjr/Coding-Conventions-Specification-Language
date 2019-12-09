@@ -21,7 +21,5 @@
 [/template]
 
 [template private generatesFile(faultType: FaultTypeDescription)]
-[file ('faultTypeRuleConfig.xml', false, 'UTF-8')]
 [faultType.generatesConfigFaultTypeRuleFile() /]
-[/file]
 [/template]

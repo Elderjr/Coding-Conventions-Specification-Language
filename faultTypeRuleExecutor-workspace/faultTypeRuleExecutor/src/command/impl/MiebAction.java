@@ -4,7 +4,7 @@ import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.Block;
 import org.eclipse.gmt.modisco.java.IfStatement;
 
-import command.InjectionCommand;
+import command.InjectionAction;
 
 /**
  * MiebAction perfoms MissingIfConstructPlusStatementsBeforeElse action.
@@ -12,7 +12,7 @@ import command.InjectionCommand;
  * @author elder
  *
  */
-public class MiebAction implements InjectionCommand {
+public class MiebAction implements InjectionAction {
 
 	@Override
 	public void doCommand(ASTNode node) {

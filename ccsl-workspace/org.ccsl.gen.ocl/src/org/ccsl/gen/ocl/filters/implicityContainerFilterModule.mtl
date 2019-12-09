@@ -1,0 +1,36 @@
+[comment encoding = UTF-8 /]
+[module implicityContainerFilterModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+[query private isIntegerSetted(x: Integer): Boolean = 
+  (not x.oclIsUndefined()) and x <> -1
+/]
+
+[template public generatesImplicityContainerFilter(filter: ImplicityContainer, target: Element)]
+let [filter.subject.getUniqueOclName() /]:ASTNode = [target.getUniqueOclName() /] in
+[filter.subject.generatesConditions(filter.subject.getUniqueOclName(), true) /] and
+[filter.generatesImplicityContainersSet('implicityContainers', filter.subject.getUniqueOclName()) /]
+implicityContainers->exists([filter.closureElement.getUniqueOclName() /]:ASTNode |
+  [filter.closureElement.generatesConditions(filter.closureElement.getUniqueOclName(), true) /] and
+  [filter.generatesRelationCondition(filter.closureElement, filter.subject, 'implicityContainers') /]
+)
+[/template]
+
+[template private generatesImplicityContainersSet(implicityContainerFilter: ImplicityContainer, setName: String, fieldOclVarname: String)]
+let [setName /]: OrderedSet(ASTNode) = [fieldOclVarname /]->asOrderedSet()->closure(node: ASTNode |
+  if node.oclContainer().oclIsKindOf(ASTNode) then
+    node.oclContainer().oclAsType(ASTNode)
+  else
+    null
+  endif
+) in
+[/template]
+
+[template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: Element, field: Element, oclSetName: String) /]
+
+[template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: IfStatement, field: Element,  setOclVarname: String) ? (container.getRelationName(field) = 'condition')]
+[setOclVarname /]->includes([container.getUniqueOclName() /].oclAsType(IfStatement).expression)
+[/template]

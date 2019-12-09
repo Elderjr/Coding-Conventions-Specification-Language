@@ -102,4 +102,20 @@
             genModel="model/ccsl.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultType/action"
+            class="ccsl.faultType.action.ActionPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultType/strategy"
+            class="ccsl.faultType.strategy.StrategyPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
 </plugin>

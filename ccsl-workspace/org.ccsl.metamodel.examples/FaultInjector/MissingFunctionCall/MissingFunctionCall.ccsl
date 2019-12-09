@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements">
-  <strategy xsi:type="faultType:AllStrategy"/>
-  <action xsi:type="faultType:DeleteAction"/>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultType/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" xmlns:strategy="http://www.example.org/ccsl/faultType/strategy" name="MissingFunctionCall">
+  <strategy xsi:type="strategy:AllStrategy"/>
+  <actions xsi:type="action:DeleteAction" target="mInv"/>
   <rule xsi:type="faultType:AtomicFaultTypeRule" subject="mInv">
+    <contextElements xsi:type="statements:MethodInvocation" uniqueName="mInv"/>
     <filters xsi:type="filters:CompositeFilter" operator="OR">
       <filters xsi:type="filters:TemplateFilter" targets="mInv" subject="mInvBodyLoop">
         <contextElements xsi:type="controlFlow:LoopStatement">
@@ -30,6 +31,5 @@
         </contextElements>
       </filters>
     </filters>
-    <contextElements xsi:type="statements:MethodInvocation" uniqueName="mInv"/>
   </rule>
 </ccsl:FaultTypeDescription>

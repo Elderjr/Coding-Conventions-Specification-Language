@@ -1,0 +1,20 @@
+<faultTypeRule>
+  <ocl>
+    Assignment.allInstances()->select(varAssignmentWithLiteral |
+      --Scope Conditions
+      let lit: ASTNode = varAssignmentWithLiteral.rightHandSide in
+      lit &lt;&gt; null and
+      (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral)) and
+      let varAssignmentWithLiteral : OclAny = lit.oclContainer() in
+      (varAssignmentWithLiteral.oclIsKindOf(Assignment)) and
+      let literalTmp: ASTNode = varAssignmentWithLiteral.oclAsType(Assignment).rightHandSide in
+      literalTmp = lit 
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingVariableAssignmentUsingAValueAction" custom="true" />
+  </actions>
+</faultTypeRule>

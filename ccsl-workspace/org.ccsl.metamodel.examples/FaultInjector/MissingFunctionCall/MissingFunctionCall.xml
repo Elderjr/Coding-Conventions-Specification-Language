@@ -1,0 +1,135 @@
+<faultTypeRule>
+  <ocl>
+    MethodInvocation.allInstances()->select(mInv |
+      --Scope Conditions
+      --Filters Conditions
+      ( -- Composite Filter (OR)
+        (
+          -- Template Filter
+          let mInvBodyLoop: ASTNode = mInv in 
+          (mInvBodyLoop.oclIsKindOf(MethodInvocation)) and
+          let stmt1 : OclAny = if mInvBodyLoop.oclContainer().oclIsKindOf(ExpressionStatement) then
+            mInvBodyLoop.oclContainer().oclContainer()
+          else
+            mInvBodyLoop.oclContainer()
+          endif in
+          (stmt1.oclIsKindOf(EnhancedForStatement) or stmt1.oclIsKindOf(ForStatement) or stmt1.oclIsKindOf(WhileStatement) or stmt1.oclIsKindOf(DoStatement)) and
+          let methodInvTmp: ASTNode = if stmt1.oclIsKindOf(EnhancedForStatement) then
+            stmt1.oclAsType(EnhancedForStatement).body
+          else if stmt1.oclIsKindOf(ForStatement) then
+            stmt1.oclAsType(ForStatement).body
+          else if stmt1.oclIsKindOf(WhileStatement) then
+            stmt1.oclAsType(WhileStatement).body
+          else if stmt1.oclIsKindOf(DoStatement) then
+            stmt1.oclAsType(DoStatement).body
+          else
+            null
+          endif endif endif endif in
+          let methodInvTmp: ASTNode = if methodInvTmp.oclIsKindOf(ExpressionStatement) then
+            methodInvTmp.oclAsType(ExpressionStatement).expression
+          else
+            methodInvTmp
+          endif in
+          methodInvTmp = mInvBodyLoop
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let mInvBlock: ASTNode = mInv in 
+          (mInvBlock.oclIsKindOf(MethodInvocation)) and
+          let block2 : OclAny = if mInvBlock.oclContainer().oclIsKindOf(ExpressionStatement) then
+            mInvBlock.oclContainer().oclContainer()
+          else
+            mInvBlock.oclContainer()
+          endif in
+          block2.oclIsKindOf(Block) and
+          let tmpStatements: OrderedSet(ASTNode) = block2.oclAsType(Block).statements in
+            tmpStatements->exists(methodInvTmp |
+              let methodInvTmp: ASTNode = if methodInvTmp.oclIsKindOf(ExpressionStatement) then
+                methodInvTmp.oclAsType(ExpressionStatement).expression
+              else
+                methodInvTmp
+              endif in
+              methodInvTmp = mInvBlock
+            )
+          
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let mInvIfThen: ASTNode = mInv in 
+          (mInvIfThen.oclIsKindOf(MethodInvocation)) and
+          let ifStmt3 : OclAny = if mInvIfThen.oclContainer().oclIsKindOf(ExpressionStatement) then
+            mInvIfThen.oclContainer().oclContainer()
+          else
+            mInvIfThen.oclContainer()
+          endif in
+          ifStmt3.oclIsKindOf(IfStatement) and
+          let methodInvTmp: ASTNode = ifStmt3.oclAsType(IfStatement).thenStatement in
+          let methodInvTmp: ASTNode = if methodInvTmp.oclIsKindOf(ExpressionStatement) then
+            methodInvTmp.oclAsType(ExpressionStatement).expression
+          else
+            methodInvTmp
+          endif in
+          methodInvTmp = mInvIfThen
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let mInvIfElse: ASTNode = mInv in 
+          (mInvIfElse.oclIsKindOf(MethodInvocation)) and
+          let ifStmt4 : OclAny = if mInvIfElse.oclContainer().oclIsKindOf(ExpressionStatement) then
+            mInvIfElse.oclContainer().oclContainer()
+          else
+            mInvIfElse.oclContainer()
+          endif in
+          ifStmt4.oclIsKindOf(IfStatement) and
+          let methodInvTmp: ASTNode = ifStmt4.oclAsType(IfStatement).elseStatement in
+          let methodInvTmp: ASTNode = if methodInvTmp.oclIsKindOf(ExpressionStatement) then
+            methodInvTmp.oclAsType(ExpressionStatement).expression
+          else
+            methodInvTmp
+          endif in
+          methodInvTmp = mInvIfElse
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let mInvSwitch: ASTNode = mInv in 
+          (mInvSwitch.oclIsKindOf(MethodInvocation)) and
+          let caseBlock5 : OclAny = if mInvSwitch.oclContainer().oclIsKindOf(ExpressionStatement) then
+            mInvSwitch.oclContainer().oclContainer()
+          else
+            mInvSwitch.oclContainer()
+          endif in
+          caseBlock5.oclIsKindOf(SwitchStatement) and
+          let caseBlock5Blocks: OrderedSet(OrderedSet(Statement)) = caseBlock5.oclAsType(SwitchStatement).statements->iterate(tmpStmt: Statement; acc: OrderedSet(OrderedSet(Statement)) = OrderedSet(OrderedSet(Statement)){} |
+          	if(tmpStmt.oclIsKindOf(SwitchCase)) then
+          	  acc->append(OrderedSet(Statement){tmpStmt})
+          	else 
+          	  let lastSetAcc: OrderedSet(Statement) = acc->last()->append(tmpStmt) in
+          	  acc->excluding(acc->last())->including(lastSetAcc)
+          	endif
+          ) in
+          caseBlock5Blocks->exists(switchBlockCaseTmp: OrderedSet(Statement) | 
+            switchBlockCaseTmp->exists(methodInvTmp |
+              let methodInvTmp: ASTNode = if methodInvTmp.oclIsKindOf(ExpressionStatement) then
+                methodInvTmp.oclAsType(ExpressionStatement).expression
+              else
+                methodInvTmp
+              endif in
+              methodInvTmp = mInvSwitch
+            )
+          
+          )-- End Template Filter
+        )
+      ) -- End Composite Filter (OR)
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="delete" custom="false" />
+  </actions>
+</faultTypeRule>

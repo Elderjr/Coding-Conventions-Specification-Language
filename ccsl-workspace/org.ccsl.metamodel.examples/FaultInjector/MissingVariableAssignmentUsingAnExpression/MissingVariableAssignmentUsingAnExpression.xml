@@ -1,0 +1,23 @@
+<faultTypeRule>
+  <ocl>
+    Assignment.allInstances()->select(varAssignmentWithExpression |
+      --Scope Conditions
+      let stmt: ASTNode = varAssignmentWithExpression.rightHandSide in
+      stmt &lt;&gt; null and
+      (stmt.oclIsKindOf(Statement) or stmt.oclIsKindOf(Expression))  and 
+      --Filters Conditions
+      not (
+        -- Template Filter
+        let stmtTemplate: ASTNode = stmt in 
+        (stmtTemplate.oclIsKindOf(StringLiteral) or stmtTemplate.oclIsKindOf(CharacterLiteral) or stmtTemplate.oclIsKindOf(NumberLiteral) or stmtTemplate.oclIsKindOf(BooleanLiteral))
+        -- End Template Filter
+      )
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingVariableAssignmentUsingAnExpressionAction" custom="true" />
+  </actions>
+</faultTypeRule>

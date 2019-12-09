@@ -3,7 +3,8 @@
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 
 [query public isStringLiteral(literal: LiteralValue): Boolean = 
 literal.oclIsKindOf(StringLiteral)
@@ -77,10 +78,13 @@ endif endif endif endif endif
 /]
 
 [query public getLiteralConditions(literal: LiteralValue, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let void: OclVoid = literal.addElementAsVisited() in
 OrderedSet(String) {
   literal.generatesLiteralValueTypecheckCondition(varname, typecheck),
   literal.generatesConditionForValue(varname, typecheck)
-}->select(s | s.trim().size() > 0)
+}
+->select(s | s.trim().size() > 0)
+->addAll(literal.getStatementConditions(varname, false))
 /]
 
 [template public generatesLiteralValueTypecheckCondition(literal: LiteralValue, varName: String, typecheck: Boolean) ? (typecheck)]

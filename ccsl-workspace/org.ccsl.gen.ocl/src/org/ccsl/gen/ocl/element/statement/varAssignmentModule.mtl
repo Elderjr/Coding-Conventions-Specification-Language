@@ -1,0 +1,49 @@
+[comment encoding = UTF-8 /]
+[module varAssignmentModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[query public getVariableAssignmentMatchingJavaMetaclasses(varAssignment: VarAssignment): OrderedSet(String)=
+  OrderedSet(String){'Assignment'}
+/]
+
+[query public getVariableAssignmentConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = varAssignment.addElementAsVisited() in
+let newVarname: String = varname.printVarname(typecheck, 'Assignment') in
+OrderedSet(String){
+  varAssignment.generatesVarAssignmentTypecheckConditions(varname, typecheck),
+  varAssignment.generatesConditionForVariable(newVarname),
+  varAssignment.generatesConditionForAssignment(newVarname)
+}
+->select(s | s.trim().size() > 0)
+->addAll(varAssignment.getStatementConditions(newVarname, false))
+/]
+
+[query public getVariableDeclarationConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+  varAssignment.getVariableAssignmentConditions(varname, typecheck)
+/]
+
+[template public generatesVarAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean) ? (typecheck)]
+([for (javaMetaclass: String | varAssignment.getVariableAssignmentMatchingJavaMetaclasses()) separator (' or ')]
+[varname /].oclIsKindOf([javaMetaclass /])[/for])
+[/template]
+
+[template private generatesConditionForVariable(varAssignment: VarAssignment, varname: String) ? ((not varAssignment.variable.oclIsUndefined()))]
+[let fieldName: String = varAssignment.variable.getFieldName()]
+let [fieldName /]: ASTNode = if [varname /].variable.oclIsKindOf(FieldAccess) then
+  [varname /].variable.oclAsType(FieldAccess).field.oclAsType(SingleVariableAccess).variable
+else if [varname /].variable.oclIsKindOf(SingleVariableAccess) then
+  [varname /].variable.oclAsType(SingleVariableAccess).variable
+else
+  OclInvalid
+endif endif in 
+[varAssignment.generatesFieldCondition(varAssignment.variable, fieldName, 'ASTNode') /][/let]
+[/template]
+
+[template private generatesConditionForAssignment(varAssignment: VarAssignment, varname: String) ? (not varAssignment.assignment.oclIsUndefined())] 
+[varAssignment.generatesMonovaluedFieldConditions(varAssignment.assignment, varname, 'rightHandSide', 'ASTNode') /]
+[/template]
+
+

@@ -28,11 +28,11 @@ OrderedSet(String) {
 
 [template public generatesConditionForReturnType(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
 (not [varname /].returnType.oclIsUndefined()) and
-[method.generatesMonovaluedFieldConditions(varname, method.returnType, 'returnType.type', 'OclAny') /]
+[method.generatesMonovaluedFieldConditions(method.returnType, varname, 'returnType.type', 'OclAny') /]
 [/template]
 
 [template public generatesConditionForParams(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
 [if typecheck]
-[method.generatesMultivaluedFieldConditions(varname, method.params, method.getMethodMatchingJavaMetaclasses(), 'tmpParams', 'parameters', 'SingleVariableDeclaration') /][else]
-[method.generatesMultivaluedFieldConditions(varname, method.params, 'tmpParams', 'parameters', 'SingleVariableDeclaration') /][/if]
+[method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration', method.getMethodMatchingJavaMetaclasses()) /][else]
+[method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration') /][/if]
 [/template]

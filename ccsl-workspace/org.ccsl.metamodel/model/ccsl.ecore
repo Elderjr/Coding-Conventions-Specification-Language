@@ -19,11 +19,12 @@
       eSuperTypes="#//Rule"/>
   <eClassifiers xsi:type="ecore:EClass" name="FaultTypeDescription">
     <eStructuralFeatures xsi:type="ecore:EReference" name="strategy" lowerBound="1"
-        eType="#//faultType/Strategy" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="action" lowerBound="1"
-        eType="#//faultType/InjectionAction" containment="true"/>
+        eType="#//faultType/strategy/Strategy" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" lowerBound="1"
+        upperBound="-1" eType="#//faultType/action/InjectionAction" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="1" eType="#//faultType/FaultTypeRule"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomicRecommendationRule" eSuperTypes="#//RecommendationRule #//AtomicRule"/>
   <eClassifiers xsi:type="ecore:EClass" name="Context" abstract="true">
@@ -97,8 +98,6 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//elements/statements/Statement"
             containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="BranchControl" eSuperTypes="#//elements/statements/ControlFlow"/>
-      <eClassifiers xsi:type="ecore:EClass" name="LoopControl" eSuperTypes="#//elements/statements/ControlFlow"/>
       <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//elements/statements/Statement #//nonElements/StatementsContainer"/>
       <eClassifiers xsi:type="ecore:EClass" name="SuperMethodInvocation" eSuperTypes="#//elements/statements/MethodInvocation"/>
       <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//elements/statements/Statement">
@@ -115,6 +114,11 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="ArrayCreation" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/ObjectType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="#//elements/statements/Statement"
+            containment="true"/>
       </eClassifiers>
       <eSubpackages name="expressions" nsURI="http://www.example.org/ccsl/elements/statements/expressions"
           nsPrefix="expressions">
@@ -219,7 +223,7 @@
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="InstanceOf" eSuperTypes="#//java/JElement #//elements/statements/Statement #//elements/statements/expressions/OperatorExpression"/>
     <eClassifiers xsi:type="ecore:EClass" name="ThrowStatement" eSuperTypes="#//java/JElement"/>
-    <eClassifiers xsi:type="ecore:EClass" name="JFor" eSuperTypes="#//elements/statements/Block #//java/JElement #//elements/statements/LoopControl">
+    <eClassifiers xsi:type="ecore:EClass" name="JFor" eSuperTypes="#//elements/statements/Block #//java/JElement">
       <eStructuralFeatures xsi:type="ecore:EReference" name="initializers" upperBound="-1"
           eType="#//elements/statements/Statement" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="updaters" upperBound="-1"
@@ -284,9 +288,14 @@
           eType="#//elements/statements/controlFlow/SwitchCaseBlock" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="ClosureFilter" eSuperTypes="#//filters/TemplateFilter">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="closureRelation" lowerBound="1"
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDepth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDepth" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+          unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="closureElement" lowerBound="1"
           eType="#//elements/Element"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ImplicityContainer" eSuperTypes="#//filters/ClosureFilter"/>
   </eSubpackages>
   <eSubpackages name="nonElements" nsURI="http://www.example.org/ccsl/nonElements"
       nsPrefix="nonElements">
@@ -296,17 +305,25 @@
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="faultType" nsURI="http://www.example.org/ccsl/faultType" nsPrefix="faultType">
-    <eClassifiers xsi:type="ecore:EClass" name="Strategy" abstract="true"/>
-    <eClassifiers xsi:type="ecore:EClass" name="InjectionAction" abstract="true"/>
-    <eClassifiers xsi:type="ecore:EClass" name="AllStrategy" eSuperTypes="#//faultType/Strategy"/>
-    <eClassifiers xsi:type="ecore:EClass" name="DeleteAction" eSuperTypes="#//faultType/InjectionAction"/>
     <eClassifiers xsi:type="ecore:EClass" name="AtomicFaultTypeRule" eSuperTypes="#//AtomicRule #//faultType/FaultTypeRule"/>
     <eClassifiers xsi:type="ecore:EClass" name="FaultTypeRule" abstract="true" eSuperTypes="#//Rule"/>
     <eClassifiers xsi:type="ecore:EClass" name="CompositeFaultTypeRule" eSuperTypes="#//faultType/FaultTypeRule">
       <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="2"
           upperBound="-1" eType="#//faultType/FaultTypeRule" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="MiaAction" eSuperTypes="#//faultType/InjectionAction"/>
-    <eClassifiers xsi:type="ecore:EClass" name="MiebAction" eSuperTypes="#//faultType/InjectionAction"/>
+    <eSubpackages name="action" nsURI="http://www.example.org/ccsl/faultType/action"
+        nsPrefix="action">
+      <eClassifiers xsi:type="ecore:EClass" name="InjectionAction" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+            eType="#//elements/Element"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DeleteAction" eSuperTypes="#//faultType/action/InjectionAction"/>
+      <eClassifiers xsi:type="ecore:EClass" name="MoveScopeUpAction" eSuperTypes="#//faultType/action/InjectionAction"/>
+    </eSubpackages>
+    <eSubpackages name="strategy" nsURI="http://www.example.org/ccsl/faultType/strategy"
+        nsPrefix="strategy">
+      <eClassifiers xsi:type="ecore:EClass" name="Strategy" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="AllStrategy" eSuperTypes="#//faultType/strategy/Strategy"/>
+    </eSubpackages>
   </eSubpackages>
 </ecore:EPackage>

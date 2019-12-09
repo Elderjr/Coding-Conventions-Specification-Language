@@ -25,8 +25,9 @@
     <genClasses ecoreClass="ccsl.ecore#//RecommendationRule"/>
     <genClasses ecoreClass="ccsl.ecore#//FaultTypeDescription">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//FaultTypeDescription/strategy"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//FaultTypeDescription/action"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//FaultTypeDescription/actions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//FaultTypeDescription/rule"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//FaultTypeDescription/name"/>
     </genClasses>
     <genClasses ecoreClass="ccsl.ecore#//AtomicRecommendationRule"/>
     <genClasses ecoreClass="ccsl.ecore#//Context">
@@ -88,8 +89,6 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ControlFlow">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ControlFlow/condition"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/statements/BranchControl"/>
-        <genClasses ecoreClass="ccsl.ecore#//elements/statements/LoopControl"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/Block"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/SuperMethodInvocation"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarDeclaration">
@@ -107,6 +106,11 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ArrayCreation">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ArrayCreation/type"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarAssignment">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/variable"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/assignment"/>
         </genClasses>
         <nestedGenPackages prefix="Expressions" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/expressions">
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/OperatorExpression">
@@ -251,9 +255,12 @@
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/SwitchCaseStatementCount/cases"/>
       </genClasses>
       <genClasses ecoreClass="ccsl.ecore#//filters/ClosureFilter">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/ClosureFilter/maxDepth"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/ClosureFilter/minDepth"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ClosureFilter/closureRelation"/>
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ClosureFilter/closureElement"/>
       </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/ImplicityContainer"/>
     </nestedGenPackages>
     <nestedGenPackages prefix="NonElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//nonElements">
       <genClasses image="false" ecoreClass="ccsl.ecore#//nonElements/StatementsContainer">
@@ -261,17 +268,23 @@
       </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="FaultType" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//faultType">
-      <genClasses ecoreClass="ccsl.ecore#//faultType/Strategy"/>
-      <genClasses ecoreClass="ccsl.ecore#//faultType/InjectionAction"/>
-      <genClasses ecoreClass="ccsl.ecore#//faultType/AllStrategy"/>
-      <genClasses ecoreClass="ccsl.ecore#//faultType/DeleteAction"/>
       <genClasses ecoreClass="ccsl.ecore#//faultType/AtomicFaultTypeRule"/>
       <genClasses image="false" ecoreClass="ccsl.ecore#//faultType/FaultTypeRule"/>
       <genClasses ecoreClass="ccsl.ecore#//faultType/CompositeFaultTypeRule">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//faultType/CompositeFaultTypeRule/rules"/>
       </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//faultType/MiaAction"/>
-      <genClasses ecoreClass="ccsl.ecore#//faultType/MiebAction"/>
+      <nestedGenPackages prefix="Action" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//faultType/action">
+        <genClasses image="false" ecoreClass="ccsl.ecore#//faultType/action/InjectionAction">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//faultType/action/InjectionAction/target"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/DeleteAction"/>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/MoveScopeUpAction"/>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="Strategy" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//faultType/strategy">
+        <genClasses image="false" ecoreClass="ccsl.ecore#//faultType/strategy/Strategy"/>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/strategy/AllStrategy"/>
+      </nestedGenPackages>
     </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

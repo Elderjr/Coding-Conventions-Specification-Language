@@ -23,6 +23,7 @@
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
+[import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 
 [comment statements/controlFlow /]
@@ -30,6 +31,8 @@
 [import org::ccsl::gen::ocl::element::statement::controlFlow::ifStatementOperations /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
+[comment statements/expression /]
+[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
 
 [template private printConditions(element: Element, conditions: OrderedSet(String))]
 [for (condition: String | conditions) separator(' and\n')]
@@ -112,7 +115,6 @@
 [stmt.printConditions(stmt.getStatementConditions(varname, typecheck)) /]
 [/template]
 
-
 [template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]
 [/template]
@@ -132,6 +134,14 @@
 [/template]
 [template public generatesConditions(inst: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String)]
 [inst.printConditions(inst.getArrayCreationConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/VarAssignment /]
+[template public generatesConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean)]
+[varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String)]
+[varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
 [/template]
 
 [comment statements/TypeAccess /]
@@ -196,4 +206,12 @@
 [/template]
 [template public generatesConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [loopStmt.printConditions(loopStmt.getLoopStatementConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/expression /]
+[template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean)]
+[infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
+[/template]
+[template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
 [/template]

@@ -1,0 +1,32 @@
+[comment encoding = UTF-8 /]
+[module actionModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::action::deleteActionModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::action::moveScopeUpModule /]
+
+[template public generatesActionTag(action: InjectionAction, root: Element, ruleName: String) ? (root = action.target)]
+<action name="delete" custom="false" />
+[/template]
+
+[template public generatesActionTag(action: InjectionAction, root: Element, ruleName: String) ? (root <> action.target)]
+<action name="[ruleName /]Action" custom="true" />
+[/template]
+
+[template public generatesActionJavaClass(action: InjectionAction, root: Element, ruleName: String) ? (root <> action.target)]
+[file (ruleName.concat('/').concat(ruleName).concat('Action.java'), false, 'UTF-8')]
+import org.eclipse.gmt.modisco.java.*;
+import command.InjectionAction;
+import command.impl.*;
+
+public class [ruleName /]Action implements InjectionAction {
+
+  @Override
+  public void doCommand(ASTNode node) {
+    [action.generatesDoCommandMethod(root) /]
+  }
+}
+[/file]
+[/template]
+
+[template public generatesDoCommandMethod(action: InjectionAction, root: Element) /]

@@ -16,7 +16,8 @@ public class WalkHelper {
 	private static int uniqueId = 1;
 	private static final Map<Context, Integer> totalExistsDeclarations = new HashMap<>();
 	private static final Map<Element, String> uniqueNamesMap = new HashMap<>();
-
+	private static final Set<Element> elementsVisited = new HashSet<Element>();
+	
 	public static void clearAllContexts() {
 		uniqueNamesMap.clear();
 		uniqueId = 1;
@@ -42,8 +43,12 @@ public class WalkHelper {
 		}
 	}
 
+	public static void addElementAsVisited(Element element) {
+		elementsVisited.add(element);
+	}
+	
 	public static Set<Element> getElementsVisited() {
-		return uniqueNamesMap.keySet();
+		return elementsVisited;
 	}
 
 	private static Context getElementContext(Element element) {

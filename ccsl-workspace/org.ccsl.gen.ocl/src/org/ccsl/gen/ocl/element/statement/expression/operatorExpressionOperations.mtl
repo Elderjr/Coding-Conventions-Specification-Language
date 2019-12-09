@@ -17,7 +17,7 @@ AssignmentKind::PLUS_ASSIGN[/if]
 [/template]
 
 [template private generatesOperandsLetStatement(operatorExpression: OperatorExpression, varname: String, letName: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(StringConcatenation))]
-let [letName /]: OrderedSet(OclAny) = if [varname /].oclIsKindOf(InfixExpression) then
+let [letName /]: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(InfixExpression) then
   [varname /].oclAsType(InfixExpression).extendedOperands->asOrderedSet()->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
 else if [varname /].oclIsKindOf(Assignment) then
   [varname /].oclAsType(Assignment).rightHandSide->asOrderedSet()
@@ -27,13 +27,13 @@ endif endif
 [/template]
 
 [template private generatesOperandsLetStatement(operatorExpression: OperatorExpression, varname: String, letName: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(Assignment))]
-let [letName /]: OrderedSet(OclAny) = [varname /].rightHandSide->asOrderedSet()
+let [letName /]: OrderedSet(ASTNode) = [varname /].rightHandSide->asOrderedSet()
 [/template]
 
 [template public generatesConditionForOperands(operatorExpression: OperatorExpression, varname: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(StringConcatenation))]
-[operatorExpression.generatesOperandsLetStatement(varname, 'tmpOperands') /]->closure(x | 
+let operands: OrderedSet(ASTNode) = [operatorExpression.generatesOperandsLetStatement(varname, 'tmpOperands') /]->closure(x | 
   if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
 ) in
-[operatorExpression.generatesMultivaluedFieldConditions('tmpOperands', operatorExpression.operands, 'OclAny') /]
+[operatorExpression.generatesSetConditions('operands', operatorExpression.operands, 'ASTNode') /]
 [/template]
 

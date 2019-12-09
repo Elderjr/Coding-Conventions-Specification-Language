@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 public final class Main {
 
 	private Main() {
+
 	}
 
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public final class Main {
 		EssentialOCLStandaloneSetup.doSetup();
 		try {
 			FaultTypeDescription faultTypeDescription = FaultTypeLoader.getInstance().loadFaultTypeDescription(
-					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatementsPlusElseBeforeStatements.xml");
+					"D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatementsPlusElseBeforeStatements\\MissingIfConstructPlusStatementsPlusElseBeforeStatements.xml");
 			Model modiscoModel = FaultTypeExecutor.getInstance().executeFaultType(faultTypeDescription,
 					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi");
 			GenerateJavaExtended javaGenerator = new GenerateJavaExtended(modiscoModel, new File("./"),
@@ -44,6 +45,9 @@ public final class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FaultTypeDescriptionParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

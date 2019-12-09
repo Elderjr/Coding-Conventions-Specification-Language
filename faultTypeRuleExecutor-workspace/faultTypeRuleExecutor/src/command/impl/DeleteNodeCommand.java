@@ -1,13 +1,14 @@
 package command.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 
-import command.InjectionCommand;
+import command.InjectionAction;
 import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.ExpressionStatement;
 
-public class DeleteNodeCommand implements InjectionCommand {
+public class DeleteNodeCommand implements InjectionAction {
 
 	@Override
 	public void doCommand(ASTNode target) {
@@ -18,7 +19,10 @@ public class DeleteNodeCommand implements InjectionCommand {
 		}
 		Object fieldValue = null;
 		boolean accessibleHasBeenChanged;
-		for (Field containerField : container.getClass().getDeclaredFields()) {
+		for (Field containerField : ClassUtils.getAllClassFields(container.getClass())) {
+			if (Modifier.isStatic(containerField.getModifiers())) {
+				continue;
+			}
 			try {
 				if (!containerField.canAccess(container)) {
 					containerField.setAccessible(true);

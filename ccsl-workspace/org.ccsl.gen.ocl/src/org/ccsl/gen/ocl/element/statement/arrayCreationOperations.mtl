@@ -23,6 +23,6 @@ OrderedSet(String) {
 [/template]
 
 [template private generatesConditionsForType(inst: ArrayCreation, varname: String) ? (not inst.type.oclIsUndefined())]
-[inst.generatesMonovaluedFieldConditions(varname, inst.type, 'type.type', 'ASTNode') /]
+[inst.generatesMonovaluedFieldConditions(inst.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

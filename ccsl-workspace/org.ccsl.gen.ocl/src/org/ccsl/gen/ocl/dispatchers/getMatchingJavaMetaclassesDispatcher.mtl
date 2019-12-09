@@ -22,6 +22,7 @@
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
+[import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 
 [comment statements/controlFlow /]
@@ -29,6 +30,8 @@
 [import org::ccsl::gen::ocl::element::statement::controlFlow::ifStatementOperations /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
+[comment statements/expression /]
+[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
 
 [query public getMatchingJavaMetaclasses (element : Element) : OrderedSet(String) =
 --element/datatype
@@ -64,6 +67,8 @@ else if element.oclIsTypeOf(DataTypeAccess) then
   element.oclAsType(DataTypeAccess).getTypeAccessMatchingMetaclasses()
 else if element.oclIsTypeOf(Block) then
   element.oclAsType(Block).getBlockMatchingMetaclasses()
+else if element.oclIsTypeOf(VarAssignment) then
+  element.oclAsType(VarAssignment).getVariableAssignmentMatchingJavaMetaclasses()
 --element/statements/access
 else if element.oclIsTypeOf(Access) then
   element.oclAsType(Access).getAccessMatchingMetaclasses()
@@ -76,7 +81,11 @@ else if element.oclIsTypeOf(IfStatement) then
   element.oclAsType(IfStatement).getIfStatementMatchingMetaclasses()
 else if element.oclIsTypeOf(LoopStatement) then
   element.oclAsType(LoopStatement).getLoopStatementMatchingMetaclasses()
+--element/statements/expression
+else if element.oclIsTypeOf(InfixExpression) then
+  element.oclAsType(InfixExpression).getInfixMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
-endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif
 /]

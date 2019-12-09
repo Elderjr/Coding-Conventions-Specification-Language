@@ -1,19 +1,24 @@
 [comment encoding = UTF-8 /]
 [module infixExpressionOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getInfixMatchingMetaclasses(infixExp: InfixExpression): OrderedSet(String)= 
   OrderedSet(String){'InfixExpression'}
 /]
 
 [query public getInfixConditions(infix: InfixExpression, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let void: OclVoid = infix.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, 'InfixExpression') in
 let conditions: OrderedSet(String) =  OrderedSet(String){
-  infix.generateConditionForOperator(newVarname),
-  infix.generateConditionForOperands(newVarname)
-}->select(s | s.trim().size() > 0) in
+  infix.generatesConditionForOperator(newVarname),
+  infix.generatesConditionForOperands(newVarname)
+}
+->select(s | s.trim().size() > 0)
+->addAll(infix.getStatementConditions(newVarname, false)) in
 if typecheck then
   OrderedSet(String){varname.printKindOfCondition('InfixExpression')}->addAll(conditions)
 else
@@ -21,15 +26,14 @@ else
 endif
 /]
 
-[template public getAllOperandsExpression(infixExp: InfixExpression, varName: String)]
-leftOperand->asOrderedSet()->append([varName /].rightOperand)->append([varName /].extendedOperands)
+[template public generatesConditionForOperator(infixExp: InfixExpression, varname: String) ? (not infixExp.operator.oclIsUndefined())]
+[if infixExp.operator = '&&']
+[varname /].operator = InfixExpressionKind::CONDITIONAL_AND[elseif infixExp.operator = '||']
+[varname /].operator = InfixExpressionKind::CONDITIONAL_OR[/if]
 [/template]
 
-[template public generateConditionForOperator(infixExp: InfixExpression, varName: String) ? (not infixExp.operator.oclIsUndefined())]
-[varName /].operator = '[infixExp.operator /]'
-[/template]
-
-[template public generateConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.operands->size() > 0)]
-[infixExp.generatesMultivaluedFieldConditions(varname, infixExp.operands, 'tmpOperands', infixExp.getAllOperandsExpression(varname), 'OclAny') /]
+[template public generatesConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.hasAnyNotClosureRelationField(infixExp.operands))]
+let operands: OrderedSet(ASTNode) = leftOperand->asOrderedSet()->append([varname /].rightOperand)->append([varname /].extendedOperands) in
+[infixExp.generatesSetConditions('operands', infixExp.operands, 'ASTNode') /]
 [/template]
 

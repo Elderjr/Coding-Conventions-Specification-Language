@@ -4,11 +4,12 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator/]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 
 
 [query public getVariableMatchingJavaMetaclasses(variable: Variable): OrderedSet(String)=
-  if variable.eContainer().oclIsKindOf(ComplexType) then
+  if variable.eContainer().oclIsKindOf(ComplexType) or (not variable.initialValue.oclIsUndefined()) then
     OrderedSet(String){'VariableDeclarationFragment'}
   else if variable.eContainer().oclIsKindOf(Method) then
     OrderedSet(String){'SingleVariableDeclaration'}
@@ -18,6 +19,7 @@
 /]
 
 [query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean): OrderedSet(String) = 
+let void: OclVoid = var.addElementAsVisited() in
 if var.getVariableMatchingJavaMetaclasses()->size() > 1 then
   OrderedSet(String){
     var.generatesVariableTypecheckCondition(varname, typecheck),
@@ -31,13 +33,14 @@ endif
 /]
 
 [query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = var.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, metaclass) in
 OrderedSet(String) {
   var.generatesVariableTypecheckCondition(varname, typecheck, metaclass),
   var.generatesConditionsForType(newVarname, metaclass),
-  var.generatesConditionsForInitialValue(varname, metaclass)
+  var.generatesConditionsForInitialValue(newVarname, metaclass)
 }->select(s | s.trim().size() > 0)
-->addAll(var.getNamedElementConditions(varname, typecheck, metaclass))
+->addAll(var.getNamedElementConditions(newVarname, typecheck, metaclass))
 /]
 
 [comment Type Check Conditions /]
@@ -52,7 +55,7 @@ OrderedSet(String) {
 
 [comment conditions for 'type' /]
 [template public generatesConditionsForType(var: Variable, varname: String) ? (not var.type.oclIsUndefined())]
-[var.generatesMonovaluedFieldConditions(varname, var.type, 'OclAny',
+[var.generatesMonovaluedFieldConditions(var.type, varname, 'ASTNode',
 OrderedSet(OrderedSet(String)){
   OrderedSet(String){'SingleVariableDeclaration', 'type.type'},
   OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
@@ -61,20 +64,23 @@ OrderedSet(OrderedSet(String)){
 
 [template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined())]
 [if metaclass = 'VariableDeclarationFragment']
-[var.generatesMonovaluedFieldConditions(varname, var.type, 'variablesContainer.type.type', 'OclAny') /][else]
-[var.generatesMonovaluedFieldConditions(varname, var.type, 'type.type', 'OclAny') /][/if]
+[var.generatesMonovaluedFieldConditions(var.type, varname, 'variablesContainer.type.type', 'ASTNode') /][else]
+[var.generatesMonovaluedFieldConditions(var.type, varname, 'type.type', 'ASTNode') /][/if]
 [/template]
 
 [comment conditions for 'initialValue' /]
 [template public generatesConditionsForInitialValue(var: Variable, varname: String) ? (not var.initialValue.oclIsUndefined())]
-[var.generatesMonovaluedFieldConditions(varname, var.initialValue, 'OclAny',
+[if var.getVariableMatchingJavaMetaclasses()->size() = 1 and var.getVariableMatchingJavaMetaclasses()->first() = 'VariableDeclarationFragment']
+[var.generatesMonovaluedFieldConditions(var.initialValue, varname, 'variablesContainer.fragments->asOrderedSet()->last().initializer', 'ASTNode') /][else]
+[var.generatesMonovaluedFieldConditions(var.type, varname, 'ASTNode',
 OrderedSet(OrderedSet(String)){
-  OrderedSet(String){'SingleVariableDeclaration', 'variablesContainer.fragments->asOrderedSet()->last().initializer'}
-}) /]
+  OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
+}) /][/if]
+ 
 [/template]
 
 [template public generatesConditionsForInitialValue(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and metaclass = 'VariableDeclarationFragment')]
 [if metaclass = 'VariableDeclarationFragment']
-[var.generatesMonovaluedFieldConditions(varname, var.initialValue, 'variablesContainer.fragments->asOrderedSet()->last().initializer', 'OclAny') /][else]
+[var.generatesMonovaluedFieldConditions(var.initialValue, varname, 'variablesContainer.fragments->asOrderedSet()->last().initializer', 'ASTNode') /][else]
 false[/if]
 [/template]

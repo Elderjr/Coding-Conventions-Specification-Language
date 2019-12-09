@@ -22,6 +22,8 @@ import org.eclipse.ocl.pivot.utilities.OCL;
 import org.eclipse.ocl.pivot.utilities.ParserException;
 import org.eclipse.ocl.pivot.utilities.Query;
 
+import command.InjectionAction;
+
 public class FaultTypeExecutor {
 
 	private static final FaultTypeExecutor INSTANCE = new FaultTypeExecutor();
@@ -53,7 +55,9 @@ public class FaultTypeExecutor {
 			if (result != null && result instanceof Collection) {
 				List<ASTNode> nodes = faultType.getStrategy().selectNodes((Collection<?>) result);
 				for (Object node : nodes) {
-					faultType.getAction().doCommand((ASTNode) node);
+					for (InjectionAction action : faultType.getActions()) {
+						action.doCommand((ASTNode) node);
+					}
 				}
 			} else {
 				System.err.println("The generated OCL doesn't return a collection.");

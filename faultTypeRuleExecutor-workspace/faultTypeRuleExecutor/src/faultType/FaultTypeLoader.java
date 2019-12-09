@@ -1,6 +1,9 @@
 package faultType;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,7 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import command.InjectionCommand;
+import command.InjectionAction;
 import command.InjectionCommandFactory;
 import faultInjectorStrategy.FaultInjectorStrategy;
 import faultInjectorStrategy.FaultInjectorStrategyFactory;
@@ -53,19 +56,21 @@ public final class FaultTypeLoader {
 		return null;
 	}
 
-	private InjectionCommand getAction(Element action) throws FaultTypeDescriptionParserException {
+	private InjectionAction getAction(Element action, String dir) throws Exception {
 		validateStrategyOrActionElement(action);
 		if (action.getAttribute("custom").equals("false")) {
-			return InjectionCommandFactory.createsAction(action.getAttribute("name"));
+			return InjectionCommandFactory.createsDefaultAction(action.getAttribute("name"));
+		} else {
+			return InjectionCommandFactory.compileCustomAction(action.getAttribute("name"),
+					dir + "\\" + action.getAttribute("name") + ".java");
 		}
-		return null;
 	}
 
-	public FaultTypeDescription loadFaultTypeDescription(String pathFile)
-			throws ParserConfigurationException, SAXException, IOException, FaultTypeDescriptionParserException {
+	public FaultTypeDescription loadFaultTypeDescription(String pathFile) throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document doc = builder.parse(pathFile);
+		File file = new File(pathFile);
+		Document doc = builder.parse(file);
 		Element faultTypeRuleTag = doc.getDocumentElement();
 		if (!faultTypeRuleTag.getNodeName().equals("faultTypeRule"))
 			throw new FaultTypeDescriptionParserException(
@@ -73,7 +78,13 @@ public final class FaultTypeLoader {
 		Element oclTag = getElement(faultTypeRuleTag, "ocl");
 		String ocl = oclTag.getTextContent();
 		FaultInjectorStrategy strategy = getStrategy(getElement(faultTypeRuleTag, "strategy"));
-		InjectionCommand action = getAction(getElement(faultTypeRuleTag, "action"));
-		return new FaultTypeDescription(ocl, action, strategy);
+		List<InjectionAction> actions = new LinkedList<>();
+		NodeList list = faultTypeRuleTag.getElementsByTagName("action");
+		int index = 0;
+		while (index < list.getLength()) {
+			actions.add(getAction((Element) list.item(index), file.getParent()));
+			index++;
+		}
+		return new FaultTypeDescription(ocl, actions, strategy);
 	}
 }

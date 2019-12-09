@@ -3,61 +3,65 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [template public getUniqueOclName(element : Element)]
-[element.getUniqueName('e') /]
+[element.getUniqueName(element.getBaseName()) /]
 [/template]
 
-[template public getUniqueOclName(element : ComplexType)]
-[element.getUniqueName('complexType') /]
+[template public getBaseName(element: Element)]
+e
 [/template]
 
-[template public getUniqueOclName(element : JavaClass)]
-[element.getUniqueName('clazz') /]
+[template public getBaseName(element : ComplexType)]
+complexType
 [/template]
 
-[template public getUniqueOclName(element : JavaInterface)]
-[element.getUniqueName('interface') /]
+[template public getBaseName(element : JavaClass)]
+clazz
 [/template]
 
-[template public getUniqueOclName(element : Variable)]
-[element.getUniqueName('var') /]
+[template public getBaseName(element : JavaInterface)]
+interface
 [/template]
 
-[template public getUniqueOclName(element : Method)]
-[element.getUniqueName('method') /]
+[template public getBaseName(element : Variable)]
+var
 [/template]
 
-[template public getUniqueOclName(element : Statement)]
-[element.getUniqueName('stmt') /]
+[template public getBaseName(element : Method)]
+method
 [/template]
 
-[template public getUniqueOclName(element : MethodInvocation)]
-[element.getUniqueName('mInv') /]
+[template public getBaseName(element : Statement)]
+stmt
 [/template]
 
-[template public getUniqueOclName(element : PrimitiveType)]
-[element.getUniqueName('primitiveType') /]
+[template public getBaseName(element : MethodInvocation)]
+methodInv
 [/template]
 
-[template public getUniqueOclName(element : LiteralValue)]
-[element.getUniqueName('literal') /]
+[template public getBaseName(element : PrimitiveType)]
+primitiveType
 [/template]
 
-[template public getUniqueOclName(element : VarDeclaration)]
-[element.getUniqueName('varDecl') /]
+[template public getBaseName(element : LiteralValue)]
+literal
 [/template]
 
-[template public getUniqueOclName(element : StringConcatenation)]
-[element.getUniqueName('strConcat') /]
+[template public getBaseName(element : VarDeclaration)]
+varDecl
 [/template]
 
-[template public getUniqueOclName(element : Block)]
-[element.getUniqueName('block') /]
+[template public getBaseName(element : StringConcatenation)]
+strConcat
 [/template]
 
-[template public getUniqueOclName(element : SwitchCaseBlock)]
-[element.getUniqueName('switchBlock') /]
+[template public getBaseName(element : Block)]
+block
 [/template]
 
-[template public getUniqueOclName(element : IfStatement)]
-[element.getUniqueName('ifStmt') /]
+[template public getBaseName(element : SwitchCaseBlock)]
+caseBlock
+[/template]
+
+[template public getBaseName(element : IfStatement)]
+ifStmt
 [/template]

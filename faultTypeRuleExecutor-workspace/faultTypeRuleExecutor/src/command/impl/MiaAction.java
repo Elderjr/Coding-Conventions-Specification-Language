@@ -3,7 +3,7 @@ package command.impl;
 import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.Block;
 import org.eclipse.gmt.modisco.java.IfStatement;
-import command.InjectionCommand;
+import command.InjectionAction;
 
 /**
  * MiaAction perfoms MissingIfConstructionAroundStatements action.
@@ -11,7 +11,7 @@ import command.InjectionCommand;
  * @author elder
  *
  */
-public class MiaAction implements InjectionCommand {
+public class MiaAction implements InjectionAction {
 
 	@Override
 	public void doCommand(ASTNode node) {

@@ -2,14 +2,12 @@
 [module getOclElementReferenceModule('http://www.example.org/ccsl')]
 
 
-[template public getOclReferenceExpression(element : Element, varname: String)]
-[varname /]
-[/template]
+[template public getOclReferenceExpression(element : Element, varname: String, mappedMetaclass: String) /]
 
-[template public getOclReferenceExpression(element : MethodInvocation, varname: String)]
-if [varname /].oclIsKindOf(ExpressionStatement) then
+[template public getOclReferenceExpression(element : MethodInvocation, varname: String, mappedMetaclass: String)]
+let [varname /]: [mappedMetaclass /] = if [varname /].oclIsKindOf(ExpressionStatement) then
   [varname /].oclAsType(ExpressionStatement).expression
 else
   [varname /]
-endif
+endif in
 [/template]

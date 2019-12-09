@@ -1,0 +1,16 @@
+<faultTypeRule>
+  <ocl>
+    VariableDeclarationFragment.allInstances()->select(varWithLiteralInitialization |
+      --Scope Conditions
+      let lit: ASTNode = varWithLiteralInitialization.variablesContainer.fragments->asOrderedSet()->last().initializer in
+      lit &lt;&gt; null and
+      (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral)) 
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingVariableInitializationUsingAValueAction" custom="true" />
+  </actions>
+</faultTypeRule>

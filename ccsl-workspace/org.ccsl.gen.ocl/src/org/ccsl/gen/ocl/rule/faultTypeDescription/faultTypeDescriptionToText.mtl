@@ -3,18 +3,25 @@
 
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextOCLModule /]
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextStrategyModule /]
-[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToTextActionModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::action::actionModule /]
 
 
 
 [template public generatesConfigFaultTypeRuleFile(faultType: FaultTypeDescription)]
+[file (faultType.name.concat('/').concat(faultType.name).concat('.xml'), false, 'UTF-8')]
 <faultTypeRule>
   <ocl>
     [faultType.rule.generatesOCL() /]
   </ocl>
   [faultType.generatesStrategy() /]
-  [faultType.generatesAction() /]
+  <actions>
+    [for(action: InjectionAction | faultType.actions)]
+    [action.generatesActionTag(faultType.rule.oclAsType(AtomicFaultTypeRule).subject, faultType.name) /]
+    [/for]
+  </actions>
 </faultTypeRule>
+[/file]
+[faultType.actions.generatesActionJavaClass(faultType.rule.oclAsType(AtomicFaultTypeRule).subject, faultType.name) /]
 [/template]
 
 

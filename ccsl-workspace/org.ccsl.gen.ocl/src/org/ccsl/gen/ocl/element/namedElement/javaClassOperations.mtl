@@ -48,5 +48,5 @@ else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
 else
   null
 endif endif in (not interfacesImplemented->oclIsUndefined()) and
-[class.generatesMultivaluedFieldConditions('interfacesImplemented', class.implements, 'ASTNode') /]
+[class.generatesSetConditions('interfacesImplemented', class.implements, 'ASTNode') /]
 [/template]

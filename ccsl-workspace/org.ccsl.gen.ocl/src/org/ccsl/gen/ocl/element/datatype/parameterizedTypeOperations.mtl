@@ -23,5 +23,5 @@ OrderedSet(String) {
 
 [template public generatesConditionsForTypeParameters(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
 let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
-[parameterizedType.generatesMultivaluedFieldConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
+[parameterizedType.generatesSetConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
 [/template]

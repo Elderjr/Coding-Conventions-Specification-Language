@@ -11,8 +11,31 @@
   endif
 /]
 
-[query public isElementPartOfClosureOperation(element: Element): Boolean = 
-  ClosureFilter.allInstances()->exists(closureFilter | closureFilter.closureRelation = element)
+[query public getRelationName(element: Element, field: Element): String =
+let relatedFeature: OrderedSet(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->asOrderedSet()->select(feature: ecore::EStructuralFeature |
+  let featureValue: OclAny = element.eGet(feature) in if (not featureValue.oclIsUndefined()) and (not feature.many) then
+    featureValue = field
+  else if (not featureValue.oclIsUndefined()) and (feature.many) then
+    featureValue->flatten()->includes(field)
+  else
+    false
+  endif endif 
+) in if relatedFeature->size() > 0 then
+  relatedFeature->first().name
+else
+  null
+endif
+/]
+
+[query public hasAnyNotClosureRelationField(element: Element, fields: OrderedSet(Element)): Boolean =
+  fields->exists(field: Element | not element.isClosureRelation(field))
+/]
+
+[query public isClosureRelation(element: Element, field: Element): Boolean = 
+  ClosureFilter.allInstances()->exists(f: ClosureFilter | 
+    (f.subject = element and f.closureElement = field) or
+    (f.subject = field and f.closureElement = element)
+  )
 /]
 
 

@@ -3,15 +3,18 @@
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getIfStatementMatchingMetaclasses(ifStatement: IfStatement): OrderedSet(String) =
 OrderedSet(String) {'IfStatement'}
 /]
 
 [query public getIfStatementConditions(ifStatement: IfStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = ifStatement.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
 OrderedSet(String){
   ifStatement.generatesIfStatementTypecheckerCondition(varname, typecheck),
+  ifStatement.generatesConditionForIfCondition(newVarname),
   ifStatement.generatesConditionForThen(newVarname),
   ifStatement.generatesConditionForElse(newVarname)
 }->select(s: String | s.isNotEmpty())
@@ -21,10 +24,14 @@ OrderedSet(String){
 [varname /].oclIsKindOf(IfStatement)
 [/template]
 
+[template private generatesConditionForIfCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('condition'))]
+[ifStatement.generatesMonovaluedFieldConditions(ifStatement.condition, varname, 'expression', 'ASTNode') /]
+[/template]
+
 [template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('thenStatement'))]
-[ifStatement.generatesMonovaluedFieldConditions(varname, ifStatement.thenStatement, 'thenStatement', 'ASTNode') /]
+[ifStatement.generatesMonovaluedFieldConditions(ifStatement.thenStatement, varname, 'thenStatement', 'ASTNode') /]
 [/template]
 
 [template private generatesConditionForElse(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('elseStatement'))]
-[ifStatement.generatesMonovaluedFieldConditions(varname, ifStatement.elseStatement, 'elseStatement', 'ASTNode') /]
+[ifStatement.generatesMonovaluedFieldConditions(ifStatement.elseStatement, varname, 'elseStatement', 'ASTNode') /]
 [/template]
