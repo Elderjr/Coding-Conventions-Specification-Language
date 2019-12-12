@@ -1,6 +1,6 @@
 <faultTypeRule>
   <ocl>
-    IfStatement.allInstances()->select(ifStmt1 |
+    IfStatement.allInstances()->asOrderedSet()->select(ifStmt1 |
       --Scope Conditions
       let stmt2: ASTNode = ifStmt1.thenStatement in
       stmt2 &lt;&gt; null and

@@ -280,6 +280,15 @@
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//faultType/action/DeleteAction"/>
         <genClasses ecoreClass="ccsl.ecore#//faultType/action/MoveScopeUpAction"/>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/DeleteInfixOperator"/>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/ChangeLiteralValue"/>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/ReplaceInfixOperator">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//faultType/action/ReplaceInfixOperator/replacements"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//faultType/action/OperatorReplace">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//faultType/action/OperatorReplace/originalOperator"/>
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//faultType/action/OperatorReplace/newOperator"/>
+        </genClasses>
       </nestedGenPackages>
       <nestedGenPackages prefix="Strategy" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//faultType/strategy">
         <genClasses image="false" ecoreClass="ccsl.ecore#//faultType/strategy/Strategy"/>

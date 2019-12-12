@@ -1,0 +1,59 @@
+<faultTypeRule>
+  <ocl>
+    InfixExpression.allInstances()->select(mainInfix |
+      --Scope Conditions
+      --Filters Conditions
+      (
+        -- Composite Filter (OR)
+        (
+          -- Template Filter
+          let plusInfix: ASTNode = mainInfix in 
+          plusInfix.oclIsKindOf(InfixExpression) and
+          plusInfix.oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let minusInfix: ASTNode = mainInfix in 
+          minusInfix.oclIsKindOf(InfixExpression) and
+          minusInfix.oclAsType(InfixExpression).operator = InfixExpressionKind::MINUS
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let multInfix: ASTNode = mainInfix in 
+          multInfix.oclIsKindOf(InfixExpression) and
+          multInfix.oclAsType(InfixExpression).operator = InfixExpressionKind::TIMES
+          -- End Template Filter
+        ) or 
+        (
+          -- Template Filter
+          let divInfix: ASTNode = mainInfix in 
+          divInfix.oclIsKindOf(InfixExpression) and
+          divInfix.oclAsType(InfixExpression).operator = InfixExpressionKind::DIVIDE
+          -- End Template Filter
+        )
+        -- End Composite Filter (OR)
+      )  and
+      let infixWIthImplicitContainer:ASTNode = mainInfix in
+      infixWIthImplicitContainer.oclIsKindOf(InfixExpression) and
+      let implicityContainers: OrderedSet(ASTNode) = infixWIthImplicitContainer->asOrderedSet()->closure(node: ASTNode |
+        if node.oclContainer().oclIsKindOf(ASTNode) then
+          node.oclContainer().oclAsType(ASTNode)
+        else
+          null
+        endif
+      ) in
+      implicityContainers->exists(implicitContainer:ASTNode |
+        (implicitContainer.oclIsKindOf(MethodInvocation)) and
+        implicityContainers->intersection(implicitContainer.oclAsType(MethodInvocation).arguments)->size() > 0
+      )
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="WrongArithmeticExpressionInParameterOfAFunctionCallAction" custom="true" />
+  </actions>
+</faultTypeRule>

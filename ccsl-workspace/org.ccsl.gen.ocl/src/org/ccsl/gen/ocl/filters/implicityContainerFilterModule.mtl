@@ -34,3 +34,7 @@ let [setName /]: OrderedSet(ASTNode) = [fieldOclVarname /]->asOrderedSet()->clos
 [template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: IfStatement, field: Element,  setOclVarname: String) ? (container.getRelationName(field) = 'condition')]
 [setOclVarname /]->includes([container.getUniqueOclName() /].oclAsType(IfStatement).expression)
 [/template]
+
+[template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: MethodInvocation, field: Element,  setOclVarname: String) ? (container.getRelationName(field) = 'args')]
+[setOclVarname /]->intersection([container.getUniqueOclName() /].oclAsType(MethodInvocation).arguments)->size() > 0
+[/template]

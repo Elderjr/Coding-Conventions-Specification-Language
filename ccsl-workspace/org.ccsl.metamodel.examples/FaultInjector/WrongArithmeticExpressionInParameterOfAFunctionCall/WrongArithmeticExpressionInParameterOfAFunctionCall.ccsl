@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultType/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" xmlns:strategy="http://www.example.org/ccsl/faultType/strategy" name="WrongArithmeticExpressionInParameterOfAFunctionCall">
+  <strategy xsi:type="strategy:AllStrategy"/>
+  <actions xsi:type="action:ReplaceInfixOperator" target="mainInfix">
+    <replacements originalOperator="+" newOperator="-"/>
+    <replacements originalOperator="-" newOperator="+"/>
+    <replacements originalOperator="*" newOperator="+"/>
+    <replacements originalOperator="/" newOperator="*"/>
+  </actions>
+  <rule xsi:type="faultType:AtomicFaultTypeRule" subject="mainInfix">
+    <contextElements xsi:type="expressions:InfixExpression" uniqueName="mainInfix"/>
+    <filters xsi:type="filters:CompositeFilter" operator="OR">
+      <filters xsi:type="filters:TemplateFilter" targets="mainInfix" subject="plusInfix">
+        <contextElements xsi:type="expressions:InfixExpression" uniqueName="plusInfix" operator="+"/>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="mainInfix" subject="minusInfix">
+        <contextElements xsi:type="expressions:InfixExpression" uniqueName="minusInfix" operator="-"/>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="mainInfix" subject="multInfix">
+        <contextElements xsi:type="expressions:InfixExpression" uniqueName="multInfix" operator="*"/>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="mainInfix" subject="divInfix">
+        <contextElements xsi:type="expressions:InfixExpression" uniqueName="divInfix" operator="/"/>
+      </filters>
+    </filters>
+    <filters xsi:type="filters:ImplicityContainer" targets="mainInfix" subject="infixWIthImplicitContainer" maxDepth="-1" minDepth="-1" closureElement="implicitContainer">
+      <contextElements xsi:type="statements:MethodInvocation" uniqueName="implicitContainer">
+        <args xsi:type="expressions:InfixExpression" uniqueName="infixWIthImplicitContainer"/>
+      </contextElements>
+    </filters>
+  </rule>
+</ccsl:FaultTypeDescription>

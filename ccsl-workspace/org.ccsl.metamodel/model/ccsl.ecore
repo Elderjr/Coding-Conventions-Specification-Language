@@ -319,6 +319,16 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="DeleteAction" eSuperTypes="#//faultType/action/InjectionAction"/>
       <eClassifiers xsi:type="ecore:EClass" name="MoveScopeUpAction" eSuperTypes="#//faultType/action/InjectionAction"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DeleteInfixOperator" eSuperTypes="#//faultType/action/InjectionAction"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ChangeLiteralValue" eSuperTypes="#//faultType/action/InjectionAction"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ReplaceInfixOperator" eSuperTypes="#//faultType/action/InjectionAction">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="replacements" lowerBound="1"
+            upperBound="-1" eType="#//faultType/action/OperatorReplace" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OperatorReplace">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="newOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+      </eClassifiers>
     </eSubpackages>
     <eSubpackages name="strategy" nsURI="http://www.example.org/ccsl/faultType/strategy"
         nsPrefix="strategy">

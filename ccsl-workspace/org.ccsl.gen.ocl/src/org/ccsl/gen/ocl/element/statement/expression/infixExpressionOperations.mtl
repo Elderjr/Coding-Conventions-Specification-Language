@@ -29,7 +29,11 @@ endif
 [template public generatesConditionForOperator(infixExp: InfixExpression, varname: String) ? (not infixExp.operator.oclIsUndefined())]
 [if infixExp.operator = '&&']
 [varname /].operator = InfixExpressionKind::CONDITIONAL_AND[elseif infixExp.operator = '||']
-[varname /].operator = InfixExpressionKind::CONDITIONAL_OR[/if]
+[varname /].operator = InfixExpressionKind::CONDITIONAL_OR[elseif infixExp.operator = '+']
+[varname /].operator = InfixExpressionKind::PLUS[elseif infixExp.operator = '-']
+[varname /].operator = InfixExpressionKind::MINUS[elseif infixExp.operator = '*']
+[varname /].operator = InfixExpressionKind::TIMES[elseif infixExp.operator = '/']
+[varname /].operator = InfixExpressionKind::DIVIDE[/if]
 [/template]
 
 [template public generatesConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.hasAnyNotClosureRelationField(infixExp.operands))]

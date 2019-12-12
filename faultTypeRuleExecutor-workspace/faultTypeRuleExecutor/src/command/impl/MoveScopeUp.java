@@ -23,7 +23,9 @@ public class MoveScopeUp implements InjectionAction {
 	}
 
 	@Override
-	public void doCommand(ASTNode node) {
+	public void doAction(ASTNode node) {
+		if (node == null)
+			return;
 		ScopeTreeResult nodeScope = getScope(node);
 		ScopeTreeResult superScope = null;
 		if (nodeScope != null) {
@@ -41,7 +43,7 @@ public class MoveScopeUp implements InjectionAction {
 			superScope = getScope(scope);
 		}
 		if (superScope != null) {
-			for (Field field : ClassUtils.getAllClassFields(superScope.scope.getClass())) {
+			for (Field field : ActionUtils.getAllClassFields(superScope.scope.getClass())) {
 				if (Modifier.isStatic(field.getModifiers())) {
 					continue;
 				}
@@ -79,7 +81,8 @@ public class MoveScopeUp implements InjectionAction {
 		ASTNode previousNode = null;
 		ASTNode currentNode = node;
 		do {
-			if (currentNode.eContainer() != null && currentNode.eContainer() instanceof ASTNode) {
+			if (currentNode != null && currentNode.eContainer() != null
+					&& currentNode.eContainer() instanceof ASTNode) {
 				previousNode = currentNode;
 				currentNode = (ASTNode) currentNode.eContainer();
 			}

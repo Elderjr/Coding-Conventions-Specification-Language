@@ -1,4 +1,4 @@
-package compiler;
+package javaCompiler;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -21,7 +21,7 @@ import javax.tools.ToolProvider;
 
 import command.InjectionAction;
 
-public class JavaSourceFromString {
+public class JavaCompilerFromString {
 
 	private static String readCode(String sourcePath) throws FileNotFoundException {
 		InputStream stream = new FileInputStream(sourcePath);
@@ -52,8 +52,7 @@ public class JavaSourceFromString {
 		return clazz.getDeclaredConstructor().newInstance();
 	}
 
-	public static Object compileClass(String className, String sourcePath) throws Exception {
-		System.out.println(sourcePath);
+	public static Object getNewInstanceClassFromFile(String className, String sourcePath) throws Exception {
 		String code = readCode(sourcePath);
 		Path javaFile = saveSource(className, code);
 		Path classFile = compileSource(className, javaFile);

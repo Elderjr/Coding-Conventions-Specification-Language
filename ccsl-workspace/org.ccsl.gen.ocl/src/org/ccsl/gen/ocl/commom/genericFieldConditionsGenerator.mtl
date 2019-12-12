@@ -87,8 +87,11 @@ else
 [element.generatesFieldCondition(field, fieldOclVarname, mappedFieldMetaclass) /][/let]
 [/template]
 
+[query private getElementsNotInClosureRelation(element: Element, fields: OrderedSet(Element)): OrderedSet(Element) =
+  fields->select(field: Element | not element.isClosureRelation(field))
+/]
 [comment Gerar condicoes de atributo multivalorado com acesso direto /]
-[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String, mappedPropertyFieldName: String, mappedFieldMetaclass: String)]
+[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String, mappedPropertyFieldName: String, mappedFieldMetaclass: String) ? (element.getElementsNotInClosureRelation(fields)->size() > 0)]
 [element.generatesGetFieldExpression(elementOclVarname, fieldsOclVarname, mappedPropertyFieldName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')')) /]
 [element.generatesSetConditions(fieldsOclVarname, fields, mappedFieldMetaclass) /]
 [/template]
@@ -96,12 +99,12 @@ else
 [**
  * Generates conditions for a multivalue property of @element.
 */]
-[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String , mappedPropertyFieldName: String, mappedFieldMetaclass: String, elementMetaclasses: OrderedSet(String))]
+[template public generatesMultivaluedFieldConditions(element: Element, fields: OrderedSet(Element), elementOclVarname: String, fieldsOclVarname: String , mappedPropertyFieldName: String, mappedFieldMetaclass: String, elementMetaclasses: OrderedSet(String))  ? (element.getElementsNotInClosureRelation(fields)->size() > 0)]
 [element.generatesGetFieldExpression(elementOclVarname, fieldsOclVarname, mappedPropertyFieldName, 'OrderedSet('.concat(mappedFieldMetaclass).concat(')'), elementMetaclasses) /]
 [element.generatesSetConditions(fieldsOclVarname, fields, mappedFieldMetaclass) /]
 [/template]
 
-[template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)]
+[template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)  ? (element.getElementsNotInClosureRelation(fields)->size() > 0)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and ')]
   [setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /]

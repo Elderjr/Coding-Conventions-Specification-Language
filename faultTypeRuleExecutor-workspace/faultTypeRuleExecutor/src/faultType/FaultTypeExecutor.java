@@ -36,10 +36,12 @@ public class FaultTypeExecutor {
 	}
 
 	public Model executeFaultType(FaultTypeDescription faultType, String xmiPathFile) {
+		System.out.println("Reading MoDisco instance...");
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource r = rs.getResource(URI.createURI(xmiPathFile), true);
 		TreeIterator<EObject> contents = r.getAllContents();
+		System.out.println("Reading MoDisco instance... OK");
 		Model modiscoModel = (Model) contents.next();
 		OCL oclInstance = OCL.newInstance(rs);
 		executeFaultType(faultType, modiscoModel, oclInstance);
@@ -49,16 +51,20 @@ public class FaultTypeExecutor {
 	private void executeFaultType(FaultTypeDescription faultType, Model modiscoModel, OCL oclInstance) {
 		try {
 			EClass context = JavaPackage.eINSTANCE.getASTNode();
+			System.out.println("Executing OCL query...");
 			ExpressionInOCL expression = oclInstance.createQuery(context, faultType.getOcl());
 			Query queryEval = oclInstance.createQuery(expression);
-			Object result = queryEval.evaluateEcore(modiscoModel);
+			Collection<?> result = (Collection<?>) queryEval.evaluateEcore(modiscoModel);
+			System.out.println("Executing OCL query... OK (" + result.size() + " nodes found)");
 			if (result != null && result instanceof Collection) {
-				List<ASTNode> nodes = faultType.getStrategy().selectNodes((Collection<?>) result);
-				for (Object node : nodes) {
-					for (InjectionAction action : faultType.getActions()) {
-						action.doCommand((ASTNode) node);
-					}
+				System.out.println("Executing strategy... ");
+				List<ASTNode> nodes = faultType.getStrategy().selectNodes(result);
+				System.out.println("Executing strategy... OK (" + nodes.size() + " selected)");
+				System.out.println("Executing actions...");
+				for (ASTNode node : nodes) {
+					faultType.getActionPipe().doActions(node);
 				}
+				System.out.println("Executing actions... OK");
 			} else {
 				System.err.println("The generated OCL doesn't return a collection.");
 			}

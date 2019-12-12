@@ -25,16 +25,24 @@ public final class Main {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("Registering MoDisco...");
 		EPackage.Registry.INSTANCE.put(JavaPackage.eNS_URI, JavaPackage.eINSTANCE);
+		System.out.println("Registering MoDisco... OK");
+		System.out.println("Initializing OCL standalone lib...");
 		EssentialOCLStandaloneSetup.doSetup();
+		System.out.println("Initializing OCL standalone lib... OK");
 		try {
+			System.out.println("Reading fault type formalization from XML...");
 			FaultTypeDescription faultTypeDescription = FaultTypeLoader.getInstance().loadFaultTypeDescription(
-					"D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatementsPlusElseBeforeStatements\\MissingIfConstructPlusStatementsPlusElseBeforeStatements.xml");
+					"D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\WrongArithmeticExpressionInParameterOfAFunctionCall\\WrongArithmeticExpressionInParameterOfAFunctionCall.xml");
+			System.out.println("Reading fault type formalization from XML... OK");
 			Model modiscoModel = FaultTypeExecutor.getInstance().executeFaultType(faultTypeDescription,
 					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi");
+			System.out.println("Regenerating java code...");
 			GenerateJavaExtended javaGenerator = new GenerateJavaExtended(modiscoModel, new File("./"),
 					new ArrayList<Object>());
 			javaGenerator.doGenerate(null);
+			System.out.println("Regenerating java code... OK");
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

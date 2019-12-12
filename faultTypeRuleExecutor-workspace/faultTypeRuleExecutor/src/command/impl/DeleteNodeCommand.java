@@ -11,7 +11,9 @@ import org.eclipse.gmt.modisco.java.ExpressionStatement;
 public class DeleteNodeCommand implements InjectionAction {
 
 	@Override
-	public void doCommand(ASTNode target) {
+	public void doAction(ASTNode target) {
+		if (target == null)
+			return;
 		Object container = target.eContainer();
 		if (container instanceof ExpressionStatement) {
 			target = (ASTNode) container;
@@ -19,7 +21,7 @@ public class DeleteNodeCommand implements InjectionAction {
 		}
 		Object fieldValue = null;
 		boolean accessibleHasBeenChanged;
-		for (Field containerField : ClassUtils.getAllClassFields(container.getClass())) {
+		for (Field containerField : ActionUtils.getAllClassFields(container.getClass())) {
 			if (Modifier.isStatic(containerField.getModifiers())) {
 				continue;
 			}

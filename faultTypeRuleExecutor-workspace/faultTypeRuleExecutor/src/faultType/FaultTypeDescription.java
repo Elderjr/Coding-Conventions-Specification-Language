@@ -3,17 +3,18 @@ package faultType;
 import java.util.List;
 
 import command.InjectionAction;
+import command.impl.ActionPipe;
 import faultInjectorStrategy.FaultInjectorStrategy;
 
 public class FaultTypeDescription {
 
 	private String ocl;
-	private List<InjectionAction> actions;
+	private ActionPipe pipe;
 	private FaultInjectorStrategy strategy;
 
-	public FaultTypeDescription(String ocl, List<InjectionAction> action, FaultInjectorStrategy strategy) {
+	public FaultTypeDescription(String ocl, ActionPipe pipe, FaultInjectorStrategy strategy) {
 		this.ocl = ocl;
-		this.actions = action;
+		this.pipe = pipe;
 		this.strategy = strategy;
 	}
 
@@ -21,8 +22,8 @@ public class FaultTypeDescription {
 		return this.ocl;
 	}
 
-	public List<InjectionAction> getActions() {
-		return this.actions;
+	public ActionPipe getActionPipe() {
+		return this.pipe;
 	}
 
 	public FaultInjectorStrategy getStrategy() {

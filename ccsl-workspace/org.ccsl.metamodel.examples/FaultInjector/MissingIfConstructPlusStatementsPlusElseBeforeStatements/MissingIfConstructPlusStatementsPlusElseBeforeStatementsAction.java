@@ -5,10 +5,12 @@ import command.impl.*;
 public class MissingIfConstructPlusStatementsPlusElseBeforeStatementsAction implements InjectionAction {
 
   @Override
-  public void doCommand(ASTNode node) {
-    if (node instanceof IfStatement) {
-      IfStatement ifStmt = (IfStatement) node;
-      new MoveScopeUp().doCommand(ifStmt.getElseStatement());
-    }
+  public void doAction(ASTNode node) {
+    if (!(node instanceof IfStatement))
+      return;
+    IfStatement ifStmt = (IfStatement) node;
+    if (ifStmt.getElseStatement() == null)
+      return;
+    new MoveScopeUp().doAction(ifStmt.getElseStatement());
   }
 }

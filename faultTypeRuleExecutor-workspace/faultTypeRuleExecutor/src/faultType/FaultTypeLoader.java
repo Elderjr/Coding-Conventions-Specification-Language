@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import command.InjectionAction;
 import command.InjectionCommandFactory;
+import command.impl.ActionPipe;
 import faultInjectorStrategy.FaultInjectorStrategy;
 import faultInjectorStrategy.FaultInjectorStrategyFactory;
 
@@ -78,13 +79,13 @@ public final class FaultTypeLoader {
 		Element oclTag = getElement(faultTypeRuleTag, "ocl");
 		String ocl = oclTag.getTextContent();
 		FaultInjectorStrategy strategy = getStrategy(getElement(faultTypeRuleTag, "strategy"));
-		List<InjectionAction> actions = new LinkedList<>();
+		ActionPipe actionPipe = new ActionPipe();
 		NodeList list = faultTypeRuleTag.getElementsByTagName("action");
 		int index = 0;
 		while (index < list.getLength()) {
-			actions.add(getAction((Element) list.item(index), file.getParent()));
+			actionPipe.addAction(getAction((Element) list.item(index), file.getParent()));
 			index++;
 		}
-		return new FaultTypeDescription(ocl, actions, strategy);
+		return new FaultTypeDescription(ocl, actionPipe, strategy);
 	}
 }

@@ -17,17 +17,20 @@
 [template public generatesFilterConditions(filter : Filter) /]
 
 [template public generatesFilterConditions(compositeFilter : CompositeFilter) ? (not compositeFilter.negated)]
-( -- Composite Filter ([compositeFilter.operator /])
+(
+  -- Composite Filter ([compositeFilter.operator /])
 [for(f: Filter | compositeFilter.filters) separator(compositeFilter.operator.oclOperator().concat('\n'))]
   (
     [f.generatesFilterConditions() /]
   )[/for]
 
-) -- End Composite Filter ([compositeFilter.operator /])
+  -- End Composite Filter ([compositeFilter.operator /])
+) 
 [/template]
 
 [template public generatesFilterConditions(compositeFilter : CompositeFilter) ? (compositeFilter.negated)]
-(  -- Composite Filter ([compositeFilter.operator /])
+(
+  -- Composite Filter ([compositeFilter.operator /])
   not (
 [for(f: Filter | compositeFilter.filters) separator(compositeFilter.operator.oclOperator().concat('\n'))]
     (
@@ -35,7 +38,8 @@
     )[/for]
   
   )
-)  -- End Composite Filter ([compositeFilter.operator /])
+  -- End Composite Filter ([compositeFilter.operator /])
+)
 [/template]
 
 [template public generatesFilterConditions(atomicFilter : AtomicFilter) ? (atomicFilter.negated)]
