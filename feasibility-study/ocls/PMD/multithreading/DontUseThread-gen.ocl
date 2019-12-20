@@ -1,45 +1,53 @@
-let violations: Set(ASTNode) = TypeAccess.allInstances()->select(element1 |
-  --Scope Conditions
-  let complexType2: ASTNode = element1.type in (not complexType2.oclIsUndefined()) and
-  (complexType2.oclIsKindOf(ClassDeclaration) or complexType2.oclIsKindOf(InterfaceDeclaration) or complexType2.oclIsKindOf(AnonymousClassDeclaration)) and
+let violations: Set(ASTNode) = TypeAccess.allInstances()->select(threadAccess |
+  --Context Conditions
   --Filters Conditions
-  let complexType2Package: Package = if complexType2.oclIsKindOf(ClassDeclaration) then
-    complexType2.oclAsType(ClassDeclaration).package
-  else if complexType2.oclIsKindOf(InterfaceDeclaration) then
-    complexType2.oclAsType(InterfaceDeclaration).package
-  else
-    null
-  endif endif in (not complexType2Package.oclIsUndefined()) and
-  complexType2Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-    fullName.concat(p.name).concat('.')
-  ).concat(complexType2.oclAsType(NamedElement).name).matches('java\\.lang\\.(Thread|Runnable)')  and
+  --Closure Filter
+  let typeAccessClosure: ASTNode = threadAccess in
+  let closureSet: OrderedSet(ASTNode) = typeAccessClosure.oclAsType(TypeAccess).type
+  ->closure(node: ASTNode |
+    if(node.oclIsKindOf(TypeAccess)) then
+      node.oclAsType(TypeAccess).type
+    else if (node.oclIsKindOf(ArrayType)) then
+      node.oclAsType(ArrayType).elementType
+    else if (node.oclIsKindOf(ParameterizedType)) then
+      node.oclAsType(ParameterizedType).typeArguments->append(node.oclAsType(ParameterizedType).type)
+    else
+      null
+    endif endif endif
+  ) in
+  closureSet->exists(threadOrInterface:ASTNode |
+    (threadOrInterface.oclIsKindOf(ClassDeclaration) or threadOrInterface.oclIsKindOf(InterfaceDeclaration) or threadOrInterface.oclIsKindOf(AnonymousClassDeclaration)) and
+  (
+    --Closure Filter Context
+    --Context Conditions
+    --Filters Conditions
+    let threadOrInterfacePackage: Package = if threadOrInterface.oclIsKindOf(ClassDeclaration) then
+      threadOrInterface.oclAsType(ClassDeclaration).package
+    else if threadOrInterface.oclIsKindOf(InterfaceDeclaration) then
+      threadOrInterface.oclAsType(InterfaceDeclaration).package
+    else
+      null
+    endif endif in (not threadOrInterfacePackage.oclIsUndefined()) and
+    threadOrInterfacePackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+      fullName.concat(p.name).concat('.')
+    ).concat(threadOrInterface.oclAsType(NamedElement).name).matches('java\\.lang\\.(Thread|Runnable)')
+    --End Closure Filter
+  )) and
   not (
-    element1.oclIsKindOf(TypeAccess) and
-    let methodInv3: OclAny = element1.oclContainer() in (not methodInv3.oclIsUndefined()) and
-    (methodInv3.oclIsKindOf(MethodInvocation) or methodInv3.oclIsKindOf(ClassInstanceCreation))
+    -- Template Filter
+    let typeAccessInv: ASTNode = threadAccess in
+    typeAccessInv.oclIsKindOf(TypeAccess) and
+    let methodInv1 : OclAny = typeAccessInv.oclContainer() in
+    (methodInv1.oclIsKindOf(MethodInvocation)) and
+    let stmtTmp: ASTNode = methodInv1.oclAsType(MethodInvocation).expression in
+    stmtTmp = typeAccessInv
+    -- End Template Filter
   )
 )
-->reject(node | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) 
-->iterate(typeAccess: TypeAccess; acc: OrderedSet(ASTNode) = OrderedSet(ASTNode){} |
-  if typeAccess.oclContainer().oclIsKindOf(ASTNode) and (not typeAccess.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined()) then
-    acc->append(typeAccess.oclContainer())
-  else if typeAccess.oclContainer().oclIsKindOf(Type) and typeAccess.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
-    acc->append(
-      typeAccess.oclContainer().oclAsType(Type).usagesInTypeAccess->closure(accessRec: TypeAccess |
-        if accessRec.oclContainer().oclIsKindOf(Type) and accessRec.oclContainer().oclAsType(Type).originalCompilationUnit.oclIsUndefined() then
-          accessRec.oclContainer().oclAsType(Type).usagesInTypeAccess
-        else if accessRec.oclContainer().oclIsKindOf(AbstractVariablesContainer) or accessRec.oclContainer().oclIsKindOf(ClassInstanceCreation) or accessRec.oclContainer().oclIsKindOf(ArrayCreation) then
-          accessRec.oclContainer()
-        else
-          null
-        endif endif
-      )->select(x | x <> null and not x.oclIsKindOf(TypeAccess))
-    )->flatten()
-  else
-    acc
-  endif endif
-) in
-violations->collect(node: ASTNode | 
+->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode | node.oclContainer().oclAsType(ASTNode)) in
+violations->asSequence()->collect(node: ASTNode | 
 	let container: NamedElement = node->asOrderedSet()->closure(x |
         if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
 		  x

@@ -37,7 +37,7 @@ endif
 [/template]
 
 [template public generatesConditionForOperands(infixExp: InfixExpression, varname: String) ? (infixExp.hasAnyNotClosureRelationField(infixExp.operands))]
-let operands: OrderedSet(ASTNode) = leftOperand->asOrderedSet()->append([varname /].rightOperand)->append([varname /].extendedOperands) in
+let operands: OrderedSet(ASTNode) = [varname /].extendedOperands->append([varname /].leftOperand)->append([varname /].rightOperand) in
 [infixExp.generatesSetConditions('operands', infixExp.operands, 'ASTNode') /]
 [/template]
 

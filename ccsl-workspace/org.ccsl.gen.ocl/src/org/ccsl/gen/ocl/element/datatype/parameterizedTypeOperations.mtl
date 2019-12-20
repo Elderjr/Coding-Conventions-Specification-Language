@@ -3,6 +3,7 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 
 [query public getParameterizedTypeMatchingMetaclasses(parameterizedType: ParameterizedType): OrderedSet(String)=
@@ -10,18 +11,24 @@
 /]
 
 [query public getParameterizedTypeConditions(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = parameterizedType.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, 'ParameterizedType') in
 OrderedSet(String) {
-  parameterizedType.generatesParameterizedType(varname, typecheck),
-  parameterizedType.generatesConditionsForTypeParameters(varname)
+  parameterizedType.generatesParameterizedTypecheck(varname, typecheck),
+  parameterizedType.generatesConditionsForTypeParameters(newVarname),
+  parameterizedType.generatesConditionsForType(newVarname)
 }->select(cond: String | cond.isNotEmpty())
 /]
 
-[template public generatesParameterizedType(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public generatesParameterizedTypecheck(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ParameterizedType)
 [/template]
 
 [template public generatesConditionsForTypeParameters(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
 let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
 [parameterizedType.generatesSetConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
+[/template]
+
+[template public generatesConditionsForType(parameterizedType: ParameterizedType, varname: String) ? (not parameterizedType.type.oclIsUndefined())] 
+[parameterizedType.generatesMonovaluedFieldConditions(parameterizedType.type, varname, 'type.type', 'ASTNode') /]
 [/template]

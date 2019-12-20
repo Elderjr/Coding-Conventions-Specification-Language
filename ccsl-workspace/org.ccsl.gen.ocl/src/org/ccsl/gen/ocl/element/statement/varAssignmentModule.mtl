@@ -6,19 +6,18 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getVariableAssignmentMatchingJavaMetaclasses(varAssignment: VarAssignment): OrderedSet(String)=
-  OrderedSet(String){'Assignment'}
+  OrderedSet(String){'Assignment', 'PostfixExpression', 'PrefixExpression'}
 /]
 
 [query public getVariableAssignmentConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean): OrderedSet(String) =
-let void: OclVoid = varAssignment.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, 'Assignment') in
+ let void: OclVoid = varAssignment.addElementAsVisited() in
 OrderedSet(String){
   varAssignment.generatesVarAssignmentTypecheckConditions(varname, typecheck),
-  varAssignment.generatesConditionForVariable(newVarname),
-  varAssignment.generatesConditionForAssignment(newVarname)
+  varAssignment.generatesConditionForVariable(varname),
+  varAssignment.generatesConditionForAssignment(varname)
 }
 ->select(s | s.trim().size() > 0)
-->addAll(varAssignment.getStatementConditions(newVarname, false))
+->addAll(varAssignment.getStatementConditions(varname, false))
 /]
 
 [query public getVariableDeclarationConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -26,8 +25,19 @@ OrderedSet(String){
 /]
 
 [template public generatesVarAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean) ? (typecheck)]
-([for (javaMetaclass: String | varAssignment.getVariableAssignmentMatchingJavaMetaclasses()) separator (' or ')]
-[varname /].oclIsKindOf([javaMetaclass /])[/for])
+let isAssignment:Boolean = if [varname /].oclIsKindOf(Assignment) then
+  true
+else if [varname /].oclIsKindOf(PrefixExpression) and 
+  ([varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::INCREMENT or
+   [varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::DECREMENT) then
+  true
+else if [varname /].oclIsKindOf(PostfixExpression) and 
+  ([varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::INCREMENT or
+   [varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::DECREMENT) then
+  true
+else
+  false
+endif endif endif in isAssignment
 [/template]
 
 [template private generatesConditionForVariable(varAssignment: VarAssignment, varname: String) ? ((not varAssignment.variable.oclIsUndefined()))]

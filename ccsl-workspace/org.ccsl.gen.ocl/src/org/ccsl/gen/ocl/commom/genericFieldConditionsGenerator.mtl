@@ -51,9 +51,8 @@ else
 
 [template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
 [fieldOclVarname /] <> null and
-[if mappedFieldMetaclass = 'ASTNode' or mappedFieldMetaclass = 'OclAny']
-[field.generatesConditions(field.getUniqueOclName(), true) /][else]
-[field.generatesConditions(field.getUniqueOclName(), false, mappedFieldMetaclass) /][/if]
+[let isTypecheckNeeded: Boolean = mappedFieldMetaclass = 'ASTNode' or mappedFieldMetaclass = 'OclAny']
+[field.generatesConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass) /][/let]
 [/template]
 
 [template public generatesFieldCondition(element: Element, field: Element, fieldOclVarname: String, mappedFieldMetaclass: String) ? (not element.isClosureRelation(field))]

@@ -5,10 +5,15 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
+[template public generatesTemplateElement(templ: TemplateFilter, target: Element)]
+let [templ.subject.getUniqueOclName() /]: ASTNode = [target.getUniqueOclName() /] in
+
+[/template]
+
 [template public generatesTemplateFilterConditions(templ: TemplateFilter, target: Element)]
 -- Template Filter
-let [templ.subject.getUniqueOclName() /]: ASTNode = [target.getUniqueOclName() /] in 
-[let subjectCondition: String = templ.subject.generatesConditions(templ.subject.getUniqueOclName(), true)]
+[templ.generatesTemplateLetStatement(target) /]
+[let subjectCondition: String = templ.subject.generatesConditions(templ.subject.getUniqueOclName(), false, 'ASTNode')]
 [subjectCondition.printStringWithIdentation() /]
 [for(Sequence(Integer){1 ..templ.getTotalElementsDeclaredInExists()})])[/for][/let]
 -- End Template Filter

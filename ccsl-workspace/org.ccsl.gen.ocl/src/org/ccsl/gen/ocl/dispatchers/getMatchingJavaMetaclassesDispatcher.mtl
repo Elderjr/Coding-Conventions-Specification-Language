@@ -20,7 +20,7 @@
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
-[import org::ccsl::gen::ocl::element::statement::dataTypeAccessOperations /]
+[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
@@ -33,6 +33,13 @@
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
 
+[query public getGenericMatchingJavaMetaclass(element: Element): String =
+  if element.getMatchingJavaMetaclasses()->size() = 1 then
+     element.getMatchingJavaMetaclasses()->first()
+  else
+    'ASTNode'
+  endif
+/]
 [query public getMatchingJavaMetaclasses (element : Element) : OrderedSet(String) =
 --element/datatype
 if element.oclIsTypeOf(ObjectType) then 

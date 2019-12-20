@@ -20,6 +20,7 @@ public class WalkHelper {
 	
 	public static void clearAllContexts() {
 		uniqueNamesMap.clear();
+		elementsVisited.clear();
 		uniqueId = 1;
 	}
 

@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module postConditionsModule('http://www.example.org/ccsl')]
+
+[template public generatesPostConditionToRemoveJavadocRelatedElements(element: Element)]
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+[/template]
+
+[comment condition to fix MoDisco Bug /]
+[template public generatesPostConditionToRemoveNonSourceElements(element: Element) ? (element.eContainer().oclIsKindOf(VarAssignment))]
+->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
+[/template]
+
+[template public generatesPostConditionToRemoveNonSourceElements(element: Element)]
+->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+[/template]
+
+[template public generatesPostConditionToRemoveNonSourceElements(element: DataTypeAccess)]
+->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
+[/template]
+
+[template public generatesPostConditionToSelectClosestContext(element: Element) /]
+
+[template public generatesPostConditionToSelectClosestContext(element: DataTypeAccess)]
+->collect(node: ASTNode | node.oclContainer().oclAsType(ASTNode))
+[/template]

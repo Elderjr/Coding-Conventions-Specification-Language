@@ -2,12 +2,14 @@
 [module interfaceOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getInterfaceMatchingMetaclasses(interface: JavaInterface): OrderedSet(String)=
   OrderedSet(String){'InterfaceDeclaration'}
 /]
 
 [query public getInterfaceConditions(interface: JavaInterface, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = interface.addElementAsVisited() in
 OrderedSet(String) {
   interface.generatesClassTypecheckCondition(varname, typecheck)
 }->select(cond | cond.isNotEmpty())

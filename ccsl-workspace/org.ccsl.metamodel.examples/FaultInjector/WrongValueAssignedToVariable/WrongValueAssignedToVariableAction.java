@@ -1,6 +1,6 @@
 import org.eclipse.gmt.modisco.java.*;
-import command.InjectionAction;
-import command.impl.*;
+import faultTypeRuleExecutor.command.InjectionAction;
+import faultTypeRuleExecutor.command.impl.*;
 
 public class WrongValueAssignedToVariableAction implements InjectionAction {
 

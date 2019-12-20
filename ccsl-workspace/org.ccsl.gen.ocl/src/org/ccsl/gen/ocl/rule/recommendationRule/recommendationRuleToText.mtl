@@ -1,7 +1,8 @@
 [comment encoding = UTF-8 /]
 [module recommendationRuleToText('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementToOcl /]
-
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [template private operation(logicOperator: LogicOperator)]
 [if logicOperator = LogicOperator::AND]
 ->intersect[elseif logicOperator = LogicOperator::OR]
@@ -10,7 +11,7 @@
 
 [template public generatesOCL(rule: RecommendationRule)]
 let violations: Set(ASTNode) = [rule.generatesOCLToSelectElements() /] in
-violations->collect(node: ASTNode | 
+violations->asSequence()->collect(node: ASTNode | 
 	let container: NamedElement = node->asOrderedSet()->closure(x |
         if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
 		  x
@@ -29,16 +30,16 @@ violations->collect(node: ASTNode |
 [template private generatesOCLToSelectElements(rule: RecommendationRule) /]
 
 [template private generatesOCLToSelectElements(rule: AtomicRecommendationRule)]
-[rule.generatesSelectOCL(rule.subject, rule.filters) /]
+[rule.clearAllContexts() /][rule.generatesContextOCLConditionsAllInstances() /]
 [rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
 [rule.subject.generatesPostConditionToSelectClosestContext() /]
 [/template]
 
-[template private generatesOCLToSelectElements(rule: RecommendationCompositeRule)]
+[template private generatesOCLToSelectElements(compositeRule: RecommendationCompositeRule)]
 (
-[for (rule: RecommendationRule | rule.rules) separator(rule.operator.operation().concat('(\n'))]
-[if i = 1]  [rule.generatesOCL() /][else]    [rule.generatesOCL() /])[/if][/for]
+[for (subRules: RecommendationRule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]
+[if i = 1]  [subRules.generatesOCLToSelectElements() /][else]    [subRules.generatesOCLToSelectElements() /])[/if][/for]
 
 )
 [/template]

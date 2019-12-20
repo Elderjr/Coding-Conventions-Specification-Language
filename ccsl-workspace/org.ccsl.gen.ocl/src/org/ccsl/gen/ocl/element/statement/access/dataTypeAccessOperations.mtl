@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module dataTypeAccessOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[query public getTypeAccessMatchingMetaclasses(typeAccess: DataTypeAccess): OrderedSet(String)=
+  OrderedSet(String){'TypeAccess'}
+/]
+
+[query public getTypeAccessConditions(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = typeAccess.addElementAsVisited() in
+let newVarname: String = varname.printVarname(typecheck, 'TypeAccess') in
+OrderedSet(String) {
+  typeAccess.generatesTypeAccessTypecheckCondition(varname, typecheck)
+}->addAll(typeAccess.getElementConditions(varname, typecheck, 'TypeAccess'))
+->select(s | s.isNotEmpty())
+/]
+
+[template private generatesTypeAccessTypecheckCondition(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(TypeAccess)
+[/template]
+

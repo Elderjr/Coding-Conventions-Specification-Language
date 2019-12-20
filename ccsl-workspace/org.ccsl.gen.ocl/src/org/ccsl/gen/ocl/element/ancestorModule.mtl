@@ -15,13 +15,13 @@
 [template public generatesConditionForAncestor(element: Element, varname: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
 [let acestorUniqueName: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
 let [acestorUniqueName /] : OclAny = [element.getAncestorOclExpression(varname) /] in
-[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true) /][/let]
+[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true, 'OclAny') /][/let]
 [/template]
 
 [template public generatesConditionForAncestor(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
 [let acestorUniqueName: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
 let [acestorUniqueName /] : OclAny = [element.getAncestorOclExpression(varname, metaclass) /] in
-[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true) /][/let]
+[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true, 'OclAny') /][/let]
 [/template]
 
 [comment get ancestor ocl expression/]

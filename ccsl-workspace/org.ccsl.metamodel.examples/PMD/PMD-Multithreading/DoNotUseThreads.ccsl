@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@ruleElements.1">
-  <ruleElements xsi:type="namedElements:ComplexType"/>
-  <ruleElements xsi:type="statements:DataTypeAccess" elementAccessed="//@ruleElements.0"/>
-  <filters xsi:type="filters:RegexMatch" targets="//@ruleElements.0" regex="java\\.lang\\.(Thread|Runnable)"/>
-  <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@ruleElements.1" subject="//@filters.1/@templateElements.0/@from">
-    <templateElements xsi:type="statements:MethodInvocation">
-      <from xsi:type="statements:DataTypeAccess"/>
-    </templateElements>
+<ccsl:AtomicRecommendationRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="threadAccess">
+  <contextElements xsi:type="statements:DataTypeAccess" uniqueName="threadAccess"/>
+  <filters xsi:type="filters:ClosureFilter" targets="threadAccess" subject="typeAccessClosure" maxDepth="-1" minDepth="-1" closureElement="threadOrInterface">
+    <contextElements xsi:type="statements:DataTypeAccess" uniqueName="typeAccessClosure" elementAccessed="threadOrInterface"/>
+    <contextElements xsi:type="namedElements:ComplexType" uniqueName="threadOrInterface"/>
+    <filters xsi:type="filters:RegexMatch" targets="threadOrInterface" regex="java\\.lang\\.(Thread|Runnable)"/>
   </filters>
-</ccsl:AtomicRule>
+  <filters xsi:type="filters:TemplateFilter" negated="true" targets="threadAccess" subject="typeAccessInv">
+    <contextElements xsi:type="statements:MethodInvocation">
+      <from xsi:type="statements:DataTypeAccess" uniqueName="typeAccessInv"/>
+    </contextElements>
+  </filters>
+</ccsl:AtomicRecommendationRule>

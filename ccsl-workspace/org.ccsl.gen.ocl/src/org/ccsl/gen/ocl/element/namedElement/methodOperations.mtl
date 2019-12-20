@@ -7,16 +7,17 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
-OrderedSet(String){'MethodDeclaration', 'ConstructorDeclaration'}
+OrderedSet(String){'MethodDeclaration'}
 /]
 
 
-[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) = 
+[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'MethodDeclaration') in 
 OrderedSet(String) {
   method.generatesMethodTypecheckCondition(varname, typecheck),
-  method.generatesConditionForReturnType(varname),
-  method.generatesConditionForParams(varname, typecheck)
-}->addAll(method.getNamedElementConditions(varname, typecheck))
+  method.generatesConditionForReturnType(newVarname),
+  method.generatesConditionForParams(newVarname, typecheck)
+}->addAll(method.getNamedElementConditions(newVarname, typecheck))
 ->select(s | s.trim().size() > 0)
 /]
 

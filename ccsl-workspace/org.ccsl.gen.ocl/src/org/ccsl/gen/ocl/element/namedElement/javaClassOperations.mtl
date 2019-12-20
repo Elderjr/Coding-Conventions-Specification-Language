@@ -3,13 +3,14 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getJavaClassMatchingMetaclasses(javaClass: JavaClass): OrderedSet(String)=
   OrderedSet(String){'ClassDeclaration', 'AnonymousClassDeclaration'}
 /]
 
 [query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean): OrderedSet(String) =
+let void: OclVoid = javaClass.addElementAsVisited() in
 OrderedSet(String) {
   javaClass.generatesClassTypecheckCondition(varname, typecheck),
   javaClass.generatesConditionsForImplements(varname)
@@ -18,6 +19,7 @@ OrderedSet(String) {
 /]
 
 [query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = javaClass.addElementAsVisited() in
 OrderedSet(String) {
   javaClass.generatesClassTypecheckCondition(varname, typecheck, metaclass),
   javaClass.generatesConditionsForImplements(varname)

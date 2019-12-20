@@ -12,11 +12,12 @@
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean): OrderedSet(String) =
 let void: OclVoid = methodInv.addElementAsVisited() in
+let newVarname: String = varname.printVarname(typecheck, 'MethodInvocation') in
 OrderedSet(String) {
   methodInv.generatesMethodInvocationTypecheckConditions(varname, typecheck),
-  methodInv.generatesConditionForTo(varname),
-  methodInv.generatesConditionForArgs(varname),
-  methodInv.generatesConditionForFrom(varname)
+  methodInv.generatesConditionForTo(newVarname),
+  methodInv.generatesConditionForArgs(newVarname),
+  methodInv.generatesConditionForFrom(newVarname)
 }
 ->select(s | s.trim().size() > 0)
 ->addAll(methodInv.getStatementConditions(varname, false))

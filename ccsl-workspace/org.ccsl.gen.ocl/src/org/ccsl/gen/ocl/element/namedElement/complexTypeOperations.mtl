@@ -6,22 +6,24 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
   OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
 /]
 
-[query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean): OrderedSet(String) =
+[query public getComplexTypeConditions(complexType: ComplexType, varname: String, isTypecheckNeeded: Boolean): OrderedSet(String) =
+let void: OclVoid = complexType.addElementAsVisited() in
 OrderedSet(String) {
-  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck),
+  complexType.generatesComplexTypeTypecheckCondition(varname, isTypecheckNeeded),
   complexType.generatesConditionForFields(varname),
   complexType.generatesConditionForMethods(varname),
   complexType.generatesConditionForSuperTypes(varname)
-}->addAll(complexType.getNamedElementConditions(varname, typecheck))
+}->addAll(complexType.getNamedElementConditions(varname, isTypecheckNeeded))
 ->select(s | s.trim().size() > 0)
 /]
 
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = complexType.addElementAsVisited() in
 let newVarname: String = if typecheck then
   varname.printWithCast(metaclass)
 else

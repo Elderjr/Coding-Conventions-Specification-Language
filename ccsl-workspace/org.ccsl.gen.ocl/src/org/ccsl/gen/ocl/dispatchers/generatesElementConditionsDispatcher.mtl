@@ -21,7 +21,7 @@
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
-[import org::ccsl::gen::ocl::element::statement::dataTypeAccessOperations /]
+[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
@@ -39,7 +39,6 @@
 [condition.printStringWithIdentation() /][/for]
 [/template]
 
-[template public generatesConditions(element: Element, varname: String, typecheck: Boolean) /]
 [template public generatesConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String) /]
 
 
@@ -144,7 +143,7 @@
 [varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
 [/template]
 
-[comment statements/TypeAccess /]
+[comment statements/access/DataTypeAccess /]
 [template public generatesConditions(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean)]
 [typeAccess.printConditions(typeAccess.getTypeAccessConditions(varname, typecheck)) /]
 [/template]

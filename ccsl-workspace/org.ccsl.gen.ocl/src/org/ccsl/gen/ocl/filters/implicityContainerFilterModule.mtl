@@ -4,17 +4,20 @@
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [query private isIntegerSetted(x: Integer): Boolean = 
   (not x.oclIsUndefined()) and x <> -1
 /]
 
 [template public generatesImplicityContainerFilter(filter: ImplicityContainer, target: Element)]
 let [filter.subject.getUniqueOclName() /]:ASTNode = [target.getUniqueOclName() /] in
-[filter.subject.generatesConditions(filter.subject.getUniqueOclName(), true) /] and
+[let subjectConditions: String = filter.subject.generatesConditions(filter.subject.getUniqueOclName(), false, 'ASTNode')]
+[if not subjectConditions.isEmpty()]
+[subjectConditions.printStringWithIdentation() /] and
+[/if][/let]
 [filter.generatesImplicityContainersSet('implicityContainers', filter.subject.getUniqueOclName()) /]
 implicityContainers->exists([filter.closureElement.getUniqueOclName() /]:ASTNode |
-  [filter.closureElement.generatesConditions(filter.closureElement.getUniqueOclName(), true) /] and
+  [filter.closureElement.generatesConditions(filter.closureElement.getUniqueOclName(), true, 'ASTNode') /] and
   [filter.generatesRelationCondition(filter.closureElement, filter.subject, 'implicityContainers') /]
 )
 [/template]
@@ -37,4 +40,9 @@ let [setName /]: OrderedSet(ASTNode) = [fieldOclVarname /]->asOrderedSet()->clos
 
 [template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: MethodInvocation, field: Element,  setOclVarname: String) ? (container.getRelationName(field) = 'args')]
 [setOclVarname /]->intersection([container.getUniqueOclName() /].oclAsType(MethodInvocation).arguments)->size() > 0
+[/template]
+
+[template private generatesRelationCondition(implicityContainerFilter: ImplicityContainer, container: InfixExpression, field: Element,  setOclVarname: String) ? (container.getRelationName(field) = 'operands')]
+[let containerOCLVarname: String = container.getUniqueOclName().concat('.oclAsType(InfixExpression)')]
+[setOclVarname /]->intersection([containerOCLVarname /].extendedOperands->append([containerOCLVarname /].leftOperand)->append([containerOCLVarname /].rightOperand))->size() > 0[/let]
 [/template]

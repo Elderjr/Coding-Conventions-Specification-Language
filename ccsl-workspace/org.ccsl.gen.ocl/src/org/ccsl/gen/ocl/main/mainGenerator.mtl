@@ -4,15 +4,12 @@
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToText /]
 [import org::ccsl::gen::ocl::rule::recommendationRule::recommendationRuleToText /]
 
-[template public main(rule: RecommendationRule) ? (rule.eContainer().oclIsUndefined())]
+[template public main(rule: Rule) ? (rule.eContainer().oclIsUndefined())]
 [comment @main/]
 [rule.generatesFile() /]
 [/template]
 
-[template public main(faultType: FaultTypeDescription)]
-[comment @main/]
-[faultType.generatesFile() /]
-[/template]
+[template private generatesFile(rule: Rule) /]
 
 [template private generatesFile(rule: RecommendationRule)]
 [file ('ocl-gen', false, 'UTF-8')]

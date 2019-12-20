@@ -1,0 +1,80 @@
+[comment encoding = UTF-8 /]
+[module closureFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+
+[template public generatesClosureFilterConditions(filter: ClosureFilter, target: Element)]
+--Closure Filter
+let [filter.subject.getUniqueOclName() /]: [target.getGenericMatchingJavaMetaclass() /] = [target.getUniqueOclName() /] in
+[filter.generatesClosureSet(filter.subject, filter.closureElement, filter.subject.getUniqueOclName(), 'closureSet') /]
+[filter.generatesClosureElementCondition('closureSet') /] and
+(
+  --Closure Filter Context
+  [filter.generatesContextOCLConditions(false, target.getGenericMatchingJavaMetaclass()) /]
+  --End Closure Filter
+))
+[/template]
+
+[template private generatesClosureElementCondition(filter: ClosureFilter, setOclVarname: String)]
+[setOclVarname /]->exists([filter.closureElement.getUniqueOclName() /]:ASTNode |
+  [filter.closureElement.generatesConditions(filter.closureElement.getUniqueOclName(), true, 'ASTNode') /]
+[/template]
+
+[template private generatesClosureSet(f: ClosureFilter, container: Element, field: Element, containerOclVarname: String, relation: String) /]
+
+[comment closureset to @MethodInvocation /]
+[template private generatesClosureSet(f: ClosureFilter, container: MethodInvocation, field: Element, containerOclVarname: String, setOclVarname: String) ? (container.getRelationName(field) = 'from')]
+let [setOclVarname /]: OrderedSet(ASTNode) = [containerOclVarname /].oclAsType(MethodInvocation).expression->closure(node: ASTNode |
+  if(node.oclIsKindOf(ParenthesizedExpression)) then
+    node.oclAsType(ParenthesizedExpression).expression
+  else if(node.oclIsKindOf(MethodInvocation)) then
+    node.oclAsType(MethodInvocation).expression
+  else if(node.oclIsKindOf(SingleVariableAccess)) then
+    node.oclAsType(SingleVariableAccess).qualifier
+  else if(node.oclIsKindOf(TypeAccess)) then
+    node.oclAsType(TypeAccess).qualifier
+  else if(node.oclIsKindOf(TypeLiteral)) then
+    node.oclAsType(TypeLiteral).type
+  else
+    null
+  endif endif endif endif endif
+)
+[/template]
+
+[comment closureset to @InfixExpression /]
+[template private generatesClosureSet(f: ClosureFilter, container: InfixExpression, field: Element, containerOclVarname: String, setOclVarname: String) ? (container.getRelationName(field) = 'operands')]
+let [setOclVarname /]: OrderedSet(ASTNode) = [containerOclVarname /].oclAsType(InfixExpression).extendedOperands
+->append([containerOclVarname /].oclAsType(InfixExpression).leftOperand)
+->append([containerOclVarname /].oclAsType(InfixExpression).rightOperand)
+->closure(node: ASTNode |
+  if (node.oclIsKindOf(ParenthesizedExpression)) then
+    node.oclAsType(ParenthesizedExpression).expression
+  else if (node.oclIsKindOf(InfixExpression)) then
+    node.oclAsType(InfixExpression).extendedOperands
+    ->append(node.oclAsType(InfixExpression).leftOperand)
+    ->append(node.oclAsType(InfixExpression).rightOperand)
+  else
+    null
+  endif endif
+) in
+[/template]
+
+[comment closureset to @DataTypeAccess /]
+[template private generatesClosureSet(f: ClosureFilter, container: DataTypeAccess, field: Element, containerOclVarname: String, setOclVarname: String) ? (container.getRelationName(field) = 'elementAccessed')]
+let [setOclVarname /]: OrderedSet(ASTNode) = [containerOclVarname /].oclAsType(TypeAccess).type
+->closure(node: ASTNode |
+  if(node.oclIsKindOf(TypeAccess)) then
+    node.oclAsType(TypeAccess).type
+  else if (node.oclIsKindOf(ArrayType)) then
+    node.oclAsType(ArrayType).elementType
+  else if (node.oclIsKindOf(ParameterizedType)) then
+    node.oclAsType(ParameterizedType).typeArguments->append(node.oclAsType(ParameterizedType).type)
+  else
+    null
+  endif endif endif
+) in
+[/template]

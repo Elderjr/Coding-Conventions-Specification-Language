@@ -1,12 +1,10 @@
 [comment encoding = UTF-8 /]
 [module instanceCreationOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 
 [query public getInstanceCreationMatchingMetaclasses(inst: InstanceCreation): OrderedSet(String)=
@@ -14,28 +12,19 @@
 /]
 
 [query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean): OrderedSet(String) =
-let newVarname: String = if typecheck then
-  varname.printWithCast('ClassInstanceCreation')
-else
-  varname
-endif in
-let conditions: OrderedSet(String) = OrderedSet(String) {
-  inst.generatesConditionsForType(varname)
+let newVarname: String = varname.printVarname(typecheck, 'ClassInstanceCreation') in
+OrderedSet(String) {
+  inst.generatesConditionForTypecheck(varname, typecheck),
+  inst.generatesConditionsForType(newVarname)
 }
-->select(s | s.isNotEmpty()) in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition('InstanceCreation')}->addAll(conditions)
-else
-  conditions
-endif
+->select(s | s.isNotEmpty())
 /]
 
+[template private generatesConditionForTypecheck(inst: InstanceCreation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ClassInstanceCreation)
+[/template]
+
 [template private generatesConditionsForType(inst: InstanceCreation, varname: String) ? (not inst.type.oclIsUndefined())]
-let [inst.type.getUniqueOclName() /]: ASTNode = if [varname /].type.type.oclIsKindOf(ParameterizedType) then
-  [varname /].type.type.oclAsType(ParameterizedType).type.type
-else
-  [varname /].type.type
-endif in (not [inst.type.getUniqueOclName() /].oclIsUndefined()) and
-[inst.type.generatesConditions(inst.type.getUniqueOclName(), true) /]
+[inst.generatesMonovaluedFieldConditions(inst.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

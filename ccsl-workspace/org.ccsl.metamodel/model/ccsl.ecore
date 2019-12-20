@@ -105,7 +105,7 @@
             containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="InstanceCreation" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/namedElements/ComplexType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/ObjectType"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="elementAccessed" eType="#//elements/Element"/>
@@ -181,6 +181,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="ParameterizedType" eSuperTypes="#//elements/datatype/ObjectType">
         <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
             eType="#//elements/datatype/ObjectType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/namedElements/ComplexType"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//elements/namedElements/ComplexType"/>
       <eClassifiers xsi:type="ecore:EClass" name="IntPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
