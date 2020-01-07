@@ -1,0 +1,42 @@
+let violations: Set(ASTNode) = CatchClause.allInstances()->select(catchBlock |
+  --Context Conditions
+  let nullPointerExceptionVar: SingleVariableDeclaration = catchBlock.exception in
+  nullPointerExceptionVar <> null and
+  (not nullPointerExceptionVar.oclIsKindOf(UnresolvedItem)) and
+  let nullPointerExceptionClass: ASTNode = nullPointerExceptionVar.type.type in
+  nullPointerExceptionClass <> null and
+  (nullPointerExceptionClass.oclIsKindOf(ClassDeclaration) or nullPointerExceptionClass.oclIsKindOf(AnonymousClassDeclaration)) and
+  let className: String = if nullPointerExceptionClass.oclIsKindOf(ClassDeclaration) then
+    nullPointerExceptionClass.oclAsType(ClassDeclaration).name
+  else if nullPointerExceptionClass.oclIsKindOf(AnonymousClassDeclaration) then
+    nullPointerExceptionClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if nullPointerExceptionClass.oclIsKindOf(ClassDeclaration) then
+    nullPointerExceptionClass.oclAsType(ClassDeclaration).package
+  else if nullPointerExceptionClass.oclIsKindOf(AnonymousClassDeclaration) then
+    nullPointerExceptionClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className) = 'java.lang.NullPointerException'
+)
+->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations->asSequence()->collect(node: ASTNode | 
+	let container: NamedElement = node->asOrderedSet()->closure(x |
+        if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
+		  x
+		else
+		  x.oclContainer()
+	    endif
+	)->last() in if (not container.oclIsUndefined()) and (not container.originalCompilationUnit.oclIsUndefined()) then
+      'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
+    else
+      ''
+    endif
+)->asSequence()->select(violation | violation.size() > 0)
+->append('#violations: '.concat(violations->size().toString()))

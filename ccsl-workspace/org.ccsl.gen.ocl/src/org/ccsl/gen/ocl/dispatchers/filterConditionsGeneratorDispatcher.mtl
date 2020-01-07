@@ -9,6 +9,7 @@
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::closureFilterModule /]
 [import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
+[import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -55,6 +56,16 @@ not (
 [atomicFilter.generatesSpecificFilterConditions(target) /][/for]
 [/template]
 
+[template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (atomicFilter.negated)]
+not (
+  [atomicFilter.generatesSpecificFilterConditions(atomicFilter.targets->first()) /]
+)
+[/template]
+
+[template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (not atomicFilter.negated)]
+[atomicFilter.generatesSpecificFilterConditions(atomicFilter.targets->first()) /]
+[/template]
+
 [comment dispatchers /]
 [template public generatesSpecificFilterConditions(atomicFilter: AtomicFilter, target: Element) /]
 
@@ -88,4 +99,8 @@ not (
 
 [template public generatesSpecificFilterConditions(implicityContainerFilter: ImplicityContainer, target: Element)]
 [implicityContainerFilter.generatesImplicityContainerFilter(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(sameNameFilter: SameNameFilter, target: Element)]
+[sameNameFilter.generatesSameNameFilterConditions(sameNameFilter, target) /]
 [/template]

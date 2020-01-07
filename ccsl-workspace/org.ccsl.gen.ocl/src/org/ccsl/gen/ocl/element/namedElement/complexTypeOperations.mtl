@@ -3,71 +3,68 @@
 
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
   OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
 /]
 
-[query public getComplexTypeConditions(complexType: ComplexType, varname: String, isTypecheckNeeded: Boolean): OrderedSet(String) =
-let void: OclVoid = complexType.addElementAsVisited() in
-OrderedSet(String) {
-  complexType.generatesComplexTypeTypecheckCondition(varname, isTypecheckNeeded),
-  complexType.generatesConditionForFields(varname),
-  complexType.generatesConditionForMethods(varname),
-  complexType.generatesConditionForSuperTypes(varname)
-}->addAll(complexType.getNamedElementConditions(varname, isTypecheckNeeded))
-->select(s | s.trim().size() > 0)
-/]
-
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = complexType.addElementAsVisited() in
-let newVarname: String = if typecheck then
-  varname.printWithCast(metaclass)
-else
-  varname
-endif in
+let completeVarname: String = complexType.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = complexType.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, metaclass),
-  complexType.generatesConditionForFields(newVarname, metaclass),
-  complexType.generatesConditionForMethods(newVarname, metaclass),
-  complexType.generatesConditionForSuperTypes(varname)
-}->addAll(complexType.getNamedElementConditions(newVarname, false, metaclass))
+  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, concreteMetaclass),
+  complexType.generatesBodyDeclarationVariable(completeVarname, concreteMetaclass),
+  complexType.generatesConditionForFields(completeVarname, concreteMetaclass),
+  complexType.generatesConditionForMethods(completeVarname, concreteMetaclass),
+  complexType.generatesConditionForSuperTypes(completeVarname, concreteMetaclass)
+}->addAll(complexType.getNamedElementConditions(completeVarname, false, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
-[template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
+[template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass))]
 ([for (metaclass: String | complexType.getComplexTypeMatchingMetaclasses()) separator(' or ')]
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (complexType.oclIsTypeOf(ComplexType) and typecheck)]
-[varname.printKindOfCondition(metaclass) /]
+[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.isSet('fields') or complexType.isSet('methods')))]
+let bodyDeclarations: OrderedSet(ASTNode) = [varname /].oclIsKindOf([metaclass /])
+[/template]
+
+[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (not complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.isSet('fields') or complexType.isSet('methods')))]
+let bodyDeclarations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
+  [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations
+else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
+  [varname /].oclAsType(AnonymousClassDeclaration).bodyDeclarations
+else
+  null
+endif endif in (not bodyDeclarations->oclIsUndefined())
 [/template]
 
 [template public generatesConditionForFields(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.fields->size() > 0)]
-let fields: OrderedSet(FieldDeclaration) = [varname /].bodyDeclarations->collect(field: ASTNode | field.oclIsKindOf(FieldDeclaration)->asOrderedSet() in
-[complexType.generatesSetConditions('fields', complexType.fields, 'ASTNode') /]
-[/template]
-
-[template public generatesConditionForFields(complexType: ComplexType, varname: String) ? (complexType.fields->size() > 0)]
-let fields: OrderedSet(FieldDeclaration) = [varname /].bodyDeclarations->collect(field: ASTNode | field.oclIsKindOf(FieldDeclaration)->asOrderedSet() in
-[complexType.generatesSetConditions('fields', complexType.fields, 'ASTNode') /]
+let fields: OrderedSet(VariableDeclarationFragment) = bodyDeclarations->collect(field: ASTNode | if field.oclIsKindOf(FieldDeclaration) then
+  field.oclAsType(FieldDeclaration).fragments
+else
+  null
+endif
+)->select(field: ASTNode | field <> null)->flatten() in
+[complexType.generatesSetConditions('fields', complexType.fields, 'VariableDeclarationFragment') /]
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.methods->size() > 0)]
-let methods: OrderedSet(MethodDeclaration) = [varname /].bodyDeclarations->collect(method: ASTNode | method.oclIsKindOf(MethodDeclaration)->asOrderedSet() in
-[complexType.generatesSetConditions('methods', complexType.fields, 'ASTNode') /]
+let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration))
+[complexType.generatesSetConditions('methods', complexType.methods, 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionForMethods(complexType: ComplexType, varname: String) ? (complexType.methods->size() > 0)]
-let methods: OrderedSet(MethodDeclaration) = [varname /].bodyDeclarations->collect(method: ASTNode | method.oclIsKindOf(MethodDeclaration)->asOrderedSet() in
-[complexType.generatesSetConditions('methods', complexType.fields, 'ASTNode') /]
-[/template]
+[template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0) /]
 
-[template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String) ? (complexType.superTypes->size() > 0 and complexType.oclIsTypeOf(JavaClass))]
+[template public generatesConditionForSuperTypes(complexType: JavaClass, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0)]
 let superType: ASTNode = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).superClass.type
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then

@@ -34,6 +34,9 @@
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
 
+[comment statements/tryCatch /]
+[import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
+
 [template private printConditions(element: Element, conditions: OrderedSet(String))]
 [for (condition: String | conditions) separator(' and\n')]
 [condition.printStringWithIdentation() /][/for]
@@ -64,23 +67,14 @@
 [arrayType.printConditions(arrayType.getArrayTypeConditions(varname, typecheck)) /]
 [/template]
 
-[template public generatesConditions(method: Method, varname: String, typecheck: Boolean)]
-[method.printConditions(method.getMethodConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String)]
-[method.printConditions(method.getMethodConditions(varname, typecheck)) /]
+[method.printConditions(method.getMethodConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean)]
-[complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
 [complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean)]
-[javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String)]
 [javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck, metaclass)) /]
 [/template]
@@ -92,9 +86,6 @@
 [javaInterface.printConditions(javaInterface.getInterfaceConditions(varname, typecheck)) /]
 [/template]
 
-[template public generatesConditions(var: Variable, varname: String, typecheck: Boolean)]
-[var.printConditions(var.getVariableConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.printConditions(var.getVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
@@ -213,4 +204,9 @@
 [/template]
 [template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/tryCatch/CatchBlock /]
+[template public generatesConditions(catchBlock: CatchBlock, varname: String, typecheck: Boolean, metaclass: String)]
+[catchBlock.printConditions(catchBlock.getCatchBlockConditions(varname, typecheck, metaclass)) /]
 [/template]

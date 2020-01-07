@@ -29,7 +29,7 @@ violations->asSequence()->collect(node: ASTNode |
 
 [template private generatesOCLToSelectElements(rule: RecommendationRule) /]
 
-[template private generatesOCLToSelectElements(rule: AtomicRecommendationRule)]
+[template private generatesOCLToSelectElements(rule: AtomicRecommendationRule) post(trim())]
 [rule.clearAllContexts() /][rule.generatesContextOCLConditionsAllInstances() /]
 [rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]

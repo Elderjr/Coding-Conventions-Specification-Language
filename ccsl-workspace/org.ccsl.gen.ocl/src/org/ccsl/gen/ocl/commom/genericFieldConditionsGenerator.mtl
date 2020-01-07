@@ -1,13 +1,12 @@
 [comment encoding = UTF-8 /]
 [module genericFieldConditionsGenerator('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::getOclElementReferenceModule /] 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [template public getFieldName(field: Element)]
 [if field = null]
@@ -50,9 +49,10 @@ else
 [/template]
 
 [template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
-[fieldOclVarname /] <> null and
 [let isTypecheckNeeded: Boolean = mappedFieldMetaclass = 'ASTNode' or mappedFieldMetaclass = 'OclAny']
-[field.generatesConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass) /][/let]
+[let fieldCondition: String = field.generatesConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
+[fieldOclVarname /] <> null[if not fieldCondition.isEmpty()] and
+  [fieldCondition.printStringWithIdentation() /][/if][/let][/let]
 [/template]
 
 [template public generatesFieldCondition(element: Element, field: Element, fieldOclVarname: String, mappedFieldMetaclass: String) ? (not element.isClosureRelation(field))]
@@ -105,21 +105,21 @@ else
 
 [template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)  ? (element.getElementsNotInClosureRelation(fields)->size() > 0)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
-[for (field: Element | tmpFields) separator(' and ')]
-  [setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /]
-[/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if tmpFields->size() > 0] and
+[for (field: Element | tmpFields) separator(' and \n')]
+[setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /][/for][if element.oclIsKindOf(CodeElement) and element.oclAsType(CodeElement).exact][if tmpFields->size() > 0] and
 [/if][setOclName /]->size() = [tmpFields->size() /][/if][/let]
 [/template]
 
 [template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
 [let fieldName: String = field.getFieldName()]
-exists([fieldName /] |
-  [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /]
-)[/let]
+exists([fieldName /] | [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /])[/let]
 [/template]
 
 [template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]
 [let fieldName: String = field.getUniqueOclName()]
-exists([fieldName /] | [field.addElementExistsDeclaration() /]
-  [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /][/let]
+[let fieldCondition: String = field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass)]
+exists([fieldName /] | [field.addElementExistsDeclaration() /] 
+[if not fieldCondition.isEmpty()]
+  [fieldCondition.printStringWithIdentation() /][else]
+  true[/if][/let][/let]
 [/template]

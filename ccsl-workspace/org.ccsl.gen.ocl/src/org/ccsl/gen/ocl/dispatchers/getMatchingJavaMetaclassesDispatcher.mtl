@@ -10,9 +10,9 @@
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::javaClassOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
 
 [comment statements /]
 [import org::ccsl::gen::ocl::element::statement::statementOperations /]
@@ -32,6 +32,9 @@
 
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+
+[comment statements/tryCatch /]
+[import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /] 
 
 [query public getGenericMatchingJavaMetaclass(element: Element): String =
   if element.getMatchingJavaMetaclasses()->size() = 1 then
@@ -91,8 +94,11 @@ else if element.oclIsTypeOf(LoopStatement) then
 --element/statements/expression
 else if element.oclIsTypeOf(InfixExpression) then
   element.oclAsType(InfixExpression).getInfixMatchingMetaclasses()
+--element/statements/tryCatch
+else if element.oclIsTypeOf(CatchBlock) then
+  element.oclAsType(CatchBlock).getCatchBlockMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
-endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif
 endif endif endif endif endif endif endif endif endif endif endif
 /]

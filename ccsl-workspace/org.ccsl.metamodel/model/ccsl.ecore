@@ -169,6 +169,17 @@
               unsettable="true" containment="true"/>
         </eClassifiers>
       </eSubpackages>
+      <eSubpackages name="tryCatch" nsURI="http://www.example.org/ccsl/elements/statements/tryCatch"
+          nsPrefix="tryCatch">
+        <eClassifiers xsi:type="ecore:EClass" name="TryStatement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="catchBlocks" upperBound="-1"
+              eType="#//elements/statements/tryCatch/CatchBlock" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="CatchBlock" eSuperTypes="#//elements/statements/Block">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="exception" eType="#//elements/namedElements/Variable"
+              containment="true"/>
+        </eClassifiers>
+      </eSubpackages>
     </eSubpackages>
     <eSubpackages name="datatype" nsURI="http://www.example.org/ccsl/elements/datatype"
         nsPrefix="datatype">
@@ -255,7 +266,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="methods" lowerBound="1"
           upperBound="-1" eType="#//elements/namedElements/Method" containment="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="EqualsNamedElement" eSuperTypes="#//filters/AtomicFilter">
+    <eClassifiers xsi:type="ecore:EClass" name="SameNameFilter" eSuperTypes="#//filters/AtomicFilter">
       <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
           eType="#//elements/namedElements/NamedElement"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="ignoreCase" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"

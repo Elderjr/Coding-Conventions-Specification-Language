@@ -5,19 +5,22 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
 OrderedSet(String){'MethodDeclaration'}
 /]
 
 
-[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'MethodDeclaration') in 
+[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = method.addElementAsVisited() in
+let completeVarname: String = method.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = method.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
   method.generatesMethodTypecheckCondition(varname, typecheck),
-  method.generatesConditionForReturnType(newVarname),
-  method.generatesConditionForParams(newVarname, typecheck)
-}->addAll(method.getNamedElementConditions(newVarname, typecheck))
+  method.generatesConditionForReturnType(completeVarname),
+  method.generatesConditionForParams(completeVarname, typecheck)
+}->addAll(method.getNamedElementConditions(completeVarname, typecheck, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 

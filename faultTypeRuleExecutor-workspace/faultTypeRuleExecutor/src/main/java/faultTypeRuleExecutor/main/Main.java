@@ -34,7 +34,7 @@ public final class Main {
 		try {
 			System.out.println("Reading fault type formalization from XML...");
 			FaultTypeDescription faultTypeDescription = FaultTypeLoader.getInstance().loadFaultTypeDescriptionNEW(
-					"D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\WrongArithmeticExpressionInParameterOfAFunctionCall\\WrongArithmeticExpressionInParameterOfAFunctionCall.xml");
+					"D:\\git-repositories\\Coding-Conventions-Specification-Language\\ccsl-workspace\\org.ccsl.metamodel.examples\\FaultInjector\\MissingIfConstructPlusStatementsPlusElseBeforeStatements\\MissingIfConstructPlusStatementsPlusElseBeforeStatements.xml");
 			System.out.println("Reading fault type formalization from XML... OK");
 			Model modiscoModel = FaultTypeExecutor.getInstance().executeFaultType(faultTypeDescription,
 					"file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi");

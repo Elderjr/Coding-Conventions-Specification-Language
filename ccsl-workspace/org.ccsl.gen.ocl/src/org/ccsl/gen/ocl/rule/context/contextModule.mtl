@@ -15,6 +15,7 @@
   [if ctx.subject.getMatchingJavaMetaclasses()->size() = 1]
   [ctx.generatesContextOCLConditions(false, ctx.subject.getMatchingJavaMetaclasses()->first()) /][else]
   [ctx.generatesContextOCLConditions(ctx.subject.isElementAlwaysNeedTypecheck(), 'ASTNode') /][/if]
+
 )
 [/template]
 

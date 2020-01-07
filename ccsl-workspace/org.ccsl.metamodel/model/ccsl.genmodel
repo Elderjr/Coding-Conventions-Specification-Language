@@ -152,6 +152,14 @@
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/controlFlow/LoopStatement/body"/>
           </genClasses>
         </nestedGenPackages>
+        <nestedGenPackages prefix="TryCatch" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/tryCatch">
+          <genClasses ecoreClass="ccsl.ecore#//elements/statements/tryCatch/TryStatement">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/tryCatch/TryStatement/catchBlocks"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/statements/tryCatch/CatchBlock">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/tryCatch/CatchBlock/exception"/>
+          </genClasses>
+        </nestedGenPackages>
       </nestedGenPackages>
       <nestedGenPackages prefix="Datatype" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/datatype">
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/DataType"/>
@@ -228,10 +236,10 @@
       <genClasses ecoreClass="ccsl.ecore#//filters/DefinesMethodFilter">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/DefinesMethodFilter/methods"/>
       </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/EqualsNamedElement">
+      <genClasses ecoreClass="ccsl.ecore#//filters/SameNameFilter">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/EqualsNamedElement/elements"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/EqualsNamedElement/ignoreCase"/>
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/SameNameFilter/elements"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SameNameFilter/ignoreCase"/>
       </genClasses>
       <genClasses ecoreClass="ccsl.ecore#//filters/RegexLiteralValueFilter">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/RegexLiteralValueFilter/regex"/>

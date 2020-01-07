@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module elementUtils('http://www.example.org/ccsl')]
-
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 
 [query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  
   let properties: Sequence(ecore::EStructuralFeature) = obj.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
@@ -38,5 +38,22 @@ endif
   )
 /]
 
+[query public isMetaclassInMatchingMetaclasses(element: Element, metaclass: String): Boolean = 
+  element.getMatchingJavaMetaclasses()->includes(metaclass)
+/]
 
+[query public getCompleteElementVarname(element: Element, baseVarname: String, metaclass: String): String = 
+  if element.getMatchingJavaMetaclasses()->size() = 1 and element.getMatchingJavaMetaclasses()->first() <> metaclass then
+    baseVarname.concat('.oclAsType(').concat(metaclass).concat(')')
+  else
+    baseVarname
+  endif
+/]
 
+[query public getConcreteElementMetaclass(element: Element, metaclass: String): String =
+  if element.getMatchingJavaMetaclasses()->size() = 1 and element.getMatchingJavaMetaclasses()->first() <> metaclass then
+    element.getMatchingJavaMetaclasses()->first()
+  else
+    metaclass
+  endif 
+/]
