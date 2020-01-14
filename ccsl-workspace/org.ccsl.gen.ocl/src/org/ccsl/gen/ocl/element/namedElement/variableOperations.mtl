@@ -4,6 +4,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator/]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
@@ -20,30 +21,30 @@
 /]
 
 [query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = var.addElementAsVisited() in
+let void: OclVoid = var.addElementAsVisited(metaclass) in
 let completeVarname: String = var.getCompleteElementVarname(varname, metaclass) in
 let concreteMetaclass: String = var.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  var.generatesVariableTypecheckCondition(varname, typecheck),
-  var.generatesSkipUnresolvedItemCondition(varname),
-  var.generatesConditionsForType(completeVarname, concreteMetaclass),
-  var.generatesConditionsForInitialValue(completeVarname, concreteMetaclass)
+  var.writeVariableTypecheckCondition(varname, typecheck),
+  var.writeSkipUnresolvedItemCondition(varname),
+  var.writeTypeCondition(completeVarname, concreteMetaclass),
+  var.writeInitialValueCondition(completeVarname, concreteMetaclass)
 }->select(s | s.trim().size() > 0)
 ->addAll(var.getNamedElementConditions(completeVarname, false, concreteMetaclass))
 /]
 
-[template private generatesSkipUnresolvedItemCondition(var: Variable, varname: String)]
+[template private writeSkipUnresolvedItemCondition(var: Variable, varname: String)]
 (not [varname /].oclIsKindOf(UnresolvedItem))
 [/template]
 
 [comment Type Check Conditions /]
-[template public generatesVariableTypecheckCondition(var: Variable, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeVariableTypecheckCondition(var: Variable, varname: String, typecheck: Boolean) ? (typecheck)]
 ([for (metaclass: String | var.getVariableMatchingJavaMetaclasses()) separator(' or ')]
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
 [comment ============= Conditions for attribute 'type' ===================== /]
-[template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined() and not var.isMetaclassInMatchingMetaclasses(metaclass))]
+[template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined() and not var.isMetaclassInMatchingMetaclasses(metaclass))]
 [var.generatesMonovaluedFieldConditions(var.type, varname, 'ASTNode',
 OrderedSet(OrderedSet(String)){
   OrderedSet(String){'SingleVariableDeclaration', 'type.type'},
@@ -51,22 +52,30 @@ OrderedSet(OrderedSet(String)){
 }) /]
 [/template]
 
-[template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'VariableDeclarationFragment')]
+[template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'VariableDeclarationFragment')]
 [var.generatesMonovaluedFieldConditions(var.type, varname, 'variablesContainer.type.type', 'ASTNode') /]
 [/template]
 
-[template public generatesConditionsForType(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'SingleVariableDeclaration')]
+[template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'SingleVariableDeclaration')]
 [var.generatesMonovaluedFieldConditions(var.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 
 [comment ============= Conditions for attribute 'initialValue' ===================== /]
-[template public generatesConditionsForInitialValue(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and not var.isMetaclassInMatchingMetaclasses(metaclass))]
-[var.generatesMonovaluedFieldConditions(var.type, varname, 'ASTNode',
-OrderedSet(OrderedSet(String)){
-  OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
-}) /]
- [/template]
+[template public writeInitialValueCondition(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and not var.isMetaclassInMatchingMetaclasses(metaclass))]
+let [var.initialValue.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(VariableDeclarationFragment) and not [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.fragments->oclIsUndefined() then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.fragments->asOrderedSet()->last().initializer
+else
+  null
+endif in
+[var.generatesFieldCondition(var.initialValue, var.initialValue.getFieldName(), 'ASTNode') /]
 
-[template public generatesConditionsForInitialValue(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and metaclass = 'VariableDeclarationFragment')]
-[var.generatesMonovaluedFieldConditions(var.initialValue, varname, 'variablesContainer.fragments->asOrderedSet()->last().initializer', 'ASTNode') /]
+[/template]
+
+[template public writeInitialValueCondition(var: Variable, varname: String, metaclass: String) ? (not var.initialValue.oclIsUndefined() and metaclass = 'VariableDeclarationFragment')]
+let [var.initialValue.getFieldName() /]: ASTNode = if not [varname /].variablesContainer.fragments->oclIsUndefined() then
+  [varname /].variablesContainer.fragments->asOrderedSet()->last().initializer
+else
+  null
+endif in
+[var.generatesFieldCondition(var.initialValue, var.initialValue.getFieldName(), 'ASTNode') /]
 [/template]

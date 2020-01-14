@@ -65,3 +65,7 @@ caseBlock
 [template public getBaseName(element : IfStatement)]
 ifStmt
 [/template]
+
+[template public getBaseName(element : VariableAccess)]
+varAccess
+[/template]

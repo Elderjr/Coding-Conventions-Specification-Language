@@ -1,69 +1,40 @@
 [comment encoding = UTF-8 /]
 [module methodInvocationOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
   OrderedSet(String){'MethodInvocation'}
 /]
 
-[query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean): OrderedSet(String) =
-let void: OclVoid = methodInv.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, 'MethodInvocation') in
-OrderedSet(String) {
-  methodInv.generatesMethodInvocationTypecheckConditions(varname, typecheck),
-  methodInv.generatesConditionForTo(newVarname),
-  methodInv.generatesConditionForArgs(newVarname),
-  methodInv.generatesConditionForFrom(newVarname)
-}
-->select(s | s.trim().size() > 0)
-->addAll(methodInv.getStatementConditions(varname, false))
-/]
-
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = methodInv.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, metaclass) in
+let void: OclVoid = methodInv.addElementAsVisited(metaclass) in
+let concreteMetaclass: String = methodInv.getConcreteElementMetaclass(metaclass) in
+let completeVarname: String = methodInv.getCompleteElementVarname(varname, metaclass) in
 OrderedSet(String) {
-  methodInv.generatesMethodInvocationTypecheckConditions(varname, typecheck, metaclass),
-  methodInv.generatesConditionForTo(newVarname, metaclass),
-  methodInv.generatesConditionForFrom(newVarname, metaclass),
-  methodInv.generatesConditionForArgs(newVarname, metaclass)
+  methodInv.writeMethodInvocationTypecheckCondition(varname, typecheck, metaclass),
+  methodInv.writeToCondition(completeVarname, concreteMetaclass),
+  methodInv.writeFromCondition(completeVarname, concreteMetaclass),
+  methodInv.writeArgsCondition(completeVarname, concreteMetaclass)
 }->select(s | s.trim().size() > 0)
-->addAll(methodInv.getStatementConditions(newVarname, false, metaclass))
+->addAll(methodInv.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 
-[template public generatesMethodInvocationTypecheckConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
-([for (metaclass: String | methodInv.getMethodInvocationMatchingMetaclasses()) separator(' or ')]
-[varname.printKindOfCondition(metaclass) /][/for])
+[template public writeMethodInvocationTypecheckCondition(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname /].oclIsKindOf(MethodInvocation)
 [/template]
 
-[template public generatesMethodInvocationTypecheckConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
-[varname.printKindOfCondition(metaclass) /]
-[/template]
-
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('elementAccessed'))]
-[methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
-[/template]
-
-[template public generatesConditionForTo(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('elementAccessed'))]
+[template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('elementAccessed'))]
 [methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('from'))]
+[template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('from'))]
 [methodInv.generatesMonovaluedFieldConditions(methodInv.from, varname, 'expression', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public generatesConditionForFrom(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('from'))]
-[methodInv.generatesMonovaluedFieldConditions(methodInv.from, varname, 'expression', 'ASTNode') /]
-[/template]
-
-[template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String) ? (methodInv.isSet('args'))]
-[methodInv.generatesMultivaluedFieldConditions(methodInv.args, varname, 'tmpArgs', 'arguments', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
-[/template]
-
-[template public generatesConditionForArgs(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('args'))]
+[template public writeArgsCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('args'))]
 [methodInv.generatesMultivaluedFieldConditions(methodInv.args, varname, 'tmpArgs', 'arguments', 'ASTNode') /]
 [/template]

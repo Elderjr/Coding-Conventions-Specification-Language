@@ -1,9 +1,9 @@
 [comment encoding = UTF-8 /]
 [module catchBlockModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [query public getCatchBlockMatchingMetaclasses(catch: CatchBlock): OrderedSet(String)= 
   OrderedSet(String){'CatchClause'}
 /]

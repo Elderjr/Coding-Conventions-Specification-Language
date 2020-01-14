@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ASCII"?>
+<java:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java" name="Sample">
+  <ownedElements name="(default package)">
+    <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.0" name="Test">
+      <modifier visibility="public"/>
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo">
+        <modifier visibility="public"/>
+        <body originalCompilationUnit="//@compilationUnits.0">
+          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@orphanTypes.0"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="a" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.2/@fragments.0/@initializer/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.2/@fragments.0/@initializer/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.3/@expression/@operand/@expression/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.3/@expression/@operand/@expression/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.4/@expression/@leftOperand/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.4/@expression/@leftOperand/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.4/@expression/@rightOperand/@expression/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.4/@expression/@rightOperand/@expression/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.5/@expression/@expression/@leftOperand/@expression/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.5/@expression/@expression/@leftOperand/@expression/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.5/@expression/@expression/@rightOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.6/@expression/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.6/@expression/@rightOperand/@leftOperand/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.6/@expression/@rightOperand/@rightOperand/@leftOperand">
+              <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
+            </fragments>
+            <modifier/>
+          </statements>
+          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@orphanTypes.0"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="b">
+              <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="2"/>
+            </fragments>
+            <modifier/>
+          </statements>
+          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@orphanTypes.4"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="exp">
+              <initializer xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </rightOperand>
+                <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="2"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </leftOperand>
+              </initializer>
+            </fragments>
+            <modifier/>
+          </statements>
+          <statements xsi:type="java:IfStatement" originalCompilationUnit="//@compilationUnits.0">
+            <expression xsi:type="java:PrefixExpression" originalCompilationUnit="//@compilationUnits.0" operator="!">
+              <operand xsi:type="java:ParenthesizedExpression" originalCompilationUnit="//@compilationUnits.0">
+                <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                  <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                    <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="8"/>
+                    <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                  </rightOperand>
+                  <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                    <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="7"/>
+                    <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                  </leftOperand>
+                </expression>
+              </operand>
+            </expression>
+            <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0"/>
+          </statements>
+          <statements xsi:type="java:IfStatement" originalCompilationUnit="//@compilationUnits.0">
+            <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+              <rightOperand xsi:type="java:ParenthesizedExpression" originalCompilationUnit="//@compilationUnits.0">
+                <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                  <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                    <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="2"/>
+                    <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                  </rightOperand>
+                  <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                    <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="3"/>
+                    <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                  </leftOperand>
+                </expression>
+              </rightOperand>
+              <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="2"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </rightOperand>
+                <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </leftOperand>
+              </leftOperand>
+            </expression>
+            <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0"/>
+          </statements>
+          <statements xsi:type="java:IfStatement" originalCompilationUnit="//@compilationUnits.0">
+            <comments xsi:type="java:LineComment" originalCompilationUnit="//@compilationUnits.0" content="//1" prefixOfParent="true"/>
+            <expression xsi:type="java:ParenthesizedExpression" originalCompilationUnit="//@compilationUnits.0">
+              <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="||">
+                <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="8"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </rightOperand>
+                <leftOperand xsi:type="java:ParenthesizedExpression" originalCompilationUnit="//@compilationUnits.0">
+                  <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                    <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                      <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="9"/>
+                      <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                    </rightOperand>
+                    <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                      <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="8"/>
+                      <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                    </leftOperand>
+                  </expression>
+                </leftOperand>
+              </expression>
+            </expression>
+            <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0"/>
+          </statements>
+          <statements xsi:type="java:IfStatement" originalCompilationUnit="//@compilationUnits.0">
+            <comments xsi:type="java:LineComment" originalCompilationUnit="//@compilationUnits.0" content="//1" prefixOfParent="true"/>
+            <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="||">
+              <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&amp;&amp;">
+                <rightOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="8"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </rightOperand>
+                <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                  <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="9"/>
+                  <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+                </leftOperand>
+              </rightOperand>
+              <leftOperand xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="==">
+                <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="8"/>
+                <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
+              </leftOperand>
+            </expression>
+            <thenStatement xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0"/>
+          </statements>
+        </body>
+        <returnType type="//@orphanTypes.5"/>
+      </bodyDeclarations>
+    </ownedElements>
+  </ownedElements>
+  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.1/@type"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeLong" name="long"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeFloat" name="float"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeDouble" name="double"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeBoolean" name="boolean" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.2/@type"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeVoid" name="void" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@returnType"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeChar" name="char"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeShort" name="short"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeByte" name="byte"/>
+  <compilationUnits name="Test.java" originalFilePath="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\Test.java" commentList="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.5/@comments.0 //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.6/@comments.0" types="//@ownedElements.0/@ownedElements.0"/>
+</java:Model>

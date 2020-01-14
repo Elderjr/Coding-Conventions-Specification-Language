@@ -16,12 +16,12 @@
   [faultType.generatesStrategy() /]
   <actions>
     [for(action: InjectionAction | faultType.actions)]
-    [action.generatesActionTag(faultType.rule.oclAsType(AtomicFaultTypeRule).subject, faultType.name) /]
+    [action.writeActionTag(faultType.rule.subject, faultType.name) /]
     [/for]
   </actions>
 </faultTypeRule>
 [/file]
-[faultType.actions.generatesActionJavaClass(faultType.rule.oclAsType(AtomicFaultTypeRule).subject, faultType.name) /]
+[faultType.actions.generatesActionJavaClass(faultType.rule.subject, faultType.name) /]
 [/template]
 
 

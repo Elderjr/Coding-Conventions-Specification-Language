@@ -1,20 +1,20 @@
 [comment encoding = UTF-8 /]
 [module templateFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-
-[template public generatesTemplateElement(templ: TemplateFilter, target: Element)]
-let [templ.subject.getUniqueOclName() /]: ASTNode = [target.getUniqueOclName() /] in
-
-[/template]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [template public generatesTemplateFilterConditions(templ: TemplateFilter, target: Element)]
 -- Template Filter
-[templ.generatesTemplateLetStatement(target) /]
-[let subjectCondition: String = templ.subject.generatesConditions(templ.subject.getUniqueOclName(), false, 'ASTNode')]
-[subjectCondition.printStringWithIdentation() /]
-[for(Sequence(Integer){1 ..templ.getTotalElementsDeclaredInExists()})])[/for][/let]
+[templ.writeTemplateLetStatement(target) /]
+[let templCondition: String = templ.template.generatesConditions(templ.template.getUniqueOclName(), true, target.getDeclaredElementMetaclass())]
+[templCondition.writeStr() /]
+[for(Sequence(Integer){1 ..templ._context.getTotalElementsDeclaredInExists()})])[/for][/let]
 -- End Template Filter
 [/template]
+
+[template public writeTemplateLetStatement(templ: TemplateFilter, target: Element)]
+let [templ.template.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in
+[/template]
+

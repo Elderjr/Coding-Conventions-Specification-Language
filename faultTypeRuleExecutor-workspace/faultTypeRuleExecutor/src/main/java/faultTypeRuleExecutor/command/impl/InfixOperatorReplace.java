@@ -17,15 +17,17 @@ public class InfixOperatorReplace implements InjectionAction {
 	}
 
 	@Override
-	public void doAction(ASTNode target) {
+	public boolean doAction(ASTNode target) {
 		if (target == null)
-			return;
+			return false;
 		if (!(target instanceof InfixExpression))
-			return;
+			return false;
 		InfixExpression exp = (InfixExpression) target;
 		String newOperator = operatorReplaces.get(exp.getOperator().getLiteral());
 		if (newOperator != null) {
 			exp.setOperator(InfixExpressionKind.get(newOperator));
+			return true;
 		}
+		return false;
 	}
 }

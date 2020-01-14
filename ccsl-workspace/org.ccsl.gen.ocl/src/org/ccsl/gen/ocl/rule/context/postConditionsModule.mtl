@@ -14,7 +14,7 @@
 ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
 [/template]
 
-[template public generatesPostConditionToRemoveNonSourceElements(element: DataTypeAccess)]
+[template public generatesPostConditionToRemoveNonSourceElements(element: Access)]
 ->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
 [/template]
 

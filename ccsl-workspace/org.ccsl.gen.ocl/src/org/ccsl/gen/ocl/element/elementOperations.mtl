@@ -9,19 +9,17 @@
 
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean): OrderedSet(String) = 
 OrderedSet(String){
-  element.generatesConditionForAncestor(varname),
+  element.writeAncestorCondition(varname, 'Error'),
   element.generatesConditionForProperties(varname, element.oclAsType(CodeElement).properties)
 }->select(s | s.trim().size() > 0)
 /]
 
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
 OrderedSet(String){
-  element.generatesConditionForAncestor(varname),
+  element.writeAncestorCondition(varname, metaclass),
   element.generatesConditionForProperties(varname, element.oclAsType(CodeElement).properties)
 }->select(s | s.trim().size() > 0)
 /]
-
-
 
 
 [comment conditions for properties /]

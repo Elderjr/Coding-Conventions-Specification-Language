@@ -1,10 +1,10 @@
 [comment encoding = UTF-8 /]
 [module accessModule('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [query public getAccessMatchingMetaclasses(access: Access): OrderedSet(String)=
   OrderedSet(String){'TypeAccess', 'MethodInvocation', 'SingleVariableAccess'}

@@ -34,5 +34,5 @@
 /]
 
 [query public getTotalElementsDeclaredInExists(arg0 : Context) : Integer
-	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'getTotalElementsDeclaredInExists(ccsl.Context)', Sequence{arg0})
+	= invoke('org.ccsl.gen.ocl.services.WalkHelper', 'getTotalElementsDeclaredInExists(ccsl.context.Context)', Sequence{arg0})
 /]

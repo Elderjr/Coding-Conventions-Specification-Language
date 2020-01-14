@@ -2,8 +2,10 @@ package faultTypeRuleExecutor.command;
 
 import faultTypeRuleExecutor.command.impl.DeleteInfixOperator;
 import faultTypeRuleExecutor.command.impl.DeleteNodeCommand;
+import faultTypeRuleExecutor.command.impl.DeleteSmallPartOfTheAlgorithm;
 import faultTypeRuleExecutor.command.impl.InfixOperatorReplace;
 import faultTypeRuleExecutor.command.impl.MoveScopeUp;
+import faultTypeRuleExecutor.command.impl.ReplaceVariableAccess;
 import faultTypeRuleExecutor.javaCompiler.JavaCompilerFromString;
 
 public final class InjectionCommandFactory {
@@ -17,6 +19,10 @@ public final class InjectionCommandFactory {
 			return new DeleteInfixOperator();
 		} else if (actionName.equals("InfixOperatorReplace")) {
 			return new InfixOperatorReplace(null);
+		} else if(actionName.equals("DeleteRandomStatement")) {
+			return new DeleteSmallPartOfTheAlgorithm();
+		} else if(actionName.equals("ReplaceVariableAccess")) {
+			return new ReplaceVariableAccess();
 		}
 		return null;
 	}

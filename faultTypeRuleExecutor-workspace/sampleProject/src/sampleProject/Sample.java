@@ -1,26 +1,14 @@
 package sampleProject;
 
-
-import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Sample {
 
-	public void qux(int a) {
-		
+	
+	public String foo(String str) {
+		String aux = foo(str);
+		return "";
 	}
-	public void foo() throws IOException {
-		int a = 5;
-		if(true) {
-			System.out.println("Bloco true");
-		} else {
-			System.out.println("Bloco false");
-		}
-		
-		if(true)
-			System.out.println("Bloco True");
-		else
-			System.out.println("Bloco False");
-		qux(5 + 3 + 2 + 7);
-	}
-
+ 
 }

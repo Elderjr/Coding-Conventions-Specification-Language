@@ -1,39 +1,32 @@
 [comment encoding = UTF-8 /]
 [module operatorExpressionOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 
-[query public getOperatorExpressionConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean): OrderedSet(String) = 
+[query public getOperatorExpressionConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
 OrderedSet(String){
-  operatorExpression.generatesConditionForOperator(varname) ,
-  operatorExpression.generatesConditionForOperands(varname)
+  operatorExpression.writeOperandsCondition(varname, metaclass)
 }->select(s | s.isNotEmpty())
+->addAll(operatorExpression.getStatementConditions(varname, false, metaclass))
+
 /]
 
-[template public generatesConditionForOperator(operatorExpression : OperatorExpression, varname: String) ? (not operatorExpression.oclIsUndefined())]
-[varname /].operator = [if operatorExpression.operator = '+']
-InfixExpressionKind::PLUS[elseif operatorExpression.operator = '+=']
-AssignmentKind::PLUS_ASSIGN[/if]
-[/template]
+[template private writeOperandsCondition(booleanExp: OperatorExpression, varname: String, metaclass: String) /]
 
-[template private generatesOperandsLetStatement(operatorExpression: OperatorExpression, varname: String, letName: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(StringConcatenation))]
-let [letName /]: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(InfixExpression) then
-  [varname /].oclAsType(InfixExpression).extendedOperands->asOrderedSet()->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
-else if [varname /].oclIsKindOf(Assignment) then
-  [varname /].oclAsType(Assignment).rightHandSide->asOrderedSet()
+[template public writeGetOperands(opExpression: OperatorExpression, varname: String, metaclass: String)]
+if [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression).operand
+else if [varname /].oclIsKindOf(InfixExpression) then
+  [varname /].oclAsType(InfixExpression).extendedOperands->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression.rightOperand))
 else
- OrderedSet(OclAny){}
+  null
 endif endif
 [/template]
 
-[template private generatesOperandsLetStatement(operatorExpression: OperatorExpression, varname: String, letName: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(Assignment))]
-let [letName /]: OrderedSet(ASTNode) = [varname /].rightHandSide->asOrderedSet()
+[comment ======= Boolean Expression Operands conditions ======= /]
+[template private writeOperandsCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.mustWriteConditionFor('operands'))]
+let operands: OrderedSet(ASTNode) =  [booleanExp.writeGetOperands(varname, metaclass) /] in operands <> null and
+[booleanExp.generatesSetConditions('operands', booleanExp.operands, 'ASTNode') /]
 [/template]
-
-[template public generatesConditionForOperands(operatorExpression: OperatorExpression, varname: String) ? (operatorExpression.operands->size() > 0 and operatorExpression.oclIsKindOf(StringConcatenation))]
-let operands: OrderedSet(ASTNode) = [operatorExpression.generatesOperandsLetStatement(varname, 'tmpOperands') /]->closure(x | 
-  if x.oclIsKindOf(ParenthesizedExpression) then x.oclAsType(ParenthesizedExpression).expression else x endif
-) in
-[operatorExpression.generatesSetConditions('operands', operatorExpression.operands, 'ASTNode') /]
-[/template]
-

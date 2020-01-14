@@ -11,9 +11,9 @@
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::javaClassOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::vectorVariableOperations /]
 
 [comment statements /]
 [import org::ccsl::gen::ocl::element::statement::statementOperations /]
@@ -25,6 +25,7 @@
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
+[import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -33,13 +34,19 @@
 
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
 
 [comment statements/tryCatch /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
 
+[template private writeAllConditions(conditions: OrderedSet(String))]
+[for (condition: String | conditions) separator(' and\n')]
+[condition.writeStr() /][/for]
+[/template]
+
 [template private printConditions(element: Element, conditions: OrderedSet(String))]
 [for (condition: String | conditions) separator(' and\n')]
-[condition.printStringWithIdentation() /][/for]
+[condition.writeStr() /][/for]
 [/template]
 
 [template public generatesConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String) /]
@@ -79,20 +86,14 @@
 [javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(javaInterface: JavaInterface, varname: String, typecheck: Boolean)]
-[javaInterface.printConditions(javaInterface.getInterfaceConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(javaInterface: JavaInterface, varname: String, typecheck: Boolean, metaclass: String)]
-[javaInterface.printConditions(javaInterface.getInterfaceConditions(varname, typecheck)) /]
+[javaInterface.printConditions(javaInterface.getInterfaceConditions(varname, typecheck, metaclass)) /]
 [/template]
 
 [template public generatesConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.printConditions(var.getVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean)]
-[var.printConditions(var.getVectorVariableConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(var: VariableVector, varname: String, typecheck: Boolean, metaclass: String)]
 [var.printConditions(var.getVectorVariableConditions(varname, typecheck, metaclass)) /]
 [/template]
@@ -105,9 +106,6 @@
 [stmt.printConditions(stmt.getStatementConditions(varname, typecheck)) /]
 [/template]
 
-[template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean)]
-[methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck, metaclass)) /]
 [/template]
@@ -134,10 +132,12 @@
 [varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
 [/template]
 
-[comment statements/access/DataTypeAccess /]
-[template public generatesConditions(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean)]
-[typeAccess.printConditions(typeAccess.getTypeAccessConditions(varname, typecheck)) /]
+[comment statements/access/VariableAccess /]
+[template public generatesConditions(varAccess: VariableAccess, varname: String, typecheck: Boolean, metaclass: String)]
+[varAccess.printConditions(varAccess.getVariableAccessConditions(varname, typecheck, metaclass)) /]
 [/template]
+
+[comment statements/access/DataTypeAccess /]
 [template public generatesConditions(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean, metaclass: String)]
 [typeAccess.printConditions(typeAccess.getTypeAccessConditions(varname, typecheck)) /]
 [/template]
@@ -199,11 +199,13 @@
 [/template]
 
 [comment statements/expression /]
-[template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean)]
-[infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
+[/template]
+
+[comment statements/expression/BooleanExpression /]
+[template public generatesConditions(booleanExp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[booleanExp.getBooleanExpressionConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
 [comment statements/tryCatch/CatchBlock /]

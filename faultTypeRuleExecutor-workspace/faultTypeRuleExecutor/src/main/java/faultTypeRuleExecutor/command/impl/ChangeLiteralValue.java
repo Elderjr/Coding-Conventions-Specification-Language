@@ -43,15 +43,17 @@ public class ChangeLiteralValue implements InjectionAction {
 	}
 
 	@Override
-	public void doAction(ASTNode node) {
+	public boolean doAction(ASTNode node) {
 		if (node instanceof NumberLiteral) {
 			NumberLiteral numberLiteral = (NumberLiteral) node;
 			numberLiteral.setTokenValue(getWrongNumber(numberLiteral.getTokenValue()));
+			return true;
 		} else if (node instanceof StringLiteral) {
 			StringLiteral stringLiteral = (StringLiteral) node;
 			String escapedString = stringLiteral.getEscapedValue().substring(1,
 					stringLiteral.getEscapedValue().length() - 1);
 			stringLiteral.setEscapedValue("\"" + escapedString + "r" + "\"");
+			return true;
 		} else if (node instanceof CharacterLiteral) {
 			CharacterLiteral characterLiteral = (CharacterLiteral) node;
 			String lit = characterLiteral.getEscapedValue();
@@ -60,9 +62,12 @@ public class ChangeLiteralValue implements InjectionAction {
 				int numericValue = (int) subStr.charAt(0);
 				characterLiteral.setEscapedValue("\'" + Character.toString(numericValue + 1) + "\'");
 			}
+			return true;
 		} else if (node instanceof BooleanLiteral) {
 			BooleanLiteral booleanLiteral = (BooleanLiteral) node;
 			booleanLiteral.setValue(!booleanLiteral.isValue());
+			return true;
 		}
+		return false;
 	}
 }

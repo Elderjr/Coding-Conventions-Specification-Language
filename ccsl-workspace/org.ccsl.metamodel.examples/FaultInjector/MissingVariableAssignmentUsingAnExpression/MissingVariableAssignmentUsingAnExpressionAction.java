@@ -1,14 +1,14 @@
 import org.eclipse.gmt.modisco.java.*;
-import command.InjectionAction;
-import command.impl.*;
+import faultTypeRuleExecutor.command.InjectionAction;
+import faultTypeRuleExecutor.command.impl.*;
 
 public class MissingVariableAssignmentUsingAnExpressionAction implements InjectionAction {
 
   @Override
-  public void doCommand(ASTNode node) {
+  public void doAction(ASTNode node) {
     if (node instanceof Assignment) {
       Assignment assignment = (Assignment) node;
-      new DeleteNodeCommand().doCommand(assignment);
+      new DeleteNodeCommand().doAction(assignment);
     }
   }
 }

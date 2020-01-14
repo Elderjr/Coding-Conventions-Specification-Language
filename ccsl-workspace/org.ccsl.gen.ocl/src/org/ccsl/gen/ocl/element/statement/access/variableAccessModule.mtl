@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module variableAccessModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[query public getVariableAccessMatchingMetaclasses(access: VariableAccess): OrderedSet(String)=
+  OrderedSet(String){'SingleVariableAccess'}
+/]
+
+[query public getVariableAccessConditions(varAccess: VariableAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = varAccess.addElementAsVisited(metaclass) in
+let completeVarname: String = varAccess.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = varAccess.getConcreteElementMetaclass(metaclass) in 
+OrderedSet(String) {
+  varAccess.writeVariableAccessTypecheckCondition(varname, typecheck)
+}->addAll(varAccess.getElementConditions(completeVarname, typecheck, concreteMetaclass))
+->select(s | s.isNotEmpty())
+/]
+
+[template private writeVariableAccessTypecheckCondition(varAccess: VariableAccess, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(SingleVariableAccess)
+[/template]

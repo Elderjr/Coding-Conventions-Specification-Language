@@ -2,8 +2,9 @@
 [module ancestorModule('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringUtils  /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [comment conditions for the ancestor /]
 [query private isAncestorNotRegistered(element: Element): Boolean = 
@@ -12,43 +13,31 @@
   (not getElementsVisited()->includes(element.eContainer().oclAsType(Element)))
 /]
 
-[template public generatesConditionForAncestor(element: Element, varname: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
-[let acestorUniqueName: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
-let [acestorUniqueName /] : OclAny = [element.getAncestorOclExpression(varname) /] in
-[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true, 'OclAny') /][/let]
-[/template]
-
-[template public generatesConditionForAncestor(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
-[let acestorUniqueName: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
-let [acestorUniqueName /] : OclAny = [element.getAncestorOclExpression(varname, metaclass) /] in
-[element.eContainer().oclAsType(Element).generatesConditions(acestorUniqueName, true, 'OclAny') /][/let]
+[template public writeAncestorCondition(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
+[let ancestorVarname: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
+[let ancestorCondition: String = element.eContainer().oclAsType(Element).generatesConditions(ancestorVarname, true, 'OclAny')]
+let [ancestorVarname /] : OclAny = [element.writeGetAncestorExpression(varname, metaclass) /] in [ancestorVarname /] <> null [if not ancestorCondition.isEmpty()]
+and
+[ancestorCondition.writeStr() /][/if][/let][/let]
 [/template]
 
 [comment get ancestor ocl expression/]
-[template public getAncestorOclExpression(element: Element, varname: String, metaclass: String)]
+[template public writeGetAncestorExpression(element: Element, varname: String, metaclass: String)]
 [varname /].oclContainer()
 [/template]
 
-[template public getAncestorOclExpression(element: Element, varname: String)]
-[varname /].oclContainer()
+[template public writeGetAncestorExpression(var: Variable, varname: String, metaclass: String)]
+if [varname /].oclContainer() <> null then
+  [varname /].oclContainer().oclContainer()
+else
+  null
+endif
 [/template]
 
-[template public getAncestorOclExpression(var: Variable, varname: String)]
-[varname /].oclContainer().oclContainer()
-[/template]
-
-[template public getAncestorOclExpression(var: Variable, varname: String, metaclass: String)]
-[var.getAncestorOclExpression(varname) /]
-[/template]
-
-[template public getAncestorOclExpression(methodInv: MethodInvocation, varname: String)]
-if [varname /].oclContainer().oclIsKindOf(ExpressionStatement) then
+[template public writeGetAncestorExpression(methodInv: MethodInvocation, varname: String, metaclass: String)]
+if [varname /].oclContainer() <> null and [varname /].oclContainer().oclIsKindOf(ExpressionStatement) then
   [varname /].oclContainer().oclContainer()
 else
   [varname /].oclContainer()
 endif
-[/template]
-
-[template public getAncestorOclExpression(methodInv: MethodInvocation, varname: String, metaclass: String)]
-[methodInv.getAncestorOclExpression(varname) /]
 [/template]

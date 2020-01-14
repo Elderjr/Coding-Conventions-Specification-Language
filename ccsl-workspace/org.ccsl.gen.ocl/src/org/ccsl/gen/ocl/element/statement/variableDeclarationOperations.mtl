@@ -23,9 +23,6 @@ else
 endif
 /]
 
-[template public generatesConditionForVariable(varDecl: VarDeclaration, varname: String, typecheck: Boolean) ? ((not varDecl.variable.oclIsUndefined()) and varDecl.getVariableDeclarationMatchingJavaMetaclasses()->size() > 1)]
-[varDecl.variable.generatesConditions(varname, typecheck) /]
-[/template]
 
 [template public generatesConditionForVariable(varDecl: VarDeclaration, varname: String, typecheck: Boolean) ? ((not varDecl.variable.oclIsUndefined()) and varDecl.getVariableDeclarationMatchingJavaMetaclasses()->size() = 1)]
 [varDecl.variable.generatesConditions(varname, typecheck, 'VariableDeclarationFragment') /]

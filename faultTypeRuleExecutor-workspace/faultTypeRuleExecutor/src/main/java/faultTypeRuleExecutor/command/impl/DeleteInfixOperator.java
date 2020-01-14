@@ -8,14 +8,15 @@ import faultTypeRuleExecutor.command.InjectionAction;
 public class DeleteInfixOperator implements InjectionAction {
 
 	@Override
-	public void doAction(ASTNode target) {
+	public boolean doAction(ASTNode target) {
 		if (target == null)
-			return;
+			return false;
 		if (!(target instanceof InfixExpression))
-			return;
+			return false;
 		InfixExpression exp = (InfixExpression) target;
 		ASTNode leftOperand = exp.getLeftOperand();
 		ActionUtils.setValue(exp, leftOperand);
+		return true;
 	}
 
 }

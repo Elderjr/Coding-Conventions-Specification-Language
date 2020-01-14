@@ -1,22 +1,11 @@
 [comment encoding = UTF-8 /]
 [module faultTypeDescriptionToTextOCLModule('http://www.example.org/ccsl')/]
-[import org::ccsl::gen::ocl::rule::context::contextModule /]
+
 [import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
 
-[template public generatesOCL(rule: FaultTypeRule) /]
-
-[template public generatesOCL(atomicRule: AtomicFaultTypeRule)]
-[atomicRule.generatesContextOCLConditionsAllInstances().replaceAll('<>', '&lt;&gt;') /]
+[template public generatesOCL(atomicRule: AtomicRule)]
+[atomicRule._context.writeContextConditions(atomicRule.subject).replaceAll('<>', '&lt;&gt;') /]
 [atomicRule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [atomicRule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
-[/template]
-
-[template public generatesOCL(compositeRule: CompositeFaultTypeRule)]
-(
-[for (rule: FaultTypeRule | compositeRule.rules) separator('\n->union(\n')]
-  [rule.generatesOCL() /][if i <> 1]
-  
-  )
-  [/if]
-[/for])
 [/template]

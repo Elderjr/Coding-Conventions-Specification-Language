@@ -24,6 +24,7 @@
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
+[import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -32,9 +33,10 @@
 
 [comment statements/expression /]
 [import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
 
 [comment statements/tryCatch /]
-[import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /] 
+[import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
 
 [query public getGenericMatchingJavaMetaclass(element: Element): String =
   if element.getMatchingJavaMetaclasses()->size() = 1 then
@@ -82,6 +84,8 @@ else if element.oclIsTypeOf(VarAssignment) then
 --element/statements/access
 else if element.oclIsTypeOf(Access) then
   element.oclAsType(Access).getAccessMatchingMetaclasses()
+else if element.oclIsTypeOf(VariableAccess) then
+  element.oclAsType(VariableAccess).getVariableAccessMatchingMetaclasses()
 --element/statements/controlFow
 else if element.oclIsTypeOf(SwitchStatement) then
   element.oclAsType(SwitchStatement).getSwitchStatementMatchingMetaclasses()
@@ -94,11 +98,13 @@ else if element.oclIsTypeOf(LoopStatement) then
 --element/statements/expression
 else if element.oclIsTypeOf(InfixExpression) then
   element.oclAsType(InfixExpression).getInfixMatchingMetaclasses()
+else if element.oclIsTypeOf(BooleanExpression) then
+  element.oclAsType(BooleanExpression).getBooleanExpressionMatchingJavaMetaclasses()
 --element/statements/tryCatch
 else if element.oclIsTypeOf(CatchBlock) then
   element.oclAsType(CatchBlock).getCatchBlockMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
 endif endif endif endif endif endif endif endif endif endif endif endif
-endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif endif
 /]

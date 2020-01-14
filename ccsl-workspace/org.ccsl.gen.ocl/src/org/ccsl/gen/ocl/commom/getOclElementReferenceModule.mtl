@@ -5,7 +5,7 @@
 [template public getOclReferenceExpression(element : Element, varname: String, mappedMetaclass: String) /]
 
 [template public getOclReferenceExpression(element : MethodInvocation, varname: String, mappedMetaclass: String)]
-let [varname /]: [mappedMetaclass /] = if [varname /].oclIsKindOf(ExpressionStatement) then
+let [varname /]: [mappedMetaclass /] = if [varname /] <> null and [varname /].oclIsKindOf(ExpressionStatement) then
   [varname /].oclAsType(ExpressionStatement).expression
 else
   [varname /]

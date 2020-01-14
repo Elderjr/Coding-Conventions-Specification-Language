@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
 [module ifStatementOperations('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getIfStatementMatchingMetaclasses(ifStatement: IfStatement): OrderedSet(String) =
@@ -14,7 +14,7 @@ let void: OclVoid = ifStatement.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
 OrderedSet(String){
   ifStatement.generatesIfStatementTypecheckerCondition(varname, typecheck),
-  ifStatement.generatesConditionForIfCondition(newVarname),
+  ifStatement.writeConditionCondition(newVarname),
   ifStatement.generatesConditionForThen(newVarname),
   ifStatement.generatesConditionForElse(newVarname)
 }->select(s: String | s.isNotEmpty())
@@ -24,8 +24,9 @@ OrderedSet(String){
 [varname /].oclIsKindOf(IfStatement)
 [/template]
 
-[template private generatesConditionForIfCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('condition'))]
-[ifStatement.generatesMonovaluedFieldConditions(ifStatement.condition, varname, 'expression', 'ASTNode') /]
+[template private writeConditionCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('condition'))]
+let [ifStatement.condition.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(n | if n.oclIsKindOf(ParenthesizedExpression) then n.oclAsType(ParenthesizedExpression).expression else n endif)->last() in
+[ifStatement.generatesFieldCondition(ifStatement.condition, ifStatement.condition.getFieldName(), 'ASTNode') /]
 [/template]
 
 [template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('thenStatement'))]

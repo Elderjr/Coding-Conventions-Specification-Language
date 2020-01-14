@@ -1,6 +1,19 @@
 [comment encoding = UTF-8 /]
 [module elementUtils('http://www.example.org/ccsl')]
+
 [import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+
+[query public mustWriteConditionFor(element: Element, propertyName: String): Boolean = 
+let features: Sequence(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
+let feature: ecore::EStructuralFeature = if features->size() > 0 then features->first() else null endif in
+if feature <> null and element.eIsSet(feature) and not feature.many then 
+  element.eGet(feature)->asSet()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
+else if feature <> null and element.eIsSet(feature) and feature.many then
+  element.eGet(feature)->flatten()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
+else
+  false
+endif endif
+/]
 
 [query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  
   let properties: Sequence(ecore::EStructuralFeature) = obj.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
@@ -9,6 +22,10 @@
   else
     false
   endif
+/]
+
+[query private getEStructuralFeatureValue(element: Element, feature: ecore::EStructuralFeature): OclAny = 
+
 /]
 
 [query public getRelationName(element: Element, field: Element): String =
@@ -33,8 +50,8 @@ endif
 
 [query public isClosureRelation(element: Element, field: Element): Boolean = 
   ClosureFilter.allInstances()->exists(f: ClosureFilter | 
-    (f.subject = element and f.closureElement = field) or
-    (f.subject = field and f.closureElement = element)
+    (f.targetTemplate = element and f.closureElement = field) or
+    (f.targetTemplate = field and f.closureElement = element)
   )
 /]
 
@@ -44,7 +61,7 @@ endif
 
 [query public getCompleteElementVarname(element: Element, baseVarname: String, metaclass: String): String = 
   if element.getMatchingJavaMetaclasses()->size() = 1 and element.getMatchingJavaMetaclasses()->first() <> metaclass then
-    baseVarname.concat('.oclAsType(').concat(metaclass).concat(')')
+    baseVarname.concat('.oclAsType(').concat(element.getMatchingJavaMetaclasses()->first()).concat(')')
   else
     baseVarname
   endif

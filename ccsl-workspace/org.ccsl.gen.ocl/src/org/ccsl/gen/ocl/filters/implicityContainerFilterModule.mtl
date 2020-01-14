@@ -13,7 +13,7 @@
 let [filter.subject.getUniqueOclName() /]:ASTNode = [target.getUniqueOclName() /] in
 [let subjectConditions: String = filter.subject.generatesConditions(filter.subject.getUniqueOclName(), false, 'ASTNode')]
 [if not subjectConditions.isEmpty()]
-[subjectConditions.printStringWithIdentation() /] and
+[subjectConditions.writeStr() /] and
 [/if][/let]
 [filter.generatesImplicityContainersSet('implicityContainers', filter.subject.getUniqueOclName()) /]
 implicityContainers->exists([filter.closureElement.getUniqueOclName() /]:ASTNode |

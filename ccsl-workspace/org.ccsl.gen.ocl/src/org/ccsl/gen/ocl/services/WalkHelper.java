@@ -7,8 +7,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
-import ccsl.Context;
-import ccsl.Rule;
+import ccsl.context.Context;
 import ccsl.elements.Element;
 
 public class WalkHelper {
@@ -51,7 +50,7 @@ public class WalkHelper {
 	}
 	
 	public static void addElementAsVisited(Element element, String metaclass) {
-		elementsVisited.add(element);
+		addElementAsVisited(element);
 		declaredElementMetaclass.put(element, metaclass);
 	}
 	
@@ -73,7 +72,7 @@ public class WalkHelper {
 	}
 
 	public static void addElementExistsDeclaration(Element element, String metaclass) {
-		addElementAsVisited(element);
+		addElementExistsDeclaration(element);
 		declaredElementMetaclass.put(element, metaclass);
 	}
 	

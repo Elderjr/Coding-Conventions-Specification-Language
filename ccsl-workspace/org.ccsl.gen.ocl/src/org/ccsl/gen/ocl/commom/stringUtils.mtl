@@ -10,7 +10,7 @@
 
 [query public isEmpty(str: String): Boolean = str.trim().size() = 0 /]
 
-[template public printStringWithIdentation(aString : String)]
+[template public writeStr(aString : String)]
 [aString /]
 [/template]
 

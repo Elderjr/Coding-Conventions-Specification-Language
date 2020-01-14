@@ -3,47 +3,43 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [query private isElementAlwaysNeedTypecheck(e: Element): Boolean = 
   e.oclIsKindOf(VarAssignment)
 /]
-[template public generatesContextOCLConditionsAllInstances(ctx: Context) post(trim())]
-[ctx.generatesAllInstancesOCLExpression() /]->select([ctx.subject.getUniqueOclName() /] |
-  [if ctx.subject.getMatchingJavaMetaclasses()->size() = 1]
-  [ctx.generatesContextOCLConditions(false, ctx.subject.getMatchingJavaMetaclasses()->first()) /][else]
-  [ctx.generatesContextOCLConditions(ctx.subject.isElementAlwaysNeedTypecheck(), 'ASTNode') /][/if]
+[template public writeContextConditions(ctx: Context, entryPoint: Element) post(trim())]
+[entryPoint.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([entryPoint.getUniqueOclName() /] |
+  [if entryPoint.getMatchingJavaMetaclasses()->size() = 1]
+  [ctx.writeContextConditions(entryPoint, entryPoint.isElementAlwaysNeedTypecheck(), entryPoint.getMatchingJavaMetaclasses()->first()) /][else]
+  [ctx.writeContextConditions(entryPoint, true, 'ASTNode') /][/if]
 
 )
 [/template]
 
-[template public generatesContextOCLConditions(ctx: Context, isTypecheckNeeeded: Boolean, metaclass: String) post(trim())]
-[let scopeConditions: String = ctx.generatesContextSubjectConditions(isTypecheckNeeeded, metaclass)]
-[let filtersConditions: String = ctx.generatesContextFiltersConditions()]
+[template public writeContextConditions(ctx: Context, entryPoint: Element, isTypecheckNeeeded: Boolean, metaclass: String) post(trim())]
+[let scopeConditions: String = entryPoint.generatesConditions(entryPoint.getUniqueOclName(), isTypecheckNeeeded, metaclass)]
+[let filtersConditions: String = ctx.writeContextFiltersConditions()]
 --Context Conditions
 [if scopeConditions.isNotEmpty()]
-[scopeConditions.printStringWithIdentation() /] [if filtersConditions.isNotEmpty()] and [/if]
+[scopeConditions.writeStr() /] [if filtersConditions.isNotEmpty()] and [/if]
 [/if][if filtersConditions.isNotEmpty()]
 --Filters Conditions
-[filtersConditions.printStringWithIdentation() /]
+[filtersConditions.writeStr() /]
 [/if]
 [for(Sequence(Integer){1 ..ctx.getTotalElementsDeclaredInExists()})])[/for][/let][/let]
 [/template]
 
-[template private generatesAllInstancesOCLExpression(ctx: Context)]
-[for (metaclassesTarget: String | ctx.subject.getMatchingJavaMetaclasses()) separator('->union(')]
+[template private writeGetAllInstances(metaclasses: OrderedSet(String))]
+[for (metaclassesTarget: String | metaclasses) separator('->union(')]
 [metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
 [/template]
 
-[template private generatesContextFiltersConditions(ctx: Context)]
+[template private writeContextFiltersConditions(ctx: Context)]
 [let filterConditions: Sequence(String) = ctx.filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
 [for(cond: String | filterConditions) separator(' and\n')]
-[cond.printStringWithIdentation() /][/for][/let]
-[/template]
-
-[template private generatesContextSubjectConditions(ctx: Context, isTypecheckNeeded: Boolean, metaclass: String)]
-[ctx.subject.generatesConditions(ctx.subject.getUniqueOclName(), isTypecheckNeeded, metaclass) /]
+[cond.writeStr() /][/for][/let]
 [/template]
 

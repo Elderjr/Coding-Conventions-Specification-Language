@@ -4,6 +4,6 @@ import org.eclipse.gmt.modisco.java.ASTNode;
 
 public interface InjectionAction {
 
-	public void doAction(ASTNode target);
+	public boolean doAction(ASTNode target);
 
 }

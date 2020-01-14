@@ -8,12 +8,12 @@
   OrderedSet(String){'InterfaceDeclaration'}
 /]
 
-[query public getInterfaceConditions(interface: JavaInterface, varname: String, typecheck: Boolean): OrderedSet(String) =
+[query public getInterfaceConditions(interface: JavaInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = interface.addElementAsVisited() in
 OrderedSet(String) {
   interface.generatesClassTypecheckCondition(varname, typecheck)
 }->select(cond | cond.isNotEmpty())
-->addAll(interface.getComplexTypeConditions(varname, typecheck))
+->addAll(interface.getComplexTypeConditions(varname, typecheck, metaclass))
 /]
 
 [template public generatesClassTypecheckCondition(interface: JavaInterface, varname: String, typecheck: Boolean) ? (typecheck)]

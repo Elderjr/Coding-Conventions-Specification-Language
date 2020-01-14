@@ -1,8 +1,8 @@
 [comment encoding = UTF-8 /]
 [module loopStatementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getLoopStatementMatchingMetaclasses(loopStmt: LoopStatement): OrderedSet(String) =
 OrderedSet(String) {'EnhancedForStatement', 'ForStatement', 'WhileStatement', 'DoStatement'}

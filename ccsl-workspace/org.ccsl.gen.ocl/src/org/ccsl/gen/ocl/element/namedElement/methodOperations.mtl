@@ -13,29 +13,29 @@ OrderedSet(String){'MethodDeclaration'}
 
 
 [query public getMethodConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = method.addElementAsVisited() in
+let void: OclVoid = method.addElementAsVisited(metaclass) in
 let completeVarname: String = method.getCompleteElementVarname(varname, metaclass) in
 let concreteMetaclass: String = method.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  method.generatesMethodTypecheckCondition(varname, typecheck),
-  method.generatesConditionForReturnType(completeVarname),
-  method.generatesConditionForParams(completeVarname, typecheck)
+  method.writeMethodTypecheckCondition(varname, typecheck),
+  method.writeReturnTypeCondition(completeVarname),
+  method.writeParamsCondition(completeVarname, typecheck)
 }->addAll(method.getNamedElementConditions(completeVarname, typecheck, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
 
-[template public generatesMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
 ([for (metaclass: String | method.getMethodMatchingJavaMetaclasses()) separator(' or ')]
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template public generatesConditionForReturnType(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
+[template public writeReturnTypeCondition(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
 (not [varname /].returnType.oclIsUndefined()) and
 [method.generatesMonovaluedFieldConditions(method.returnType, varname, 'returnType.type', 'OclAny') /]
 [/template]
 
-[template public generatesConditionForParams(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
+[template public writeParamsCondition(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
 [if typecheck]
 [method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration', method.getMethodMatchingJavaMetaclasses()) /][else]
 [method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration') /][/if]
