@@ -29,9 +29,9 @@ public class ResultComparator {
 		return violations;
 	}
 	
-	private static List<String> getCCSLViolations() throws IOException {
+	private static List<String> getCCSLViolations(String ccslResultFile) throws IOException {
 		List<String> ccslViolations = new LinkedList<>();
-		for(String str : getViolations("ccsl.txt", "D:(.)*\\.java")) {
+		for(String str : getViolations(ccslResultFile, "D:(.)*\\.java")) {
 			ccslViolations.add(str.replaceAll("\\\\\\\\", "\\\\"));
 		}
 		return ccslViolations;
@@ -62,8 +62,8 @@ public class ResultComparator {
 	}
 
 	public static void main(String[] args) throws IOException {
-		List<String> pmdViolations = getPMDViolations();
-		List<String> ccslViolations = getCCSLViolations();
+		List<String> pmdViolations = getCCSLViolations("pmd.txt");
+		List<String> ccslViolations = getCCSLViolations("ccsl.txt");
 		System.out.println("#PMD Violations: " + pmdViolations.size());
 		System.out.println("#PMD Files: " + pmdViolations.stream().collect(Collectors.toSet()).size());
 		System.out.println("#CCSL Violations: " + ccslViolations.size());

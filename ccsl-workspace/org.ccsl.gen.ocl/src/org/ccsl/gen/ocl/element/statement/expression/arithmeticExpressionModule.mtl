@@ -1,0 +1,75 @@
+[comment encoding = UTF-8 /]
+[module arithmeticExpressionModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[query public getArithmeticExpressionMatchingJavaMetaclasses(arithmeticExpression: ArithmeticExpression): OrderedSet(String)=
+  OrderedSet(String){'InfixExpression', 'PrefixExpression'}
+/]
+
+[query public getArithmeticExpressionConditions(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
+let void: OclVoid = arithmeticExpression.addElementAsVisited(metaclass) in
+let completeVarname: String = arithmeticExpression.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = arithmeticExpression.getConcreteElementMetaclass(metaclass) in
+OrderedSet(String){
+  arithmeticExpression.writeArithmeticExpressionTypecheckCondition(varname, typecheck, concreteMetaclass),
+  arithmeticExpression.writeArithmeticOperatorCondition(completeVarname, concreteMetaclass)
+}->select(s | s.isNotEmpty())
+->addAll(arithmeticExpression.getOperatorExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+
+
+[template private writeArithmeticExpressionTypecheckCondition(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+if [varname /].oclIsKindOf(InfixExpression) then
+  let arithmeticInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+    InfixExpressionKind::TIMES,
+    InfixExpressionKind::DIVIDE,
+    InfixExpressionKind::PLUS,
+    InfixExpressionKind::MINUS,
+    InfixExpressionKind::REMAINDER
+  } in arithmeticInfixExpressionOperators->exists(op | op = [varname /].oclAsType(InfixExpression).operator)
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  let arithmeticPrefixExpressionOperators: Set(PrefixExpressionKind) = Set(PrefixExpressionKind){
+    PrefixExpressionKind::PLUS,
+    PrefixExpressionKind::MINUS
+  } in arithmeticPrefixExpressionOperators->exists(op | op = [varname /].oclAsType(PrefixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template private writeArithmeticOperatorCondition(arithmeticExp: ArithmeticExpression, varname: String, metaclass: String) ? (arithmeticExp.arithmeticOperator <> ArithmeticOperator::UNDEFINED)]
+[if (arithmeticExp.arithmeticOperator = ArithmeticOperator::ADDITION)]
+if [varname /].oclIsKindOf(InfixExpression) then
+ [varname /].oclAsType(InfixExpression) = InfixExpressionKind::PLUS
+else [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression) = PrefixExpression::PLUS
+else
+  false
+endif endif[elseif (arithmeticExp.arithmeticOperator = ArithmeticOperator::SUBTRACTION)]
+if [varname /].oclIsKindOf(InfixExpression) then
+ [varname /].oclAsType(InfixExpression) = InfixExpressionKind::MINUS
+else [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression) = PrefixExpression::MINUS
+else
+  false
+endif endif[elseif (arithmeticExp.arithmeticOperator = ArithmeticOperator::DIVISION)]
+if [varname /].oclIsKindOf(InfixExpression) then
+ [varname /].oclAsType(InfixExpression) = InfixExpressionKind::DIVIDE
+else
+  false
+endif endif[elseif (arithmeticExp.arithmeticOperator = ArithmeticOperator::MULTIPLICATION)]
+if [varname /].oclIsKindOf(InfixExpression) then
+ [varname /].oclAsType(InfixExpression) = InfixExpressionKind::TIMES
+else
+  false
+endif endif[elseif (arithmeticExp.arithmeticOperator = ArithmeticOperator::MODULUS)]
+if [varname /].oclIsKindOf(InfixExpression) then
+ [varname /].oclAsType(InfixExpression) = InfixExpressionKind::REMAINDER
+else
+  false
+endif endif[/if]
+[/template]

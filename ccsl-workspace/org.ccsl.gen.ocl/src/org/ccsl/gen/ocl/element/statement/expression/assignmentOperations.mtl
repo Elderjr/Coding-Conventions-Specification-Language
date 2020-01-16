@@ -14,7 +14,7 @@ OrderedSet(String){
   assignment.generatesConditionForAssignmentTypechecker(varname, typecheck),
   assignment.generatesConditionForTarget(varname)
 }->select(s | s.isNotEmpty())
-->addAll(assignment.getOperatorExpressionConditions(varname, false))
+->addAll(assignment.getOperatorExpressionConditions(varname, false, 'bla'))
 /]
 
 [template public generatesConditionForAssignmentTypechecker(assignment: Assignment, varname: String, typecheck: Boolean) ? (typecheck)]

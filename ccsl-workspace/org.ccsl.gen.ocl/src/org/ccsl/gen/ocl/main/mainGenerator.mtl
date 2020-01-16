@@ -1,23 +1,26 @@
 [comment encoding = UTF-8 /]
 [module mainGenerator('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToText /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToXMLModule /]
+[import org::ccsl::gen::ocl::rule::faultTypeDescription::injectionActionToJavaClassModule /]
 [import org::ccsl::gen::ocl::rule::recommendationRule::recommendationRuleToText /]
 
 [template public main(root: Root) ? (root.eContainer().oclIsUndefined())]
 [comment @main/]
-[root.generatesFile() /]
+[root.write() /]
 [/template]
 
-[template private generatesFile(root: Root) /]
+[template private write(root: Root) /]
 
-[template private generatesFile(rule: Rule)]
+[template private write(rule: Rule)]
 [file ('ocl-gen', false, 'UTF-8')]
 [rule.writeOCL() /]
 [/file]
 [/template]
 
-[template private generatesFile(faultType: FaultTypeDescription)]
-[comment faultType.generatesConfigFaultTypeRuleFile() /]
-[faultType.rule.generatesFile() /]
+[template private write(faultType: FaultTypeDescription)]
+[faultType.writeXMLFile() /]
+[for(action: InjectionAction | faultType.actions)]
+[action.writeActionJavaClass(faultType.rule.subject, faultType.name, i) /]
+[/for]
 [/template]

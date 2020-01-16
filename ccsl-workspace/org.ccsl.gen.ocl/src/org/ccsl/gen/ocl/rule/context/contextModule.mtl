@@ -7,14 +7,17 @@
 [import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
-[query private isElementAlwaysNeedTypecheck(e: Element): Boolean = 
-  e.oclIsKindOf(VarAssignment)
+[query private isElementNeedsTypecheckOnStart(e: Element): Boolean = 
+  e.oclIsKindOf(VarAssignment) or
+  -- e.oclIsKindOf(ArithmeticExpression) or
+  e.oclIsKindOf(BooleanExpression)
 /]
+
 [template public writeContextConditions(ctx: Context, entryPoint: Element) post(trim())]
 [entryPoint.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([entryPoint.getUniqueOclName() /] |
   [if entryPoint.getMatchingJavaMetaclasses()->size() = 1]
-  [ctx.writeContextConditions(entryPoint, entryPoint.isElementAlwaysNeedTypecheck(), entryPoint.getMatchingJavaMetaclasses()->first()) /][else]
-  [ctx.writeContextConditions(entryPoint, true, 'ASTNode') /][/if]
+  [ctx.writeContextConditions(entryPoint, entryPoint.isElementNeedsTypecheckOnStart(), entryPoint.getMatchingJavaMetaclasses()->first()) /][else]
+  [ctx.writeContextConditions(entryPoint, entryPoint.isElementNeedsTypecheckOnStart(), 'ASTNode') /][/if]
 
 )
 [/template]
@@ -22,7 +25,7 @@
 [template public writeContextConditions(ctx: Context, entryPoint: Element, isTypecheckNeeeded: Boolean, metaclass: String) post(trim())]
 [let scopeConditions: String = entryPoint.generatesConditions(entryPoint.getUniqueOclName(), isTypecheckNeeeded, metaclass)]
 [let filtersConditions: String = ctx.writeContextFiltersConditions()]
---Context Conditions
+--[ctx.eContainer().eClass().name /] Context Conditions
 [if scopeConditions.isNotEmpty()]
 [scopeConditions.writeStr() /] [if filtersConditions.isNotEmpty()] and [/if]
 [/if][if filtersConditions.isNotEmpty()]

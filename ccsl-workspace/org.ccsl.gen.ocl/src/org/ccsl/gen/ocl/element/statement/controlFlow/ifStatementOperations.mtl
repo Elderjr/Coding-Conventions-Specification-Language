@@ -13,26 +13,32 @@ OrderedSet(String) {'IfStatement'}
 let void: OclVoid = ifStatement.addElementAsVisited() in
 let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
 OrderedSet(String){
-  ifStatement.generatesIfStatementTypecheckerCondition(varname, typecheck),
+  ifStatement.writeIfStatementTypecheckCondition(varname, typecheck),
   ifStatement.writeConditionCondition(newVarname),
-  ifStatement.generatesConditionForThen(newVarname),
-  ifStatement.generatesConditionForElse(newVarname)
+  ifStatement.writeThenCondition(newVarname),
+  ifStatement.writeElseCondition(newVarname)
 }->select(s: String | s.isNotEmpty())
 /]
 
-[template private generatesIfStatementTypecheckerCondition(ifStatement: IfStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[template private writeIfStatementTypecheckCondition(ifStatement: IfStatement, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(IfStatement)
 [/template]
 
 [template private writeConditionCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('condition'))]
-let [ifStatement.condition.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(n | if n.oclIsKindOf(ParenthesizedExpression) then n.oclAsType(ParenthesizedExpression).expression else n endif)->last() in
+let [ifStatement.condition.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(cond: ASTNode | 
+  if cond.oclIsKindOf(ParenthesizedExpression) then 
+    cond.oclAsType(ParenthesizedExpression).expression 
+  else 
+    cond 
+  endif
+)->last() in
 [ifStatement.generatesFieldCondition(ifStatement.condition, ifStatement.condition.getFieldName(), 'ASTNode') /]
 [/template]
 
-[template private generatesConditionForThen(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('thenStatement'))]
+[template private writeThenCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('thenStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(ifStatement.thenStatement, varname, 'thenStatement', 'ASTNode') /]
 [/template]
 
-[template private generatesConditionForElse(ifStatement: IfStatement, varname: String) ? (ifStatement.isSet('elseStatement'))]
+[template private writeElseCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('elseStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(ifStatement.elseStatement, varname, 'elseStatement', 'ASTNode') /]
 [/template]

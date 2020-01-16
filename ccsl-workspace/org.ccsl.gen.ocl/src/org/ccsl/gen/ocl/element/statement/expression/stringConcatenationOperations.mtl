@@ -13,7 +13,7 @@
 [query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String): OrderedSet(String) = 
 OrderedSet(String) {
   strConcat.generatesConditionForStringConcatenationTypecheck(varname)
-}->addAll(strConcat.getOperatorExpressionConditions(varname, false))
+}->addAll(strConcat.getOperatorExpressionConditions(varname, false, 'ASTNode'))
 /]
 
 [template public generatesConditionForStringConcatenationTypecheck(strConcat: StringConcatenation, varname: String)]

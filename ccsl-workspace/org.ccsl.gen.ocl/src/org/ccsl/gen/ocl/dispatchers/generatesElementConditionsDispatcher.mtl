@@ -33,11 +33,13 @@
 [import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
 [comment statements/expression /]
-[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
+[import org::ccsl::gen::ocl::element::statement::expression::arithmeticExpressionModule /]
 
 [comment statements/tryCatch /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
+
 
 [template private writeAllConditions(conditions: OrderedSet(String))]
 [for (condition: String | conditions) separator(' and\n')]
@@ -198,9 +200,14 @@
 [loopStmt.printConditions(loopStmt.getLoopStatementConditions(varname, typecheck)) /]
 [/template]
 
-[comment statements/expression /]
-[template public generatesConditions(infixExp: InfixExpression, varname: String, typecheck: Boolean, metaclass: String)]
-[infixExp.printConditions(infixExp.getInfixConditions(varname, typecheck)) /]
+[comment statements/expression/OperatorExpression /]
+[template public generatesConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[operatorExpression.getOperatorExpressionConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment statements/expression/ArithmeticExpression /]
+[template public generatesConditions(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[arithmeticExpression.getArithmeticExpressionConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
 [comment statements/expression/BooleanExpression /]

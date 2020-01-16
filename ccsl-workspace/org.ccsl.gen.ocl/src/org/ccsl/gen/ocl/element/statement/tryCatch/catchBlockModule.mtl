@@ -4,6 +4,8 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+
+
 [query public getCatchBlockMatchingMetaclasses(catch: CatchBlock): OrderedSet(String)= 
   OrderedSet(String){'CatchClause'}
 /]

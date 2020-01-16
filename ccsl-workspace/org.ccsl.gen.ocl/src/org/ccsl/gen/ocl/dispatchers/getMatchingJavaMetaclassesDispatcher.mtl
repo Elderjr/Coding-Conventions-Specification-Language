@@ -32,8 +32,9 @@
 [import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
 [comment statements/expression /]
-[import org::ccsl::gen::ocl::element::statement::expression::infixExpressionOperations /]
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
+[import org::ccsl::gen::ocl::element::statement::expression::arithmeticExpressionModule /]
 
 [comment statements/tryCatch /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
@@ -96,15 +97,17 @@ else if element.oclIsTypeOf(IfStatement) then
 else if element.oclIsTypeOf(LoopStatement) then
   element.oclAsType(LoopStatement).getLoopStatementMatchingMetaclasses()
 --element/statements/expression
-else if element.oclIsTypeOf(InfixExpression) then
-  element.oclAsType(InfixExpression).getInfixMatchingMetaclasses()
+else if element.oclIsTypeOf(OperatorExpression) then
+  element.oclAsType(OperatorExpression).getOperatorExpressionMatchingJavaMetaclasses()
 else if element.oclIsTypeOf(BooleanExpression) then
   element.oclAsType(BooleanExpression).getBooleanExpressionMatchingJavaMetaclasses()
+else if element.oclIsTypeOf(ArithmeticExpression) then
+  element.oclAsType(ArithmeticExpression).getArithmeticExpressionMatchingJavaMetaclasses()
 --element/statements/tryCatch
 else if element.oclIsTypeOf(CatchBlock) then
   element.oclAsType(CatchBlock).getCatchBlockMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
-endif endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif endif
 endif endif endif endif endif endif endif endif endif endif endif endif endif
 /]

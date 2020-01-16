@@ -19,7 +19,7 @@ let [target.getUniqueOclName() /]InheritanceClasses: Set(ClassDeclaration) = [ta
 [for(m: Method | definesMethodFilter.methods) separator(' and\n')]
 [target.getUniqueOclName() /]InheritanceClasses->exists(c: ClassDeclaration |
   c.bodyDeclarations->exists([m.getUniqueOclName() /] |
-    [m.generatesConditions(m.getUniqueOclName(), true) /]
+    [m.generatesConditions(m.getUniqueOclName(), true, 'ASTNode') /]
   )
 )[/for]
 [/template]

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultType/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:strategy="http://www.example.org/ccsl/faultType/strategy" name="MissingANDExpressionUsedAsBranchCondition">
+  <strategy xsi:type="strategy:AllStrategy"/>
+  <actions xsi:type="action:DeleteAction" target="//@rule/@context/@contextElements.0/@operands.0"/>
+  <rule subject="booleanExpression">
+    <context>
+      <contextElements xsi:type="expressions:BooleanExpression" uniqueName="booleanExpression">
+        <operands/>
+      </contextElements>
+      <filters xsi:type="filters:CompositeFilter" operator="OR">
+        <filters xsi:type="filters:TemplateFilter" targets="booleanExpression" targetTemplate="templateAndBooleanExpression">
+          <context>
+            <contextElements xsi:type="controlFlow:IfStatement">
+              <condition xsi:type="expressions:BooleanExpression" uniqueName="templateAndBooleanExpression" booleanOperator="AND"/>
+            </contextElements>
+          </context>
+        </filters>
+        <filters xsi:type="filters:ImplicityOperandFilter" targets="booleanExpression" targetTemplate="closureTemplateAndBooleanExpression" implicityOperand="closureTemplateAndBooleanExpression" operatorExpression="anyInfixExpression">
+          <context>
+            <contextElements xsi:type="controlFlow:IfStatement">
+              <condition xsi:type="expressions:BooleanExpression" uniqueName="anyInfixExpression">
+                <operands xsi:type="expressions:BooleanExpression" uniqueName="closureTemplateAndBooleanExpression" booleanOperator="AND"/>
+              </condition>
+            </contextElements>
+          </context>
+        </filters>
+      </filters>
+    </context>
+  </rule>
+</ccsl:FaultTypeDescription>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ASCII"?>
 <java:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java" name="sampleProject">
   <ownedElements name="sampleProject">
-    <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.0" name="Sample">
+    <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.0" name="Sample" usagesInTypeAccess="//@ownedElements.0/@ownedElements.1/@superClass">
       <modifier visibility="public"/>
-      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0/@initializer">
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo" usages="//@ownedElements.0/@ownedElements.1/@bodyDeclarations.0/@body/@statements.0/@expression //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0/@initializer">
         <modifier visibility="public"/>
         <body originalCompilationUnit="//@compilationUnits.0">
           <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
@@ -25,6 +25,20 @@
         </parameters>
         <returnType type="//@ownedElements.1/@ownedPackages.1/@ownedElements.2"/>
       </bodyDeclarations>
+    </ownedElements>
+    <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.1" name="SampleB">
+      <modifier visibility="public"/>
+      <bodyDeclarations xsi:type="java:ConstructorDeclaration" originalCompilationUnit="//@compilationUnits.1" name="SampleB">
+        <modifier visibility="public"/>
+        <body originalCompilationUnit="//@compilationUnits.1">
+          <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.1">
+            <expression xsi:type="java:SuperMethodInvocation" originalCompilationUnit="//@compilationUnits.1" method="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0">
+              <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.1" escapedValue="&quot;dsadad&quot;"/>
+            </expression>
+          </statements>
+        </body>
+      </bodyDeclarations>
+      <superClass type="//@ownedElements.0/@ownedElements.0"/>
     </ownedElements>
   </ownedElements>
   <ownedElements name="java" proxy="true">
@@ -86,4 +100,5 @@
     <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
     <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.4"/>
   </compilationUnits>
+  <compilationUnits name="SampleB.java" originalFilePath="D:\git-repositories\Coding-Conventions-Specification-Language\faultTypeRuleExecutor-workspace\sampleProject\src\sampleProject\SampleB.java" package="//@ownedElements.0" types="//@ownedElements.0/@ownedElements.1"/>
 </java:Model>

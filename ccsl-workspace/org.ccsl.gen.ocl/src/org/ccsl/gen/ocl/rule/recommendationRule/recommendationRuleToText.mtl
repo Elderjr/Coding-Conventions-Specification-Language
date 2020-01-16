@@ -29,16 +29,16 @@ violations->asSequence()->collect(node: ASTNode |
 ->append('#violations: '.concat(violations->size().toString()))
 [/template]
 
-[template public writeOCLToSelectElements(rule: Rule) /]
+[template private writeOCLToSelectElements(rule: Rule) /]
 
-[template public writeOCLToSelectElements(rule: AtomicRule) post(trim())]
+[template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
 [rule.clearAllContexts() /][rule._context.writeContextConditions(rule.subject) /]
 [rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
 [rule.subject.generatesPostConditionToSelectClosestContext() /]
 [/template]
 
-[template public writeOCLToSelectElements(compositeRule: CompositeRule)]
+[template private writeOCLToSelectElements(compositeRule: CompositeRule)]
 (
 [for (subRules: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]
 [if i = 1]  [subRules.writeOCLToSelectElements() /][else]    [subRules.writeOCLToSelectElements() /])[/if][/for]

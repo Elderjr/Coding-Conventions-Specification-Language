@@ -1,0 +1,75 @@
+[comment encoding = UTF-8 /]
+[module implicityOperandFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+
+[query private getClosureElement(filter: ImplicityOperandFilter, target: Element): Element = 
+  if filter.operatorExpression = target then
+    filter.implicityOperand
+  else
+    filter.operatorExpression
+  endif
+/]
+
+[template public writeImplicityOperandFilterCondition(filter: ImplicityOperandFilter, target: Element)]
+[filter.writeTemplateFilterCondition(target) /] and
+--Closure Condition
+[filter.writeClosureSet() /]
+[filter.writeClosureSetCondition(target) /]
+[/template]
+
+[template private writeClosureSetCondition(filter: ImplicityOperandFilter, target: Element) ? (not getElementsVisited()->includes(filter.getClosureElement(target)))]
+closureSet->exists([filter.getClosureElement(target).getUniqueOclName() /]: ASTNode |
+  [filter.getClosureElement(target).generatesConditions(filter.getClosureElement(target).getUniqueOclName(), true, 'ASTNode') /]
+)
+[/template]
+
+[template private writeClosureSetCondition(filter: ImplicityOperandFilter, target: Element) ? (getElementsVisited()->includes(filter.getClosureElement(target)))]
+closureSet->exists(x: ASTNode | x = [filter.getClosureElement(target).getUniqueOclName() /])
+[/template]
+
+[template private writeClosureSet(f: ImplicityOperandFilter)]
+let closureSet: OrderedSet(ASTNode) = [if f.operatorExpression = f.targetTemplate]
+[f.writeGetClosureSetFromOperatorToOperand(f.operatorExpression) /][else]
+[f.writeGetClosureSetFromOperandToOperator(f.implicityOperand) /][/if] in
+[/template]
+
+[template private writeGetClosureSetFromOperatorToOperand(f: ImplicityOperandFilter, operatorExpression: OperatorExpression)]
+[operatorExpression.writeGetOperands(operatorExpression.getUniqueOclName(), operatorExpression.getDeclaredElementMetaclass()) /]->closure(n: ASTNode |
+  if n.oclIsKindOf(InfixExpression) then
+    n.oclAsType(InfixExpression).operands->extendedOperands(n.oclAsType(InfixExpression).leftOperand)->append(n.oclAsType(InfixExpression).rightOperand)
+  else if n.oclIsKindOf(PrefixExpression) then
+    n.oclAsType(PrefixExpression).operand
+  else if n.oclIsKindOf(ParenthesizedExpression) then
+    n.oclAsType(ParenthesizedExpression).expression
+  else
+    n
+  endif endif
+)->excluding([operatorExpression.getUniqueOclName() /])
+[/template]
+
+[template private writeGetClosureSetFromOperandToOperator(f: ImplicityOperandFilter, operand: Element)]
+[operand.getUniqueOclName() /]->closure(n: ASTNode |
+  let container: OclAny = n.oclContainer() in
+  if container <> null and container.oclIsKindOf(InfixExpression) and
+    container.oclAsType(InfixExpression).extendedOperands
+      ->append(container.oclAsType(InfixExpression).leftOperand)
+      ->append(container.oclAsType(InfixExpression).rightOperand)
+      ->exists(x | x = n) then
+    container
+  else if container.oclIsKindOf(PrefixExpression) and container.oclAsType(PrefixExpression).operand = n then
+    container
+  else if container.oclIsKindOf(ParenthesizedExpression) then
+    container
+  else if n.oclIsKindOf(ParenthesizedExpression) then
+    n.oclAsType(ParenthesizedExpression).expression
+  else
+    null
+  endif endif endif endif
+)->excluding([operand.getUniqueOclName() /])
+[/template]

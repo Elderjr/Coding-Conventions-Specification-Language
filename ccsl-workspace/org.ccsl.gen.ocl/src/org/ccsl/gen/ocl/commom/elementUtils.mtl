@@ -49,10 +49,10 @@ endif
 /]
 
 [query public isClosureRelation(element: Element, field: Element): Boolean = 
-  ClosureFilter.allInstances()->exists(f: ClosureFilter | 
-    (f.targetTemplate = element and f.closureElement = field) or
-    (f.targetTemplate = field and f.closureElement = element)
-  )
+ImplicityOperandFilter.allInstances()->exists(f: ImplicityOperandFilter | 
+  (f.operatorExpression = element and f.implicityOperand = field) or
+  (f.operatorExpression = field and f.implicityOperand = element)
+)
 /]
 
 [query public isMetaclassInMatchingMetaclasses(element: Element, metaclass: String): Boolean = 

@@ -5,13 +5,22 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
+[query public getOperatorExpressionMatchingJavaMetaclasses(operatorExpression: OperatorExpression): OrderedSet(String)=
+  OrderedSet(String){'InfixExpression', 'PrefixExpression'}
+/]
+
 [query public getOperatorExpressionConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
 OrderedSet(String){
+  operatorExpression.writeOperatorExpressionTypecheckCondition(varname, typecheck, metaclass),
   operatorExpression.writeOperandsCondition(varname, metaclass)
 }->select(s | s.isNotEmpty())
 ->addAll(operatorExpression.getStatementConditions(varname, false, metaclass))
 
 /]
+
+[template public writeOperatorExpressionTypecheckCondition(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+([varname /].oclIsKindOf(InfixExpression) or [varname /].oclIsKindOf(PrefixExpression)) 
+[/template]
 
 [template private writeOperandsCondition(booleanExp: OperatorExpression, varname: String, metaclass: String) /]
 

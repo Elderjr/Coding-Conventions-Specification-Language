@@ -7,7 +7,7 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
 [query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
-  OrderedSet(String){'MethodInvocation'}
+  OrderedSet(String){'MethodInvocation', 'SuperMethodInvocation'}
 /]
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -27,14 +27,47 @@ OrderedSet(String) {
 [varname /].oclIsKindOf(MethodInvocation)
 [/template]
 
-[template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('elementAccessed'))]
+[template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
 [methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration') /]
 [/template]
 
-[template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('from'))]
+[template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and not methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
+[methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[/template]
+
+[template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('from') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
 [methodInv.generatesMonovaluedFieldConditions(methodInv.from, varname, 'expression', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
-[template public writeArgsCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.isSet('args'))]
-[methodInv.generatesMultivaluedFieldConditions(methodInv.args, varname, 'tmpArgs', 'arguments', 'ASTNode') /]
+[template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('from') and not methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
+[methodInv.generatesMonovaluedFieldConditions(methodInv.from, varname, 'expression', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+[/template]
+
+[template public writeArgsCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('args') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
+let args: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+)
+[methodInv.generatesSetConditions('args', methodInv.args, 'ASTNode') /]
+[/template]
+
+[template public writeArgsCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('args') and not methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
+let args: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(MethodInvocation) then
+  [varname /].oclAsType(MethodInvocation).arguments
+elseif [varname /].oclIsKindOf(SuperMethodInvocation) then
+  [varname /].oclAsType(SuperMethodInvocation).arguments
+else
+  null
+endif in (not args->oclIsUndefined()) and
+let args: OrderedSet(ASTNode) = args->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+)
+[methodInv.generatesSetConditions('args', methodInv.args, 'ASTNode') /]
 [/template]

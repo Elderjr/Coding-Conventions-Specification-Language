@@ -23,7 +23,13 @@ and
 
 [comment get ancestor ocl expression/]
 [template public writeGetAncestorExpression(element: Element, varname: String, metaclass: String)]
-[varname /].oclContainer()
+[varname /].oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+  container.oclAsType(ASTNode).oclContainer()
+elseif container <> null and container.oclIsKindOf(ASTNode) then
+  container.oclAsType(ASTNode)
+else
+ null
+endif)->last()
 [/template]
 
 [template public writeGetAncestorExpression(var: Variable, varname: String, metaclass: String)]

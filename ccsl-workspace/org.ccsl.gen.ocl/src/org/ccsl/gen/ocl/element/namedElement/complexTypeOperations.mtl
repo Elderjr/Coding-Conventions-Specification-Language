@@ -6,9 +6,8 @@
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
   OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
@@ -75,3 +74,5 @@ endif endif in (not superType.oclIsUndefined()) and
 let [complexType.superTypes->first().getUniqueOclName() /]: ASTNode = superType in
 [complexType.superTypes->first().generatesConditions(complexType.superTypes->first().getUniqueOclName(), true, 'ClassDeclaration') /]
 [/template]
+
+

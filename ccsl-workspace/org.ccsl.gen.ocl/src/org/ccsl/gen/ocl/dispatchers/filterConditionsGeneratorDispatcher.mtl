@@ -6,7 +6,7 @@
 [import org::ccsl::gen::ocl::filters::typedStatementFilterOperations /]
 [import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
-[import org::ccsl::gen::ocl::filters::closureFilterModule /]
+[import org::ccsl::gen::ocl::filters::implicityOperandFilterModule /]
 [import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
 [import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
 
@@ -89,15 +89,15 @@ not (
 [/template]
 
 [template public generatesSpecificFilterConditions(templFilter: TemplateFilter, target: Element)]
-[templFilter.generatesTemplateFilterConditions(target) /]
+[templFilter.writeTemplateFilterCondition(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(closureFilter: ClosureFilter, target: Element)]
-[closureFilter.writeClosureFilterCondition(target) /]
+[template public generatesSpecificFilterConditions(implicityOperandFilter: ImplicityOperandFilter, target: Element)]
+[implicityOperandFilter.writeImplicityOperandFilterCondition(target) /]
 [/template]
 
 [template public generatesSpecificFilterConditions(implicityContainerFilter: ImplicityContainer, target: Element)]
-[implicityContainerFilter.generatesImplicityContainerFilter(target) /]
+
 [/template]
 
 [template public generatesSpecificFilterConditions(sameNameFilter: SameNameFilter, target: Element)]

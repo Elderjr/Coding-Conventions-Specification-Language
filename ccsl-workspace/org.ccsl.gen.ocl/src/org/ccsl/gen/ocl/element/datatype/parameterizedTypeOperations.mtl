@@ -1,10 +1,10 @@
 [comment encoding = UTF-8 /]
 [module parameterizedTypeOperations('http://www.example.org/ccsl')]
+
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-
+[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
 
 [query public getParameterizedTypeMatchingMetaclasses(parameterizedType: ParameterizedType): OrderedSet(String)=
   OrderedSet(String){'ParameterizedType'}
@@ -32,3 +32,4 @@ let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type
 [template public generatesConditionsForType(parameterizedType: ParameterizedType, varname: String) ? (not parameterizedType.type.oclIsUndefined())] 
 [parameterizedType.generatesMonovaluedFieldConditions(parameterizedType.type, varname, 'type.type', 'ASTNode') /]
 [/template]
+

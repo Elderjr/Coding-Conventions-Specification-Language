@@ -105,24 +105,32 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
-            uri="http://www.example.org/ccsl/faultType/action"
-            class="ccsl.faultType.action.ActionPackage"
-            genModel="model/ccsl.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated ccsl -->
-      <package
-            uri="http://www.example.org/ccsl/faultType/strategy"
-            class="ccsl.faultType.strategy.StrategyPackage"
-            genModel="model/ccsl.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated ccsl -->
-      <package
             uri="http://www.example.org/ccsl/context"
             class="ccsl.context.ContextPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultTypeDescription"
+            class="ccsl.faultTypeDescription.FaultTypeDescriptionPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultTypeDescription/action"
+            class="ccsl.faultTypeDescription.action.ActionPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/faultTypeDescription/strategy"
+            class="ccsl.faultTypeDescription.strategy.StrategyPackage"
             genModel="model/ccsl.genmodel"/>
    </extension>
 

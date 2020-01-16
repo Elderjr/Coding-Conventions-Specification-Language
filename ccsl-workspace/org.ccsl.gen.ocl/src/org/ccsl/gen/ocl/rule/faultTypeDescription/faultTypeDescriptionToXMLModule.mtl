@@ -1,0 +1,37 @@
+[comment encoding = UTF-8 /]
+[module faultTypeDescriptionToXMLModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+
+[template public writeXMLFile(faultType: FaultTypeDescription)]
+[file (faultType.name.concat('/').concat(faultType.name).concat('.xml'), false, 'UTF-8')]
+<faultTypeRule>
+  [faultType.writeOclTag() /]
+  [faultType.writeStrategyTag(faultType.strategy) /]
+  [faultType.writeActionsTag() /]
+</faultTypeRule>
+[/file]
+[/template]
+
+[template private writeOclTag(faultType: FaultTypeDescription)]
+<ocl>
+  [faultType.rule._context.writeContextConditions(faultType.rule.subject).replaceAll('<>', '&lt;&gt;') /]
+  [faultType.rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
+  [faultType.rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+</ocl>
+[/template]
+
+[template private writeStrategyTag(fault: FaultTypeDescription, strategy: InjectionStrategy) /]
+[template private writeStrategyTag(fault: FaultTypeDescription, strategy: AllStrategy)]
+<strategy name="All" custom="false" />
+[/template]
+
+[template private writeActionsTag(faultTypeDescription: FaultTypeDescription)]
+<actions>
+  [for(action: InjectionAction | faultTypeDescription.actions)]
+  <action name="[faultTypeDescription.name /]Step[i /]" />
+  [/for]
+</actions>
+[/template]
+

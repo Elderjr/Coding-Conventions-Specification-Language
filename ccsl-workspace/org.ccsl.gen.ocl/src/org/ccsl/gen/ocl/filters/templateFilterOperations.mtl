@@ -3,18 +3,23 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
-[template public generatesTemplateFilterConditions(templ: TemplateFilter, target: Element)]
--- Template Filter
-[templ.writeTemplateLetStatement(target) /]
-[let templCondition: String = templ.template.generatesConditions(templ.template.getUniqueOclName(), true, target.getDeclaredElementMetaclass())]
-[templCondition.writeStr() /]
-[for(Sequence(Integer){1 ..templ._context.getTotalElementsDeclaredInExists()})])[/for][/let]
--- End Template Filter
-[/template]
 
-[template public writeTemplateLetStatement(templ: TemplateFilter, target: Element)]
-let [templ.template.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in
-[/template]
+[query private isTargetTemplateShouldBeChecked(templ: TemplateFilter, target: Element): Boolean =
+  if target.eClass() = templ.targetTemplate.eClass() then
+    let targetMetaclasses: OrderedSet(String) = target.getMatchingJavaMetaclasses() in
+    let targetTemplateMetaclasses: OrderedSet(String) = templ.targetTemplate.getMatchingJavaMetaclasses() in
+    not(targetMetaclasses->intersection(targetTemplateMetaclasses)->size() = targetMetaclasses->size() and
+    targetTemplateMetaclasses->size() = targetMetaclasses->size())
+  else
+    templ.targetTemplate.eClass().eAllSuperTypes->includes(target.eClass())
+  endif
+/]
 
+[template public writeTemplateFilterCondition(templ: TemplateFilter, target: Element)]
+let [templ.targetTemplate.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in
+[templ._context.writeContextConditions(templ.targetTemplate, templ.isTargetTemplateShouldBeChecked(target), target.getDeclaredElementMetaclass()) /]
+[/template]

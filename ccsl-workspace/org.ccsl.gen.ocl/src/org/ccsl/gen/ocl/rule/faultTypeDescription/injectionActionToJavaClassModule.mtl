@@ -1,0 +1,86 @@
+[comment encoding = UTF-8 /]
+[module injectionActionToJavaClassModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+[template private writeJavaClassPath(action: InjectionAction, ruleName: String, step:Integer)]
+[ruleName /]/[ruleName /]Step[step /].java
+[/template]
+
+[template public writeActionJavaClass(action: InjectionAction, root: Element, ruleName: String, step: Integer)]
+[file (action.writeJavaClassPath(ruleName, step), false, 'UTF-8')]
+import org.eclipse.gmt.modisco.java.*;
+import ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction.*;
+
+public class [ruleName /]Step[step /] implements InjectionAction {
+
+  private ASTNode getTarget(ASTNode root) {
+    [action.writeGetTargetBody(root) /]
+  }
+
+  @Override
+  public boolean doAction(ASTNode node) {
+    [action.writeDoActionBody() /]
+  }
+}
+[/file]
+[/template]
+
+[template private writeActionName(action: InjectionAction)][/template]
+[template private writeActionName(action: DeleteAction)]DeleteNodeCommand[/template]
+[template private writeActionName(action: MoveScopeUpAction)]MoveScopeUpAction[/template]
+[template private writeActionName(action: ChangeLiteralValueAction)]ChangeLiteralValueAction[/template]
+[template private writeActionName(action: DeleteRandomStatementAction)]DeleteSmallPartOfTheAlgorithmAction[/template]
+[template private writeActionName(action: ReplaceVariableAccessAction)]ReplaceVariableAccessAction[/template]
+[template private writeActionName(action: ReplaceArithmeticOperatorAction)]InfixOperatorReplaceAction[/template]
+
+
+[template private writeDoActionBody(action: InjectionAction)]
+ASTNode target = getTarget(node);
+if(target != null) {
+  return new [action.writeActionName() /]().doAction(target);
+}
+return false;
+[/template]
+
+[template private writeDoActionBody(action: ReplaceArithmeticOperatorAction)]
+ASTNode target = getTarget(node);
+if(target != null) {
+  java.util.Map<String, String> replacementMap = new java.util.HashMap<>();
+  [for (entry: ArithmeticOperatorMap | action.replaceMap)]
+  replacementMap.put("[entry.oldArithmeticOperator.writeJavaArithmeticOperator() /]","[entry.newArithmeticOperator.writeJavaArithmeticOperator() /]");
+  [/for]
+  new InfixOperatorReplace(replacementMap).doAction(target);
+}
+[/template]
+
+[template private writeJavaArithmeticOperator(op: ArithmeticOperator)]
+[if op = ArithmeticOperator::ADDITION]
++[elseif op = ArithmeticOperator::DIVISION]
+/[elseif op = ArithmeticOperator::MODULUS]
+%[elseif op = ArithmeticOperator::MULTIPLICATION]
+*[elseif op = ArithmeticOperator::SUBTRACTION]
+-[/if]
+[/template]
+
+[template private writeGetTargetBody(action: InjectionAction, container: Element) ? (container = action.target)]
+return root;
+[/template]
+
+[template private writeGetTargetBody(action: InjectionAction, root: Variable) ? (root.getRelationName(action.target) = 'initialValue')]
+if (root instanceof VariableDeclarationFragment) {
+  VariableDeclarationFragment varDecl = (VariableDeclarationFragment) root;
+  int lastFragment = varDecl.getVariablesContainer().getFragments().size() - 1;
+  ASTNode initialValue = varDecl.getVariablesContainer().getFragments().get(lastFragment).getInitializer();
+  return initialValue;
+}
+return null;
+[/template]
+
+[template private writeGetTargetBody(action: InjectionAction, root: VarAssignment) ? (root.getRelationName(action.target) = 'assignment')]
+if (root instanceof Assignment) {
+  Assignment assignment = (Assignment) root;
+  return assignment.getRightHandSide();
+}
+return null;
+[/template]

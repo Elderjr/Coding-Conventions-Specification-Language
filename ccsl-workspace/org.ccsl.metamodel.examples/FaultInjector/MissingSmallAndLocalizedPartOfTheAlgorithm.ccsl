@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultType/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:strategy="http://www.example.org/ccsl/faultType/strategy" name="MissingSmallAndLocalizedPartOfTheAlgorithm">
+  <strategy xsi:type="strategy:AllStrategy"/>
+  <actions xsi:type="action:DeleteRandomStatement" target="//@rule/@context/@contextElements.0"/>
+  <rule subject="//@rule/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="namedElements:Method"/>
+    </context>
+  </rule>
+</ccsl:FaultTypeDescription>
