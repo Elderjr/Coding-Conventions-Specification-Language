@@ -6,11 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.gmt.modisco.java.SingleVariableAccess;
+import org.eclipse.gmt.modisco.java.emf.JavaPackage;
 import org.eclipse.gmt.modisco.java.generation.files.GenerateJavaExtended;
 
 import ccslFaultTypeDescriptionExecutor.FaultTypeDescriptionResult;
 import ccslFaultTypeDescriptionExecutor.facade.FaultTypeDescriptionExecutorFacade;
 import ccslFaultTypeDescriptionExecutor.javaCompiler.StringToJavaCompilationException;
+import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoJavaToWrapper;
 
 public final class Main {
 
@@ -34,7 +38,7 @@ public final class Main {
 	}
 
 	public static void main(String[] args) {
-		String faultType = MISSING_FUNCTION_CALL;
+		String faultType = MISSING_VARIABLE_ASSIGNMENT_USING_AN_EXPRESSION;
 		String faultTypeXmlPath = FAULT_TYPE_BASE_PATH + faultType + "-gen\\" + faultType + ".xml";
 		String testPath = "file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi";
 		String realPath = "file:///D:\\git-repositories\\FaultType-FeasibilityStudy\\gdx-ai-1.8.2\\gdx-ai-1.8.2-original\\gdx-ai-1.8.2_java.xmi";

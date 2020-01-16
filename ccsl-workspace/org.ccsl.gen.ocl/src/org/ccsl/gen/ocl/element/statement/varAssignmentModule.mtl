@@ -3,57 +3,87 @@
 [import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getVariableAssignmentMatchingJavaMetaclasses(varAssignment: VarAssignment): OrderedSet(String)=
-  OrderedSet(String){'Assignment', 'PostfixExpression', 'PrefixExpression'}
+  if not varAssignment.assignment.oclIsUndefined() then
+    OrderedSet(String){'Assignment'}
+  else
+    OrderedSet(String){'Assignment', 'PostfixExpression', 'PrefixExpression'}
+  endif
 /]
 
-[query public getVariableAssignmentConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean): OrderedSet(String) =
- let void: OclVoid = varAssignment.addElementAsVisited() in
+[query public getVariableAssignmentConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = varAssignment.addElementAsVisited() in
+let completeVarname: String = varAssignment.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = varAssignment.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String){
-  varAssignment.generatesVarAssignmentTypecheckConditions(varname, typecheck),
-  varAssignment.generatesConditionForVariable(varname),
-  varAssignment.generatesConditionForAssignment(varname)
+  varAssignment.writeAssignmentTypecheckConditions(varname, typecheck, concreteMetaclass),
+  varAssignment.writeTargetCondition(completeVarname),
+  varAssignment.writeValueCondition(completeVarname, concreteMetaclass)
 }
 ->select(s | s.trim().size() > 0)
 ->addAll(varAssignment.getStatementConditions(varname, false))
 /]
 
-[query public getVariableDeclarationConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-  varAssignment.getVariableAssignmentConditions(varname, typecheck)
-/]
+[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and metaclass = 'Assignment')]
+[varname /].oclIsKindOf(Assignment)
+[/template]
 
-[template public generatesVarAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean) ? (typecheck)]
-let isAssignment:Boolean = if [varname /].oclIsKindOf(Assignment) then
-  true
-else if [varname /].oclIsKindOf(PrefixExpression) and 
+[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and (metaclass = 'PostfixExpression' or metaclass = 'PrefixExpression'))]
+if [varname /].oclIsKindOf(PrefixExpression) and 
   ([varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::INCREMENT or
    [varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::DECREMENT) then
   true
-else if [varname /].oclIsKindOf(PostfixExpression) and 
+elseif [varname /].oclIsKindOf(PostfixExpression) and 
   ([varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::INCREMENT or
    [varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::DECREMENT) then
   true
 else
   false
-endif endif endif in isAssignment
+endif
 [/template]
 
-[template private generatesConditionForVariable(varAssignment: VarAssignment, varname: String) ? ((not varAssignment.variable.oclIsUndefined()))]
+[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+if [varname /].oclIsKindOf(Assignment) then
+  true
+elseif [varname /].oclIsKindOf(PrefixExpression) and 
+  ([varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::INCREMENT or
+   [varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::DECREMENT) then
+  true
+elseif [varname /].oclIsKindOf(PostfixExpression) and 
+  ([varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::INCREMENT or
+   [varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::DECREMENT) then
+  true
+else
+  false
+endif
+[/template]
+
+[template private writeTargetCondition(varAssignment: VarAssignment, varname: String) ? ((not varAssignment.variable.oclIsUndefined()))]
 [let fieldName: String = varAssignment.variable.getFieldName()]
 let [fieldName /]: ASTNode = if [varname /].variable.oclIsKindOf(FieldAccess) then
   [varname /].variable.oclAsType(FieldAccess).field.oclAsType(SingleVariableAccess).variable
 else if [varname /].variable.oclIsKindOf(SingleVariableAccess) then
   [varname /].variable.oclAsType(SingleVariableAccess).variable
 else
-  OclInvalid
+  null
 endif endif in 
 [varAssignment.generatesFieldCondition(varAssignment.variable, fieldName, 'ASTNode') /][/let]
 [/template]
 
-[template private generatesConditionForAssignment(varAssignment: VarAssignment, varname: String) ? (not varAssignment.assignment.oclIsUndefined())] 
-[varAssignment.generatesMonovaluedFieldConditions(varAssignment.assignment, varname, 'rightHandSide', 'ASTNode') /]
+[template private writeValueCondition(varAssignment: VarAssignment, varname: String, metaclass: String) ? (varAssignment.mustWriteConditionFor('assignment') and metaclass = 'Assignment')]
+[let fieldName: String = varAssignment.assignment.getFieldName()]
+let [fieldName /]: ASTNode = [varname /].rightHandSide in
+[varAssignment.assignment.writeClosureToSkipParenthesis(fieldName, 'ASTNode') /]
+[varAssignment.generatesFieldCondition(varAssignment.assignment, fieldName, 'ASTNode') /][/let]  
 [/template]
 
-
+[template private writeValueCondition(varAssignment: VarAssignment, varname: String, metaclass: String) ? (varAssignment.mustWriteConditionFor('assignment') and metaclass <> 'Assignment')]
+if [varname /].oclIsKindOf(Assignment) then
+  [varAssignment.writeValueCondition(varname.concat('.oclAsType(Assignment)'), 'Assignment') /]
+else
+  false
+endif  
+[/template]

@@ -19,6 +19,7 @@
 [/template]
 
 [template private write(faultType: FaultTypeDescription)]
+[faultType.rule.write() /]
 [faultType.writeXMLFile() /]
 [for(action: InjectionAction | faultType.actions)]
 [action.writeActionJavaClass(faultType.rule.subject, faultType.name, i) /]

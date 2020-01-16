@@ -1,0 +1,34 @@
+<faultTypeRule>
+  <ocl>
+    Assignment.allInstances()->select(varAssignmentWithExpression |
+      --AtomicRule Context Conditions
+      varAssignmentWithExpression.oclIsKindOf(Assignment) and
+      let stmt: ASTNode = varAssignmentWithExpression.rightHandSide in
+      let stmt: ASTNode = if stmt &lt;&gt; null then
+        stmt->asOrderedSet()->closure(v: ASTNode | 
+          if v.oclIsKindOf(ParenthesizedExpression) then 
+            v.oclAsType(ParenthesizedExpression).expression 
+          else 
+            v 
+          endif
+        )->last()
+      else
+        null
+      endif in
+      stmt &lt;&gt; null and
+        (stmt.oclIsKindOf(Statement) or stmt.oclIsKindOf(Expression))  and 
+      --Filters Conditions
+      not (
+        let stmtTemplate: ASTNode = stmt in
+        --TemplateFilter Context Conditions
+        (stmtTemplate.oclIsKindOf(StringLiteral) or stmtTemplate.oclIsKindOf(CharacterLiteral) or stmtTemplate.oclIsKindOf(NumberLiteral) or stmtTemplate.oclIsKindOf(BooleanLiteral))
+      )
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingVariableAssignmentUsingAnExpressionStep1" />
+  </actions>
+</faultTypeRule>

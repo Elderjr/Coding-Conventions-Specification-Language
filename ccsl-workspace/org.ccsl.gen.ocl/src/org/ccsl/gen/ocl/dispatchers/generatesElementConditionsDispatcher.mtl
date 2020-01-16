@@ -127,11 +127,8 @@
 [/template]
 
 [comment statements/VarAssignment /]
-[template public generatesConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean)]
-[varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String)]
-[varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck)) /]
+[varAssignment.printConditions(varAssignment.getVariableAssignmentConditions(varname, typecheck, metaclass)) /]
 [/template]
 
 [comment statements/access/VariableAccess /]

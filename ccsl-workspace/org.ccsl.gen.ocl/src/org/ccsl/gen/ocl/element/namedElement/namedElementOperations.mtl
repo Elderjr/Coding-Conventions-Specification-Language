@@ -16,7 +16,7 @@ OrderedSet(String){
 [varname /].name = '[namedElement.name /]'
 [/template]
 
-[template public generatesConditionNamedElementForName(javaClass: JavaClass, varname: String, metaclass: String) ? ( (not javaClass.name.oclIsUndefined()) and (not javaClass.isMetaclassInMatchingMetaclasses(metaclass)) and  (javaClass.name.contains('.')))]
+[template public generatesConditionNamedElementForName(javaClazz: NamedElement, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (not javaClazz.isMetaclassInMatchingMetaclasses(metaclass)) and  (javaClazz.name.contains('.')))]
 let className: String = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).name
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
@@ -33,13 +33,13 @@ else
 endif endif in (not className.oclIsUndefined()) and
 classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat(className) = '[javaClass.name /]'
+).concat(className) = '[javaClazz.name /]'
 [/template]
 
-[template public generatesConditionNamedElementForName(javaClass: JavaClass, varname: String, metaclass: String) ? ( (not javaClass.name.oclIsUndefined()) and (javaClass.name.contains('.')) and metaclass = 'ClassDeclaration')]
+[template public generatesConditionNamedElementForName(javaClazz: JavaClass, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (javaClazz.name.contains('.')) and metaclass = 'ClassDeclaration')]
 [varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
-).concat([varname /].name) = '[javaClass.name /]'
+).concat([varname /].name) = '[javaClazz.name /]'
 [/template]
 
 [template public generatesConditionNamedElementForName(interface: JavaInterface, varname: String, metaclass: String) ? ( (not interface.name.oclIsUndefined()) and (interface.name.contains('.')) )]

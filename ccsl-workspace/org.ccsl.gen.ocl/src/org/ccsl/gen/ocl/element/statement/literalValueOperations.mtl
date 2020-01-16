@@ -38,7 +38,7 @@ else if literal.isBooleanLiteral() then
 else if literal.isNullLiteral() then
   OrderedSet(String){'NullLiteral'}
 else
-  OrderedSet(String){'StringLiteral', 'CharacterLiteral', 'NumberLiteral', 'BooleanLiteral'}
+  OrderedSet(String){'StringLiteral', 'CharacterLiteral', 'NumberLiteral', 'BooleanLiteral', 'NullLiteral'}
 endif endif endif endif endif
 /]
 

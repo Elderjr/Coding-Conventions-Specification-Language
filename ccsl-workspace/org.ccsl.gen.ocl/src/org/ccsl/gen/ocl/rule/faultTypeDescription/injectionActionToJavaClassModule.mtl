@@ -71,8 +71,10 @@ return root;
 if (root instanceof VariableDeclarationFragment) {
   VariableDeclarationFragment varDecl = (VariableDeclarationFragment) root;
   int lastFragment = varDecl.getVariablesContainer().getFragments().size() - 1;
-  ASTNode initialValue = varDecl.getVariablesContainer().getFragments().get(lastFragment).getInitializer();
-  return initialValue;
+  if(lastFragment >= 0) {
+    ASTNode initialValue = varDecl.getVariablesContainer().getFragments().get(lastFragment).getInitializer();
+    return initialValue;
+  }
 }
 return null;
 [/template]

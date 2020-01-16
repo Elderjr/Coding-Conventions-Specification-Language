@@ -5,10 +5,11 @@ import java.util.Set;
 
 public class Sample {
 
+	public int a = 5;
 	
-	public String foo(String str) {
-		String aux = foo(str);
-		return "";
+	public void foo() {
+		int a = 5;
+		a = ((((((2))))));
 	}
  
 }

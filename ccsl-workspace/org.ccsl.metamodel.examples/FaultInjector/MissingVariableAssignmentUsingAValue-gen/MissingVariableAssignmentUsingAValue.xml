@@ -1,0 +1,28 @@
+<faultTypeRule>
+  <ocl>
+    Assignment.allInstances()->select(varAssignmentWithLiteral |
+      --AtomicRule Context Conditions
+      varAssignmentWithLiteral.oclIsKindOf(Assignment) and
+      let lit: ASTNode = varAssignmentWithLiteral.rightHandSide in
+      let lit: ASTNode = if lit &lt;&gt; null then
+        lit->asOrderedSet()->closure(v: ASTNode | 
+          if v.oclIsKindOf(ParenthesizedExpression) then 
+            v.oclAsType(ParenthesizedExpression).expression 
+          else 
+            v 
+          endif
+        )->last()
+      else
+        null
+      endif in
+      lit &lt;&gt; null and
+        (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral))
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingVariableAssignmentUsingAValueStep1" />
+  </actions>
+</faultTypeRule>

@@ -74,3 +74,17 @@ ImplicityOperandFilter.allInstances()->exists(f: ImplicityOperandFilter |
     metaclass
   endif 
 /]
+
+[template public writeClosureToSkipParenthesis(element: Element, elementVarname: String, metaclass: String) ? (element <> null)]
+let [elementVarname /]: [metaclass /] = if [elementVarname /] <> null then
+  [elementVarname /]->asOrderedSet()->closure(v: ASTNode | 
+    if v.oclIsKindOf(ParenthesizedExpression) then 
+      v.oclAsType(ParenthesizedExpression).expression 
+    else 
+      v 
+    endif
+  )->last()
+else
+  null
+endif in
+[/template]

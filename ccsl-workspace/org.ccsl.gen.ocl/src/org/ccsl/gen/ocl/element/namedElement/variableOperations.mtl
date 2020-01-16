@@ -67,6 +67,7 @@ let [var.initialValue.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(Va
 else
   null
 endif in
+[var.initialValue.writeClosureToSkipParenthesis(var.initialValue.getFieldName(), 'ASTNode') /]
 [var.generatesFieldCondition(var.initialValue, var.initialValue.getFieldName(), 'ASTNode') /]
 
 [/template]
@@ -77,5 +78,6 @@ let [var.initialValue.getFieldName() /]: ASTNode = if not [varname /].variablesC
 else
   null
 endif in
+[var.initialValue.writeClosureToSkipParenthesis(var.initialValue.getFieldName(), 'ASTNode') /]
 [var.generatesFieldCondition(var.initialValue, var.initialValue.getFieldName(), 'ASTNode') /]
 [/template]

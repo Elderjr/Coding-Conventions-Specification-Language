@@ -7,18 +7,22 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.gmt.modisco.java.ASTNode;
+import org.eclipse.gmt.modisco.java.ParenthesizedExpression;
 
 public class ActionUtils {
 
-	public static void setValue(ASTNode nodeField, ASTNode newNodeField) {
+	public static boolean setValue(ASTNode nodeField, ASTNode newNodeField) {
 		if (nodeField.eContainer() != null && nodeField.eContainer() instanceof ASTNode) {
-			setValue((ASTNode) nodeField.eContainer(), nodeField, newNodeField);
+			return setValue((ASTNode) nodeField.eContainer(), nodeField, newNodeField);
 		}
+		return false;
 	}
 
-	public static void setValue(ASTNode container, ASTNode nodeField, ASTNode newNodeField) {
+	public static boolean setValue(ASTNode container, ASTNode nodeField, ASTNode newNodeField) {
+		boolean setWithSuccess = false;
 		for (Field field : getAllClassFields(container.getClass())) {
 			if (Modifier.isStatic(field.getModifiers())) {
 				continue;
@@ -31,10 +35,12 @@ public class ActionUtils {
 				if (fieldValue == nodeField) {
 					// Monovalued
 					field.set(container, newNodeField);
+					setWithSuccess = true;
 				} else if (fieldValue instanceof Collection) {
 					// Multivalued
 					EObjectContainmentEList<ASTNode> values = (EObjectContainmentEList<ASTNode>) fieldValue;
 					if (values.contains(nodeField)) {
+						setWithSuccess = true;
 						int fieldIndex = values.indexOf(nodeField);
 						values.remove(nodeField);
 						values.add(fieldIndex, newNodeField);
@@ -42,8 +48,10 @@ public class ActionUtils {
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				System.err.println("Error in accessing field " + field.getName() + ": " + e.getMessage());
+				setWithSuccess = false;
 			}
 		}
+		return setWithSuccess;
 	}
 
 	private static List<Field> getAllClassFieldsRec(List<Field> fields, Class<?> type) {
@@ -58,5 +66,18 @@ public class ActionUtils {
 		List<Field> fields = new LinkedList<>();
 		getAllClassFieldsRec(fields, type);
 		return fields;
+	}
+	
+	public static RecursiveTreeResult getASTNodeContainerSkippingParentheses(ASTNode node) {
+		EObject container = node.eContainer();
+		EObject previousNode = node;
+		while(container != null && container instanceof ParenthesizedExpression) {
+			previousNode = container;
+			container = container.eContainer();
+		}
+		if(container != null && container instanceof ASTNode) {
+			return new RecursiveTreeResult((ASTNode) container, (ASTNode) previousNode);
+		}
+		return null;
 	}
 }

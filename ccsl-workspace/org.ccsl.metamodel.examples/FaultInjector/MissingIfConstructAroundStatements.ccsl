@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultType/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:faultType="http://www.example.org/ccsl/faultType" xmlns:strategy="http://www.example.org/ccsl/faultType/strategy" name="MissingIfConstructAroundStatements">
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultTypeDescription/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:faultType="http://www.example.org/ccsl/faultTypeDescription" xmlns:strategy="http://www.example.org/ccsl/faultTypeDescription/strategy" name="MissingIfConstructAroundStatements">
   <strategy xsi:type="strategy:AllStrategy"/>
   <actions xsi:type="action:MoveScopeUpAction" target="stmtToIncreaseScope"/>
   <actions xsi:type="action:DeleteAction" target="ifWithoutElse"/>
