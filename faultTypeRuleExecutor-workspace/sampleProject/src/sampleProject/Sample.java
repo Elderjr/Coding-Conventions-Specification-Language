@@ -2,15 +2,18 @@ package sampleProject;
 
 public class Sample {
 
+	private int a;
+	
 	public void foo() {
-		int a;
-		for (int i = 0, n = 3; i < n; i++) {
-			a = 4;
-			if (a == 5) {
-				System.out.println("a");
-				break;
-			}
+		bar(5);
+		for(int i = 0; i < 5; i++) {
+			bar(a);
 		}
+	}
+	
+	public void bar(int z) {
+		int w = 0;
+		foo();
 	}
 
 }

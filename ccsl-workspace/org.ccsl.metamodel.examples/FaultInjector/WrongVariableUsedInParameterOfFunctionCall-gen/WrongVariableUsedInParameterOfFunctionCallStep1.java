@@ -1,7 +1,7 @@
 import org.eclipse.gmt.modisco.java.*;
 import ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction.*;
 
-public class MissingIfConstructPlusStatementsStep1 implements InjectionAction {
+public class WrongVariableUsedInParameterOfFunctionCallStep1 implements InjectionAction {
 
   private ASTNode getTarget(ASTNode root) {
     return root;
@@ -11,7 +11,7 @@ public class MissingIfConstructPlusStatementsStep1 implements InjectionAction {
   public boolean doAction(ASTNode node) {
     ASTNode target = getTarget(node);
     if(target != null) {
-      return new DeleteNodeCommand().doAction(target);
+      return new ReplaceVariableAccessAction().doAction(target);
     }
     return false;
   }

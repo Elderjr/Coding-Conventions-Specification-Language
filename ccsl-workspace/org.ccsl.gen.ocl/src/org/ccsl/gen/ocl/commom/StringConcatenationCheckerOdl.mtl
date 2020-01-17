@@ -1,0 +1,74 @@
+[comment encoding = UTF-8 /]
+[module StringConcatenationCheckerOdl('http://www.example.org/ccsl')]
+
+
+[template public writeStringConcatenationChecker(obj: OclAny, varname: String)]
+
+ 
+[/template]
+
+
+[template private writeDeepCollector(obj: OclAny, varname: String)]
+[varname /]->asOrderedSet()->closure(v: ASTNode |
+  if v.oclIsKindOf(InfixExpression) then
+  if v.oclIsKindOf(ArrayAccess) then
+  if v.oclIsKindOf(Assignment) then
+  if v.oclIsKindOf(MethodInvocation) then
+  if v.oclIsKindOf(SuperMethodInvocation) then
+  if v.oclIsKindOf(SingleVariableAccess) then
+  if v.oclIsKindOf(FieldAccess) then
+  if v.oclIsKindOf(ClassInstanceCreation) then
+  if v.oclIsKindOf(StringLiteral) then
+)
+[/template]
+
+[template private writeGetArrayAccessType(obj: OclAny, varname: String)]
+let arrayAccessClosureSet: OrderedSet(ASTNode) = [varname /]->asOrderedSet()->closure(v: ASTNode |
+  if v.oclIsKindOf(ArrayAccess) and v.oclAsType(ArrayAccess).array.oclIsKindOf(ArrayAccess) then
+    v.oclAsType(ArrayAccess).array
+  elseif v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  elseif v.oclIsKindOf(Assignment) then
+    v.oclAsType(Assignment).left
+  elseif v.oclIsKindOf(FieldAccess) or v.oclIsKindOf(SingleVariableAccess) or 
+    v.oclIsKindOf(MethodInvocation) or v.oclIsKindOf(SuperMethodInvocation) or 
+    v.oclIsKindOf(Assignment) then
+    v
+  else
+    v
+  endif
+) in
+let arrayAccessesCount:Integer = arrayAccessClosureSet->select(v:ASTNode | v.oclIsKindOf(ArrayAccess)->size() in
+let baseNode: ASTNode = arrayAccessClosureSet->last() in
+if v.oclIsKindOf(Assignment) then
+  if v.oclIsKindOf(MethodInvocation) then
+  if v.oclIsKindOf(SuperMethodInvocation) then
+  if v.oclIsKindOf(SingleVariableAccess) then
+  if v.oclIsKindOf(FieldAccess) then
+[/template]
+
+[template private writeGetClassInstanceCreationType(obj: OclAny, varname: String)]
+[varname /].type.type
+[/template]
+
+[template private writeGetMethodInvocationType(obj: OclAny, varname: String)]
+if [varname /].method.oclIsKindOf(MethodDeclaration) and [varname /].method.oclAsType(MethodInvocation).returnType <> null then
+  [varname /].method.oclAsType(MethodDeclaration).returnType.type.type
+else
+  null
+endif
+[/template]
+
+[template private writeGetFieldAccessType(obj: OclAny, varname: String)]
+[obj.writeGetSingleVariableAccessType(varname.concat('.field')) /]
+[/template]
+
+[template private writeGetSingleVariableAccessType(obj: OclAny, varname: String)]
+if [varname /].variable.oclIsKindOf(SingleVariableDeclaration) then
+  [varname /].variable.oclAsType(SingleVariableDeclaration).type.type
+elseif [varname /].variable.oclIsKindOf(VariableDeclarationFragment) then
+  [varname /].variable.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else
+  null
+endif
+[/template]

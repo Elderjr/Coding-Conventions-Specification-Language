@@ -1,0 +1,126 @@
+<faultTypeRule>
+  <ocl>
+    InfixExpression.allInstances()->union(PrefixExpression.allInstances())->select(booleanExpression |
+      --AtomicRule Context Conditions
+      if booleanExpression.oclIsKindOf(InfixExpression) then
+        let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+          InfixExpressionKind::LESS,
+          InfixExpressionKind::GREATER,
+          InfixExpressionKind::LESS_EQUALS,
+          InfixExpressionKind::GREATER_EQUALS,
+          InfixExpressionKind::EQUALS,
+          InfixExpressionKind::NOT_EQUALS,
+          InfixExpressionKind::CONDITIONAL_AND,
+          InfixExpressionKind::CONDITIONAL_OR
+        } in booleanInfixExpressionOperators->exists(op | op = booleanExpression.oclAsType(InfixExpression).operator)
+      else if booleanExpression.oclIsKindOf(PrefixExpression) then
+        booleanExpression.oclAsType(PrefixExpression).operator = PrefixExpressionKind::NOT
+      else
+        false
+      endif endif and
+      let operands: OrderedSet(ASTNode) =  if booleanExpression.oclIsKindOf(PrefixExpression) then
+        booleanExpression.oclAsType(PrefixExpression).operand->asOrderedSet()
+      else if booleanExpression.oclIsKindOf(InfixExpression) then
+        booleanExpression.oclAsType(InfixExpression).extendedOperands->append(booleanExpression.oclAsType(InfixExpression).leftOperand)->append(booleanExpression.oclAsType(InfixExpression).rightOperand)
+      else
+        null
+      endif endif in operands &lt;&gt; null and
+      operands->exists(stmt1 |  
+        stmt1 &lt;&gt; null and
+          (stmt1.oclIsKindOf(Statement) or stmt1.oclIsKindOf(Expression))  and 
+      --Filters Conditions
+      (
+        -- Composite Filter (OR)
+        (
+          let templateAndBooleanExpression: ASTNode = booleanExpression in
+          --TemplateFilter Context Conditions
+          templateAndBooleanExpression.oclIsKindOf(InfixExpression) and
+          templateAndBooleanExpression.oclAsType(InfixExpression).operator = InfixExpressionKind::CONDITIONAL_AND and
+          let ifStmt2 : OclAny = templateAndBooleanExpression.oclAsType(InfixExpression).oclContainer()->asOrderedSet()->closure(container: OclAny | if container &lt;&gt; null and container.oclIsKindOf(ParenthesizedExpression) then
+            container.oclAsType(ASTNode).oclContainer()
+          elseif container &lt;&gt; null and container.oclIsKindOf(ASTNode) then
+            container.oclAsType(ASTNode)
+          else
+           null
+          endif)->last() in ifStmt2 &lt;&gt; null and
+          ifStmt2.oclIsKindOf(IfStatement) and
+          let stmtTmp: ASTNode = ifStmt2.oclAsType(IfStatement).expression->asOrderedSet()->closure(cond: ASTNode | 
+            if cond.oclIsKindOf(ParenthesizedExpression) then 
+              cond.oclAsType(ParenthesizedExpression).expression 
+            else 
+              cond 
+            endif
+          )->last() in
+          stmtTmp = templateAndBooleanExpression
+        ) or 
+        (
+          let closureTemplateAndBooleanExpression: ASTNode = booleanExpression in
+          --ImplicityOperandFilter Context Conditions
+          closureTemplateAndBooleanExpression.oclIsKindOf(InfixExpression) and
+          closureTemplateAndBooleanExpression.oclAsType(InfixExpression).operator = InfixExpressionKind::CONDITIONAL_AND and
+          --Closure Condition
+          let closureSet: OrderedSet(ASTNode) = closureTemplateAndBooleanExpression->closure(n: ASTNode |
+            let container: OclAny = n.oclContainer() in
+            if container &lt;&gt; null and container.oclIsKindOf(InfixExpression) and
+              container.oclAsType(InfixExpression).extendedOperands
+                ->append(container.oclAsType(InfixExpression).leftOperand)
+                ->append(container.oclAsType(InfixExpression).rightOperand)
+                ->exists(x | x = n) then
+              container
+            else if container.oclIsKindOf(PrefixExpression) and container.oclAsType(PrefixExpression).operand = n then
+              container
+            else if container.oclIsKindOf(ParenthesizedExpression) then
+              container
+            else if n.oclIsKindOf(ParenthesizedExpression) then
+              n.oclAsType(ParenthesizedExpression).expression
+            else
+              null
+            endif endif endif endif
+          )->excluding(closureTemplateAndBooleanExpression) in
+          closureSet->exists(anyInfixExpression: ASTNode |
+            if anyInfixExpression.oclIsKindOf(InfixExpression) then
+              let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+                InfixExpressionKind::LESS,
+                InfixExpressionKind::GREATER,
+                InfixExpressionKind::LESS_EQUALS,
+                InfixExpressionKind::GREATER_EQUALS,
+                InfixExpressionKind::EQUALS,
+                InfixExpressionKind::NOT_EQUALS,
+                InfixExpressionKind::CONDITIONAL_AND,
+                InfixExpressionKind::CONDITIONAL_OR
+              } in booleanInfixExpressionOperators->exists(op | op = anyInfixExpression.oclAsType(InfixExpression).operator)
+            else if anyInfixExpression.oclIsKindOf(PrefixExpression) then
+              anyInfixExpression.oclAsType(PrefixExpression).operator = PrefixExpressionKind::NOT
+            else
+              false
+            endif endif and
+            let ifStmt3 : OclAny = anyInfixExpression.oclContainer()->asOrderedSet()->closure(container: OclAny | if container &lt;&gt; null and container.oclIsKindOf(ParenthesizedExpression) then
+              container.oclAsType(ASTNode).oclContainer()
+            elseif container &lt;&gt; null and container.oclIsKindOf(ASTNode) then
+              container.oclAsType(ASTNode)
+            else
+             null
+            endif)->last() in ifStmt3 &lt;&gt; null and
+            ifStmt3.oclIsKindOf(IfStatement) and
+            let stmtTmp: ASTNode = ifStmt3.oclAsType(IfStatement).expression->asOrderedSet()->closure(cond: ASTNode | 
+              if cond.oclIsKindOf(ParenthesizedExpression) then 
+                cond.oclAsType(ParenthesizedExpression).expression 
+              else 
+                cond 
+              endif
+            )->last() in
+            stmtTmp = anyInfixExpression
+          )
+        )
+        -- End Composite Filter (OR)
+      ) 
+      )
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingANDExpressionUsedAsBranchConditionStep1" />
+  </actions>
+</faultTypeRule>

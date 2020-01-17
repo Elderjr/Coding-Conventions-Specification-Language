@@ -8388,9 +8388,28 @@
     </ownedAnnotationEntries>
     <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_jGn0wDf5EeqHAae6Rvy45g" source="GMF_DIAGRAMS">
       <data xmi:type="notation:Diagram" xmi:id="_jGn0wTf5EeqHAae6Rvy45g" type="Sirius" element="_jGc1oDf5EeqHAae6Rvy45g" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_Mp4zYDk1Eeq4Zq78npRpwA" type="2001" element="_MpjcMDk1Eeq4Zq78npRpwA">
+          <children xmi:type="notation:Node" xmi:id="_Mp_hEDk1Eeq4Zq78npRpwA" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_Mp_hETk1Eeq4Zq78npRpwA" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_Mwa5MDk1Eeq4Zq78npRpwA" type="3005" element="_Mpl4cDk1Eeq4Zq78npRpwA">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_MwbgQDk1Eeq4Zq78npRpwA" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MwbgQTk1Eeq4Zq78npRpwA"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_Mp4zYTk1Eeq4Zq78npRpwA" fontName="Segoe UI" fontHeight="8"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mp4zYjk1Eeq4Zq78npRpwA" width="500" height="90"/>
+        </children>
         <styles xmi:type="notation:DiagramStyle" xmi:id="_jGn0wjf5EeqHAae6Rvy45g"/>
       </data>
     </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_MpjcMDk1Eeq4Zq78npRpwA" width="-1" height="-1">
+      <target xmi:type="ecore:EPackage" href="ccsl.ecore#//faultTypeDescription/action"/>
+      <semanticElements xmi:type="ecore:EPackage" href="ccsl.ecore#//faultTypeDescription/action"/>
+      <ownedStyle xmi:type="diagram:WorkspaceImage" uid="_Mpl4cDk1Eeq4Zq78npRpwA" showIcon="false" labelPosition="node" workspacePath="/org.eclipse.emf.ecoretools.design/icons/full/back/empty.svg">
+        <description xmi:type="style:WorkspaceImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@nodeMappings[name='Empty%20Diagram']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@nodeMappings[name='Empty%20Diagram']"/>
+    </ownedDiagramElements>
     <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
     <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_jGeDwDf5EeqHAae6Rvy45g"/>
     <activatedLayers xmi:type="description_1:Layer" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer"/>

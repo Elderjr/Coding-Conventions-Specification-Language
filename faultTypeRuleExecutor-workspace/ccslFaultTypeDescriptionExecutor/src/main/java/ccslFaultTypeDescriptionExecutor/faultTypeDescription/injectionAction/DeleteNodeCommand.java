@@ -1,11 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction;
 
+import java.util.List;
+
 import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.Block;
 import org.eclipse.gmt.modisco.java.DoStatement;
 import org.eclipse.gmt.modisco.java.EnhancedForStatement;
+import org.eclipse.gmt.modisco.java.Expression;
 import org.eclipse.gmt.modisco.java.ForStatement;
 import org.eclipse.gmt.modisco.java.IfStatement;
+import org.eclipse.gmt.modisco.java.InfixExpression;
 import org.eclipse.gmt.modisco.java.LabeledStatement;
 import org.eclipse.gmt.modisco.java.SwitchStatement;
 import org.eclipse.gmt.modisco.java.VariableDeclarationFragment;
@@ -13,6 +17,7 @@ import org.eclipse.gmt.modisco.java.WhileStatement;
 import org.eclipse.gmt.modisco.java.emf.JavaPackage;
 
 import ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction.deleteNodeHelpers.DeleteIfContent;
+import ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction.deleteNodeHelpers.DeleteInfixContent;
 import ccslFaultTypeDescriptionExecutor.modiscoWrapper.*;
 
 public class DeleteNodeCommand implements InjectionAction, ModiscoWrapperVisitor {
@@ -347,9 +352,8 @@ public class DeleteNodeCommand implements InjectionAction, ModiscoWrapperVisitor
 	}
 
 	@Override
-	public void visit(InfixExpressionWrapper infixExpression) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void visit(InfixExpressionWrapper infixExpressionWrapper) {
+		hasNodeBeenDeleted = DeleteInfixContent.deleteInfixExpressionContent((InfixExpression) infixExpressionWrapper.getASTNode(), fieldToBeDeleted);
 	}
 
 	@Override

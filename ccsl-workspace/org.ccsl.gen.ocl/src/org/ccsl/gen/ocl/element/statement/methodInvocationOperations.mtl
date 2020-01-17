@@ -24,7 +24,7 @@ OrderedSet(String) {
 /]
 
 [template public writeMethodInvocationTypecheckCondition(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
-[varname /].oclIsKindOf(MethodInvocation)
+([varname /].oclIsKindOf(MethodInvocation) or [varname /].oclIsKindOf(SuperMethodInvocation))
 [/template]
 
 [template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
@@ -50,7 +50,7 @@ let args: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
   else
     v
   endif)
-)
+) in
 [methodInv.generatesSetConditions('args', methodInv.args, 'ASTNode') /]
 [/template]
 
@@ -68,6 +68,6 @@ let args: OrderedSet(ASTNode) = args->collect(arg: ASTNode |
   else
     v
   endif)
-)
+) in
 [methodInv.generatesSetConditions('args', methodInv.args, 'ASTNode') /]
 [/template]

@@ -4,6 +4,7 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::StringConcatenationChecker /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getArithmeticExpressionMatchingJavaMetaclasses(arithmeticExpression: ArithmeticExpression): OrderedSet(String)=
@@ -30,7 +31,10 @@ if [varname /].oclIsKindOf(InfixExpression) then
     InfixExpressionKind::PLUS,
     InfixExpressionKind::MINUS,
     InfixExpressionKind::REMAINDER
-  } in arithmeticInfixExpressionOperators->exists(op | op = [varname /].oclAsType(InfixExpression).operator)
+  } in arithmeticInfixExpressionOperators->exists(op | op = [varname /].oclAsType(InfixExpression).operator) and
+  not(
+    [arithmeticExpression.writeStringConcatenationChecker(varname) /]
+  )
 elseif [varname /].oclIsKindOf(PrefixExpression) then
   let arithmeticPrefixExpressionOperators: Set(PrefixExpressionKind) = Set(PrefixExpressionKind){
     PrefixExpressionKind::PLUS,

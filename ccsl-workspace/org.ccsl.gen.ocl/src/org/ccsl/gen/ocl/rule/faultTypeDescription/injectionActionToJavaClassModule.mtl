@@ -50,8 +50,9 @@ if(target != null) {
   [for (entry: ArithmeticOperatorMap | action.replaceMap)]
   replacementMap.put("[entry.oldArithmeticOperator.writeJavaArithmeticOperator() /]","[entry.newArithmeticOperator.writeJavaArithmeticOperator() /]");
   [/for]
-  new InfixOperatorReplace(replacementMap).doAction(target);
+  return new InfixOperatorReplaceAction(replacementMap).doAction(target);
 }
+return false;
 [/template]
 
 [template private writeJavaArithmeticOperator(op: ArithmeticOperator)]
@@ -99,6 +100,22 @@ return null;
 if (root instanceof IfStatement) {
   IfStatement ifStmt = (IfStatement) root;
   return ifStmt.getElseStatement();
+}
+return null;
+[/template]
+
+[template private writeGetTargetBody(action: InjectionAction, root: OperatorExpression) ? (root.getRelationName(action.target) = 'operands')]
+if (root instanceof PrefixExpression) {
+  PrefixExpression prefixExpression = (PrefixExpression) root;
+  return prefixExpression.getOperand();
+} else if (root instanceof InfixExpression) {
+  InfixExpression infixExpression = (InfixExpression) root;
+  int extendedOperandsSize = infixExpression.getExtendedOperands().size();
+  if(extendedOperandsSize > 0) {
+    return infixExpression.getExtendedOperands().get(extendedOperandsSize - 1);
+  } else {
+    return infixExpression.getRightOperand();
+  }
 }
 return null;
 [/template]

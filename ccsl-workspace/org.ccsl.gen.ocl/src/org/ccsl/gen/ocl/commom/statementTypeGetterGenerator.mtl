@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module statementTypeGetterGenerator('http://www.example.org/ccsl')/]
-[import org::ccsl::gen::ocl::commom::infixExpressionInfer /]
+[import org::ccsl::gen::ocl::commom::StringConcatenationCheckerOdl /]
 
 [template public generatesStatementTypeGetter(any : OclAny, varname: String, statementTypeLetName: String)]
 --Statement Type Getter

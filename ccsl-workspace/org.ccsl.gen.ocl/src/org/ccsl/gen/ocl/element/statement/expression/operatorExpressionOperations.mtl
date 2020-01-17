@@ -26,9 +26,9 @@ OrderedSet(String){
 
 [template public writeGetOperands(opExpression: OperatorExpression, varname: String, metaclass: String)]
 if [varname /].oclIsKindOf(PrefixExpression) then
-  [varname /].oclAsType(PrefixExpression).operand
+  [varname /].oclAsType(PrefixExpression).operand->asOrderedSet()
 else if [varname /].oclIsKindOf(InfixExpression) then
-  [varname /].oclAsType(InfixExpression).extendedOperands->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression.rightOperand))
+  [varname /].oclAsType(InfixExpression).extendedOperands->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
 else
   null
 endif endif

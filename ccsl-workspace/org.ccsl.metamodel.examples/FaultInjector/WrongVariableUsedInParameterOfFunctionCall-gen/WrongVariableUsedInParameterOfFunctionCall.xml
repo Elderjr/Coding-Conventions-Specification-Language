@@ -1,0 +1,36 @@
+<faultTypeRule>
+  <ocl>
+    SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->select(varAccess1 |
+      --AtomicRule Context Conditions
+      let methodInv2 : OclAny = varAccess1.oclContainer()->asOrderedSet()->closure(container: OclAny | if container &lt;&gt; null and container.oclIsKindOf(ParenthesizedExpression) then
+        container.oclAsType(ASTNode).oclContainer()
+      elseif container &lt;&gt; null and container.oclIsKindOf(ASTNode) then
+        container.oclAsType(ASTNode)
+      else
+       null
+      endif)->last() in methodInv2 &lt;&gt; null and
+      (methodInv2.oclIsKindOf(MethodInvocation) or methodInv2.oclIsKindOf(SuperMethodInvocation)) and
+      let args: OrderedSet(ASTNode) = if methodInv2.oclIsKindOf(MethodInvocation) then
+        methodInv2.oclAsType(MethodInvocation).arguments
+      elseif methodInv2.oclIsKindOf(SuperMethodInvocation) then
+        methodInv2.oclAsType(SuperMethodInvocation).arguments
+      else
+        null
+      endif in (not args->oclIsUndefined()) and
+      let args: OrderedSet(ASTNode) = args->collect(arg: ASTNode |
+        arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+          v.oclAsType(ParenthesizedExpression).expression
+        else
+          v
+        endif)
+      ) in
+      args->exists(varAccessTmp | varAccessTmp = varAccess1)
+    )
+    ->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="WrongVariableUsedInParameterOfFunctionCallStep1" />
+  </actions>
+</faultTypeRule>

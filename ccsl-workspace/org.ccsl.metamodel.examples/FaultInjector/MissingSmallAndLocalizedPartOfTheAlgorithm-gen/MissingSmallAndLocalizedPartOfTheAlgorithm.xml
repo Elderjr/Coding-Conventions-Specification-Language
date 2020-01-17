@@ -1,0 +1,13 @@
+<faultTypeRule>
+  <ocl>
+    MethodDeclaration.allInstances()->select(method1 |
+      true
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingSmallAndLocalizedPartOfTheAlgorithmStep1" />
+  </actions>
+</faultTypeRule>

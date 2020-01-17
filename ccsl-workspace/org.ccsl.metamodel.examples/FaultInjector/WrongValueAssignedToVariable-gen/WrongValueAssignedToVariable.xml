@@ -1,0 +1,28 @@
+<faultTypeRule>
+  <ocl>
+    Assignment.allInstances()->select(varAssignmentWithLiteral |
+      --AtomicRule Context Conditions
+      varAssignmentWithLiteral.oclIsKindOf(Assignment) and
+      let litToChange: ASTNode = varAssignmentWithLiteral.rightHandSide in
+      let litToChange: ASTNode = if litToChange &lt;&gt; null then
+        litToChange->asOrderedSet()->closure(v: ASTNode | 
+          if v.oclIsKindOf(ParenthesizedExpression) then 
+            v.oclAsType(ParenthesizedExpression).expression 
+          else 
+            v 
+          endif
+        )->last()
+      else
+        null
+      endif in
+      litToChange &lt;&gt; null and
+        (litToChange.oclIsKindOf(StringLiteral) or litToChange.oclIsKindOf(CharacterLiteral) or litToChange.oclIsKindOf(NumberLiteral) or litToChange.oclIsKindOf(BooleanLiteral) or litToChange.oclIsKindOf(NullLiteral))
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="WrongValueAssignedToVariableStep1" />
+  </actions>
+</faultTypeRule>

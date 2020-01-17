@@ -34,12 +34,12 @@ public class FaultTypeDescriptionExecutor {
 	
 	public FaultTypeDescriptionResult executeFaultTypeDescription(FaultTypeDescription faultType, Model modiscoModel) {
 		try {
+			long startTime = System.currentTimeMillis();
 			OCL oclInstance = OCL.newInstance();
 			EClass context = JavaPackage.eINSTANCE.getASTNode();
 			ExpressionInOCL expression = oclInstance.createQuery(context, faultType.getOcl());
 			Query queryEval = oclInstance.createQuery(expression);
 			System.out.println("Executing OCL query...");
-			long startTime = System.currentTimeMillis();
 			Collection<?> result = (Collection<?>) queryEval.evaluateEcore(modiscoModel);
 			int totalElementsSelectedByQuery = result.size();
 			int totalElementsSelectedByStrategy = 0;

@@ -4,7 +4,7 @@
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToXMLModule /]
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::injectionActionToJavaClassModule /]
 [import org::ccsl::gen::ocl::rule::recommendationRule::recommendationRuleToText /]
-
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [template public main(root: Root) ? (root.eContainer().oclIsUndefined())]
 [comment @main/]
 [root.write() /]
@@ -20,6 +20,7 @@
 
 [template private write(faultType: FaultTypeDescription)]
 [faultType.rule.write() /]
+[faultType.clearAllContexts() /]
 [faultType.writeXMLFile() /]
 [for(action: InjectionAction | faultType.actions)]
 [action.writeActionJavaClass(faultType.rule.subject, faultType.name, i) /]
