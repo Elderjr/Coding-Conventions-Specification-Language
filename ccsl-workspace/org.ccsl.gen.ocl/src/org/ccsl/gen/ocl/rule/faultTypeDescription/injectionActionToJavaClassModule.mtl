@@ -86,3 +86,19 @@ if (root instanceof Assignment) {
 }
 return null;
 [/template]
+
+[template private writeGetTargetBody(action: InjectionAction, root: IfStatement) ? (root.getRelationName(action.target) = 'thenStatement')]
+if (root instanceof IfStatement) {
+  IfStatement ifStmt = (IfStatement) root;
+  return ifStmt.getThenStatement();
+}
+return null;
+[/template]
+
+[template private writeGetTargetBody(action: InjectionAction, root: IfStatement) ? (root.getRelationName(action.target) = 'elseStatement')]
+if (root instanceof IfStatement) {
+  IfStatement ifStmt = (IfStatement) root;
+  return ifStmt.getElseStatement();
+}
+return null;
+[/template]

@@ -21,7 +21,7 @@
       not (
         let stmtTemplate: ASTNode = stmt in
         --TemplateFilter Context Conditions
-        (stmtTemplate.oclIsKindOf(StringLiteral) or stmtTemplate.oclIsKindOf(CharacterLiteral) or stmtTemplate.oclIsKindOf(NumberLiteral) or stmtTemplate.oclIsKindOf(BooleanLiteral))
+        (stmtTemplate.oclIsKindOf(StringLiteral) or stmtTemplate.oclIsKindOf(CharacterLiteral) or stmtTemplate.oclIsKindOf(NumberLiteral) or stmtTemplate.oclIsKindOf(BooleanLiteral) or stmtTemplate.oclIsKindOf(NullLiteral))
       )
     )
     ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())

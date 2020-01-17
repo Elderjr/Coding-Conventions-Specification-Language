@@ -7,13 +7,13 @@ import org.eclipse.gmt.modisco.java.ASTNode;
 public class ModiscoJavaToWrapper {
 
 	
-	public static ModiscoASTNodeWrapper modiscoJavaToWrapper(ASTNode node) {
-		ModiscoASTNodeWrapper wrapper = null;
+	public static ModiscoWrapper modiscoJavaToWrapper(ASTNode node) {
+		ModiscoWrapper wrapper = null;
 		try {
 			String simpleName = node.getClass().getSimpleName().replace("Impl", "") + "Wrapper"; 
 			String className = "ccslFaultTypeDescriptionExecutor.modiscoWrapper." + simpleName;
 			Class c = Class.forName(className);
-			wrapper = (ModiscoASTNodeWrapper) c.getDeclaredConstructor(node.getClass().getInterfaces()[0]).newInstance(node);
+			wrapper = (ModiscoWrapper) c.getDeclaredConstructor(node.getClass().getInterfaces()[0]).newInstance(node);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

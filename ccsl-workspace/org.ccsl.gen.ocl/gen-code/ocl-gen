@@ -1,24 +1,11 @@
-let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(varWithLiteralInitialization |
+let violations: Set(ASTNode) = IfStatement.allInstances()->select(ifStmt1 |
   --AtomicRule Context Conditions
-  (not varWithLiteralInitialization.oclIsKindOf(UnresolvedItem)) and
-  let lit: ASTNode = if not varWithLiteralInitialization.variablesContainer.fragments->oclIsUndefined() then
-    varWithLiteralInitialization.variablesContainer.fragments->asOrderedSet()->last().initializer
-  else
-    null
-  endif in
-  let lit: ASTNode = if lit <> null then
-    lit->asOrderedSet()->closure(v: ASTNode | 
-      if v.oclIsKindOf(ParenthesizedExpression) then 
-        v.oclAsType(ParenthesizedExpression).expression 
-      else 
-        v 
-      endif
-    )->last()
-  else
-    null
-  endif in
-  lit <> null and
-    (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral) or lit.oclIsKindOf(NullLiteral))
+  let stmt2: ASTNode = ifStmt1.thenStatement in
+  stmt2 <> null and
+    (stmt2.oclIsKindOf(Statement) or stmt2.oclIsKindOf(Expression)) and
+  let elseStmt: ASTNode = ifStmt1.elseStatement in
+    elseStmt <> null and
+      (elseStmt.oclIsKindOf(Statement) or elseStmt.oclIsKindOf(Expression))
 )
 ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
 ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in

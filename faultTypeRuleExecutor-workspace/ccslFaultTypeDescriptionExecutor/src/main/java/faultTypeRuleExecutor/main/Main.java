@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.gmt.modisco.java.IfStatement;
 import org.eclipse.gmt.modisco.java.SingleVariableAccess;
 import org.eclipse.gmt.modisco.java.emf.JavaPackage;
 import org.eclipse.gmt.modisco.java.generation.files.GenerateJavaExtended;
@@ -38,7 +39,7 @@ public final class Main {
 	}
 
 	public static void main(String[] args) {
-		String faultType = MISSING_VARIABLE_ASSIGNMENT_USING_AN_EXPRESSION;
+		String faultType = MISSING_IF_CONSTRUCT_PLUS_STATEMENTS_PLUS_ELSE_BEFORE_STATEMENTS;
 		String faultTypeXmlPath = FAULT_TYPE_BASE_PATH + faultType + "-gen\\" + faultType + ".xml";
 		String testPath = "file:///D:\\git-repositories\\Coding-Conventions-Specification-Language\\faultTypeRuleExecutor-workspace\\sampleProject\\sampleProject_java.xmi";
 		String realPath = "file:///D:\\git-repositories\\FaultType-FeasibilityStudy\\gdx-ai-1.8.2\\gdx-ai-1.8.2-original\\gdx-ai-1.8.2_java.xmi";

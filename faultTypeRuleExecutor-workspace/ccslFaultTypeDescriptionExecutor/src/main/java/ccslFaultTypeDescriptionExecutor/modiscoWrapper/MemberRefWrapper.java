@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.MemberRef;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class MemberRefWrapper extends ModiscoASTNodeWrapper {
+public class MemberRefWrapper extends ModiscoWrapper {
 
 	public MemberRefWrapper(MemberRef memberRef) {
         super(memberRef);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from MemberRef not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

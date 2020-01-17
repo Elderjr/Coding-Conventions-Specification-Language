@@ -1,29 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.ForStatement;
-import org.eclipse.gmt.modisco.java.emf.JavaPackage;
 
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
-
-public class ForStatementWrapper extends ModiscoASTNodeWrapper {
+public class ForStatementWrapper extends ModiscoWrapper {
 
 	public ForStatementWrapper(ForStatement forStatement) {
-		super(forStatement);
+        super(forStatement);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-		ForStatement forStatement = (ForStatement) getASTNode();
-		if (forStatement.getBody() == field) {
-			return deleteBody(forStatement);
-		}
-		throw new UnsupportedOperationException("Method deleteWhileStatementContent not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
-
-	private boolean deleteBody(ForStatement forStmt) {
-		forStmt.setBody(JavaPackage.eINSTANCE.getJavaFactory().createEmptyStatement());
-		return true;
-	}
-
+	
 }

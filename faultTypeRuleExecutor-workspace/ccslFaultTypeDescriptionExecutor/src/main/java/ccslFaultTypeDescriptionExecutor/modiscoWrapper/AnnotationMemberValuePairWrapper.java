@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.AnnotationMemberValuePair;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class AnnotationMemberValuePairWrapper extends ModiscoASTNodeWrapper {
+public class AnnotationMemberValuePairWrapper extends ModiscoWrapper {
 
 	public AnnotationMemberValuePairWrapper(AnnotationMemberValuePair annotationMemberValuePair) {
         super(annotationMemberValuePair);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from AnnotationMemberValuePair not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

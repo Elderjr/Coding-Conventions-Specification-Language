@@ -1,15 +1,16 @@
 package sampleProject;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Sample {
 
-	public int a = 5;
-	
 	public void foo() {
-		int a = 5;
-		a = ((((((2))))));
+		int a;
+		for (int i = 0, n = 3; i < n; i++) {
+			a = 4;
+			if (a == 5) {
+				System.out.println("a");
+				break;
+			}
+		}
 	}
- 
+
 }

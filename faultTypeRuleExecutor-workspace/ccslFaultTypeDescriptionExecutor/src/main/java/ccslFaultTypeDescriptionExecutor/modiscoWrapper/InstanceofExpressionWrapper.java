@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.InstanceofExpression;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class InstanceofExpressionWrapper extends ModiscoASTNodeWrapper {
+public class InstanceofExpressionWrapper extends ModiscoWrapper {
 
 	public InstanceofExpressionWrapper(InstanceofExpression instanceofExpression) {
         super(instanceofExpression);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from InstanceofExpression not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

@@ -20,7 +20,7 @@
         null
       endif in
       lit &lt;&gt; null and
-        (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral))
+        (lit.oclIsKindOf(StringLiteral) or lit.oclIsKindOf(CharacterLiteral) or lit.oclIsKindOf(NumberLiteral) or lit.oclIsKindOf(BooleanLiteral) or lit.oclIsKindOf(NullLiteral))
     )
     ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
     ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))

@@ -1,18 +1,26 @@
 package ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Collection;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.gmt.modisco.java.ASTNode;
-import org.eclipse.gmt.modisco.java.ParenthesizedExpression;
 
 public class ActionUtils {
+
+	public static class Triple {
+		Field field;
+		Method getterMethod;
+		Method setterMethod;
+		
+		Triple(Field f, Method getterMethod, Method setterMethod) {
+			this.field = f;
+			this.getterMethod = getterMethod;
+			this.setterMethod = setterMethod;
+		}
+	}
 
 	public static boolean setValue(ASTNode nodeField, ASTNode newNodeField) {
 		if (nodeField.eContainer() != null && nodeField.eContainer() instanceof ASTNode) {
@@ -23,22 +31,16 @@ public class ActionUtils {
 
 	public static boolean setValue(ASTNode container, ASTNode nodeField, ASTNode newNodeField) {
 		boolean setWithSuccess = false;
-		for (Field field : getAllClassFields(container.getClass())) {
-			if (Modifier.isStatic(field.getModifiers())) {
-				continue;
-			}
-			if (!field.canAccess(container)) {
-				field.setAccessible(true);
-			}
+		for (Triple t : getTripleValues(container.getClass())) {
 			try {
-				Object fieldValue = field.get(container);
-				if (fieldValue == nodeField) {
+				Object fieldValue = t.getterMethod.invoke(container);
+				if (fieldValue == nodeField && t.setterMethod != null) {
 					// Monovalued
-					field.set(container, newNodeField);
+					t.setterMethod.invoke(container, newNodeField);
 					setWithSuccess = true;
-				} else if (fieldValue instanceof Collection) {
+				} else if (fieldValue instanceof List) {
 					// Multivalued
-					EObjectContainmentEList<ASTNode> values = (EObjectContainmentEList<ASTNode>) fieldValue;
+					List<ASTNode> values = (List<ASTNode>) fieldValue;
 					if (values.contains(nodeField)) {
 						setWithSuccess = true;
 						int fieldIndex = values.indexOf(nodeField);
@@ -46,38 +48,41 @@ public class ActionUtils {
 						values.add(fieldIndex, newNodeField);
 					}
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				System.err.println("Error in accessing field " + field.getName() + ": " + e.getMessage());
+			} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+				System.err.println("Error in accessing field " + t.field.getName() + ": " + e.getMessage());
 				setWithSuccess = false;
 			}
 		}
 		return setWithSuccess;
 	}
 
-	private static List<Field> getAllClassFieldsRec(List<Field> fields, Class<?> type) {
-		fields.addAll(Arrays.asList(type.getDeclaredFields()));
-		if (type.getSuperclass() != null) {
-			getAllClassFieldsRec(fields, type.getSuperclass());
+	private static List<Triple> tripleValuesRec(List<Triple> triple, Class<?> type) {
+		for(Field f: type.getDeclaredFields()) {
+			String getterMethodName = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+			String setterMethodName = "set" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+			Method getterMethod = null;
+			Method setterMethod = null;
+			for (Method m : type.getDeclaredMethods()) {
+				if(m.getName().equals(getterMethodName) && m.getParameters().length == 0) {
+					getterMethod = m;
+				} else if(m.getName().equals(setterMethodName) && m.getParameters().length == 1) {
+					setterMethod = m;
+				}
+			}
+			if(f != null && getterMethod != null) {
+				triple.add(new Triple(f, getterMethod, setterMethod));
+			}
 		}
-		return fields;
+		
+		if (type.getSuperclass() != null) {
+			tripleValuesRec(triple, type.getSuperclass());
+		}
+		return triple;
 	}
 
-	public static List<Field> getAllClassFields(Class<?> type) {
-		List<Field> fields = new LinkedList<>();
-		getAllClassFieldsRec(fields, type);
+	public static List<Triple> getTripleValues(Class<?> type) {
+		List<Triple> fields = new LinkedList<>();
+		tripleValuesRec(fields, type);
 		return fields;
-	}
-	
-	public static RecursiveTreeResult getASTNodeContainerSkippingParentheses(ASTNode node) {
-		EObject container = node.eContainer();
-		EObject previousNode = node;
-		while(container != null && container instanceof ParenthesizedExpression) {
-			previousNode = container;
-			container = container.eContainer();
-		}
-		if(container != null && container instanceof ASTNode) {
-			return new RecursiveTreeResult((ASTNode) container, (ASTNode) previousNode);
-		}
-		return null;
 	}
 }

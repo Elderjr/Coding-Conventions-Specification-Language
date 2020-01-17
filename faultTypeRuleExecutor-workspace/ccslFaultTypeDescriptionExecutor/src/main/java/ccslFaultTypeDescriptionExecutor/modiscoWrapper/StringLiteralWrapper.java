@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.StringLiteral;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class StringLiteralWrapper extends ModiscoASTNodeWrapper {
+public class StringLiteralWrapper extends ModiscoWrapper {
 
 	public StringLiteralWrapper(StringLiteral stringLiteral) {
         super(stringLiteral);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from StringLiteral not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

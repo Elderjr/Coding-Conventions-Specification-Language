@@ -1,29 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.WhileStatement;
-import org.eclipse.gmt.modisco.java.emf.JavaPackage;
 
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
-
-public class WhileStatementWrapper extends ModiscoASTNodeWrapper {
+public class WhileStatementWrapper extends ModiscoWrapper {
 
 	public WhileStatementWrapper(WhileStatement whileStatement) {
-		super(whileStatement);
+        super(whileStatement);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-		WhileStatement whileStatement = (WhileStatement) getASTNode();
-		if (whileStatement.getBody() == field) {
-			return deleteBody(whileStatement);
-		}
-		throw new UnsupportedOperationException("Method deleteWhileStatementContent not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
-
-	private boolean deleteBody(WhileStatement whileStatement) {
-		whileStatement.setBody(JavaPackage.eINSTANCE.getJavaFactory().createEmptyStatement());
-		return true;
-	}
-
+	
 }

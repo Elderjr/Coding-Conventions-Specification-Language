@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.PrefixExpression;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class PrefixExpressionWrapper extends ModiscoASTNodeWrapper {
+public class PrefixExpressionWrapper extends ModiscoWrapper {
 
 	public PrefixExpressionWrapper(PrefixExpression prefixExpression) {
         super(prefixExpression);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from PrefixExpression not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

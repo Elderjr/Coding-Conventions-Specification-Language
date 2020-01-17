@@ -2,5 +2,5 @@ package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
 
 public interface VisitableModiscoWrapper {
 
-	public void accept(ModiscoVisitor visitor);
+	public void accept(ModiscoWrapperVisitor visitor);
 }

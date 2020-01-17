@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
 import org.eclipse.gmt.modisco.java.ASTNode;
-import org.eclipse.gmt.modisco.java.ASTNode;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class ASTNodeWrapper extends ModiscoASTNodeWrapper {
+public class ASTNodeWrapper extends ModiscoWrapper {
 
 	public ASTNodeWrapper(ASTNode aSTNode) {
         super(aSTNode);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from ASTNode not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

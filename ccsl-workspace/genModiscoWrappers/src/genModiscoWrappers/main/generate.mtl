@@ -8,21 +8,21 @@
   [classifier.writeWrapper() /]
   [comment classifier.writeDeleteContentHelper() /]
 [/for]
-[comment pack.writeModiscoVisitor() /]
+[pack.writeModiscoVisitor() /]
 [comment pack.writeDeleteAction() /]
 [/template]
 
 [template private writeModiscoVisitor(pack: EPackage)]
-[file ('wrappers/ModiscoVisitor.java', false, 'UTF-8')]
+[file ('wrappers/ModiscoWrapperVisitor.java', false, 'UTF-8')]
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
 [for (classifier: EClassifier | pack.eClassifiers)]
 import org.eclipse.gmt.modisco.java.[classifier.name /];
 [/for]
 
-public interface ModiscoVisitor {
+public interface ModiscoWrapperVisitor {
 
 	[for (classifier: EClassifier | pack.eClassifiers)]
-    public void accept([classifier.name /] [classifier.name.toLowerFirst() /]);
+    public void visit([classifier.name /]Wrapper [classifier.name.toLowerFirst() /]);
     [/for]
 }
 [/file]
@@ -31,19 +31,17 @@ public interface ModiscoVisitor {
 [template private writeWrapper(classifier: EClassifier)]
 [file ('wrappers/'.concat(classifier.name).concat('Wrapper.java'), false, 'UTF-8')]
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.[classifier.name /];
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class [classifier.name /]Wrapper extends ModiscoASTNodeWrapper {
+public class [classifier.name /]Wrapper extends ModiscoWrapper {
 
 	public [classifier.name /]Wrapper([classifier.name /] [classifier.name.toLowerFirst() /]) {
         super([classifier.name.toLowerFirst() /]);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from [classifier.name /] not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }

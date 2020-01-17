@@ -6,13 +6,15 @@
 [query public mustWriteConditionFor(element: Element, propertyName: String): Boolean = 
 let features: Sequence(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
 let feature: ecore::EStructuralFeature = if features->size() > 0 then features->first() else null endif in
-if feature <> null and element.eIsSet(feature) and not feature.many then 
+if feature <> null and element.eIsSet(feature) and element.eGet(feature) = null then
+  true
+else if feature <> null and element.eIsSet(feature) and not feature.many then 
   element.eGet(feature)->asSet()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
 else if feature <> null and element.eIsSet(feature) and feature.many then
   element.eGet(feature)->flatten()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
 else
   false
-endif endif
+endif endif endif
 /]
 
 [query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  

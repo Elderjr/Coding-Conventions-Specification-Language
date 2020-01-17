@@ -1,0 +1,20 @@
+<faultTypeRule>
+  <ocl>
+    IfStatement.allInstances()->select(ifStmt1 |
+      --AtomicRule Context Conditions
+      let stmt2: ASTNode = ifStmt1.thenStatement in
+      stmt2 &lt;&gt; null and
+        (stmt2.oclIsKindOf(Statement) or stmt2.oclIsKindOf(Expression)) and
+      let elseStmt: ASTNode = ifStmt1.elseStatement in
+        elseStmt &lt;&gt; null and
+          (elseStmt.oclIsKindOf(Statement) or elseStmt.oclIsKindOf(Expression))
+    )
+    ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+    ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  </ocl>
+  <strategy name="All" custom="false" />
+  <actions>
+    <action name="MissingIfConstructPlusStatementsPlusElseBeforeStatementsStep1" />
+    <action name="MissingIfConstructPlusStatementsPlusElseBeforeStatementsStep2" />
+  </actions>
+</faultTypeRule>

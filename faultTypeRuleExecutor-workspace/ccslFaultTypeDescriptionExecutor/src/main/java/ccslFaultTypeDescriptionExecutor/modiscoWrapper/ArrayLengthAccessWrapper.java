@@ -1,17 +1,15 @@
 package ccslFaultTypeDescriptionExecutor.modiscoWrapper;
-import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.ArrayLengthAccess;
-import ccslFaultTypeDescriptionExecutor.modiscoWrapper.ModiscoASTNodeWrapper;
 
-public class ArrayLengthAccessWrapper extends ModiscoASTNodeWrapper {
+public class ArrayLengthAccessWrapper extends ModiscoWrapper {
 
 	public ArrayLengthAccessWrapper(ArrayLengthAccess arrayLengthAccess) {
         super(arrayLengthAccess);
 	}
 
 	@Override
-	public boolean deleteField(ASTNode field, ASTNode originalFieldNode) {
-      throw new UnsupportedOperationException("deleteField from ArrayLengthAccess not supported");
+	public void accept(ModiscoWrapperVisitor visitor) {
+      visitor.visit(this);
 	}
 	
 }
