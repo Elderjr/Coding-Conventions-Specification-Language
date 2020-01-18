@@ -3,10 +3,12 @@ package ccslFaultTypeDescriptionExecutor.faultTypeDescription.injectionAction;
 import java.util.List;
 
 import org.eclipse.gmt.modisco.java.ASTNode;
+import org.eclipse.gmt.modisco.java.Assignment;
 import org.eclipse.gmt.modisco.java.Block;
 import org.eclipse.gmt.modisco.java.DoStatement;
 import org.eclipse.gmt.modisco.java.EnhancedForStatement;
 import org.eclipse.gmt.modisco.java.Expression;
+import org.eclipse.gmt.modisco.java.ExpressionStatement;
 import org.eclipse.gmt.modisco.java.ForStatement;
 import org.eclipse.gmt.modisco.java.IfStatement;
 import org.eclipse.gmt.modisco.java.InfixExpression;
@@ -150,9 +152,19 @@ public class DeleteNodeCommand implements InjectionAction, ModiscoWrapperVisitor
 	}
 
 	@Override
-	public void visit(AssignmentWrapper assignment) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void visit(AssignmentWrapper assignmentWrapper) {
+		Assignment assignment = (Assignment) assignmentWrapper.getASTNode();
+		if(assignment.getRightHandSide() == fieldToBeDeleted) {
+			if(assignment.eContainer() != null && assignment.eContainer() instanceof ExpressionStatement) {
+				hasNodeBeenDeleted = new DeleteNodeCommand().doAction(assignment);
+			} else if(assignment.eContainer() != null) {
+				hasNodeBeenDeleted = ActionUtils.setValue(assignment, assignment.getLeftHandSide());
+			} else {
+				throw new UnsupportedOperationException("Not supported yet.");
+			}
+		} else {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 	@Override

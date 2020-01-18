@@ -32,42 +32,41 @@ public class FaultTypeDescriptionExecutor {
 	}
 
 	
-	public FaultTypeDescriptionResult executeFaultTypeDescription(FaultTypeDescription faultType, Model modiscoModel) {
+	public FaultTypeDescriptionRunMetrics executeFaultTypeDescription(FaultTypeDescription faultType, Model modiscoModel) {
+		long queryTime = 0;
+		long injectionTime = 0;
+		int totalNodesSelectedByQuery = 0;
+		int totalNodesModified = 0;
+		FaultTypeDescriptionRunMetrics metrics = new FaultTypeDescriptionRunMetrics();
 		try {
-			long startTime = System.currentTimeMillis();
+			queryTime = System.currentTimeMillis();
 			OCL oclInstance = OCL.newInstance();
 			EClass context = JavaPackage.eINSTANCE.getASTNode();
 			ExpressionInOCL expression = oclInstance.createQuery(context, faultType.getOcl());
 			Query queryEval = oclInstance.createQuery(expression);
-			System.out.println("Executing OCL query...");
 			Collection<?> result = (Collection<?>) queryEval.evaluateEcore(modiscoModel);
-			int totalElementsSelectedByQuery = result.size();
-			int totalElementsSelectedByStrategy = 0;
-			int totalElementsModified = 0;
-			System.out.println("Executing OCL query... OK (" + result.size() + " nodes found)");
-			
+			queryTime = System.currentTimeMillis() - queryTime;
+			totalNodesSelectedByQuery = result.size();
 			if (result != null && result instanceof Collection) {
-				System.out.println("Executing strategy... ");
 				List<ASTNode> nodes = faultType.getStrategy().selectNodes(result);
-				totalElementsSelectedByStrategy = nodes.size();
-				System.out.println("Executing strategy... OK (" + nodes.size() + " selected)");
-				System.out.println("Executing actions...");
+				injectionTime = System.currentTimeMillis();
 				for (ASTNode node : nodes) {
 					boolean isActionsWerePerfomed = faultType.getActionPipe().doActions(node);
 					if (isActionsWerePerfomed) {
-						totalElementsModified++;
+						totalNodesModified++;
 					}
 				}
-				System.out.println("Executing actions... OK");
+				injectionTime = System.currentTimeMillis() - injectionTime;
 			} else {
 				System.err.println("The generated OCL doesn't return a collection.");
 			}
-			long performance = System.currentTimeMillis() - startTime;
-			return new FaultTypeDescriptionResult(performance, totalElementsSelectedByQuery,
-					totalElementsSelectedByStrategy, totalElementsModified, modiscoModel);
+			metrics.setInjectionTime(injectionTime);
+			metrics.setQueryTime(queryTime);
+			metrics.setTotalElementsModified(totalNodesModified);
+			metrics.setTotalElementsSelectedByQuery(totalNodesSelectedByQuery);
 		} catch (ParserException e) {
 			System.err.println("The generated OCL is invalid. " + e.getMessage());
-			return null;
 		}
+		return metrics;
 	}
 }

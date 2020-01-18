@@ -1,4 +1,4 @@
-let violations: Set(ASTNode) = SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->select(varAccess1 |
+let violations: Set(ASTNode) = SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->union(SuperFieldAccess.allInstances())->select(varAccess1 |
   --AtomicRule Context Conditions
   let methodInv2 : OclAny = varAccess1.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
     container.oclAsType(ASTNode).oclContainer()

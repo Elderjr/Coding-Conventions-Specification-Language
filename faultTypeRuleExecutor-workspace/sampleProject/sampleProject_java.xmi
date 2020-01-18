@@ -3,73 +3,49 @@
   <ownedElements name="sampleProject">
     <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.0" name="Sample">
       <modifier visibility="public"/>
-      <bodyDeclarations xsi:type="java:FieldDeclaration" originalCompilationUnit="//@compilationUnits.0">
-        <modifier visibility="private"/>
-        <type type="//@orphanTypes.0"/>
-        <fragments originalCompilationUnit="//@compilationUnits.0" name="a" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@body/@statements.0/@expression/@arguments.0"/>
-      </bodyDeclarations>
-      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.2/@body/@statements.1/@expression">
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="qux" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@fragments.0/@initializer">
         <modifier visibility="public"/>
         <body originalCompilationUnit="//@compilationUnits.0">
-          <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
-            <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.2">
-              <arguments xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
-            </expression>
-          </statements>
-          <statements xsi:type="java:ForStatement" originalCompilationUnit="//@compilationUnits.0">
-            <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&lt;">
-              <rightOperand xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
-              <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@initializers.0/@fragments.0"/>
-            </expression>
-            <updaters xsi:type="java:PostfixExpression" originalCompilationUnit="//@compilationUnits.0">
-              <operand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@initializers.0/@fragments.0"/>
-            </updaters>
-            <initializers xsi:type="java:VariableDeclarationExpression" originalCompilationUnit="//@compilationUnits.0">
-              <type type="//@orphanTypes.0"/>
-              <fragments originalCompilationUnit="//@compilationUnits.0" name="i" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@expression/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@updaters.0/@operand">
-                <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="0"/>
-              </fragments>
-              <modifier/>
-            </initializers>
-            <body xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0">
-              <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
-                <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.2">
-                  <arguments xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@fragments.0"/>
-                </expression>
-              </statements>
-            </body>
+          <statements xsi:type="java:ReturnStatement" originalCompilationUnit="//@compilationUnits.0">
+            <expression xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="5"/>
           </statements>
         </body>
-        <returnType type="//@orphanTypes.5"/>
+        <parameters originalCompilationUnit="//@compilationUnits.0" name="a">
+          <modifier/>
+          <type type="//@orphanTypes.0"/>
+        </parameters>
+        <returnType type="//@orphanTypes.0"/>
       </bodyDeclarations>
-      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="bar" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@expression //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@body/@statements.0/@expression">
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo">
         <modifier visibility="public"/>
         <body originalCompilationUnit="//@compilationUnits.0">
           <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
             <type type="//@orphanTypes.0"/>
-            <fragments originalCompilationUnit="//@compilationUnits.0" name="w">
-              <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="0"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="a" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@fragments.0/@initializer/@arguments.0">
+              <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="3"/>
             </fragments>
             <modifier/>
           </statements>
-          <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
-            <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1"/>
+          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@orphanTypes.0"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="z">
+              <initializer xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0">
+                <arguments xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@fragments.0"/>
+              </initializer>
+            </fragments>
+            <modifier/>
           </statements>
         </body>
-        <parameters originalCompilationUnit="//@compilationUnits.0" name="z">
-          <modifier/>
-          <type type="//@orphanTypes.0"/>
-        </parameters>
         <returnType type="//@orphanTypes.5"/>
       </bodyDeclarations>
     </ownedElements>
   </ownedElements>
-  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@initializers.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.2/@parameters.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.2/@body/@statements.0/@type"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@returnType //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@parameters.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@type"/>
   <orphanTypes xsi:type="java:PrimitiveTypeLong" name="long"/>
   <orphanTypes xsi:type="java:PrimitiveTypeFloat" name="float"/>
   <orphanTypes xsi:type="java:PrimitiveTypeDouble" name="double"/>
   <orphanTypes xsi:type="java:PrimitiveTypeBoolean" name="boolean"/>
-  <orphanTypes xsi:type="java:PrimitiveTypeVoid" name="void" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@returnType //@ownedElements.0/@ownedElements.0/@bodyDeclarations.2/@returnType"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeVoid" name="void" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@returnType"/>
   <orphanTypes xsi:type="java:PrimitiveTypeChar" name="char"/>
   <orphanTypes xsi:type="java:PrimitiveTypeShort" name="short"/>
   <orphanTypes xsi:type="java:PrimitiveTypeByte" name="byte"/>

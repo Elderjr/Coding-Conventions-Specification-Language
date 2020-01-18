@@ -21,6 +21,7 @@ import org.eclipse.gmt.modisco.java.Package;
 import org.eclipse.gmt.modisco.java.ReturnStatement;
 import org.eclipse.gmt.modisco.java.SingleVariableAccess;
 import org.eclipse.gmt.modisco.java.SingleVariableDeclaration;
+import org.eclipse.gmt.modisco.java.SuperFieldAccess;
 import org.eclipse.gmt.modisco.java.SwitchStatement;
 import org.eclipse.gmt.modisco.java.TryStatement;
 import org.eclipse.gmt.modisco.java.Type;
@@ -94,7 +95,7 @@ public class ReplaceVariableAccessAction implements InjectionAction {
 
 	@Override
 	public boolean doAction(ASTNode target) {
-		if (target instanceof SingleVariableAccess || target instanceof FieldAccess) {
+		if (target instanceof SingleVariableAccess || target instanceof FieldAccess || target instanceof SuperFieldAccess) {
 			VariableDeclaration varDecl = null;
 			if(target instanceof SingleVariableAccess) {
 				varDecl = ((SingleVariableAccess) target).getVariable();
@@ -104,9 +105,13 @@ public class ReplaceVariableAccessAction implements InjectionAction {
 			List<VariableDeclaration> candidates = new LinkedList<>();
 			getAllCandidateVariables(target, null, candidates);
 			ASTNode container = target;
-			while (container.eContainer() != null && container.eContainer() instanceof ASTNode
-					&& !(container.eContainer() instanceof AbstractVariablesContainer)) {
-				container = (ASTNode) container.eContainer();
+			while (container != null && container instanceof ASTNode
+					&& !(container instanceof AbstractVariablesContainer)) {
+				if(container.eContainer() != null && container.eContainer() instanceof ASTNode) {
+					container = (ASTNode) container.eContainer();
+				} else {
+					container = null;
+				}
 			}
 			if (container != null && container instanceof AbstractVariablesContainer) {
 				AbstractVariablesContainer varContainer = (AbstractVariablesContainer) container;

@@ -16,7 +16,12 @@
         null
       endif in
       litToChange &lt;&gt; null and
-        (litToChange.oclIsKindOf(StringLiteral) or litToChange.oclIsKindOf(CharacterLiteral) or litToChange.oclIsKindOf(NumberLiteral) or litToChange.oclIsKindOf(BooleanLiteral) or litToChange.oclIsKindOf(NullLiteral))
+        (litToChange.oclIsKindOf(StringLiteral) or litToChange.oclIsKindOf(CharacterLiteral) or litToChange.oclIsKindOf(NumberLiteral) or litToChange.oclIsKindOf(BooleanLiteral) or litToChange.oclIsKindOf(NullLiteral)) and
+      not (
+        let nullLiteralTemplate: ASTNode = litToChange in
+        --TemplateFilter Context Conditions
+        (nullLiteralTemplate.oclIsKindOf(NullLiteral))
+      )
     )
     ->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
     ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))

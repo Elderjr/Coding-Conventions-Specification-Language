@@ -22,12 +22,10 @@ public class XMIReader {
 	}
 
 	public Model getModelFromXMIFile(String xmiProjectPath){
-		System.out.println("Reading MoDisco instance...");
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 		Resource r = rs.getResource(URI.createURI(xmiProjectPath), true);
 		TreeIterator<EObject> contents = r.getAllContents();
-		System.out.println("Reading MoDisco instance... OK");
 		return (Model) contents.next();
 	}
 }

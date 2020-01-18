@@ -16,27 +16,9 @@
 
 
 
-import java.io.InputStream;
-
-import java.io.Reader;
-import java.util.List;
 
 public class Test {
+
+	int a;
 	
-	String A[];
-	String B[][];
-	
-	public String bar() {
-		return null;
-	}
-	
-	public void foo() {
-		String tmpA = B[0] + B[0][0];
-		String tmpB = B[0] + A[0];
-		String tmpC = B[0] + this.A[0];
-		String tmpH = "" + B[0];
-		String tmpD = bar() + B[0];
-		String tmpE = super.toString() + B[0];
-		String tmpF = (tmpA = bar()) + B[0];
-	}
 }

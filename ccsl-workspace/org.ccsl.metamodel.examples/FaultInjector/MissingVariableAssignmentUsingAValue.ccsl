@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultTypeDescription/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:faultType="http://www.example.org/ccsl/faultTypeDescription" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements" xmlns:strategy="http://www.example.org/ccsl/faultTypeDescription/strategy" name="MissingVariableAssignmentUsingAValue">
-  <strategy xsi:type="strategy:AllStrategy"/>
-  <actions xsi:type="action:DeleteAction" target="lit"/>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultTypeDescription/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements" xmlns:strategy="http://www.example.org/ccsl/faultTypeDescription/strategy" name="MissingVariableAssignmentUsingAValue">
   <rule subject="varAssignmentWithLiteral">
-    <context><contextElements xsi:type="statements:VarAssignment" uniqueName="varAssignmentWithLiteral">
-      <assignment xsi:type="literalValues:LiteralValue" uniqueName="lit"/>
-    </contextElements></context>
+    <context>
+      <contextElements xsi:type="statements:VarAssignment" uniqueName="varAssignmentWithLiteral">
+        <assignment xsi:type="literalValues:LiteralValue" uniqueName="lit"/>
+      </contextElements>
+    </context>
   </rule>
+  <actions xsi:type="action:DeleteAction" target="lit"/>
+  <strategy xsi:type="strategy:AllStrategy"/>
 </ccsl:FaultTypeDescription>

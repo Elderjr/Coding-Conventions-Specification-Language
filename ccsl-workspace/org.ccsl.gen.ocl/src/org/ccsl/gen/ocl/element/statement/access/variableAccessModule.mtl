@@ -7,7 +7,7 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getVariableAccessMatchingMetaclasses(access: VariableAccess): OrderedSet(String)=
-  OrderedSet(String){'SingleVariableAccess', 'FieldAccess'}
+  OrderedSet(String){'SingleVariableAccess', 'FieldAccess', 'SuperFieldAccess'}
 /]
 
 [query public getVariableAccessConditions(varAccess: VariableAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -21,5 +21,5 @@ OrderedSet(String) {
 /]
 
 [template private writeVariableAccessTypecheckCondition(varAccess: VariableAccess, varname: String, typecheck: Boolean) ? (typecheck)]
-[varname /].oclIsKindOf(SingleVariableAccess) or [varname /].oclIsKindOf(FieldAccess)  
+([varname /].oclIsKindOf(SingleVariableAccess) or [varname /].oclIsKindOf(FieldAccess) [varname /].oclIsKindOf(SuperFieldAccess))  
 [/template]

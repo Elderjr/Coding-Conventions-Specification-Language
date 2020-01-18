@@ -2,18 +2,13 @@ package sampleProject;
 
 public class Sample {
 
-	private int a;
-	
-	public void foo() {
-		bar(5);
-		for(int i = 0; i < 5; i++) {
-			bar(a);
-		}
+	public int qux(int a) {
+		return 5;
 	}
-	
-	public void bar(int z) {
-		int w = 0;
-		foo();
+
+	public void foo() {
+		int a = 3;
+		int z = qux(a);
 	}
 
 }

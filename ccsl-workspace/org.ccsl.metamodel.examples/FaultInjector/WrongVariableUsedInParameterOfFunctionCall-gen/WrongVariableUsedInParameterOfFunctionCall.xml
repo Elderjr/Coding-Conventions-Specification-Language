@@ -1,6 +1,6 @@
 <faultTypeRule>
   <ocl>
-    SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->select(varAccess1 |
+    SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->union(SuperFieldAccess.allInstances())->select(varAccess1 |
       --AtomicRule Context Conditions
       let methodInv2 : OclAny = varAccess1.oclContainer()->asOrderedSet()->closure(container: OclAny | if container &lt;&gt; null and container.oclIsKindOf(ParenthesizedExpression) then
         container.oclAsType(ASTNode).oclContainer()
