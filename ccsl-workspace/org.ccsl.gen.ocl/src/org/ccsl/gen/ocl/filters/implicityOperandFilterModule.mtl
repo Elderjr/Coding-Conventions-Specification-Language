@@ -5,8 +5,8 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 
 [query private getClosureElement(filter: ImplicityOperandFilter, target: Element): Element = 
   if filter.operatorExpression = target then

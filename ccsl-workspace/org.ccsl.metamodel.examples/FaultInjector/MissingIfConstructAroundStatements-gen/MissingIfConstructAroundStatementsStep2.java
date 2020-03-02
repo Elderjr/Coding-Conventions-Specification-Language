@@ -11,7 +11,7 @@ public class MissingIfConstructAroundStatementsStep2 implements InjectionAction 
   public boolean doAction(ASTNode node) {
     ASTNode target = getTarget(node);
     if(target != null) {
-      //return new DeleteNodeCommand().doAction(target);
+      return new DeleteNodeCommand().doAction(target);
     }
     return false;
   }

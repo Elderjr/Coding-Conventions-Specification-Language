@@ -4,7 +4,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
@@ -57,13 +57,13 @@ endif
 [/template]
 
 [template public generatesConditionForMethods(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.methods->size() > 0)]
-let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration))
+let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
 [complexType.generatesSetConditions('methods', complexType.methods, 'MethodDeclaration') /]
 [/template]
 
 [template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0) /]
 
-[template public generatesConditionForSuperTypes(complexType: JavaClass, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0)]
+[template public generatesConditionForSuperTypes(complexType: JClass, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0)]
 let superType: ASTNode = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).superClass.type
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then

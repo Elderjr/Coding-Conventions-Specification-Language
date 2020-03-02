@@ -87,10 +87,13 @@ public class ReplaceVariableAccessAction implements InjectionAction {
 	}
 
 	private boolean hasSameType(VariableDeclaration v1, VariableDeclaration v2) {
-		Type typeV1 = getVariableType(v1);
-		Type typeV2 = getVariableType(v2);
-		return v1.getExtraArrayDimensions() == v2.getExtraArrayDimensions() && typeV1 != null && typeV2 != null
-				&& getVariableType(v1) == getVariableType(v2);
+		if(v1 != null && v2 != null) {
+			Type typeV1 = getVariableType(v1);
+			Type typeV2 = getVariableType(v2);
+			return v1.getExtraArrayDimensions() == v2.getExtraArrayDimensions() && typeV1 != null && typeV2 != null
+					&& typeV1 == typeV2;
+		}
+		return false;
 	}
 
 	@Override

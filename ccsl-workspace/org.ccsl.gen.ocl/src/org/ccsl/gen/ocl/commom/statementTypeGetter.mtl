@@ -1,0 +1,78 @@
+[comment encoding = UTF-8 /]
+[module statementTypeGetter('http://www.example.org/ccsl')/]
+
+
+[template public writeStatementTypeGetter(e : Element, varname: String, statementTypeLetName: String)]
+--Statement Type Getter
+let [statementTypeLetName /]: ASTNode = 
+  let stmtToAnalyze: ASTNode = [varname /]->asOrderedSet()->closure(x |
+    if x.oclIsKindOf(ParenthesizedExpression) then 
+      x.oclAsType(ParenthesizedExpression).expression 
+    elseif x.oclIsKindOf(Assignment) then 
+      x.oclAsType(Assignment).leftHandSide
+    else
+      x
+    endif
+  )->last() in
+  let accessesClosure: OrderedSet(ASTNode) = stmtToAnalyze->asOrderedSet()->closure(v: ASTNode | 
+    if v.oclIsKindOf(ArrayAccess) then
+      v.oclAsType(ArrayAccess).array
+    else
+      v
+    endif
+  ) in
+  let totalAccesses: Integer = accessesClosure->select(v: ASTNode | v.oclIsKindOf(ArrayAccess))->size() in
+  let baseNode: ASTNode = accessesClosure->last() in
+  let baseNode: ASTNode = if baseNode.oclIsKindOf(SingleVariableAccess) then
+    baseNode.oclAsType(SingleVariableAccess).variable
+  elseif baseNode.oclIsKindOf(FieldAccess) then
+    baseNode.oclAsType(FieldAccess).field.variable
+  else
+    baseNode
+  endif in
+  let baseNodeType: ASTNode = if baseNode.oclIsKindOf(VariableDeclarationFragment) then
+    baseNode.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+  elseif baseNode.oclIsKindOf(SingleVariableDeclaration) then
+    baseNode.oclAsType(SingleVariableDeclaration).type.type
+  elseif baseNode.oclIsKindOf(MethodInvocation) and baseNode.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+    (not baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+    baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+  elseif baseNode.oclIsKindOf(SuperMethodInvocation) and baseNode.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+    (not baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+    baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+  elseif baseNode.oclIsKindOf(ClassInstanceCreation) then
+    baseNode.oclAsType(ClassInstanceCreation).type.type
+  elseif baseNode.oclIsKindOf(AnonymousClassDeclaration) then
+    baseNode.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type
+  else
+    null
+  endif in
+  let baseNodeTypeDimensions: Integer = if baseNodeType.oclIsKindOf(ArrayType) then
+    baseNodeType.oclAsType(ArrayType).dimensions
+  else
+    0
+  endif in
+  let baseNodeDimensions: Integer = if baseNode.oclIsKindOf(VariableDeclaration) then
+    baseNode.oclAsType(VariableDeclaration).extraArrayDimensions
+  else
+    0
+  endif in
+  let dimensions: Integer = if baseNodeTypeDimensions > baseNodeDimensions then
+    baseNodeTypeDimensions
+  else
+    baseNodeDimensions
+  endif in if stmtToAnalyze.oclIsKindOf(ArrayAccess) and totalAccesses = dimensions then
+    baseNodeType->asOrderedSet()->closure(v: ASTNode |
+      if v.oclIsKindOf(ArrayType) then
+        v.oclAsType(ArrayType).elementType.type
+      else
+        v
+      endif
+    )->last()
+  elseif not stmtToAnalyze.oclIsKindOf(ArrayAccess) then
+    baseNodeType
+  else
+    null
+  endif
+in [statementTypeLetName /] <> null
+[/template]

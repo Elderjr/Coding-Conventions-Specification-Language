@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[module isKindOfFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+
+
+[template public writeIsKindOfFilterCondition(filter: IsKindOfFilter, target: Element)]
+[filter.writeAllSuperTypesSet(target) /]
+allSuperTypes->exists([filter.type.getUniqueOclName() /] |
+  [filter._context.writeContextConditions(filter.type, true, 'ASTNode') /]
+)
+[/template]
+
+[template private writeAllSuperTypesSet(filter: IsKindOfFilter, target: Element)]
+let allSuperTypes: OrderedSet(ASTNode) = [target.getUniqueOclName() /]->asOrderedSet()->closure(superType |
+  let superTypeAccesses: OrderedSet(TypeAccess) = if superType.oclIsKindOf(ClassDeclaration) then
+    superType.oclAsType(ClassDeclaration).superInterfaces->append(superType.oclAsType(ClassDeclaration).superClass)
+  elseif superType.oclIsKindOf(InterfaceDeclaration) then
+    superType.oclAsType(InterfaceDeclaration).superInterfaces
+  else
+    OrderedSet(TypeAccess){}
+  endif in superTypeAccesses
+	         ->collect(typeAccess: TypeAccess | if typeAccess <> null then typeAccess.type else null endif)
+	         ->select(type | type <> null)
+) in
+[/template]

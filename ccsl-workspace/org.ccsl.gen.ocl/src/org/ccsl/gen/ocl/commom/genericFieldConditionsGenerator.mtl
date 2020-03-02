@@ -7,6 +7,7 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 
 [template public getFieldName(field: Element)]
 [if field = null]
@@ -49,7 +50,7 @@ else
 [/template]
 
 [template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
-[let isTypecheckNeeded: Boolean = mappedFieldMetaclass = 'ASTNode' or mappedFieldMetaclass = 'OclAny']
+[let isTypecheckNeeded: Boolean = not field.getMatchingJavaMetaclasses()->includes(mappedFieldMetaclass)]
 [let fieldCondition: String = field.generatesConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
 [fieldOclVarname /] <> null[if not fieldCondition.isEmpty()] and
   [fieldCondition.writeStr() /][/if][/let][/let]

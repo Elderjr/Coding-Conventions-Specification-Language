@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.gmt.modisco.java.ASTNode;
 import org.eclipse.gmt.modisco.java.Assignment;
 import org.eclipse.gmt.modisco.java.Block;
+import org.eclipse.gmt.modisco.java.ClassDeclaration;
 import org.eclipse.gmt.modisco.java.DoStatement;
 import org.eclipse.gmt.modisco.java.EnhancedForStatement;
 import org.eclipse.gmt.modisco.java.Expression;
@@ -252,8 +253,13 @@ public class DeleteNodeCommand implements InjectionAction, ModiscoWrapperVisitor
 
 	@Override
 	public void visit(ClassDeclarationWrapper classDeclaration) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
+		ClassDeclaration clazzDecl = (ClassDeclaration) classDeclaration.getASTNode();
+		if(clazzDecl.getBodyDeclarations().contains(fieldToBeDeleted)) {
+			clazzDecl.getBodyDeclarations().remove(fieldToBeDeleted);
+			hasNodeBeenDeleted = true;
+		} else {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 	@Override

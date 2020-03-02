@@ -11,7 +11,7 @@ OrderedSet(String) {'EnhancedForStatement', 'ForStatement', 'WhileStatement', 'D
 [query public getLoopStatementConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
 OrderedSet(String){
   loopStmt.generatesLoopStatementTypecheckerCondition(varname, typecheck),
-  loopStmt.generatesConditionForBody(varname)
+  loopStmt.writeBodyCondition(varname)
 }->select(s: String | s.isNotEmpty())
 /]
 
@@ -20,6 +20,6 @@ OrderedSet(String){
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template private generatesConditionForBody(loopStmt: LoopStatement, varname: String) ? (loopStmt.isSet('body'))]
+[template private writeBodyCondition(loopStmt: LoopStatement, varname: String) ? (loopStmt.mustWriteConditionFor('body'))]
 [loopStmt.generatesMonovaluedFieldConditions(loopStmt._body, varname, 'body', 'ASTNode', loopStmt.getLoopStatementMatchingMetaclasses()) /]
 [/template]

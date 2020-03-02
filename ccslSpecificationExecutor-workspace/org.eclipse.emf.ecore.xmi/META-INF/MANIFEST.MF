@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.ecore.xmi;singleton:=true
+Bundle-Version: 2.16.0.v20190528-0725
+Bundle-ClassPath: org.eclipse.emf.ecore.xmi_2.16.0.v20190528-0725.jar
+Bundle-Activator: org.eclipse.emf.ecore.xmi.XMIPlugin$Implementation$Activator
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.ecore.xmi.impl,
+ org.eclipse.emf.ecore.xmi.util
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.6.0,4.0.0)";resolution:=optional;x-installation:=greedy,
+ org.eclipse.emf.ecore;bundle-version="[2.18.0,3.0.0)";visibility:=reexport
+Import-Package: javax.xml.namespace,
+ javax.xml.parsers,
+ org.osgi.framework;version="[1.5.0,2.0.0)",
+ org.w3c.dom,
+ org.xml.sax,
+ org.xml.sax.ext,
+ org.xml.sax.helpers
+Built-By: genie.emf
+Eclipse-LazyStart: true
+Eclipse-SourceReferences: scm:git:https://git.eclipse.org/r/p/emf/org.eclipse.emf.git;path="plugins/org.eclipse.emf.ecore.xmi";commitId=063937d66a94e688eaa530b0ee8a8c751f2bb362
+Created-By: Apache Maven 3.0.5
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Build-Jdk: 1.8.0_192
+Bundle-ActivationPolicy: lazy
+Archiver-Version: Plexus Archiver
+Automatic-Module-Name: org.eclipse.emf.ecore.xmi

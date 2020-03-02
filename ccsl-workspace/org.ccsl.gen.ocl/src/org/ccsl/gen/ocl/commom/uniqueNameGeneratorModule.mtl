@@ -14,11 +14,11 @@ e
 complexType
 [/template]
 
-[template public getBaseName(element : JavaClass)]
+[template public getBaseName(element : JClass)]
 clazz
 [/template]
 
-[template public getBaseName(element : JavaInterface)]
+[template public getBaseName(element : JInterface)]
 interface
 [/template]
 

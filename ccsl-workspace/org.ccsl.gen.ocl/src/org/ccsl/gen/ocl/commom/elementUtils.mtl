@@ -3,6 +3,17 @@
 
 [import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
 
+[query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
+  if element.eClass() = templ.eClass() then
+    let targetMetaclasses: OrderedSet(String) = element.getMatchingJavaMetaclasses() in
+    let targetTemplateMetaclasses: OrderedSet(String) = templ.getMatchingJavaMetaclasses() in
+    not(targetMetaclasses->intersection(targetTemplateMetaclasses)->size() = targetMetaclasses->size() and
+    targetTemplateMetaclasses->size() = targetMetaclasses->size())
+  else
+    templ.eClass().eAllSuperTypes->includes(element.eClass())
+  endif
+/]
+
 [query public mustWriteConditionFor(element: Element, propertyName: String): Boolean = 
 let features: Sequence(ecore::EStructuralFeature) = element.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
 let feature: ecore::EStructuralFeature = if features->size() > 0 then features->first() else null endif in
@@ -54,6 +65,10 @@ endif
 ImplicityOperandFilter.allInstances()->exists(f: ImplicityOperandFilter | 
   (f.operatorExpression = element and f.implicityOperand = field) or
   (f.operatorExpression = field and f.implicityOperand = element)
+) or
+ImplicityContainerFilter.allInstances()->exists(f: ImplicityContainerFilter |
+  (f.implicityField = element and f.implicityContainer = field) or
+  (f.implicityField = field and f.implicityContainer = element)
 )
 /]
 

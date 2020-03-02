@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRecommendationRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="threadAccess">
-  <contextElements xsi:type="statements:DataTypeAccess" uniqueName="threadAccess"/>
-  <filters xsi:type="filters:ClosureFilter" targets="threadAccess" subject="typeAccessClosure" maxDepth="-1" minDepth="-1" closureElement="threadOrInterface">
-    <contextElements xsi:type="statements:DataTypeAccess" uniqueName="typeAccessClosure" elementAccessed="threadOrInterface"/>
-    <contextElements xsi:type="namedElements:ComplexType" uniqueName="threadOrInterface"/>
-    <filters xsi:type="filters:RegexMatch" targets="threadOrInterface" regex="java\\.lang\\.(Thread|Runnable)"/>
-  </filters>
-  <filters xsi:type="filters:TemplateFilter" negated="true" targets="threadAccess" subject="typeAccessInv">
-    <contextElements xsi:type="statements:MethodInvocation">
-      <from xsi:type="statements:DataTypeAccess" uniqueName="typeAccessInv"/>
-    </contextElements>
-  </filters>
-</ccsl:AtomicRecommendationRule>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule" subject="threadOrThreadChildClassAccess">
+    <context>
+      <contextElements xsi:type="statements:DataTypeAccess" uniqueName="threadOrThreadChildClassAccess" elementAccessed="threadOrThreadChildClass"/>
+      <contextElements xsi:type="java:JClass" uniqueName="threadOrThreadChildClass"/>
+      <filters xsi:type="filters:IsKindOfFilter" targets="threadOrThreadChildClass" type="threadClass">
+        <context>
+          <contextElements xsi:type="java:JClass" uniqueName="threadClass" name="java.lang.Thread"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="threadOrThreadChildClassAccess" targetTemplate="templateDataTypeAccess">
+        <context>
+          <contextElements xsi:type="statements:MethodInvocation">
+            <from xsi:type="statements:DataTypeAccess" uniqueName="templateDataTypeAccess"/>
+          </contextElements>
+        </context>
+      </filters>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="executorServiceInterfaceOrChildAccess">
+    <context>
+      <contextElements xsi:type="statements:DataTypeAccess" uniqueName="executorServiceInterfaceOrChildAccess" elementAccessed="executorServiceInterfaceOrChild"/>
+      <contextElements xsi:type="namedElements:ComplexType" uniqueName="executorServiceInterfaceOrChild"/>
+      <filters xsi:type="filters:IsKindOfFilter" targets="executorServiceInterfaceOrChild" type="executorService">
+        <context>
+          <contextElements xsi:type="namedElements:ComplexType" uniqueName="executorService"/>
+          <filters xsi:type="filters:RegexMatch" targets="executorService" regex="(java\\.util\\.concurrent\\.(Executors|ExecutorService))"/>
+        </context>
+      </filters>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.2/@context/@contextElements.1">
+    <context>
+      <contextElements xsi:type="namedElements:ComplexType"/>
+      <contextElements xsi:type="statements:VariableAccess" elementAccessed="//@rules.2/@context/@contextElements.2"/>
+      <contextElements xsi:type="namedElements:Variable" type="//@rules.2/@context/@contextElements.0"/>
+      <filters xsi:type="filters:IsKindOfFilter" targets="//@rules.2/@context/@contextElements.0" type="//@rules.2/@context/@filters.0/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="namedElements:ComplexType"/>
+          <filters xsi:type="filters:RegexMatch" targets="//@rules.2/@context/@filters.0/@context/@contextElements.0" regex="(java\\.util\\.concurrent\\.(Executors|ExecutorService))"/>
+        </context>
+      </filters>
+    </context>
+  </rules>
+</ccsl:CompositeRule>

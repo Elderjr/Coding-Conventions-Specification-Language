@@ -64,7 +64,7 @@ return false;
 -[/if]
 [/template]
 
-[template private writeGetTargetBody(action: InjectionAction, container: Element) ? (container = action.target)]
+[template private writeGetTargetBody(action: InjectionAction, root: Element) ? (root = action.target)]
 return root;
 [/template]
 

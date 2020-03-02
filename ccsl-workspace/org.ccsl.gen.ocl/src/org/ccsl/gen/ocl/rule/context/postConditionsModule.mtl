@@ -5,13 +5,44 @@
 ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
 [/template]
 
+[template public generatesPostConditionToCollectFirstSourceElements(element: Element)]
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null)
+[/template]
+
 [comment condition to fix MoDisco Bug /]
 [template public generatesPostConditionToRemoveNonSourceElements(element: Element) ? (element.eContainer().oclIsKindOf(VarAssignment))]
 ->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
 [/template]
 
 [template public generatesPostConditionToRemoveNonSourceElements(element: Element)]
-->reject(node: ASTNode | node.originalCompilationUnit.oclIsUndefined())
+->select(node: ASTNode | 
+  node->closure(n: ASTNode |
+    if n.originalCompilationUnit <> null then n
+    elseif n.oclContainer().oclIsKindOf(ASTNode) then n.oclContainer().oclAsType(ASTNode)
+    else null
+    endif
+  )->exists(n: ASTNode | n.originalCompilationUnit <> null)
+)
 [/template]
 
 [template public generatesPostConditionToRemoveNonSourceElements(element: Access)]

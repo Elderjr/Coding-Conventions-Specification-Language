@@ -17,8 +17,8 @@
 [template private writeOclTag(faultType: FaultTypeDescription)]
 <ocl>
   [faultType.rule._context.writeContextConditions(faultType.rule.subject).replaceAll('<>', '&lt;&gt;') /]
-  [faultType.rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
-  [faultType.rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+  [faultType.rule.subject.generatesPostConditionToRemoveNonSourceElements().replaceAll('<>', '&lt;&gt;') /]
+  [faultType.rule.subject.generatesPostConditionToRemoveJavadocRelatedElements().replaceAll('<>', '&lt;&gt;') /]
 </ocl>
 [/template]
 

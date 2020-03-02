@@ -24,6 +24,7 @@ OrderedSet(String){
 
 [template private writeOperandsCondition(booleanExp: OperatorExpression, varname: String, metaclass: String) /]
 
+[comment ======= Boolean Expression Operands conditions ======= /]
 [template public writeGetOperands(opExpression: OperatorExpression, varname: String, metaclass: String)]
 if [varname /].oclIsKindOf(PrefixExpression) then
   [varname /].oclAsType(PrefixExpression).operand->asOrderedSet()
@@ -34,8 +35,23 @@ else
 endif endif
 [/template]
 
-[comment ======= Boolean Expression Operands conditions ======= /]
 [template private writeOperandsCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.mustWriteConditionFor('operands'))]
 let operands: OrderedSet(ASTNode) =  [booleanExp.writeGetOperands(varname, metaclass) /] in operands <> null and
 [booleanExp.generatesSetConditions('operands', booleanExp.operands, 'ASTNode') /]
+[/template]
+
+[comment ======= String Concatenation Operands conditions ======= /]
+[template public writeGetOperands(strConcat: StringConcatenation, varname: String, metaclass: String)]
+if [varname /].oclIsKindOf(Assignment) then
+  [varname /].oclAsType(Assignment).rightHandSide->asOrderedSet()
+else if [varname /].oclIsKindOf(InfixExpression) then
+  [varname /].oclAsType(InfixExpression).extendedOperands->append([varname /].oclAsType(InfixExpression).leftOperand)->append([varname /].oclAsType(InfixExpression).rightOperand)
+else
+  null
+endif endif
+[/template]
+
+[template private writeOperandsCondition(strConcat: StringConcatenation, varname: String, metaclass: String) ? (strConcat.mustWriteConditionFor('operands'))]
+let operands: OrderedSet(ASTNode) =  [strConcat.writeGetOperands(varname, metaclass) /] in operands <> null and
+[strConcat.generatesSetConditions('operands', strConcat.operands, 'ASTNode') /]
 [/template]

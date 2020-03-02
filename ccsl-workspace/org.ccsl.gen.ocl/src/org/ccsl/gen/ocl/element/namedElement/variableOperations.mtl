@@ -45,18 +45,23 @@ OrderedSet(String) {
 
 [comment ============= Conditions for attribute 'type' ===================== /]
 [template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? (not var.type.oclIsUndefined() and not var.isMetaclassInMatchingMetaclasses(metaclass))]
-[var.generatesMonovaluedFieldConditions(var.type, varname, 'ASTNode',
-OrderedSet(OrderedSet(String)){
-  OrderedSet(String){'SingleVariableDeclaration', 'type.type'},
-  OrderedSet(String){'VariableDeclarationFragment', 'variablesContainer.type.type'}  
-}) /]
+let [var.type.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(SingleVariableDeclaration) and [varname /].oclAsType(SingleVariableDeclaration).type <> null then
+  [varname /].oclAsType(SingleVariableDeclaration).type.type
+elseif [varname /].oclIsKindOf(VariableDeclarationFragment) and [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.type <> null then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else
+  null
+endif in
+[var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
 [/template]
 
 [template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'VariableDeclarationFragment')]
+[varname /].variablesContainer.type <> null and
 [var.generatesMonovaluedFieldConditions(var.type, varname, 'variablesContainer.type.type', 'ASTNode') /]
 [/template]
 
 [template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? ((not var.type.oclIsUndefined()) and metaclass = 'SingleVariableDeclaration')]
+[varname /].type <> null and
 [var.generatesMonovaluedFieldConditions(var.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

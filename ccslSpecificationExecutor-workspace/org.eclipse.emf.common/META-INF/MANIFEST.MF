@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.common;singleton:=true
+Bundle-Version: 2.16.0.v20190528-0845
+Bundle-ClassPath: org.eclipse.emf.common_2.16.0.v20190528-0845.jar
+Bundle-Activator: org.eclipse.emf.common.CommonPlugin$Implementation$Activator
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: org.eclipse.emf.common,
+ org.eclipse.emf.common.archive,
+ org.eclipse.emf.common.command,
+ org.eclipse.emf.common.notify,
+ org.eclipse.emf.common.notify.impl,
+ org.eclipse.emf.common.util
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.6.0,4.0.0)";resolution:=optional;x-installation:=greedy
+Archiver-Version: Plexus Archiver
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Eclipse-SourceReferences: scm:git:https://git.eclipse.org/r/p/emf/org.eclipse.emf.git;path="plugins/org.eclipse.emf.common";commitId=063937d66a94e688eaa530b0ee8a8c751f2bb362
+Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true
+Created-By: Apache Maven 3.0.5
+Built-By: genie.emf
+Automatic-Module-Name: org.eclipse.emf.common
+Eclipse-BuddyPolicy: dependent
+Import-Package: org.osgi.framework;version="[1.5.0,2.0.0)"
+Build-Jdk: 1.8.0_192

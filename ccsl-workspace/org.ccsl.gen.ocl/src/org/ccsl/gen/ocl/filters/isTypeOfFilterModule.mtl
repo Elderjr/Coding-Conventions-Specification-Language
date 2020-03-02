@@ -1,0 +1,13 @@
+[comment encoding = UTF-8 /]
+[module isTypeOfFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::statementTypeGetter /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+
+
+[template public writeIsTypeOfFilterCondition(filter: IsTypeOfFilter, target: Element)]
+[target.writeStatementTypeGetter(target.getUniqueOclName(), filter.type.getUniqueOclName()) /] and
+[filter.type.generatesConditions(filter.type.getUniqueOclName(), true, 'ASTNode') /]
+[/template]

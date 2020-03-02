@@ -13,29 +13,16 @@
 
 [template public writeOCL(rule: Rule)]
 let violations: Set(ASTNode) = [rule.writeOCLToSelectElements() /] in
-violations->asSequence()->collect(node: ASTNode | 
-	let container: NamedElement = node->asOrderedSet()->closure(x |
-        if x.oclIsKindOf(AbstractMethodDeclaration) or x.oclIsKindOf(AbstractTypeDeclaration) then
-		  x
-		else
-		  x.oclContainer()
-	    endif
-	)->last() in if (not container.oclIsUndefined()) and (not container.originalCompilationUnit.oclIsUndefined()) then
-      'Violation Found at '.concat(container.originalCompilationUnit.originalFilePath).concat(' on ').concat(container.name)
-    else
-      ''
-    endif
-)->asSequence()->select(violation | violation.size() > 0)
-->append('#violations: '.concat(violations->size().toString()))
+violations
 [/template]
 
 [template private writeOCLToSelectElements(rule: Rule) /]
 
 [template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
 [rule.clearAllContexts() /][rule._context.writeContextConditions(rule.subject) /]
-[rule.subject.generatesPostConditionToRemoveNonSourceElements() /]
 [rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
-[rule.subject.generatesPostConditionToSelectClosestContext() /]
+[rule.subject.generatesPostConditionToCollectFirstSourceElements() /]
+[comment rule.subject.generatesPostConditionToSelectClosestContext() /]
 [/template]
 
 [template private writeOCLToSelectElements(compositeRule: CompositeRule)]

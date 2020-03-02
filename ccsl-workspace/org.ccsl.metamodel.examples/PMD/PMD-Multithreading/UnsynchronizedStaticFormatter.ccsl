@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:MethodInvocation" elementAccessed="//@context/@contextElements.1/@methods.0"/>
+    <contextElements xsi:type="java:JClass">
+      <methods/>
+    </contextElements>
+    <filters xsi:type="filters:IsKindOfFilter" targets="//@context/@contextElements.1" type="//@context/@filters.0/@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="java:JClass" name="java.text.Format"/>
+      </context>
+    </filters>
+    <filters xsi:type="filters:CompositeFilter" operator="OR" negated="true">
+      <filters xsi:type="filters:ImplicityContainerFilter" targets="//@context/@contextElements.0" implicityContainer="//@context/@filters.1/@filters.0/@context/@contextElements.0" implicityField="//@context/@filters.1/@filters.1/@context/@contextElements.1">
+        <context>
+          <contextElements xsi:type="namedElements:Method">
+            <properties name="synchronized" value="synchronized"/>
+          </contextElements>
+          <contextElements xsi:type="statements:MethodInvocation"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:ImplicityContainerFilter" targets="//@context/@contextElements.0" implicityContainer="//@context/@filters.1/@filters.1/@context/@contextElements.0" implicityField="//@context/@filters.1/@filters.1/@context/@contextElements.1">
+        <context>
+          <contextElements xsi:type="statements:SynchronizedBlock"/>
+          <contextElements xsi:type="statements:MethodInvocation"/>
+        </context>
+      </filters>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

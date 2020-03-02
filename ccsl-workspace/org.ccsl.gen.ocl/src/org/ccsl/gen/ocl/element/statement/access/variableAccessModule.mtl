@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module variableAccessModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
@@ -16,7 +16,7 @@ let completeVarname: String = varAccess.getCompleteElementVarname(varname, metac
 let concreteMetaclass: String = varAccess.getConcreteElementMetaclass(metaclass) in 
 OrderedSet(String) {
   varAccess.writeVariableAccessTypecheckCondition(varname, typecheck)
-}->addAll(varAccess.getElementConditions(completeVarname, typecheck, concreteMetaclass))
+}->addAll(varAccess.getAccessConditions(completeVarname, false, concreteMetaclass))
 ->select(s | s.isNotEmpty())
 /]
 

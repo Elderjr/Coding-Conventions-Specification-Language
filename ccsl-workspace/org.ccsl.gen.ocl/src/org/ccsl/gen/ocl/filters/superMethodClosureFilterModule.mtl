@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module superMethodClosureFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
+
+
+[template public writeSuperMethodClosureFilterModule(filter: SuperMethodClosureFilter, target: Element)]
+[filter.writeAllSuperMethodsSet(target) /]
+superMethods->exists([filter.superMethod.getUniqueOclName() /] |
+  [filter._context.writeContextConditions(filter.superMethod, true, target.getGenericMatchingJavaMetaclass()) /]
+)
+[/template]
+
+[template private writeAllSuperMethodsSet(filter: SuperMethodClosureFilter, target: Element)]
+let superMethods: OrderedSet(MethodDeclaration) = [target.getUniqueOclName() /]->asOrderedSet()->closure(superMethod | 
+  superMethod.redefinedMethodDeclaration
+) in
+[/template]

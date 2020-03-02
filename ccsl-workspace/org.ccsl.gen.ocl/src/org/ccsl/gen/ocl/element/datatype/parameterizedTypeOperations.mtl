@@ -2,6 +2,7 @@
 [module parameterizedTypeOperations('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
@@ -10,26 +11,27 @@
   OrderedSet(String){'ParameterizedType'}
 /]
 
-[query public getParameterizedTypeConditions(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean): OrderedSet(String) =
-let void: OclVoid = parameterizedType.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, 'ParameterizedType') in
+[query public getParameterizedTypeConditions(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = parameterizedType.addElementAsVisited(metaclass) in
+let completeVarname: String = parameterizedType.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = parameterizedType.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  parameterizedType.generatesParameterizedTypecheck(varname, typecheck),
-  parameterizedType.generatesConditionsForTypeParameters(newVarname),
-  parameterizedType.generatesConditionsForType(newVarname)
+  parameterizedType.writeParameterizedTypecheck(varname, typecheck),
+  parameterizedType.writeTypeParametersConditions(completeVarname),
+  parameterizedType.writeTypeConditions(completeVarname)
 }->select(cond: String | cond.isNotEmpty())
 /]
 
-[template public generatesParameterizedTypecheck(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeParameterizedTypecheck(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ParameterizedType)
 [/template]
 
-[template public generatesConditionsForTypeParameters(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
+[template public writeTypeParametersConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
 let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
 [parameterizedType.generatesSetConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
 [/template]
 
-[template public generatesConditionsForType(parameterizedType: ParameterizedType, varname: String) ? (not parameterizedType.type.oclIsUndefined())] 
+[template public writeTypeConditions(parameterizedType: ParameterizedType, varname: String) ? (not parameterizedType.type.oclIsUndefined())] 
 [parameterizedType.generatesMonovaluedFieldConditions(parameterizedType.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

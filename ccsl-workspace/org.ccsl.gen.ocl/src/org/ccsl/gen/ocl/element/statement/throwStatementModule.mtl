@@ -1,0 +1,24 @@
+[comment encoding = UTF-8 /]
+[module throwStatementModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::statement::statementOperations /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+[query public getThrowStatementMatchingJavaMetaclasses(throwStmt: ThrowStatement): OrderedSet(String)= 
+  OrderedSet(String){'ThrowStatement'}
+/]
+
+[query public getThrowStatementConditions(throwStmt: ThrowStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = throwStmt.addElementAsVisited(metaclass) in
+let concreteMetaclass: String = throwStmt.getConcreteElementMetaclass(metaclass) in
+let completeVarname: String = throwStmt.getCompleteElementVarname(varname, metaclass) in
+OrderedSet(String) {
+  throwStmt.writeThrowStatementTypechecker(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+/]
+
+[template public writeThrowStatementTypechecker(throwStmt: ThrowStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ThrowStatement)
+[/template]

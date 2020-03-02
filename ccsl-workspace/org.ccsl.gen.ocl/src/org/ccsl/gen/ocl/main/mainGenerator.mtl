@@ -13,7 +13,7 @@
 [template private write(root: Root) /]
 
 [template private write(rule: Rule)]
-[file ('ocl-gen', false, 'UTF-8')]
+[file ('ocl-gen.txt', false, 'UTF-8')]
 [rule.writeOCL() /]
 [/file]
 [/template]

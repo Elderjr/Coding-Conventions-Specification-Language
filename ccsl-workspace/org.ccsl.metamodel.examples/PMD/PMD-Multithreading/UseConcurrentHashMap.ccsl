@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:RecommendationCompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
-  <rules xsi:type="ccsl:AtomicRecommendationRule" subject="//@rules.0/@contextElements.0">
-    <contextElements xsi:type="namedElements:Variable" type="mapParameterizedType">
-      <initialValue xsi:type="statements:InstanceCreation" type="//@rules.0/@contextElements.4"/>
-    </contextElements>
-    <contextElements xsi:type="java:JavaInterface" uniqueName="mapInterface" name="java.util.Map"/>
-    <contextElements xsi:type="datatype:ParameterizedType" uniqueName="mapParameterizedType" type="mapInterface"/>
-    <contextElements xsi:type="java:JavaClass" uniqueName="notAConcurrentHashMapClass"/>
-    <contextElements xsi:type="datatype:ParameterizedType" type="notAConcurrentHashMapClass"/>
-    <filters xsi:type="filters:RegexMatch" negated="true" targets="notAConcurrentHashMapClass" regex="java\\.util\\.concurrent\\.ConcurrentHashMap"/>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements">
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.0/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="namedElements:Variable" type="parameterizedMap">
+        <initialValue/>
+      </contextElements>
+      <contextElements xsi:type="datatype:ParameterizedType" uniqueName="parameterizedMap" type="mapInterface"/>
+      <contextElements xsi:type="java:JInterface" uniqueName="mapInterface" name="java.util.Map"/>
+      <filters xsi:type="filters:IsTypeOfFilter" targets="//@rules.0/@context/@contextElements.0/@initialValue" type="hashMapParameterized">
+        <context>
+          <contextElements xsi:type="java:JClass" uniqueName="hashMapClass" name="java.util.HashMap"/>
+          <contextElements xsi:type="datatype:ParameterizedType" uniqueName="hashMapParameterized" type="hashMapClass"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.0/@context/@contextElements.0" targetTemplate="//@rules.0/@context/@filters.1/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="namedElements:Variable">
+            <initialValue xsi:type="literalValues:NullLiteral"/>
+          </contextElements>
+        </context>
+      </filters>
+    </context>
   </rules>
-</ccsl:RecommendationCompositeRule>
+</ccsl:CompositeRule>

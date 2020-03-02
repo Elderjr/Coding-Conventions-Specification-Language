@@ -7,31 +7,31 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
-[query public getJavaClassMatchingMetaclasses(javaClass: JavaClass): OrderedSet(String)=
+[query public getJavaClassMatchingMetaclasses(javaClass: JClass): OrderedSet(String)=
   OrderedSet(String){'ClassDeclaration', 'AnonymousClassDeclaration'}
 /]
 
-[query public getJavaClassConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+[query public getJavaClassConditions(javaClass: JClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = javaClass.addElementAsVisited() in
 let completeVarname: String = javaClass.getCompleteElementVarname(varname, metaclass) in
 let concreteMetaclass: String = javaClass.getConcreteElementMetaclass(metaclass) in 
 OrderedSet(String) {
   javaClass.generatesClassTypecheckCondition(varname, typecheck, metaclass),
-  javaClass.generatesConditionsForImplements(varname)
+  javaClass.generatesConditionsForImplements(completeVarname)
 }->select(cond | cond.isNotEmpty())
-->addAll(javaClass.getComplexTypeConditions(varname, false, metaclass))
+->addAll(javaClass.getComplexTypeConditions(completeVarname, false, concreteMetaclass))
 /]
 
-[template public generatesClassTypecheckCondition(class: JavaClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not class.isMetaclassInMatchingMetaclasses(metaclass))]
+[template public generatesClassTypecheckCondition(class: JClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not class.isMetaclassInMatchingMetaclasses(metaclass))]
 ([for (metaclass: String | class.getJavaClassMatchingMetaclasses()) separator(' or ')]
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template public generatesClassTypecheckCondition(class: JavaClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and class.isMetaclassInMatchingMetaclasses(metaclass))]
+[template public generatesClassTypecheckCondition(class: JClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and class.isMetaclassInMatchingMetaclasses(metaclass))]
 [varname /].oclIsKindOf([metaclass /])
 [/template]
 
-[template public generatesConditionsForImplements(class: JavaClass, varname: String) ? (class.implements->size() > 0)]
+[template public generatesConditionsForImplements(class: JClass, varname: String) ? (class.implements->size() > 0)]
 let interfacesImplemented: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).superInterfaces->collect(type)->asOrderedSet()
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then

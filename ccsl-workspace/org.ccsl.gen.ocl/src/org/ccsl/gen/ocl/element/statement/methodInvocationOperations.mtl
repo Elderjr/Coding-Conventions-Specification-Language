@@ -6,8 +6,12 @@
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 
-[query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String)= 
-  OrderedSet(String){'MethodInvocation', 'SuperMethodInvocation'}
+[query public getMethodInvocationMatchingMetaclasses(methodInv: MethodInvocation): OrderedSet(String) = 
+  if methodInv.mustWriteConditionFor('from') then
+    OrderedSet(String){'MethodInvocation'}
+  else
+    OrderedSet(String){'MethodInvocation', 'SuperMethodInvocation'}
+  endif
 /]
 
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -24,7 +28,8 @@ OrderedSet(String) {
 /]
 
 [template public writeMethodInvocationTypecheckCondition(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
-([varname /].oclIsKindOf(MethodInvocation) or [varname /].oclIsKindOf(SuperMethodInvocation))
+([for (javaMetaclass: String | methodInv.getMethodInvocationMatchingMetaclasses()) separator (' or ')]
+[varname /].oclIsKindOf([javaMetaclass /])[/for])
 [/template]
 
 [template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]

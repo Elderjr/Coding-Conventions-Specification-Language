@@ -21,11 +21,13 @@
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
-[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
+[import org::ccsl::gen::ocl::element::statement::synchronizedBlockModule /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
+[import org::ccsl::gen::ocl::element::statement::throwStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 [import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
+[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -36,9 +38,11 @@
 [import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
 [import org::ccsl::gen::ocl::element::statement::expression::arithmeticExpressionModule /]
+[import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
 
 [comment statements/tryCatch /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
+
 
 
 [template private writeAllConditions(conditions: OrderedSet(String))]
@@ -61,11 +65,8 @@
 [obj.printConditions(obj.getObjectTypeConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(obj: ParameterizedType, varname: String, typecheck: Boolean)]
-[obj.printConditions(obj.getParameterizedTypeConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(obj: ParameterizedType, varname: String, typecheck: Boolean, metaclass: String)]
-[obj.printConditions(obj.getObjectTypeConditions(varname, typecheck, metaclass)) /]
+[obj.printConditions(obj.getParameterizedTypeConditions(varname, typecheck, metaclass)) /]
 [/template]
 
 [comment dataType/ArrayType /]
@@ -84,11 +85,11 @@
 [complexType.printConditions(complexType.getComplexTypeConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(javaClass: JavaClass, varname: String, typecheck: Boolean, metaclass: String)]
+[template public generatesConditions(javaClass: JClass, varname: String, typecheck: Boolean, metaclass: String)]
 [javaClass.printConditions(javaClass.getJavaClassConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(javaInterface: JavaInterface, varname: String, typecheck: Boolean, metaclass: String)]
+[template public generatesConditions(javaInterface: JInterface, varname: String, typecheck: Boolean, metaclass: String)]
 [javaInterface.printConditions(javaInterface.getInterfaceConditions(varname, typecheck, metaclass)) /]
 [/template]
 
@@ -149,6 +150,11 @@
 [block.printConditions(block.getBlockConditions(varname, typecheck)) /]
 [/template]
 
+[comment statements/SynchronizedBlock /]
+[template public generatesConditions(block: SynchronizedBlock, varname: String, typecheck: Boolean, metaclass: String)]
+[block.printConditions(block.getSynchronizedBlockConditions(varname, typecheck)) /]
+[/template]
+
 [comment statements/LiteralValue /]
 [template public generatesConditions(lit: LiteralValue, varname: String, typecheck: Boolean)]
 [lit.printConditions(lit.getLiteralConditions(varname, typecheck)) /]
@@ -158,9 +164,6 @@
 [/template]
 
 [comment statement/access /]
-[template public generatesConditions(access: Access, varname: String, typecheck: Boolean)]
-[access.printConditions(access.getAccessConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(access: Access, varname: String, typecheck: Boolean, metaclass: String)]
 [access.printConditions(access.getAccessConditions(varname, typecheck, metaclass)) /]
 [/template]
@@ -212,7 +215,17 @@
 [booleanExp.getBooleanExpressionConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment statements/expression/StringConcatenation /]
+[template public generatesConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean, metaclass: String)]
+[strConcat.getStringConcatenationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
 [comment statements/tryCatch/CatchBlock /]
 [template public generatesConditions(catchBlock: CatchBlock, varname: String, typecheck: Boolean, metaclass: String)]
 [catchBlock.printConditions(catchBlock.getCatchBlockConditions(varname, typecheck, metaclass)) /]
+[/template]
+
+[comment statements/throwStatement /]
+[template public generatesConditions(throwStmt: ThrowStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[throwStmt.getThrowStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]

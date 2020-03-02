@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:InstanceCreation"/>
+    <filters xsi:type="filters:ImplicityContainerFilter" targets="//@context/@contextElements.0" implicityContainer="//@context/@filters.0/@context/@contextElements.0" implicityField="//@context/@filters.0/@context/@contextElements.0/@body">
+      <context>
+        <contextElements xsi:type="controlFlow:LoopStatement">
+          <body xsi:type="statements:InstanceCreation"/>
+        </contextElements>
+      </context>
+    </filters>
+    <filters xsi:type="filters:ImplicityContainerFilter" negated="true" targets="//@context/@contextElements.0" implicityContainer="//@context/@filters.1/@context/@contextElements.0" implicityField="//@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="statements:ThrowStatement"/>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

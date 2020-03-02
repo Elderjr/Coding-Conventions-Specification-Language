@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:FaultTypeDescription xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:action="http://www.example.org/ccsl/faultTypeDescription/action" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:strategy="http://www.example.org/ccsl/faultTypeDescription/strategy" name="MissingHashCodeImplementation">
+  <rule subject="//@rule/@context/@contextElements.0/@methods.0">
+    <context>
+      <contextElements xsi:type="java:JClass">
+        <methods name="hashCode"/>
+      </contextElements>
+      <filters xsi:type="filters:ChildComplexTypeFilter" targets="//@rule/@context/@contextElements.0" superComplexType="//@rule/@context/@contextElements.0" childComplexType="//@rule/@context/@filters.0/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="java:JClass">
+            <methods name="equals"/>
+          </contextElements>
+        </context>
+      </filters>
+    </context>
+  </rule>
+  <actions xsi:type="action:DeleteAction" target="//@rule/@context/@contextElements.0/@methods.0"/>
+  <strategy xsi:type="strategy:AllStrategy"/>
+</ccsl:FaultTypeDescription>

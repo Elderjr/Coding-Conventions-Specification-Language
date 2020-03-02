@@ -26,7 +26,7 @@ endif endif in (not [target.getUniqueOclName() /]Package.oclIsUndefined()) and
 ).concat([target.getUniqueOclName() /].oclAsType(NamedElement).name).matches('[regexFilter.regex /]') 
 [/template]
 
-[template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JavaClass)]
+[template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: JClass)]
 let className: String = if [target.getUniqueOclName() /].oclIsKindOf(ClassDeclaration) then
   [target.getUniqueOclName() /].oclAsType(ClassDeclaration).name
 else if [target.getUniqueOclName() /].oclIsKindOf(AnonymousClassDeclaration) then

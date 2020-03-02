@@ -20,11 +20,13 @@
 [import org::ccsl::gen::ocl::element::statement::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
-[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
+[import org::ccsl::gen::ocl::element::statement::synchronizedBlockModule /]
 [import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
+[import org::ccsl::gen::ocl::element::statement::throwStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 [import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
+[import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 
 [comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
@@ -35,6 +37,7 @@
 [import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
 [import org::ccsl::gen::ocl::element::statement::expression::booleanExpressionModule /]
 [import org::ccsl::gen::ocl::element::statement::expression::arithmeticExpressionModule /]
+[import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
 
 [comment statements/tryCatch /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
@@ -59,10 +62,10 @@ else if element.oclIsTypeOf(Method) then
   element.oclAsType(Method).getMethodMatchingJavaMetaclasses()
 else if element.oclIsTypeOf(ComplexType) then
   element.oclAsType(ComplexType).getComplexTypeMatchingMetaclasses()
-else if element.oclIsTypeOf(JavaClass) then
-  element.oclAsType(JavaClass).getJavaClassMatchingMetaclasses()
-else if element.oclIsTypeOf(JavaInterface) then
-  element.oclAsType(JavaInterface).getInterfaceMatchingMetaclasses()
+else if element.oclIsTypeOf(JClass) then
+  element.oclAsType(JClass).getJavaClassMatchingMetaclasses()
+else if element.oclIsTypeOf(JInterface) then
+  element.oclAsType(JInterface).getInterfaceMatchingMetaclasses()
 else if element.oclIsKindOf(Variable) then
   element.oclAsType(Variable).getVariableMatchingJavaMetaclasses()
 --element/statements
@@ -80,8 +83,12 @@ else if element.oclIsTypeOf(DataTypeAccess) then
   element.oclAsType(DataTypeAccess).getTypeAccessMatchingMetaclasses()
 else if element.oclIsTypeOf(Block) then
   element.oclAsType(Block).getBlockMatchingMetaclasses()
+else if element.oclIsTypeOf(SynchronizedBlock) then
+  element.oclAsType(SynchronizedBlock).getSynchronizedBlockMatchingMetaclasses()
 else if element.oclIsTypeOf(VarAssignment) then
   element.oclAsType(VarAssignment).getVariableAssignmentMatchingJavaMetaclasses()
+else if element.oclIsTypeOf(ThrowStatement) then
+  element.oclAsType(ThrowStatement).getThrowStatementMatchingJavaMetaclasses()
 --element/statements/access
 else if element.oclIsTypeOf(Access) then
   element.oclAsType(Access).getAccessMatchingMetaclasses()
@@ -103,11 +110,13 @@ else if element.oclIsTypeOf(BooleanExpression) then
   element.oclAsType(BooleanExpression).getBooleanExpressionMatchingJavaMetaclasses()
 else if element.oclIsTypeOf(ArithmeticExpression) then
   element.oclAsType(ArithmeticExpression).getArithmeticExpressionMatchingJavaMetaclasses()
+else if element.oclIsTypeOf(StringConcatenation) then
+  element.oclAsType(StringConcatenation).getStringConcatenationMatchingMetaclasses()
 --element/statements/tryCatch
 else if element.oclIsTypeOf(CatchBlock) then
   element.oclAsType(CatchBlock).getCatchBlockMatchingMetaclasses()
 else
   OrderedSet(String){'FIX GETTING MATCHING JAVA METACLASSES FOR CLASS '.concat(element.eClass().toString())}
-endif endif endif endif endif endif endif endif endif endif endif endif endif
-endif endif endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
+endif endif endif endif endif endif endif endif endif endif endif endif endif endif
 /]

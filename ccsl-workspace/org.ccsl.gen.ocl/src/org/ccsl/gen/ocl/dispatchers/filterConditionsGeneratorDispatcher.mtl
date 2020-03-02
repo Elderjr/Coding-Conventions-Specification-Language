@@ -1,17 +1,28 @@
 [comment encoding = UTF-8 /]
 [module filterConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::filters::propertyFilterOperations /]
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
 [import org::ccsl::gen::ocl::filters::definesMethodFilterOperations /]
-[import org::ccsl::gen::ocl::filters::typedStatementFilterOperations /]
 [import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
-[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::implicityOperandFilterModule /]
 [import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
 [import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
+[import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
+[import org::ccsl::gen::ocl::filters::isTypeOfFilterModule /]
+[import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
+[import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+[comment complex type closure filters /]
+[import org::ccsl::gen::ocl::filters::childComplexTypeFilter /]
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
+[/template]
+
+[template public writeFiltersConditions(filters: OrderedSet(Filter))]
+[let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
+[for(cond: String | filterConditions) separator(' and\n')]
+[cond.writeStr() /][/for][/let]
 [/template]
 
 [template public generatesFilterConditions(filter : Filter) /]
@@ -66,7 +77,9 @@ not (
 [/template]
 
 [comment dispatchers /]
-[template public generatesSpecificFilterConditions(atomicFilter: AtomicFilter, target: Element) /]
+[template public generatesSpecificFilterConditions(atomicFilter: AtomicFilter, target: Element)]
+[atomicFilter.eClass() /] dispatcher not implemented
+[/template]
 
 [template public generatesSpecificFilterConditions(propertyFilter: PropertyFilter, target: Element)]
 [propertyFilter.generatesPropertyFilterConditions(target) /]
@@ -80,10 +93,6 @@ not (
 [definesMethodFilter.generateDefinesMethodFilterConditions(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(typedStatementFilter: TypedStatementFilter, target: Element)]
-[typedStatementFilter.generatesTypedStatementFilterConditions(target) /]
-[/template]
-
 [template public generatesSpecificFilterConditions(casesCounter: SwitchCaseStatementCount, target: Element)]
 [casesCounter.generatesSwitchStatementCaseCounterFilterConditions(target) /]
 [/template]
@@ -92,14 +101,30 @@ not (
 [templFilter.writeTemplateFilterCondition(target) /]
 [/template]
 
+[template public generatesSpecificFilterConditions(f: ImplicityContainerFilter, target: Element)]
+[f.writeImplicityContainerFilter(target) /]
+[/template]
+
 [template public generatesSpecificFilterConditions(implicityOperandFilter: ImplicityOperandFilter, target: Element)]
 [implicityOperandFilter.writeImplicityOperandFilterCondition(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(implicityContainerFilter: ImplicityContainer, target: Element)]
-
-[/template]
-
 [template public generatesSpecificFilterConditions(sameNameFilter: SameNameFilter, target: Element)]
 [sameNameFilter.generatesSameNameFilterConditions(sameNameFilter, target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(isKindOfFilter: IsKindOfFilter, target: Element)]
+[isKindOfFilter.writeIsKindOfFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(isTypeOfFilter: IsTypeOfFilter, target: Element)]
+[isTypeOfFilter.writeIsTypeOfFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(superMethodClosureFilter: SuperMethodClosureFilter, target: Element)]
+[superMethodClosureFilter.writeSuperMethodClosureFilterModule(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(f: ChildComplexTypeFilter, target: Element)]
+[f.writeChildComplexTypeFilter(target) /]
 [/template]

@@ -108,6 +108,13 @@
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/variable"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/assignment"/>
         </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/SynchronizedBlock">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/SynchronizedBlock/bodyStatements"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/SynchronizedBlock/key"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/ThrowStatement">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ThrowStatement/expression"/>
+        </genClasses>
         <nestedGenPackages prefix="Expressions" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/expressions">
           <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/statements/expressions/BooleanOperator">
             <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/expressions/BooleanOperator/AND"/>
@@ -207,37 +214,12 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="Java" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//java">
       <genClasses ecoreClass="ccsl.ecore#//java/JElement"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/JavaClass">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JavaClass/nestedClasses"/>
+      <genClasses ecoreClass="ccsl.ecore#//java/JClass">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JClass/nestedClasses"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//java/JavaClass/implements"/>
+            ecoreFeature="ecore:EReference ccsl.ecore#//java/JClass/implements"/>
       </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JavaInterface"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/JavaMethod">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//java/JavaMethod/throws"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JConstructor"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/JTryCatch">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JTryCatch/try"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JTryCatch/catches"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JTryClause">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JTryClause/resources"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JCatchClause">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//java/JCatchClause/exceptions"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JCatchClause/param"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/InstanceOf"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/ThrowStatement"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/JFor">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JFor/initializers"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JFor/updaters"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JReturnStatement"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/GenericType"/>
+      <genClasses ecoreClass="ccsl.ecore#//java/JInterface"/>
     </nestedGenPackages>
     <nestedGenPackages prefix="Filters" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//filters">
       <genClasses image="false" ecoreClass="ccsl.ecore#//filters/Filter">
@@ -296,7 +278,35 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityOperandFilter/operatorExpression"/>
       </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/ImplicityContainer"/>
+      <genClasses ecoreClass="ccsl.ecore#//filters/ImplicityContainerFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/implicityContainer"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/implicityField"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/context"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/IsKindOfFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsKindOfFilter/context"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsKindOfFilter/type"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/SuperMethodClosureFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/SuperMethodClosureFilter/context"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/SuperMethodClosureFilter/superMethod"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/IsTypeOfFilter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsTypeOfFilter/context"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsTypeOfFilter/type"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/ChildComplexTypeFilter">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/superComplexType"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/childComplexType"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/context"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="NonElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//nonElements">
       <genClasses image="false" ecoreClass="ccsl.ecore#//nonElements/StatementsContainer">

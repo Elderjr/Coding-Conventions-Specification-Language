@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[module synchronizedBlockModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::element::elementOperations /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[query public getSynchronizedBlockMatchingMetaclasses(block: SynchronizedBlock): OrderedSet(String)= 
+  OrderedSet(String){'SynchronizedStatement'}
+/]
+
+[query public getSynchronizedBlockConditions(block: SynchronizedBlock, varname: String, typecheck: Boolean): OrderedSet(String) =
+let newVarname: String = varname.printVarname(typecheck, 'Block') in
+OrderedSet(String) {
+  block.writeSynchronizedBlockTypecheckCondition(varname, typecheck),
+  block.writeBodyStatementsCondition(newVarname)
+}->select(s: String | s.isNotEmpty())
+->addAll(block.getElementConditions(newVarname, false))
+/]
+
+[template public writeSynchronizedBlockTypecheckCondition(block: SynchronizedBlock, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(SynchronizedStatement)
+[/template]
+
+[template public writeBodyStatementsCondition(block: SynchronizedBlock, varname: String) ? (block.isSet('statements'))]
+[block.generatesMultivaluedFieldConditions(block.bodyStatements, varname, 'tmpStatements', 'body', 'ASTNode') /]
+[/template]

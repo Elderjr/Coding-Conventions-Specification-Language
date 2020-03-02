@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.edit;singleton:=true
+Bundle-Version: 2.15.0.v20190528-0725
+Bundle-ClassPath: org.eclipse.emf.edit_2.15.0.v20190528-0725.jar
+Bundle-Activator: org.eclipse.emf.edit.EMFEditPlugin$Implementation$Activator
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: org.eclipse.emf.edit,
+ org.eclipse.emf.edit.command,
+ org.eclipse.emf.edit.domain,
+ org.eclipse.emf.edit.provider,
+ org.eclipse.emf.edit.provider.resource,
+ org.eclipse.emf.edit.tree,
+ org.eclipse.emf.edit.tree.impl,
+ org.eclipse.emf.edit.tree.provider,
+ org.eclipse.emf.edit.tree.util
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.6.0,4.0.0)";resolution:=optional;x-installation:=greedy,
+ org.eclipse.emf.common;bundle-version="[2.16.0,3.0.0)";visibility:=reexport,
+ org.eclipse.emf.ecore;bundle-version="[2.18.0,3.0.0)";visibility:=reexport,
+ org.eclipse.emf.ecore.change;bundle-version="[2.14.0,3.0.0)";resolution:=optional;visibility:=reexport;x-installation:=greedy
+Import-Package: org.osgi.framework;version="[1.5.0,2.0.0)"
+Built-By: genie.emf
+Eclipse-LazyStart: true
+Eclipse-SourceReferences: scm:git:https://git.eclipse.org/r/p/emf/org.eclipse.emf.git;path="plugins/org.eclipse.emf.edit";commitId=063937d66a94e688eaa530b0ee8a8c751f2bb362
+Created-By: Apache Maven 3.0.5
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Build-Jdk: 1.8.0_192
+Bundle-ActivationPolicy: lazy
+Archiver-Version: Plexus Archiver
+Automatic-Module-Name: org.eclipse.emf.edit

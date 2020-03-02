@@ -1,16 +1,18 @@
 [comment encoding = UTF-8 /]
 [module contextModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
 
 [query private isElementNeedsTypecheckOnStart(e: Element): Boolean = 
   e.oclIsKindOf(VarAssignment) or
-  -- e.oclIsKindOf(ArithmeticExpression) or
-  e.oclIsKindOf(BooleanExpression)
+  e.oclIsKindOf(ArithmeticExpression) or
+  e.oclIsKindOf(BooleanExpression) or 
+  e.oclIsKindOf(StringConcatenation)
 /]
 
 [template public writeContextConditions(ctx: Context, entryPoint: Element) post(trim())]
@@ -48,7 +50,7 @@ endif]
 [metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
 [/template]
 
-[template private writeContextFiltersConditions(ctx: Context)]
+[template public writeContextFiltersConditions(ctx: Context)]
 [let filterConditions: Sequence(String) = ctx.filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
 [for(cond: String | filterConditions) separator(' and\n')]
 [cond.writeStr() /][/for][/let]

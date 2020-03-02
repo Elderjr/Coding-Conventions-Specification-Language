@@ -1,24 +1,34 @@
 [comment encoding = UTF-8 /]
 [module stringConcatenationOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::statementTypeGetterGenerator /]
-
 [import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::StringConcatenationChecker /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
 
 [query public getStringConcatenationMatchingMetaclasses(strConcat: StringConcatenation): OrderedSet(String)=
   OrderedSet(String){'InfixExpression', 'Assignment'}
 /]
 
-[query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String): OrderedSet(String) = 
+[query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
+let void: OclVoid = strConcat.addElementAsVisited(metaclass) in
+let completeVarname: String = strConcat.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = strConcat.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  strConcat.generatesConditionForStringConcatenationTypecheck(varname)
+  strConcat.writeStringConcatenationTypechecker(varname, typecheck)
 }->addAll(strConcat.getOperatorExpressionConditions(varname, false, 'ASTNode'))
 /]
 
-[template public generatesConditionForStringConcatenationTypecheck(strConcat: StringConcatenation, varname: String)]
-( ([varname /].oclIsKindOf(Assignment) and [varname /].oclAsType(Assignment).operator = AssignmentKind::PLUS_ASSIGN) or ([varname /].oclIsKindOf(InfixExpression)) ) and
-[strConcat.generatesStatementTypeGetter(varname, 'tmpType') /] and
-tmpType = strClass
+[template private writeStringConcatenationTypechecker(strConcat: StringConcatenation, varname: String, typecheck: Boolean) ? (typecheck)]
+let canBeStringConcatenation: Boolean = if [varname /].oclIsKindOf(InfixExpression) then
+  [varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS
+elseif [varname /].oclIsKindOf(Assignment) then
+  [varname /].oclAsType(Assignment).operator = AssignmentKind::PLUS_ASSIGN
+else
+  false
+endif in canBeStringConcatenation and
+[strConcat.writeStringConcatenationChecker(varname) /]
 [/template]
+
 
