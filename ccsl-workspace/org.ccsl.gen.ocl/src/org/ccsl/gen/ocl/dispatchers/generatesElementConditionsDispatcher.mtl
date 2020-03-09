@@ -113,11 +113,8 @@
 [methodInv.printConditions(methodInv.getMethodInvocationConditions(varname, typecheck, metaclass)) /]
 [/template]
 
-[template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean)]
-[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
-[/template]
 [template public generatesConditions(inst: InstanceCreation, varname: String, typecheck: Boolean, metaclass: String)]
-[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck)) /]
+[inst.printConditions(inst.getInstanceCreationConditions(varname, typecheck, metaclass)) /]
 [/template]
 
 [template public generatesConditions(inst: ArrayCreation, varname: String, typecheck: Boolean)]

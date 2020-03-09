@@ -1,41 +1,32 @@
-let violations: Set(ASTNode) = ClassInstanceCreation.allInstances()->select(stmt1 |
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv1 |
   --AtomicRule Context Conditions
-  let stmt2: ASTNode = stmt1 in true and
-  let implicityContainerSet: OrderedSet(ASTNode) = stmt2->asOrderedSet()->closure(node: ASTNode |
-    let container: OclAny = node.oclContainer() in  
-    if container <> null and container.oclIsKindOf(ASTNode) then
-      container
+  let method2: MethodDeclaration = if methodInv1.oclIsKindOf(MethodInvocation) then
+    methodInv1.oclAsType(MethodInvocation).method
+  else if methodInv1.oclIsKindOf(SuperMethodInvocation) then
+    methodInv1.oclAsType(SuperMethodInvocation).method
+  else
+    null
+  endif endif in
+  method2 <> null and
+  let args: OrderedSet(ASTNode) = if methodInv1.oclIsKindOf(MethodInvocation) then
+    methodInv1.oclAsType(MethodInvocation).arguments
+  elseif methodInv1.oclIsKindOf(SuperMethodInvocation) then
+    methodInv1.oclAsType(SuperMethodInvocation).arguments
+  else
+    null
+  endif in (not args->oclIsUndefined()) and
+  let args: OrderedSet(ASTNode) = args->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
     else
-      null
-    endif
+      v
+    endif)
   ) in
-  implicityContainerSet->exists(stmt3: ASTNode |
-    (stmt3.oclIsKindOf(EnhancedForStatement) or stmt3.oclIsKindOf(ForStatement) or stmt3.oclIsKindOf(WhileStatement) or stmt3.oclIsKindOf(DoStatement))  and
-    let loopBody = if stmt3.oclIsKindOf(EnhancedForStatement) then
-      stmt3.oclAsType(EnhancedForStatement).body
-    elseif stmt3.oclIsKindOf(ForStatement) then
-      stmt3.oclAsType(ForStatement).body
-    elseif stmt3.oclIsKindOf(WhileStatement) then
-      stmt3.oclAsType(WhileStatement).body
-    elseif stmt3.oclIsKindOf(DoStatement) then
-      stmt3.oclAsType(DoStatement).body
-    else 
-      null
-    endif in loopBody <> null and
-    implicityContainerSet->exists(x | x = loopBody)->size() > 0
-  ) and
-  not (
-    let implicityContainerSet: OrderedSet(ASTNode) = stmt1->asOrderedSet()->closure(node: ASTNode |
-      let container: OclAny = node.oclContainer() in  
-      if container <> null and container.oclIsKindOf(ASTNode) then
-        container
-      else
-        null
-      endif
-    ) in
-    implicityContainerSet->exists(e4: ASTNode |
-      e4.oclIsKindOf(ThrowStatement)
-    )
+  args->exists(literal3 |  
+    literal3 <> null and
+      (literal3.oclIsKindOf(StringLiteral)) and
+  literal3.oclAsType(StringLiteral).escapedValue.matches('"(.|(\\\\).)"') and
+  method2.oclAsType(NamedElement).name.matches('(indexOf|lastIndexOf)')
   )
 )
 ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))

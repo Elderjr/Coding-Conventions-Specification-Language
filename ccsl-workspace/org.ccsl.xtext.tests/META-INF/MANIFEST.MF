@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.ccsl.xtext.tests
+Bundle-ManifestVersion: 2
+Bundle-Name: org.ccsl.xtext.tests
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.ccsl.xtext.tests; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.ccsl.xtext,
+ org.ccsl.metamodel,
+ org.junit.jupiter.api;bundle-version="[5.0.0,6.0.0)",
+ org.eclipse.xtext.testing,
+ org.eclipse.xtext.xbase.testing,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.ccsl.xtext.tests;x-internal=true

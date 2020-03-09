@@ -4,26 +4,28 @@
 [import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getInstanceCreationMatchingMetaclasses(inst: InstanceCreation): OrderedSet(String)=
   OrderedSet(String){'ClassInstanceCreation'}
 /]
 
-[query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'ClassInstanceCreation') in
+[query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = inst.addElementAsVisited(metaclass) in
+let concreteMetaclass: String = inst.getConcreteElementMetaclass(metaclass) in
+let completeVarname: String = inst.getCompleteElementVarname(varname, metaclass) in
 OrderedSet(String) {
-  inst.generatesConditionForTypecheck(varname, typecheck),
-  inst.generatesConditionsForType(newVarname)
+  inst.writeInstanceCreationTypecheckCondition(varname, typecheck),
+  inst.writeTypeCondition(completeVarname)
 }
 ->select(s | s.isNotEmpty())
 /]
 
-[template private generatesConditionForTypecheck(inst: InstanceCreation, varname: String, typecheck: Boolean) ? (typecheck)]
+[template private writeInstanceCreationTypecheckCondition(inst: InstanceCreation, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ClassInstanceCreation)
 [/template]
 
-[template private generatesConditionsForType(inst: InstanceCreation, varname: String) ? (not inst.type.oclIsUndefined())]
+[template private writeTypeCondition(inst: InstanceCreation, varname: String) ? (not inst.type.oclIsUndefined())]
 [inst.generatesMonovaluedFieldConditions(inst.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

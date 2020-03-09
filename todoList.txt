@@ -1,0 +1,6 @@
+#TODO
+1. Add missing metaclasses to represent some of java elements
+2. Remove warnings in  Acceleo
+3. Add CCSL grammar
+4. Developing an eclipse-plugin to support CCSL
+5. Comparation PMD vs. CCSL

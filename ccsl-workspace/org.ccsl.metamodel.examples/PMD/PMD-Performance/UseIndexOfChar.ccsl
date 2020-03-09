@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements" violator="//@ruleElements.1">
-  <ruleElements xsi:type="java:JavaClass" name="java.lang.String">
-    <methods xsi:type="java:JavaMethod"/>
-  </ruleElements>
-  <ruleElements xsi:type="statements:MethodInvocation" elementAccessed="//@ruleElements.0/@methods.0">
-    <args xsi:type="literalValues:StringLiteral"/>
-  </ruleElements>
-  <filters xsi:type="filters:RegexMatch" targets="//@ruleElements.0/@methods.0" regex="(indexOf|lastIndexOf)"/>
-  <filters xsi:type="filters:RegexMatch" targets="//@ruleElements.1/@args.0" regex="."/>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:MethodInvocation" elementAccessed="//@context/@contextElements.1">
+      <args xsi:type="literalValues:StringLiteral"/>
+    </contextElements>
+    <contextElements xsi:type="namedElements:Method"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.0/@args.0" regex="(.|(\\\\).)"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="(indexOf|lastIndexOf)"/>
+  </context>
 </ccsl:AtomicRule>

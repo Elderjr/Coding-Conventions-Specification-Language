@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements">
-  <auxiliaryElements xsi:type="java:JavaClass"/>
-  <filters xsi:type="filters:RegexMatch" targets="//@auxiliaryElements.0" regex="java\\.io\\.File(InputStream|OutputStream|Reader|Writer)"/>
-  <scope xsi:type="statements:InstanceCreation" type="//@auxiliaryElements.0"/>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:InstanceCreation" type="//@context/@contextElements.1"/>
+    <contextElements xsi:type="java:JClass"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="java\\.io\\.File(InputStream|OutputStream|Reader|Writer)"/>
+  </context>
 </ccsl:AtomicRule>

@@ -1,0 +1,6 @@
+AtomicRule {
+	context Context {
+		contextElements {Element as elder}
+	}
+	subject elder
+}

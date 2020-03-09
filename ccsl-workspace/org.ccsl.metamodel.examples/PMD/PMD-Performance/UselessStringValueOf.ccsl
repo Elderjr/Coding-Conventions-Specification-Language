@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:java="http://www.example.org/ccsl/java" xmlns:statements="http://www.example.org/ccsl/elements/statements">
-  <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.String">
-    <methods xsi:type="java:JavaMethod" name="valueOf"/>
-  </auxiliaryElements>
-  <scope xsi:type="expressions:StringConcatenation">
-    <operands xsi:type="statements:MethodInvocation" elementAccessed="//@auxiliaryElements.0/@methods.0"/>
-  </scope>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:java="http://www.example.org/ccsl/java" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0/@operands.0">
+  <context>
+    <contextElements xsi:type="expressions:StringConcatenation">
+      <operands xsi:type="statements:MethodInvocation" elementAccessed="//@context/@contextElements.1"/>
+    </contextElements>
+    <contextElements xsi:type="namedElements:Method" name="valueOf">
+      <properties name="static" value="static"/>
+    </contextElements>
+    <contextElements xsi:type="java:JClass" name="java.lang.String"/>
+  </context>
 </ccsl:AtomicRule>
