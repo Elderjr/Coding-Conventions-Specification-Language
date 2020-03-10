@@ -30,7 +30,7 @@
 [/template]
 
 [comment condition to fix MoDisco Bug /]
-[template public generatesPostConditionToRemoveNonSourceElements(element: Element) ? (element.eContainer().oclIsKindOf(VarAssignment))]
+[template public generatesPostConditionToRemoveNonSourceElements(element: Element) ? (element.eContainer().oclIsKindOf(Assignment))]
 ->reject(node: ASTNode | node.oclContainer().oclAsType(ASTNode).originalCompilationUnit.oclIsUndefined())
 [/template]
 

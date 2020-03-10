@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java">
-  <auxiliaryElements xsi:type="java:JavaClass" name="java.lang.String"/>
-  <filters xsi:type="filters:TypedStatementFilter" targets="//@scope/@target" type="//@auxiliaryElements.0"/>
-  <scope xsi:type="expressions:Assignment" operator="+=">
-    <target/>
-  </scope>
-</ccsl:AtomicRule>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:java="http://www.example.org/ccsl/java" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" xmlns:statements="http://www.example.org/ccsl/elements/statements">
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.0/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="statements:Assignment" operator="PLUS_ASSIGN">
+        <leftHandSide/>
+      </contextElements>
+      <filters xsi:type="filters:IsStringFilter" targets="//@rules.0/@context/@contextElements.0/@leftHandSide"/>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.1/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="statements:Assignment" operator="ASSIGN">
+        <leftHandSide xsi:type="statements:VariableAccess" elementAccessed="//@rules.1/@context/@contextElements.1"/>
+        <rightHandSide xsi:type="expressions:StringConcatenation"/>
+      </contextElements>
+      <contextElements xsi:type="namedElements:Variable" type="//@rules.1/@context/@contextElements.2"/>
+      <contextElements xsi:type="java:JClass" name="java.lang.String"/>
+      <filters xsi:type="filters:ImplicityOperandFilter" targets="//@rules.1/@context/@contextElements.0/@rightHandSide" implicityOperand="//@rules.1/@context/@filters.0/@context/@contextElements.0" operatorExpression="//@rules.1/@context/@contextElements.0/@rightHandSide">
+        <context>
+          <contextElements xsi:type="statements:VariableAccess" elementAccessed="//@rules.1/@context/@contextElements.1"/>
+        </context>
+      </filters>
+    </context>
+  </rules>
+</ccsl:CompositeRule>

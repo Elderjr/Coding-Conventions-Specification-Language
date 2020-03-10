@@ -1,28 +1,16 @@
 [comment encoding = UTF-8 /]
 [module operatorExpressionOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::statement::statementOperations /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
-[query public getOperatorExpressionMatchingJavaMetaclasses(operatorExpression: OperatorExpression): OrderedSet(String)=
-  OrderedSet(String){'InfixExpression', 'PrefixExpression'}
-/]
-
-[query public getOperatorExpressionConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
-OrderedSet(String){
-  operatorExpression.writeOperatorExpressionTypecheckCondition(varname, typecheck, metaclass),
-  operatorExpression.writeOperandsCondition(varname, metaclass)
-}->select(s | s.isNotEmpty())
-->addAll(operatorExpression.getStatementConditions(varname, false, metaclass))
-
-/]
 
 [template public writeOperatorExpressionTypecheckCondition(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
 ([varname /].oclIsKindOf(InfixExpression) or [varname /].oclIsKindOf(PrefixExpression)) 
 [/template]
 
-[template private writeOperandsCondition(booleanExp: OperatorExpression, varname: String, metaclass: String) /]
+[template public writeOperandsCondition(booleanExp: OperatorExpression, varname: String, metaclass: String) /]
 
 [comment ======= Boolean Expression Operands conditions ======= /]
 [template public writeGetOperands(opExpression: OperatorExpression, varname: String, metaclass: String)]
@@ -35,7 +23,7 @@ else
 endif endif
 [/template]
 
-[template private writeOperandsCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.mustWriteConditionFor('operands'))]
+[template public writeOperandsCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.mustWriteConditionFor('operands'))]
 let operands: OrderedSet(ASTNode) =  [booleanExp.writeGetOperands(varname, metaclass) /] in operands <> null and
 [booleanExp.generatesSetConditions('operands', booleanExp.operands, 'ASTNode') /]
 [/template]
@@ -51,7 +39,7 @@ else
 endif endif
 [/template]
 
-[template private writeOperandsCondition(strConcat: StringConcatenation, varname: String, metaclass: String) ? (strConcat.mustWriteConditionFor('operands'))]
+[template public writeOperandsCondition(strConcat: StringConcatenation, varname: String, metaclass: String) ? (strConcat.mustWriteConditionFor('operands'))]
 let operands: OrderedSet(ASTNode) =  [strConcat.writeGetOperands(varname, metaclass) /] in operands <> null and
 [strConcat.generatesSetConditions('operands', strConcat.operands, 'ASTNode') /]
 [/template]

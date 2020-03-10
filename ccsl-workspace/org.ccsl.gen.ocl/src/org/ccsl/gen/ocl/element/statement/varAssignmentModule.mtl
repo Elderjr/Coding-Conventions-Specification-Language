@@ -1,89 +1,23 @@
 [comment encoding = UTF-8 /]
 [module varAssignmentModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::statement::statementOperations /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
-[query public getVariableAssignmentMatchingJavaMetaclasses(varAssignment: VarAssignment): OrderedSet(String)=
-  if not varAssignment.assignment.oclIsUndefined() then
-    OrderedSet(String){'Assignment'}
-  else
-    OrderedSet(String){'Assignment', 'PostfixExpression', 'PrefixExpression'}
-  endif
-/]
-
-[query public getVariableAssignmentConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = varAssignment.addElementAsVisited() in
-let completeVarname: String = varAssignment.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = varAssignment.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String){
-  varAssignment.writeAssignmentTypecheckConditions(varname, typecheck, concreteMetaclass),
-  varAssignment.writeTargetCondition(completeVarname),
-  varAssignment.writeValueCondition(completeVarname, concreteMetaclass)
-}
-->select(s | s.trim().size() > 0)
-->addAll(varAssignment.getStatementConditions(varname, false))
-/]
-
-[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and metaclass = 'Assignment')]
+[template public writeAssignmentTypecheckCondition(assignment: Assignment, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(Assignment)
 [/template]
 
-[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and (metaclass = 'PostfixExpression' or metaclass = 'PrefixExpression'))]
-if [varname /].oclIsKindOf(PrefixExpression) and 
-  ([varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::INCREMENT or
-   [varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::DECREMENT) then
-  true
-elseif [varname /].oclIsKindOf(PostfixExpression) and 
-  ([varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::INCREMENT or
-   [varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::DECREMENT) then
-  true
-else
-  false
-endif
+[template public writeLeftHandSideCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('leftHandSide'))]
+[assignment.generatesMonovaluedFieldConditions(assignment.leftHandSide, varname, 'leftHandSide', 'ASTNode') /]
 [/template]
 
-[template public writeAssignmentTypecheckConditions(varAssignment: VarAssignment, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
-if [varname /].oclIsKindOf(Assignment) then
-  true
-elseif [varname /].oclIsKindOf(PrefixExpression) and 
-  ([varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::INCREMENT or
-   [varname /].oclAsType(PrefixExpression).operator = PrefixExpressionKind::DECREMENT) then
-  true
-elseif [varname /].oclIsKindOf(PostfixExpression) and 
-  ([varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::INCREMENT or
-   [varname /].oclAsType(PostfixExpression).operator = PostfixExpressionKind::DECREMENT) then
-  true
-else
-  false
-endif
+[template public writeRightHandSideCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('rightHandSide'))]
+[assignment.generatesMonovaluedFieldConditions(assignment.rightHandSide, varname, 'rightHandSide', 'ASTNode') /]
 [/template]
 
-[template private writeTargetCondition(varAssignment: VarAssignment, varname: String) ? ((not varAssignment.variable.oclIsUndefined()))]
-[let fieldName: String = varAssignment.variable.getFieldName()]
-let [fieldName /]: ASTNode = if [varname /].variable.oclIsKindOf(FieldAccess) then
-  [varname /].variable.oclAsType(FieldAccess).field.oclAsType(SingleVariableAccess).variable
-else if [varname /].variable.oclIsKindOf(SingleVariableAccess) then
-  [varname /].variable.oclAsType(SingleVariableAccess).variable
-else
-  null
-endif endif in 
-[varAssignment.generatesFieldCondition(varAssignment.variable, fieldName, 'ASTNode') /][/let]
-[/template]
-
-[template private writeValueCondition(varAssignment: VarAssignment, varname: String, metaclass: String) ? (varAssignment.mustWriteConditionFor('assignment') and metaclass = 'Assignment')]
-[let fieldName: String = varAssignment.assignment.getFieldName()]
-let [fieldName /]: ASTNode = [varname /].rightHandSide in
-[varAssignment.assignment.writeClosureToSkipParenthesis(fieldName, 'ASTNode') /]
-[varAssignment.generatesFieldCondition(varAssignment.assignment, fieldName, 'ASTNode') /][/let]  
-[/template]
-
-[template private writeValueCondition(varAssignment: VarAssignment, varname: String, metaclass: String) ? (varAssignment.mustWriteConditionFor('assignment') and metaclass <> 'Assignment')]
-if [varname /].oclIsKindOf(Assignment) then
-  [varAssignment.writeValueCondition(varname.concat('.oclAsType(Assignment)'), 'Assignment') /]
-else
-  false
-endif  
+[template public writeOperatorCondition(assignment: Assignment, varname: String) ? (assignment.operator <> AssignmentOperator::ANY)]
+[varname /].operator = [if assignment.operator = AssignmentOperator::ASSIGN]
+AssignmentKind::ASSIGN[elseif assignment.operator = AssignmentOperator::PLUS_ASSIGN]
+AssignmentKind::PLUS_ASSIGN[else][/if]
 [/template]

@@ -1,22 +1,8 @@
 [comment encoding = UTF-8 /]
 [module interfaceOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations/]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
-[query public getInterfaceMatchingMetaclasses(interface: JInterface): OrderedSet(String)=
-  OrderedSet(String){'InterfaceDeclaration'}
-/]
-
-[query public getInterfaceConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = interface.addElementAsVisited() in
-OrderedSet(String) {
-  interface.generatesClassTypecheckCondition(varname, typecheck)
-}->select(cond | cond.isNotEmpty())
-->addAll(interface.getComplexTypeConditions(varname, typecheck, metaclass))
-/]
-
 [template public generatesClassTypecheckCondition(interface: JInterface, varname: String, typecheck: Boolean) ? (typecheck)]
-([for (metaclass: String | interface.getInterfaceMatchingMetaclasses()) separator(' or ')]
-[varname.printKindOfCondition(metaclass) /][/for])
+[varname /].oclIsKindOf(InterfaceDeclaration)
 [/template]

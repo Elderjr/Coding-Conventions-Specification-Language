@@ -80,7 +80,7 @@ if (root instanceof VariableDeclarationFragment) {
 return null;
 [/template]
 
-[template private writeGetTargetBody(action: InjectionAction, root: VarAssignment) ? (root.getRelationName(action.target) = 'assignment')]
+[template private writeGetTargetBody(action: InjectionAction, root: Assignment) ? (root.getRelationName(action.target) = 'assignment')]
 if (root instanceof Assignment) {
   Assignment assignment = (Assignment) root;
   return assignment.getRightHandSide();

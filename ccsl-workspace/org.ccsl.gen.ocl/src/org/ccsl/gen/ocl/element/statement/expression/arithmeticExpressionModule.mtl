@@ -1,29 +1,17 @@
 [comment encoding = UTF-8 /]
 [module arithmeticExpressionModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::StringConcatenationChecker /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::stringConcatenationChecker /]
+
 
 [query public getArithmeticExpressionMatchingJavaMetaclasses(arithmeticExpression: ArithmeticExpression): OrderedSet(String)=
   OrderedSet(String){'InfixExpression', 'PrefixExpression'}
 /]
 
-[query public getArithmeticExpressionConditions(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
-let void: OclVoid = arithmeticExpression.addElementAsVisited(metaclass) in
-let completeVarname: String = arithmeticExpression.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = arithmeticExpression.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String){
-  arithmeticExpression.writeArithmeticExpressionTypecheckCondition(varname, typecheck, concreteMetaclass),
-  arithmeticExpression.writeArithmeticOperatorCondition(completeVarname, concreteMetaclass)
-}->select(s | s.isNotEmpty())
-->addAll(arithmeticExpression.getOperatorExpressionConditions(completeVarname, false, concreteMetaclass))
-/]
-
-
-[template private writeArithmeticExpressionTypecheckCondition(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[template public writeArithmeticExpressionTypecheckCondition(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
 if [varname /].oclIsKindOf(InfixExpression) then
   let arithmeticInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
     InfixExpressionKind::TIMES,
@@ -45,7 +33,7 @@ else
 endif
 [/template]
 
-[template private writeArithmeticOperatorCondition(arithmeticExp: ArithmeticExpression, varname: String, metaclass: String) ? (arithmeticExp.arithmeticOperator <> ArithmeticOperator::UNDEFINED)]
+[template public writeArithmeticOperatorCondition(arithmeticExp: ArithmeticExpression, varname: String, metaclass: String) ? (arithmeticExp.arithmeticOperator <> ArithmeticOperator::UNDEFINED)]
 [if (arithmeticExp.arithmeticOperator = ArithmeticOperator::ADDITION)]
 if [varname /].oclIsKindOf(InfixExpression) then
  [varname /].oclAsType(InfixExpression) = InfixExpressionKind::PLUS

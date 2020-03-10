@@ -1,10 +1,14 @@
 [comment encoding = UTF-8 /]
 [module recommendationRuleToText('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::filterUtils /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::rule::context::contextModule /]
-
+[import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [template private operation(logicOperator: LogicOperator)]
 [if logicOperator = LogicOperator::AND]
 ->intersect[elseif logicOperator = LogicOperator::OR]
@@ -18,13 +22,63 @@ violations
 
 [template private writeOCLToSelectElements(rule: Rule) /]
 
-[template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
-[rule.clearAllContexts() /][rule._context.writeContextConditions(rule.subject) /]
-[rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
-[rule.subject.generatesPostConditionToCollectFirstSourceElements() /]
-[comment rule.subject.generatesPostConditionToSelectClosestContext() /]
+[query private isElementNeedsTypecheckOnStart(e: Element): Boolean = 
+  e.oclIsKindOf(Assignment) or
+  e.oclIsKindOf(ArithmeticExpression) or
+  e.oclIsKindOf(BooleanExpression) or 
+  e.oclIsKindOf(StringConcatenation)
+/]
+
+[template private writeGetAllInstances(metaclasses: OrderedSet(String))]
+[for (metaclassesTarget: String | metaclasses) separator('->union(')]
+[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
 [/template]
 
+
+[query private getSubjectMetaclass(rule: AtomicRule): String = 
+if rule.subject.getMatchingJavaMetaclasses()->size() = 1 then
+  rule.subject.getMatchingJavaMetaclasses()->first()
+else
+  'ASTNode'
+endif 
+/]
+
+[query private isSubjectNeedsTypecheckOnStart(rule: AtomicRule): Boolean = 
+if rule.subject.oclIsKindOf(Assignment) or
+   rule.subject.oclIsKindOf(ArithmeticExpression) or
+   rule.subject.oclIsKindOf(BooleanExpression) or 
+   rule.subject.oclIsKindOf(StringConcatenation) then
+  true
+else if rule.subject.getMatchingJavaMetaclasses()->size() = 1 then
+  false
+else
+  true
+endif endif
+/]
+
+[template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
+[rule.clearAllContexts() /]
+[let subjectMetaclass: String = rule.getSubjectMetaclass()]
+[let typecheck: Boolean = rule.isSubjectNeedsTypecheckOnStart()]
+[let subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass)]
+[let filtersConditions: String = rule._context.filters->writeFiltersConditions()]
+[rule.subject.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([rule.subject.getUniqueOclName() /]: [subjectMetaclass /] |
+[if subjectConditions.isNotEmpty() and filtersConditions.isNotEmpty()]
+  [subjectConditions.writeStr() /] and
+  [filtersConditions.writeStr() /]
+  [rule._context.writeCloseParenthesis() /][elseif subjectConditions.isNotEmpty() and filtersConditions.isEmpty()]
+  [subjectConditions.writeStr() /]
+  [rule._context.writeCloseParenthesis() /][elseif subjectConditions.isEmpty() and filtersConditions.isNotEmpty()]
+  [filtersConditions.writeStr() /]
+  [rule._context.writeCloseParenthesis() /][/if][/let][/let][/let][/let]
+[rule.writePostConditions() /]
+[/template]
+
+
+[template private writePostConditions(rule: AtomicRule)]
+[rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
+[rule.subject.generatesPostConditionToCollectFirstSourceElements() /]
+[/template]
 [template private writeOCLToSelectElements(compositeRule: CompositeRule)]
 (
 [for (subRules: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]

@@ -1,58 +1,10 @@
 [comment encoding = UTF-8 /]
 [module contextModule('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
-[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
-[query private isElementNeedsTypecheckOnStart(e: Element): Boolean = 
-  e.oclIsKindOf(VarAssignment) or
-  e.oclIsKindOf(ArithmeticExpression) or
-  e.oclIsKindOf(BooleanExpression) or 
-  e.oclIsKindOf(StringConcatenation)
-/]
 
-[template public writeContextConditions(ctx: Context, entryPoint: Element) post(trim())]
-[let entryPointCondition: String = if entryPoint.getMatchingJavaMetaclasses()->size() = 1 then
-  ctx.writeContextConditions(entryPoint, entryPoint.isElementNeedsTypecheckOnStart(), entryPoint.getMatchingJavaMetaclasses()->first())
-else
-  ctx.writeContextConditions(entryPoint, entryPoint.isElementNeedsTypecheckOnStart(), 'ASTNode')
-endif] 
-[entryPoint.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([entryPoint.getUniqueOclName() /] |
-[if entryPointCondition.isNotEmpty()]
-  [entryPointCondition.writeStr() /][else]
-  true[/if]
 
-)[/let]
+[template public writeCloseParenthesis(ctx: Context)]
+[for(Sequence(Integer){1 ..ctx.getTotalElementsDeclaredInExists()})])[/for]
 [/template]
-
-[template public writeContextConditions(ctx: Context, entryPoint: Element, isTypecheckNeeeded: Boolean, metaclass: String) post(trim())]
-[let scopeConditions: String = entryPoint.generatesConditions(entryPoint.getUniqueOclName(), isTypecheckNeeeded, metaclass)]
-[let filtersConditions: String = ctx.writeContextFiltersConditions()]
-[if scopeConditions.isNotEmpty() and filtersConditions.isNotEmpty()]
---[ctx.eContainer().eClass().name /] Context Conditions
-[scopeConditions.writeStr() /] and
-[filtersConditions.writeStr() /]
-[for(Sequence(Integer){1 ..ctx.getTotalElementsDeclaredInExists()})])[/for][elseif scopeConditions.isNotEmpty() and filtersConditions.isEmpty()]
---[ctx.eContainer().eClass().name /] Context Conditions
-[scopeConditions.writeStr() /]
-[for(Sequence(Integer){1 ..ctx.getTotalElementsDeclaredInExists()})])[/for][elseif scopeConditions.isEmpty() and filtersConditions.isNotEmpty()]
---[ctx.eContainer().eClass().name /] Context Conditions
-[filtersConditions.writeStr() /]
-[for(Sequence(Integer){1 ..ctx.getTotalElementsDeclaredInExists()})])[/for][/if][/let][/let]
-[/template]
-
-[template private writeGetAllInstances(metaclasses: OrderedSet(String))]
-[for (metaclassesTarget: String | metaclasses) separator('->union(')]
-[metaclassesTarget /].allInstances()[if i <> 1])[/if][/for]
-[/template]
-
-[template public writeContextFiltersConditions(ctx: Context)]
-[let filterConditions: Sequence(String) = ctx.filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
-[for(cond: String | filterConditions) separator(' and\n')]
-[cond.writeStr() /][/for][/let]
-[/template]
-

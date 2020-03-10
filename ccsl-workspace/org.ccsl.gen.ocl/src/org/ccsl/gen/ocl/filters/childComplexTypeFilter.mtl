@@ -5,27 +5,26 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
 
-
-
-[template public writeChildComplexTypeFilter(f: ChildComplexTypeFilter, target: Element) ? (f.superComplexType = target)]
+[template public writeChildComplexTypeFilter(f: ChildComplexTypeFilter, target: Element) ? (f.superComplexType = target or f.superComplexType = null)]
 [f.writeChildrenComplexTypeSet(f.superComplexType) /]
 childrenClasses->exists([f.childComplexType.getUniqueOclName() /]: ASTNode |
-  [f.childComplexType.generatesConditions(f.childComplexType.getUniqueOclName(), true, 'ASTNode') /]
+  [f.childComplexType.writeElementConditions(f.childComplexType.getUniqueOclName(), true, 'ASTNode') /]
 )[if f._context.filters->size() > 0]
   and
 [f._context.filters->writeFiltersConditions() /]
-[/if][for(Sequence(Integer){1 ..f._context.getTotalElementsDeclaredInExists()})])[/for]
+[/if][f._context.writeCloseParenthesis() /]
 [/template]
 
 [template public writeChildComplexTypeFilter(f: ChildComplexTypeFilter, target: Element) ? (f.superComplexType <> target)]
 let [f.superComplexType.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in
-[f.superComplexType.generatesConditions(f.superComplexType.getUniqueOclName(), f.isTemplateElementShouldBeChecked(target, f.superComplexType), target.getDeclaredElementMetaclass()) /] and
+[f.superComplexType.writeElementConditions(f.superComplexType.getUniqueOclName(), f.isTemplateElementShouldBeChecked(target, f.superComplexType), target.getDeclaredElementMetaclass()) /] and
 [f.writeChildrenComplexTypeSet(f.superComplexType) /]
 childrenClasses->exists([f.childComplexType.getUniqueOclName() /]: ASTNode |
-  [f.childComplexType.generatesConditions(f.childComplexType.getUniqueOclName(), true, 'ASTNode') /]
+  [f.childComplexType.writeElementConditions(f.childComplexType.getUniqueOclName(), true, 'ASTNode') /]
 )[if f._context.filters->size() > 0]
   and
 [f._context.filters->writeFiltersConditions() /]

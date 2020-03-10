@@ -10,8 +10,11 @@
 [import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
 [import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
 [import org::ccsl::gen::ocl::filters::isTypeOfFilterModule /]
+[import org::ccsl::gen::ocl::filters::isStringFilterModule /]
 [import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+
+[comment filters related to closure /]
 [comment complex type closure filters /]
 [import org::ccsl::gen::ocl::filters::childComplexTypeFilter /]
 
@@ -119,6 +122,10 @@ not (
 
 [template public generatesSpecificFilterConditions(isTypeOfFilter: IsTypeOfFilter, target: Element)]
 [isTypeOfFilter.writeIsTypeOfFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(isStringFilter: IsStringFilter, target: Element)]
+[isStringFilter.writeIsStringFilterCondition(target) /]
 [/template]
 
 [template public generatesSpecificFilterConditions(superMethodClosureFilter: SuperMethodClosureFilter, target: Element)]

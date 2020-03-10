@@ -1,23 +1,9 @@
 [comment encoding = UTF-8 /]
 [module primitiveTypeOperations('http://www.example.org/ccsl')]
 
-[query public getPrimitiveTypeMatchingMetaclasses(primitiveType: PrimitiveType): OrderedSet(String)=
-if primitiveType.oclIsKindOf(BooleanPrimitiveType) then
-  OrderedSet(String){'PrimitiveTypeBoolean'}
-else if primitiveType.oclIsKindOf(ShortPrimitiveType) then
-  OrderedSet(String){'PrimitiveTypeShort'}
-else
-  OrderedSet(String){'PrimitiveType'}
-endif endif
-/]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 
-[query public getPrimitiveTypeConditions(primitiveType: PrimitiveType, varname: String): OrderedSet(String) =
-OrderedSet(String){
-  primitiveType.generatesConditionsForName(varname)
-}->select(s | s.trim().size() > 0)
-/]
-
-[template public generatesConditionsForName(primitiveType: PrimitiveType, varname: String)]
-([for (javaMetaclass: String | primitiveType.getPrimitiveTypeMatchingMetaclasses()) separator (' or ')]
+[template public writePrimitiveTypecheckCondition(primitiveType: PrimitiveType, varname: String)]
+([for (javaMetaclass: String | primitiveType.getMatchingJavaMetaclasses()) separator (' or ')]
 [varname /].oclIsKindOf([javaMetaclass /])[/for])
 [/template]

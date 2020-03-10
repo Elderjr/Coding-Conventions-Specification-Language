@@ -1,33 +1,13 @@
 [comment encoding = UTF-8 /]
 [module methodOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
-
-[query public getMethodMatchingJavaMetaclasses(method: Method): OrderedSet(String)= 
-OrderedSet(String){'MethodDeclaration'}
-/]
-
-
-[query public getMethodConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = method.addElementAsVisited(metaclass) in
-let completeVarname: String = method.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = method.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String) {
-  method.writeMethodTypecheckCondition(varname, typecheck),
-  method.writeReturnTypeCondition(completeVarname),
-  method.writeParamsCondition(completeVarname, typecheck)
-}->addAll(method.getNamedElementConditions(completeVarname, typecheck, concreteMetaclass))
-->select(s | s.trim().size() > 0)
-/]
 
 
 [template public writeMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
-([for (metaclass: String | method.getMethodMatchingJavaMetaclasses()) separator(' or ')]
-[varname.printKindOfCondition(metaclass) /][/for])
+[varname /].oclIsKindOf(MethodDeclaration)
 [/template]
 
 [template public writeReturnTypeCondition(method: Method, varname: String) ? (not method.returnType.oclIsUndefined())]
@@ -35,8 +15,6 @@ OrderedSet(String) {
 [method.generatesMonovaluedFieldConditions(method.returnType, varname, 'returnType.type', 'OclAny') /]
 [/template]
 
-[template public writeParamsCondition(method: Method, varname: String, typecheck: Boolean) ? (method.isSet('params'))]
-[if typecheck]
-[method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration', method.getMethodMatchingJavaMetaclasses()) /][else]
-[method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration') /][/if]
+[template public writeParamsCondition(method: Method, varname: String, typecheck: Boolean) ? (method.mustWriteConditionFor('params'))]
+[method.generatesMultivaluedFieldConditions(method.params, varname, 'paramsTmp', 'parameters', 'SingleVariableDeclaration') /]
 [/template]

@@ -2,14 +2,14 @@
 [module superMethodClosureFilterModule('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
-[import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 
 
 [template public writeSuperMethodClosureFilterModule(filter: SuperMethodClosureFilter, target: Element)]
 [filter.writeAllSuperMethodsSet(target) /]
-superMethods->exists([filter.superMethod.getUniqueOclName() /] |
-  [filter._context.writeContextConditions(filter.superMethod, true, target.getGenericMatchingJavaMetaclass()) /]
+superMethods->exists([filter.superMethod.getUniqueOclName() /]: MethodDeclaration |
+  [filter.superMethod.writeElementConditions(filter.superMethod.getUniqueOclName(), false, 'MethodDeclaration') /]
 )
 [/template]
 

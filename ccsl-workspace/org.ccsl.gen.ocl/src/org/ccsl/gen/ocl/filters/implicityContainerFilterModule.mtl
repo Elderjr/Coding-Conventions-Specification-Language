@@ -4,22 +4,23 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::filterUtils /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 
 
-[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer = target or f.implicityField = target)]
+[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer = target or f.implicityContainer = null)]
 [f.writeImplicityContainerSet() /]
 implicityContainerSet->exists([f.implicityContainer.getUniqueOclName() /]: ASTNode |
-  [f.implicityContainer.generatesConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /]
+  [f.implicityContainer.writeElementConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /]
 )
 [/template]
 
-[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer <> target and f.implicityField <> target)]
-[f.writeTemplateCondition(f._context, target, f.implicityField) /] and
+[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer <> target and f.implicityContainer <> null)]
+[f.writeTemplateElementCondition(target, f.implicityContainer) /] and
 [f.writeImplicityContainerSet() /]
 implicityContainerSet->exists([f.implicityContainer.getUniqueOclName() /]: ASTNode |
-  [f.implicityContainer.generatesConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /] [if f.implicityContainer.getRelationName(f.implicityField) <> null]
+  [f.implicityContainer.writeElementConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /] [if f.implicityContainer.getRelationName(f.implicityField) <> null]
   and
   [f.writeRelationCondition(f.implicityContainer, f.implicityField) /]
 [/if]

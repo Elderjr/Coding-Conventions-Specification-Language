@@ -1,46 +1,32 @@
 [comment encoding = UTF-8 /]
 [module accessModule('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
 [query public getAccessMatchingMetaclasses(access: Access): OrderedSet(String)=
   OrderedSet(String){'TypeAccess', 'MethodInvocation', 'SingleVariableAccess'}
 /]
 
-[query public getAccessConditions(access: Access, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = access.addElementAsVisited(metaclass) in
-let completeVarname: String = access.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = access.getConcreteElementMetaclass(metaclass) in 
-OrderedSet(String) {
-  access.writeAccessTypecheckCondition(varname, typecheck, concreteMetaclass),
-  access.writeFromCondition(completeVarname, concreteMetaclass),
-  access.writeElementAccessedCondition(completeVarname, concreteMetaclass)
-}->addAll(access.getElementConditions(completeVarname, typecheck, concreteMetaclass))
-->select(s | s.isNotEmpty())
-/]
-
-[template private writeAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not access.isMetaclassInMatchingMetaclasses(metaclass))]
+[template public writeAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not access.isMetaclassInMatchingMetaclasses(metaclass))]
 ([for (metaclass: String | access.getAccessMatchingMetaclasses()) separator(' or ')]
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template private writeAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and access.isMetaclassInMatchingMetaclasses(metaclass))]
+[template public writeAccessTypecheckCondition(access: Access, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and access.isMetaclassInMatchingMetaclasses(metaclass))]
 [varname.printKindOfCondition(metaclass) /]
 [/template]
 
-[template private writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from') and (metaclass = 'SingleVariableAccess' or metaclass = 'TypeAccess'))]
+[template public writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from') and (metaclass = 'SingleVariableAccess' or metaclass = 'TypeAccess'))]
 [access.generatesMonovaluedFieldConditions(access.from, varname, 'qualifier', 'ASTNode') /]
 [/template]
 
-[template private writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from') and metaclass = 'MethodInvocation')]
+[template public writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from') and metaclass = 'MethodInvocation')]
 [access.generatesMonovaluedFieldConditions(access.from, varname, 'expression', 'ASTNode') /]
 [/template]
 
-[template private writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from'))]
+[template public writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from'))]
 [let map: OrderedSet(OrderedSet(String)) = OrderedSet(OrderedSet(String)) {
   OrderedSet(String){'TypeAccess', 'qualifier'},
   OrderedSet(String){'SingleVariableAccess', 'qualifier'},  
@@ -50,7 +36,7 @@ OrderedSet(String) {
 [/let]
 [/template]
 
-[template private writeElementAccessedCondition(access: DataTypeAccess, varname: String, metaclass: String) ? (access.mustWriteConditionFor('elementAccessed') and metaclass = 'TypeAccess')]
+[template public writeElementAccessedCondition(access: DataTypeAccess, varname: String, metaclass: String) ? (access.mustWriteConditionFor('elementAccessed') and metaclass = 'TypeAccess')]
 let typesAccessed: OrderedSet(ASTNode) = [varname /]->asOrderedSet()->closure(type |
   if type.oclIsKindOf(ArrayType) then
     type.oclAsType(ArrayType).elementType.type
@@ -63,9 +49,9 @@ let typesAccessed: OrderedSet(ASTNode) = [varname /]->asOrderedSet()->closure(ty
 [access.generatesSetConditions(access, 'typesAccessed', OrderedSet(Element){access.elementAccessed}, 'ASTNode') /]
 [/template]
 
-[template private writeElementAccessedCondition(access: Access, varname: String, metaclass: String) /]
+[template public writeElementAccessedCondition(access: Access, varname: String, metaclass: String) /]
 
-[template private writeElementAccessedCondition(access: VariableAccess, varname: String, metaclass: String)]
+[template public writeElementAccessedCondition(access: VariableAccess, varname: String, metaclass: String)]
 [let map: OrderedSet(OrderedSet(String)) = OrderedSet(OrderedSet(String)) {
   OrderedSet(String){'SingleVariableAccess', 'variable'},
   OrderedSet(String){'FieldAccess', 'field.variable'},  

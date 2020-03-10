@@ -1,31 +1,15 @@
 [comment encoding = UTF-8 /]
 [module instanceCreationOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
 
-[query public getInstanceCreationMatchingMetaclasses(inst: InstanceCreation): OrderedSet(String)=
-  OrderedSet(String){'ClassInstanceCreation'}
-/]
 
-[query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = inst.addElementAsVisited(metaclass) in
-let concreteMetaclass: String = inst.getConcreteElementMetaclass(metaclass) in
-let completeVarname: String = inst.getCompleteElementVarname(varname, metaclass) in
-OrderedSet(String) {
-  inst.writeInstanceCreationTypecheckCondition(varname, typecheck),
-  inst.writeTypeCondition(completeVarname)
-}
-->select(s | s.isNotEmpty())
-/]
-
-[template private writeInstanceCreationTypecheckCondition(inst: InstanceCreation, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeInstanceCreationTypecheckCondition(inst: InstanceCreation, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ClassInstanceCreation)
 [/template]
 
-[template private writeTypeCondition(inst: InstanceCreation, varname: String) ? (not inst.type.oclIsUndefined())]
+[template public writeTypeCondition(inst: InstanceCreation, varname: String) ? (inst.mustWriteConditionFor('type'))]
 [inst.generatesMonovaluedFieldConditions(inst.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

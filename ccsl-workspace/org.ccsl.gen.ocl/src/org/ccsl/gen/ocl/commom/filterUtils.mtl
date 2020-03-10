@@ -1,0 +1,23 @@
+[comment encoding = UTF-8 /]
+[module filterUtils('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher  /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[template public writeFiltersConditions(filters: OrderedSet(Filter))]
+[let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
+[for(cond: String | filterConditions) separator(' and\n')]
+[cond.writeStr() /][/for][/let]
+[/template]
+
+
+[query public isElementShouldBeChecked(f: Filter, target: Element, templ: Element): Boolean =
+  if target.eClass() = templ.eClass() then
+    let targetMetaclasses: OrderedSet(String) = target.getMatchingJavaMetaclasses() in
+    let targetTemplateMetaclasses: OrderedSet(String) = templ.getMatchingJavaMetaclasses() in
+    not(targetMetaclasses->intersection(targetTemplateMetaclasses)->size() = targetMetaclasses->size() and
+    targetTemplateMetaclasses->size() = targetMetaclasses->size())
+  else
+    templ.eClass().eAllSuperTypes->includes(target.eClass())
+  endif
+/]

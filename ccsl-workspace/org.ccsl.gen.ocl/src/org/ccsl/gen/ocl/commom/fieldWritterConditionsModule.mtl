@@ -1,13 +1,13 @@
 [comment encoding = UTF-8 /]
-[module genericFieldConditionsGenerator('http://www.example.org/ccsl')]
+[module fieldWritterConditionsModule('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::getOclElementReferenceModule /] 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 
 [template public getFieldName(field: Element)]
 [if field = null]
@@ -51,7 +51,7 @@ else
 
 [template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
 [let isTypecheckNeeded: Boolean = not field.getMatchingJavaMetaclasses()->includes(mappedFieldMetaclass)]
-[let fieldCondition: String = field.generatesConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
+[let fieldCondition: String = field.writeElementConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
 [fieldOclVarname /] <> null[if not fieldCondition.isEmpty()] and
   [fieldCondition.writeStr() /][/if][/let][/let]
 [/template]

@@ -1,6 +1,6 @@
 [comment encoding = UTF-8 /]
 [module ifStatementOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
@@ -9,22 +9,11 @@
 OrderedSet(String) {'IfStatement'}
 /]
 
-[query public getIfStatementConditions(ifStatement: IfStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
-let void: OclVoid = ifStatement.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
-OrderedSet(String){
-  ifStatement.writeIfStatementTypecheckCondition(varname, typecheck),
-  ifStatement.writeConditionCondition(newVarname),
-  ifStatement.writeThenCondition(newVarname),
-  ifStatement.writeElseCondition(newVarname)
-}->select(s: String | s.isNotEmpty())
-/]
-
-[template private writeIfStatementTypecheckCondition(ifStatement: IfStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeIfStatementTypecheckCondition(ifStatement: IfStatement, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(IfStatement)
 [/template]
 
-[template private writeConditionCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('condition'))]
+[template public writeConditionCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('condition'))]
 let [ifStatement.condition.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(cond: ASTNode | 
   if cond.oclIsKindOf(ParenthesizedExpression) then 
     cond.oclAsType(ParenthesizedExpression).expression 
@@ -35,10 +24,10 @@ let [ifStatement.condition.getFieldName() /]: ASTNode = [varname /].expression->
 [ifStatement.generatesFieldCondition(ifStatement.condition, ifStatement.condition.getFieldName(), 'ASTNode') /]
 [/template]
 
-[template private writeThenCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('thenStatement'))]
+[template public writeThenCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('thenStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(ifStatement.thenStatement, varname, 'thenStatement', 'ASTNode') /]
 [/template]
 
-[template private writeElseCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('elseStatement'))]
+[template public writeElseCondition(ifStatement: IfStatement, varname: String) ? (ifStatement.mustWriteConditionFor('elseStatement'))]
 [ifStatement.generatesMonovaluedFieldConditions(ifStatement.elseStatement, varname, 'elseStatement', 'ASTNode') /]
 [/template]

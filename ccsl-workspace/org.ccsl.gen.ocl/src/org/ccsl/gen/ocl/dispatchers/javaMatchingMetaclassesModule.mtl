@@ -1,0 +1,132 @@
+[comment encoding = UTF-8 /]
+[module javaMatchingMetaclassesModule('http://www.example.org/ccsl')]
+
+
+[query public getMatchingJavaMetaclasses(element: Element): OrderedSet(String) =
+  element.writeElementMatchingJavaMetaclasses().tokenize(',').trim()->asOrderedSet()
+/]
+
+[template private writeElementMatchingJavaMetaclasses(element: Element)]
+ASTNode
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(dataType: DataType)]
+ASTNode
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(objType: ObjectType)]
+ClassDeclaration, InterfaceDeclaration, ParameterizedType, AnonymousClassDeclaration, TypeParameter
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(primitiveType: PrimitiveType)]
+[if primitiveType.oclIsKindOf(BooleanPrimitiveType)]
+PrimitiveTypeBoolean[elseif primitiveType.oclIsKindOf(ShortPrimitiveType)]
+PrimitiveTypeShort[else]
+PrimitiveType[/if]
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(element: ParameterizedType)]
+ParameterizedType
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(element: ArrayType)]
+ArrayType
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(namedElement: NamedElement)]
+NamedElement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(complexType: ComplexType)]
+ClassDeclaration, InterfaceDeclaration, AnonymousClassDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(interface: JInterface)]
+InterfaceDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(javaClass: JClass)]
+ClassDeclaration, AnonymousClassDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(method: Method)]
+MethodDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(variable: Variable)]
+[if variable.eContainer().oclIsKindOf(ComplexType) or (not variable.initialValue.oclIsUndefined())] then
+VariableDeclarationFragment[elseif variable.eContainer().oclIsKindOf(Method) or variable.eContainer().oclIsKindOf(CatchBlock)]
+SingleVariableDeclaration[else]
+SingleVariableDeclaration, VariableDeclarationFragment[/if]
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(stmt: Statement)]
+Statement, Expression
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(block: SynchronizedBlock)]
+SynchronizedStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(throwStmt: ThrowStatement)]
+ThrowStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(assignment: Assignment)]
+Assignment
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(access: Access)]
+TypeAccess, MethodInvocation, SingleVariableAccess
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(dataTypeAccess: DataTypeAccess)]
+TypeAccess
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(variableAccess: VariableAccess)]
+SingleVariableAccess, FieldAccess, SuperFieldAccess
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(methodInv: MethodInvocation)]
+MethodInvocation, SuperMethodInvocation
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(ifStmt: IfStatement)]
+IfStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(loopStmt: LoopStatement)]
+EnhancedForStatement, ForStatement, WhileStatement, DoStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(switch: SwitchStatement)]
+SwitchStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(switchCase: SwitchCaseBlock)]
+SwitchStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(arithmeticExp: ArithmeticExpression)]
+InfixExpression, PrefixExpression
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(booleanExp: BooleanExpression)]
+[if (booleanExp.booleanOperator = BooleanOperator::UNDEFINED)]
+InfixExpression, PrefixExpression[elseif(booleanExp.booleanOperator = BooleanOperator::NOT)]
+PrefixExpression[else]
+InfixExpression[/if]
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(operatorExp: OperatorExpression)]
+InfixExpression, PrefixExpression
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(strConcat: StringConcatenation)]
+InfixExpression
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(catchBlock: CatchBlock)]
+CatchClause
+[/template]

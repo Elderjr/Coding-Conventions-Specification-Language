@@ -8,5 +8,5 @@
 [/template]
 
 [template public generatesPropertyFilterConditions(propertyFilter: PropertyFilter, target: CodeElement)]
-[target.generatesConditionForProperties(target.getUniqueOclName(), propertyFilter.properties) /]
+[target.writePropertiesCondition(target.getUniqueOclName(), propertyFilter.properties) /]
 [/template]

@@ -110,9 +110,8 @@
       <eClassifiers xsi:type="ecore:EClass" name="ArrayCreation" eSuperTypes="#//elements/statements/Statement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/ObjectType"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="VarAssignment" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/Variable"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" eType="#//elements/statements/Statement"
+      <eClassifiers xsi:type="ecore:EClass" name="AbstractAssignment" eSuperTypes="#//elements/statements/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" eType="#//elements/statements/Statement"
             containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SynchronizedBlock" eSuperTypes="#//elements/statements/Statement">
@@ -124,6 +123,28 @@
       <eClassifiers xsi:type="ecore:EClass" name="ThrowStatement" eSuperTypes="#//elements/CodeElement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="expression" upperBound="-1"
             eType="#//elements/statements/Statement" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="AssignmentOperator">
+        <eLiterals name="PLUS_ASSIGN"/>
+        <eLiterals name="ASSIGN" value="1"/>
+        <eLiterals name="ANY" value="2"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//elements/statements/AbstractAssignment">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/statements/AssignmentOperator"
+            defaultValueLiteral="ANY"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" eType="#//elements/statements/Statement"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryAssignment" eSuperTypes="#//elements/statements/AbstractAssignment">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/statements/UnaryAssignmentOperator"
+            defaultValueLiteral="ANY"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PrefixUnaryAssignment" eSuperTypes="#//elements/statements/UnaryAssignment"/>
+      <eClassifiers xsi:type="ecore:EClass" name="PostfixUnaryAssignment" eSuperTypes="#//elements/statements/UnaryAssignment"/>
+      <eClassifiers xsi:type="ecore:EEnum" name="UnaryAssignmentOperator">
+        <eLiterals name="DECREMENT"/>
+        <eLiterals name="INCREMENT" value="1"/>
+        <eLiterals name="ANY" value="2"/>
       </eClassifiers>
       <eSubpackages name="expressions" nsURI="http://www.example.org/ccsl/elements/statements/expressions"
           nsPrefix="expressions">
@@ -137,10 +158,6 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
         <eClassifiers xsi:type="ecore:EClass" name="InfixExpression" eSuperTypes="#//elements/statements/expressions/OperatorExpression"/>
-        <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//elements/statements/expressions/OperatorExpression">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//elements/statements/Statement"
-              containment="true"/>
-        </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//elements/statements/expressions/OperatorExpression">
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="booleanOperator"
               eType="#//elements/statements/expressions/BooleanOperator" defaultValueLiteral="UNDEFINED"
@@ -351,6 +368,7 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="context" lowerBound="1"
           eType="#//context/Context" containment="true"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IsStringFilter" eSuperTypes="#//filters/AtomicFilter"/>
   </eSubpackages>
   <eSubpackages name="nonElements" nsURI="http://www.example.org/ccsl/nonElements"
       nsPrefix="nonElements">

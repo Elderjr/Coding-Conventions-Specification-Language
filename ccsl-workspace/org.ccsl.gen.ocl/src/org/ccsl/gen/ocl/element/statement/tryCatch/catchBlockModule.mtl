@@ -1,30 +1,14 @@
 [comment encoding = UTF-8 /]
 [module catchBlockModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-
-
-[query public getCatchBlockMatchingMetaclasses(catch: CatchBlock): OrderedSet(String)= 
-  OrderedSet(String){'CatchClause'}
-/]
-
-[query public getCatchBlockConditions(catch: CatchBlock, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = catch.addElementAsVisited() in
-let completeVarname: String = catch.getCompleteElementVarname(varname, metaclass) in
-OrderedSet(String) {
-  catch.generatesCatchBlockTypecheckConditions(varname, typecheck),
-  catch.generatesExceptionHandlingConditions(completeVarname)
-}->select(s: String | s.isNotEmpty())
-/]
 
 [template public generatesCatchBlockTypecheckConditions(catch: CatchBlock, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(CatchClause)
 [/template]
 
 [comment ============= Conditions for attribute 'exception' ===================== /]
-[template public generatesExceptionHandlingConditions(catch: CatchBlock, varname: String) ? (catch.isSet('exception'))]
+[template public generatesExceptionHandlingConditions(catch: CatchBlock, varname: String) ? (catch.mustWriteConditionFor('exception'))]
 [catch.generatesMonovaluedFieldConditions(catch.exception, varname, 'exception', 'SingleVariableDeclaration') /]
 [/template]
 

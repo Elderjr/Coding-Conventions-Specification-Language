@@ -1,25 +1,23 @@
 [comment encoding = UTF-8 /]
 [module loopStatementModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
 
-[query public getLoopStatementMatchingMetaclasses(loopStmt: LoopStatement): OrderedSet(String) =
-OrderedSet(String) {'EnhancedForStatement', 'ForStatement', 'WhileStatement', 'DoStatement'}
-/]
 
-[query public getLoopStatementConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean): OrderedSet(String) =
-OrderedSet(String){
-  loopStmt.generatesLoopStatementTypecheckerCondition(varname, typecheck),
-  loopStmt.writeBodyCondition(varname)
-}->select(s: String | s.isNotEmpty())
-/]
-
-[template private generatesLoopStatementTypecheckerCondition(loopStmt: LoopStatement, varname: String, typecheck: Boolean) ? (typecheck)]
-([for (metaclass: String | loopStmt.getLoopStatementMatchingMetaclasses()) separator(' or ')]
-[varname.printKindOfCondition(metaclass) /][/for])
+[template public generatesLoopStatementTypecheckerCondition(loopStmt: LoopStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(EnhancedForStatement) or [varname /].oclIsKindOf(ForStatement) or [varname /].oclIsKindOf(WhileStatement) or [varname /].oclIsKindOf(DoStatement) 
 [/template]
 
-[template private writeBodyCondition(loopStmt: LoopStatement, varname: String) ? (loopStmt.mustWriteConditionFor('body'))]
-[loopStmt.generatesMonovaluedFieldConditions(loopStmt._body, varname, 'body', 'ASTNode', loopStmt.getLoopStatementMatchingMetaclasses()) /]
+[template public writeBodyCondition(loopStmt: LoopStatement, varname: String) ? (loopStmt.mustWriteConditionFor('body'))]
+let [loopStmt._body.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(EnhancedForStatement) then
+  [varname /].oclAsType(EnhancedForStatement).body
+elseif
+  [varname /].oclAsType(ForStatement).body
+elseif
+  [varname /].oclAsType(WhileStatement).body
+elseif
+  [varname /].oclAsType(DoStatement).body
+else
+  null
+endif in [loopStmt.generatesFieldCondition(loopStmt._body, loopStmt._body.getFieldName(), 'ASTNode') /]
 [/template]

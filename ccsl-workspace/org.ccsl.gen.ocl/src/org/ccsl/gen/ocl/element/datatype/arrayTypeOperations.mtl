@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module arrayTypeOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 
 
 [query public getArrayTypeMatchingMetaclasses(arrayType: ArrayType): OrderedSet(String)=

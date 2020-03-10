@@ -1,18 +1,10 @@
 [comment encoding = UTF-8 /]
 [module namedElementOperations('http://www.example.org/ccsl/elements/namedElements')]
-[import org::ccsl::gen::ocl::element::elementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
 
-[query public getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
- OrderedSet(String){
-  namedElement.generatesConditionNamedElementForName(varname, metaclass)
-}->select(s | s.trim().size() > 0)
-->addAll(namedElement.getElementConditions(varname, typecheck, metaclass))
-/]
-
-[template public generatesConditionNamedElementForName(javaClazz: NamedElement, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (not javaClazz.isMetaclassInMatchingMetaclasses(metaclass)) and  (javaClazz.name.contains('.')))]
+[template public writeNameCondition(javaClazz: NamedElement, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (not javaClazz.isMetaclassInMatchingMetaclasses(metaclass)) and  (javaClazz.name.contains('.')))]
 let className: String = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).name
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
@@ -32,18 +24,18 @@ classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; f
 ).concat(className) = '[javaClazz.name /]'
 [/template]
 
-[template public generatesConditionNamedElementForName(javaClazz: JClass, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (javaClazz.name.contains('.')) and metaclass = 'ClassDeclaration')]
+[template public writeNameCondition(javaClazz: JClass, varname: String, metaclass: String) ? ( (not javaClazz.name.oclIsUndefined()) and (javaClazz.name.contains('.')) and metaclass = 'ClassDeclaration')]
 [varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
 ).concat([varname /].name) = '[javaClazz.name /]'
 [/template]
 
-[template public generatesConditionNamedElementForName(interface: JInterface, varname: String, metaclass: String) ? ( (not interface.name.oclIsUndefined()) and (interface.name.contains('.')) )]
+[template public writeNameCondition(interface: JInterface, varname: String, metaclass: String) ? ( (not interface.name.oclIsUndefined()) and (interface.name.contains('.')) )]
 [varname /].oclAsType(InterfaceDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
 ).concat([varname /].oclAsType(NamedElement).name) = '[interface.name /]'
 [/template]
 
-[template public generatesConditionNamedElementForName(namedElement: NamedElement, varname: String, metaclass: String) ? (not namedElement.name.oclIsUndefined())]
+[template public writeNameCondition(namedElement: NamedElement, varname: String, metaclass: String) ? (not namedElement.name.oclIsUndefined())]
 [varname /].oclAsType(NamedElement).name = '[namedElement.name /]'
 [/template]

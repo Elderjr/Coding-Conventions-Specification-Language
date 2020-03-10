@@ -1,5 +1,0 @@
-[comment encoding = UTF-8 /]
-[module utilsModule('http://www.example.org/ccsl')]
-
-
-[query public isGenericMetaclass(metaclass: String): Boolean = metaclass = 'OclAny' or metaclass = 'ASTNode' /]

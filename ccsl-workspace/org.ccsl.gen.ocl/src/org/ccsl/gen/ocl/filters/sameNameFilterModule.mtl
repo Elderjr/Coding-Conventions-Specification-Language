@@ -3,11 +3,13 @@
 
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::commom::utilsModule /]
 
 [query private getElementsBefore(filter: OrderedSet(Element), element: Element): OrderedSet(Element) = 
   filter->select(e: Element | filter->indexOf(e) < filter->indexOf(element))
 /]
+
+[query private isGenericMetaclass(str: String): Boolean = str = 'OclAny' or str = 'ASTNode' /]
+
 [template public generatesSameNameFilterConditions(filter: SameNameFilter, target: Element)]
 --Same name Filter
 (

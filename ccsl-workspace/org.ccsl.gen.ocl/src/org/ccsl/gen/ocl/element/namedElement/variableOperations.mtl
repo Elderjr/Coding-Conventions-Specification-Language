@@ -1,13 +1,10 @@
 [comment encoding = UTF-8 /]
 [module variableOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator/]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
-
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule/]
 
 
 [query public getVariableMatchingJavaMetaclasses(variable: Variable): OrderedSet(String)=
@@ -20,20 +17,7 @@
   endif endif
 /]
 
-[query public getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = var.addElementAsVisited(metaclass) in
-let completeVarname: String = var.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = var.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String) {
-  var.writeVariableTypecheckCondition(varname, typecheck),
-  var.writeSkipUnresolvedItemCondition(varname),
-  var.writeTypeCondition(completeVarname, concreteMetaclass),
-  var.writeInitialValueCondition(completeVarname, concreteMetaclass)
-}->select(s | s.trim().size() > 0)
-->addAll(var.getNamedElementConditions(completeVarname, false, concreteMetaclass))
-/]
-
-[template private writeSkipUnresolvedItemCondition(var: Variable, varname: String)]
+[template public writeSkipUnresolvedItemCondition(var: Variable, varname: String)]
 (not [varname /].oclIsKindOf(UnresolvedItem))
 [/template]
 

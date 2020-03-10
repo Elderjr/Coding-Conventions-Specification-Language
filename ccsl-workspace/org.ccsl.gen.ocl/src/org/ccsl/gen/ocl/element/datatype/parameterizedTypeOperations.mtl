@@ -3,23 +3,12 @@
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
+
 
 [query public getParameterizedTypeMatchingMetaclasses(parameterizedType: ParameterizedType): OrderedSet(String)=
   OrderedSet(String){'ParameterizedType'}
-/]
-
-[query public getParameterizedTypeConditions(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = parameterizedType.addElementAsVisited(metaclass) in
-let completeVarname: String = parameterizedType.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = parameterizedType.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String) {
-  parameterizedType.writeParameterizedTypecheck(varname, typecheck),
-  parameterizedType.writeTypeParametersConditions(completeVarname),
-  parameterizedType.writeTypeConditions(completeVarname)
-}->select(cond: String | cond.isNotEmpty())
 /]
 
 [template public writeParameterizedTypecheck(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]

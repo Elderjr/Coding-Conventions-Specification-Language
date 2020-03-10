@@ -1,30 +1,15 @@
 [comment encoding = UTF-8 /]
 [module complexTypeOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 
 [query public getComplexTypeMatchingMetaclasses(complexType: ComplexType): OrderedSet(String) = 
   OrderedSet(String){'ClassDeclaration', 'InterfaceDeclaration', 'AnonymousClassDeclaration'}
-/]
-
-[query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = complexType.addElementAsVisited() in
-let completeVarname: String = complexType.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = complexType.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String) {
-  complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, concreteMetaclass),
-  complexType.generatesBodyDeclarationVariable(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForFields(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForMethods(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForSuperTypes(completeVarname, concreteMetaclass)
-}->addAll(complexType.getNamedElementConditions(completeVarname, false, concreteMetaclass))
-->select(s | s.trim().size() > 0)
 /]
 
 [template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass))]
@@ -32,11 +17,11 @@ OrderedSet(String) {
 [varname.printKindOfCondition(metaclass) /][/for])
 [/template]
 
-[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.isSet('fields') or complexType.isSet('methods')))]
-let bodyDeclarations: OrderedSet(ASTNode) = [varname /].oclIsKindOf([metaclass /])
+[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.mustWriteConditionFor('fields') or complexType.mustWriteConditionFor('methods')))]
+let bodyDeclarations: OrderedSet(ASTNode) = [varname /].bodyDeclarations
 [/template]
 
-[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (not complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.isSet('fields') or complexType.isSet('methods')))]
+[template public generatesBodyDeclarationVariable(complexType: ComplexType, varname: String, metaclass: String) ? (not complexType.getComplexTypeMatchingMetaclasses()->includes(metaclass) and (complexType.mustWriteConditionFor('fields') or complexType.mustWriteConditionFor('methods')))]
 let bodyDeclarations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
   [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
@@ -72,7 +57,7 @@ else
   null
 endif endif in (not superType.oclIsUndefined()) and
 let [complexType.superTypes->first().getUniqueOclName() /]: ASTNode = superType in
-[complexType.superTypes->first().generatesConditions(complexType.superTypes->first().getUniqueOclName(), true, 'ClassDeclaration') /]
+[complexType.superTypes->first().writeElementConditions(complexType.superTypes->first().getUniqueOclName(), true, 'ASTNode') /]
 [/template]
 
 

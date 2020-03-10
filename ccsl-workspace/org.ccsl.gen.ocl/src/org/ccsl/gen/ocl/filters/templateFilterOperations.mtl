@@ -2,30 +2,19 @@
 [module templateFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::filterUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
-[import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 
 
 
-
-[query public isElementShouldBeChecked(f: Filter, target: Element, templ: Element): Boolean =
-  if target.eClass() = templ.eClass() then
-    let targetMetaclasses: OrderedSet(String) = target.getMatchingJavaMetaclasses() in
-    let targetTemplateMetaclasses: OrderedSet(String) = templ.getMatchingJavaMetaclasses() in
-    not(targetMetaclasses->intersection(targetTemplateMetaclasses)->size() = targetMetaclasses->size() and
-    targetTemplateMetaclasses->size() = targetMetaclasses->size())
-  else
-    templ.eClass().eAllSuperTypes->includes(target.eClass())
-  endif
-/]
-
-[template public writeTemplateCondition(f: Filter, ctx: Context, target: Element, templ: Element)]
-[let templCondition: String = ctx.writeContextConditions(templ, f.isElementShouldBeChecked(target, templ), target.getDeclaredElementMetaclass())] 
+[template public writeTemplateElementCondition(f: Filter, target: Element, templ: Element)]
+[let templCondition: String = templ.writeElementConditions(templ.getUniqueOclName(), f.isElementShouldBeChecked(target,templ), target.getDeclaredElementMetaclass())] 
 let [templ.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in [if not templCondition.isEmpty()]
 [templCondition /][else]true[/if][/let]
 [/template]
 
-[template public writeTemplateFilterCondition(templ: TemplateFilter, target: Element)]
-[templ.writeTemplateCondition(templ._context, target, templ.targetTemplate) /]
+[template public writeTemplateFilterCondition(f: TemplateFilter, target: Element)]
+[f.writeTemplateElementCondition(target, f.targetTemplate) /]
 [/template]

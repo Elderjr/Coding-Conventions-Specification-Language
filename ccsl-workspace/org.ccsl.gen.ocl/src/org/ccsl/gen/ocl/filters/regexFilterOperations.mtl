@@ -2,7 +2,7 @@
 [module regexFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: Element)]

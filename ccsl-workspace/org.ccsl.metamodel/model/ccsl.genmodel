@@ -72,6 +72,16 @@
         </genClasses>
       </nestedGenPackages>
       <nestedGenPackages prefix="Statements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements">
+        <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/statements/AssignmentOperator">
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/AssignmentOperator/PLUS_ASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/AssignmentOperator/ASSIGN"/>
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/AssignmentOperator/ANY"/>
+        </genEnums>
+        <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/statements/UnaryAssignmentOperator">
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/UnaryAssignmentOperator/DECREMENT"/>
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/UnaryAssignmentOperator/INCREMENT"/>
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/UnaryAssignmentOperator/ANY"/>
+        </genEnums>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/Statement"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/NamedElementAccess">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -103,10 +113,9 @@
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ArrayCreation/type"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarAssignment">
-          <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/variable"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarAssignment/assignment"/>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/AbstractAssignment">
+          <genFeatures children="true" createChild="true" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/AbstractAssignment/leftHandSide"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/SynchronizedBlock">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/SynchronizedBlock/bodyStatements"/>
@@ -115,6 +124,16 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ThrowStatement">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ThrowStatement/expression"/>
         </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/Assignment">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/Assignment/operator"/>
+          <genFeatures children="true" createChild="true" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/Assignment/rightHandSide"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/UnaryAssignment">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/UnaryAssignment/operator"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/PrefixUnaryAssignment"/>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/PostfixUnaryAssignment"/>
         <nestedGenPackages prefix="Expressions" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/expressions">
           <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/statements/expressions/BooleanOperator">
             <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/statements/expressions/BooleanOperator/AND"/>
@@ -145,9 +164,6 @@
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/StringConcatenation"/>
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/InfixExpression"/>
-          <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/Assignment">
-            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/expressions/Assignment/target"/>
-          </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/expressions/BooleanExpression">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/expressions/BooleanExpression/booleanOperator"/>
           </genClasses>
@@ -307,6 +323,7 @@
             ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/childComplexType"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/context"/>
       </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//filters/IsStringFilter"/>
     </nestedGenPackages>
     <nestedGenPackages prefix="NonElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//nonElements">
       <genClasses image="false" ecoreClass="ccsl.ecore#//nonElements/StatementsContainer">

@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module elementUtils('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::dispatchers::getMatchingJavaMetaclassesDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then
@@ -26,19 +26,6 @@ else if feature <> null and element.eIsSet(feature) and feature.many then
 else
   false
 endif endif endif
-/]
-
-[query public isSet(obj: ecore:: EObject, propertyName: String): Boolean =  
-  let properties: Sequence(ecore::EStructuralFeature) = obj.eClass().eAllStructuralFeatures->select(s | s.name = propertyName)->asSequence() in
-  if properties->size() > 0 then 
-    obj.eIsSet(properties->first())
-  else
-    false
-  endif
-/]
-
-[query private getEStructuralFeatureValue(element: Element, feature: ecore::EStructuralFeature): OclAny = 
-
 /]
 
 [query public getRelationName(element: Element, field: Element): String =

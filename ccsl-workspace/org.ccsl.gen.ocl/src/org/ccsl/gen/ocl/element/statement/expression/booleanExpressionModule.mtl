@@ -1,10 +1,10 @@
 [comment encoding = UTF-8 /]
 [module booleanExpressionModule('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::element::statement::expression::operatorExpressionOperations /]
-[import org::ccsl::gen::ocl::commom::genericFieldConditionsGenerator /]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
 
 [query public getBooleanExpressionMatchingJavaMetaclasses(booleanExp: BooleanExpression): OrderedSet(String)=
   if (booleanExp.booleanOperator = BooleanOperator::UNDEFINED) then
@@ -16,24 +16,15 @@
   endif endif
 /]
 
-[query public getBooleanExpressionConditions(booleanExpression: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
-let void: OclVoid = booleanExpression.addElementAsVisited(metaclass) in
-let completeVarname: String = booleanExpression.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = booleanExpression.getConcreteElementMetaclass(metaclass) in
-OrderedSet(String){
-  booleanExpression.writeBooleanExpressionTypecheckCondition(varname, typecheck, concreteMetaclass),
-  booleanExpression.writeBooleanOperatorCondition(completeVarname, concreteMetaclass)
-}->select(s | s.isNotEmpty())
-->addAll(booleanExpression.getOperatorExpressionConditions(completeVarname, false, concreteMetaclass))
-/]
 
 
 
-[template private writeBooleanExpressionTypecheckCondition(booleanExp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and (metaclass = 'InfixExpression' or metaclass = 'PrefixExpression'))]
+
+[template public writeBooleanExpressionTypecheckCondition(booleanExp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and (metaclass = 'InfixExpression' or metaclass = 'PrefixExpression'))]
 [varname /].oclIsKindOf([metaclass /])
 [/template]
 
-[template private writeBooleanExpressionTypecheckCondition(booleanExp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[template public writeBooleanExpressionTypecheckCondition(booleanExp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
 if [varname /].oclIsKindOf(InfixExpression) then
   let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
     InfixExpressionKind::LESS,
@@ -52,7 +43,7 @@ else
 endif endif
 [/template]
 
-[template private writeBooleanOperator(booleanOp: BooleanOperator)]
+[template public writeBooleanOperator(booleanOp: BooleanOperator)]
 [if (booleanOp = BooleanOperator::AND)]
 InfixExpressionKind::CONDITIONAL_AND[elseif (booleanOp = BooleanOperator::EQUAL_TO)]
 InfixExpressionKind::EQUALS[elseif (booleanOp = BooleanOperator::GREATER_THAN)]
@@ -65,6 +56,6 @@ InfixExpressionKind::NOT_EQUALS[elseif (booleanOp = BooleanOperator::OR)]
 InfixExpressionKind::CONDITIONAL_OR[/if]
 [/template]
 
-[template private writeBooleanOperatorCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.booleanOperator <> BooleanOperator::UNDEFINED)]
+[template public writeBooleanOperatorCondition(booleanExp: BooleanExpression, varname: String, metaclass: String) ? (booleanExp.booleanOperator <> BooleanOperator::UNDEFINED)]
 [varname /].operator = [booleanExp.booleanOperator.writeBooleanOperator() /]
 [/template]

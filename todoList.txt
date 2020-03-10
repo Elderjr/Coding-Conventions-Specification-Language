@@ -4,3 +4,4 @@
 3. Add CCSL grammar
 4. Developing an eclipse-plugin to support CCSL
 5. Comparation PMD vs. CCSL
+6. Create VarAssignment to make Assigment easy to use

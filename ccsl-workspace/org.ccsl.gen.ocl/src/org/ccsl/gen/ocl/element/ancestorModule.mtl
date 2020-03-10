@@ -4,7 +4,7 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils  /]
-[import org::ccsl::gen::ocl::dispatchers::generatesElementConditionsDispatcher /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 
 [comment conditions for the ancestor /]
 [query private isAncestorNotRegistered(element: Element): Boolean = 
@@ -15,7 +15,7 @@
 
 [template public writeAncestorCondition(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
 [let ancestorVarname: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
-[let ancestorCondition: String = element.eContainer().oclAsType(Element).generatesConditions(ancestorVarname, true, 'OclAny')]
+[let ancestorCondition: String = element.eContainer().oclAsType(Element).writeElementConditions(ancestorVarname, true, 'OclAny')]
 let [ancestorVarname /] : OclAny = [element.writeGetAncestorExpression(varname, metaclass) /] in [ancestorVarname /] <> null [if not ancestorCondition.isEmpty()]
 and
 [ancestorCondition.writeStr() /][/if][/let][/let]
