@@ -18,8 +18,6 @@
 [template private writeOclTag(faultType: FaultTypeDescription)]
 <ocl>
   [faultType.rule.writeOCL().replaceAll('<>', '&lt;&gt;') /]
-  [faultType.rule.subject.generatesPostConditionToRemoveNonSourceElements().replaceAll('<>', '&lt;&gt;') /]
-  [faultType.rule.subject.generatesPostConditionToRemoveJavadocRelatedElements().replaceAll('<>', '&lt;&gt;') /]
 </ocl>
 [/template]
 

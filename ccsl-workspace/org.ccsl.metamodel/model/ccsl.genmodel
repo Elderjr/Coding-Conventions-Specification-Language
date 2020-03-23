@@ -13,6 +13,12 @@
       <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperator/OR"/>
       <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//LogicOperator/IF_THEN"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//CollectionKind">
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//CollectionKind/EXACT"/>
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//CollectionKind/SEQUENCE"/>
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//CollectionKind/ANY"/>
+      <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//CollectionKind/IMMEDIATE"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="ccsl.ecore#//Rule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//Rule/negated"/>
     </genClasses>
@@ -32,44 +38,73 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//FaultTypeDescription/strategy"/>
     </genClasses>
     <nestedGenPackages prefix="Elements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements">
-      <genClasses ecoreClass="ccsl.ecore#//elements/CodeElement">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/CodeElement/properties"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/CodeElement/exact"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//elements/Property">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/Property/name"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/Property/value"/>
-      </genClasses>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/Visibility">
+        <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/Visibility/PRIVATE"/>
+        <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/Visibility/PACKAGE"/>
+        <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/Visibility/PROTECTED"/>
+        <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/Visibility/PUBLIC"/>
+        <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/Visibility/ANY"/>
+      </genEnums>
       <genClasses ecoreClass="ccsl.ecore#//elements/Element">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/Element/uniqueName"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//elements/ControlledVisibilityElement">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/ControlledVisibilityElement/visibility"/>
       </genClasses>
       <nestedGenPackages prefix="NamedElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements">
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/NamedElement">
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/NamedElement/name"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/ComplexType">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/ComplexType/fields"/>
-          <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/ComplexType/superTypes"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/ComplexType/methods"/>
-        </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Variable">
-          <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Variable/type"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Variable/initialValue"/>
-        </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Method">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Method/params"/>
-          <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Method/returnType"/>
-        </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Constructor"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Package">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Package/groupedClasses"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/VariableVector">
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/VariableVector/dimensions"/>
-        </genClasses>
+        <nestedGenPackages prefix="Variable" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/variable">
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/Variable">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/variable/Variable/type"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/variable/Variable/final"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/ParameterVariable"/>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/LocalVariable"/>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/InitializableVariable">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/variable/InitializableVariable/initialValue"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/FieldVariable"/>
+        </nestedGenPackages>
+        <nestedGenPackages prefix="ComplexType" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/complexType">
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/JInterface">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/JInterface/superInterfaces"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/AnonymousClass">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/AnonymousClass/type"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/JClass">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/JClass/final"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/JClass/abstract"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/JClass/constructors"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/JClass/superClass"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/DeclaredType"/>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/ComplexType">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ComplexType/fields"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ComplexType/methods"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ComplexType/nestedTypes"/>
+          </genClasses>
+        </nestedGenPackages>
+        <nestedGenPackages prefix="Method" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/method">
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Constructor"/>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/SimpleMethod">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/params"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Method">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/Method/returnType"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/Method/abstract"/>
+          </genClasses>
+        </nestedGenPackages>
       </nestedGenPackages>
       <nestedGenPackages prefix="Statements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements">
         <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/statements/AssignmentOperator">
@@ -95,7 +130,10 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ControlFlow">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ControlFlow/condition"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/statements/Block"/>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/Block">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/Block/statements"/>
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/Block/statementsKind"/>
+        </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/SuperMethodInvocation"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/VarDeclaration">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/VarDeclaration/variable"/>
@@ -103,6 +141,9 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/InstanceCreation">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/InstanceCreation/type"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/InstanceCreation/constructor"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/InstanceCreation/args"/>
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/InstanceCreation/argsKind"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/Access">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -215,7 +256,7 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/ObjectType"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/datatype/ParameterizedType">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/datatype/ParameterizedType/typeParameters"/>
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/datatype/ParameterizedType/typeArguments"/>
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/datatype/ParameterizedType/type"/>
         </genClasses>
@@ -227,103 +268,6 @@
               ecoreFeature="ecore:EReference ccsl.ecore#//elements/datatype/ArrayType/type"/>
         </genClasses>
       </nestedGenPackages>
-    </nestedGenPackages>
-    <nestedGenPackages prefix="Java" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//java">
-      <genClasses ecoreClass="ccsl.ecore#//java/JElement"/>
-      <genClasses ecoreClass="ccsl.ecore#//java/JClass">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//java/JClass/nestedClasses"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//java/JClass/implements"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//java/JInterface"/>
-    </nestedGenPackages>
-    <nestedGenPackages prefix="Filters" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//filters">
-      <genClasses image="false" ecoreClass="ccsl.ecore#//filters/Filter">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/Filter/negated"/>
-      </genClasses>
-      <genClasses image="false" ecoreClass="ccsl.ecore#//filters/AtomicFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/AtomicFilter/targets"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/CompositeFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/CompositeFilter/filters"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/CompositeFilter/operator"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/PropertyFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/PropertyFilter/properties"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/TemplateFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/TemplateFilter/targetTemplate"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/TemplateFilter/context"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/DefinesMethodFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/DefinesMethodFilter/methods"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/SameNameFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/SameNameFilter/elements"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SameNameFilter/ignoreCase"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/RegexLiteralValueFilter">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/RegexLiteralValueFilter/regex"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/CountBlockStatementsFilter">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/CountBlockStatementsFilter/count"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/CountBlockStatementsFilter/operator"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/EqualsNamedElementWithLiterals">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/EqualsNamedElementWithLiterals/names"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/EqualsNamedElementWithLiterals/ignoreCase"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/RegexMatch">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/RegexMatch/regex"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/TypedStatementFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/TypedStatementFilter/type"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/SwitchCaseStatementCount">
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SwitchCaseStatementCount/min"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//filters/SwitchCaseStatementCount/max"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/SwitchCaseStatementCount/cases"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/ImplicityOperandFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityOperandFilter/implicityOperand"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityOperandFilter/operatorExpression"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/ImplicityContainerFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/implicityContainer"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/implicityField"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/ImplicityContainerFilter/context"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/IsKindOfFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsKindOfFilter/context"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsKindOfFilter/type"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/SuperMethodClosureFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/SuperMethodClosureFilter/context"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/SuperMethodClosureFilter/superMethod"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/IsTypeOfFilter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsTypeOfFilter/context"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/IsTypeOfFilter/type"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/ChildComplexTypeFilter">
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/superComplexType"/>
-        <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/childComplexType"/>
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//filters/ChildComplexTypeFilter/context"/>
-      </genClasses>
-      <genClasses ecoreClass="ccsl.ecore#//filters/IsStringFilter"/>
     </nestedGenPackages>
     <nestedGenPackages prefix="NonElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//nonElements">
       <genClasses image="false" ecoreClass="ccsl.ecore#//nonElements/StatementsContainer">
@@ -360,6 +304,113 @@
       </nestedGenPackages>
       <nestedGenPackages prefix="Strategy" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//faultTypeDescription/strategy">
         <genClasses ecoreClass="ccsl.ecore#//faultTypeDescription/strategy/AllStrategy"/>
+      </nestedGenPackages>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Functions" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//functions">
+      <genClasses ecoreClass="ccsl.ecore#//functions/CcslFunction"/>
+      <nestedGenPackages prefix="BooleanFunctions" disposableProviderFactory="true"
+          ecorePackage="ccsl.ecore#//functions/booleanFunctions">
+        <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/CcslBooleanFunction"/>
+        <nestedGenPackages prefix="Filters" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//functions/booleanFunctions/filters">
+          <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//functions/booleanFunctions/filters/EquationOperator">
+            <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//functions/booleanFunctions/filters/EquationOperator/PLUS"/>
+          </genEnums>
+          <genClasses image="false" ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/Filter">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/Filter/negated"/>
+          </genClasses>
+          <genClasses image="false" ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/AtomicFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/AtomicFilter/targets"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/CompositeFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/CompositeFilter/filters"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/CompositeFilter/operator"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/PropertyFilter"/>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/TemplateFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/TemplateFilter/targetTemplate"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/TemplateFilter/context"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/SameNameFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SameNameFilter/elements"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/SameNameFilter/ignoreCase"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/CountFilter">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/CountFilter/min"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/CountFilter/max"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/CountFilter/context"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/CountFilter/container"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/CountFilter/field"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/RegexMatch">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/RegexMatch/regex"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/ImplicityOperandFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicityOperandFilter/implicityOperand"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicityOperandFilter/operatorExpression"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/ImplicityContainerFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicityContainerFilter/implicityContainer"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicityContainerFilter/implicityField"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicityContainerFilter/context"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/IsKindOfFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/IsKindOfFilter/context"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/IsKindOfFilter/type"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/SuperMethodClosureFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SuperMethodClosureFilter/context"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SuperMethodClosureFilter/superMethod"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/IsTypeOfFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/IsTypeOfFilter/context"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/IsTypeOfFilter/type"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/ChildClosureComplexTypeFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ChildClosureComplexTypeFilter/superComplexType"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ChildClosureComplexTypeFilter/childComplexType"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ChildClosureComplexTypeFilter/context"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/IsStringFilter"/>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/EquationFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/EquationFilter/leftHandSide"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/EquationFilter/rightHandSide"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/EquationFilter/operator"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter">
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter/access"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter/from"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter/context"/>
+          </genClasses>
+        </nestedGenPackages>
+      </nestedGenPackages>
+      <nestedGenPackages prefix="NumberFunctions" disposableProviderFactory="true"
+          ecorePackage="ccsl.ecore#//functions/numberFunctions">
+        <genClasses ecoreClass="ccsl.ecore#//functions/numberFunctions/CcslNumberFunction"/>
+        <genClasses ecoreClass="ccsl.ecore#//functions/numberFunctions/CcslIntegerLiteral">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/numberFunctions/CcslIntegerLiteral/value"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//functions/numberFunctions/GetIndexOf">
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//functions/numberFunctions/GetIndexOf/container"/>
+          <genFeatures notify="false" createChild="false" propertySortChoices="true"
+              ecoreFeature="ecore:EReference ccsl.ecore#//functions/numberFunctions/GetIndexOf/field"/>
+        </genClasses>
       </nestedGenPackages>
     </nestedGenPackages>
   </genPackages>

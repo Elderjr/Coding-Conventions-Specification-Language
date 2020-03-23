@@ -6,15 +6,14 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
 
 
 
-[template public writeTemplateElementCondition(f: Filter, target: Element, templ: Element)]
-[let templCondition: String = templ.writeElementConditions(templ.getUniqueOclName(), f.isElementShouldBeChecked(target,templ), target.getDeclaredElementMetaclass())] 
-let [templ.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in [if not templCondition.isEmpty()]
-[templCondition /][else]true[/if][/let]
-[/template]
 
 [template public writeTemplateFilterCondition(f: TemplateFilter, target: Element)]
-[f.writeTemplateElementCondition(target, f.targetTemplate) /]
+[f.writeTemplateElementCondition(target, f.targetTemplate) /] [if f._context.filters->size() > 0]
+  and
+[f._context.filters->writeFiltersConditions() /]
+[/if]
 [/template]

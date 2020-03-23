@@ -5,11 +5,6 @@
 
 [template public getDataTypeName(datatype: DataType) /]
 
-
-[template public getDataTypeName(datatype: ComplexType)]
-[datatype.name /]
-[/template]
-
 [template public getDataTypeName(datatype: BooleanPrimitiveType)]
 boolean
 [/template]

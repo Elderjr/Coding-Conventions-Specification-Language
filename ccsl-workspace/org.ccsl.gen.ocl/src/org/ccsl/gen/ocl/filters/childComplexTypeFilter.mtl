@@ -6,10 +6,10 @@
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
-[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
 [import org::ccsl::gen::ocl::rule::context::contextModule /]
+[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
 
-[template public writeChildComplexTypeFilter(f: ChildComplexTypeFilter, target: Element) ? (f.superComplexType = target or f.superComplexType = null)]
+[template public writeChildComplexTypeFilter(f: ChildClosureComplexTypeFilter, target: Element) ? (f.superComplexType = target or f.superComplexType = null)]
 [f.writeChildrenComplexTypeSet(f.superComplexType) /]
 childrenClasses->exists([f.childComplexType.getUniqueOclName() /]: ASTNode |
   [f.childComplexType.writeElementConditions(f.childComplexType.getUniqueOclName(), true, 'ASTNode') /]
@@ -19,7 +19,7 @@ childrenClasses->exists([f.childComplexType.getUniqueOclName() /]: ASTNode |
 [/if][f._context.writeCloseParenthesis() /]
 [/template]
 
-[template public writeChildComplexTypeFilter(f: ChildComplexTypeFilter, target: Element) ? (f.superComplexType <> target)]
+[template public writeChildComplexTypeFilter(f: ChildClosureComplexTypeFilter, target: Element) ? (f.superComplexType <> target)]
 let [f.superComplexType.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in
 [f.superComplexType.writeElementConditions(f.superComplexType.getUniqueOclName(), f.isTemplateElementShouldBeChecked(target, f.superComplexType), target.getDeclaredElementMetaclass()) /] and
 [f.writeChildrenComplexTypeSet(f.superComplexType) /]
@@ -31,9 +31,9 @@ childrenClasses->exists([f.childComplexType.getUniqueOclName() /]: ASTNode |
 [/if][for(Sequence(Integer){1 ..f._context.getTotalElementsDeclaredInExists()})])[/for]
 [/template]
 
-[template private writeChildrenComplexTypeSet(f: ChildComplexTypeFilter, superComplexType: Element) /]
+[template private writeChildrenComplexTypeSet(f: ChildClosureComplexTypeFilter, superComplexType: Element) /]
 
-[template private writeChildrenComplexTypeSet(f: ChildComplexTypeFilter, superComplexType: JClass)]
+[template private writeChildrenComplexTypeSet(f: ChildClosureComplexTypeFilter, superComplexType: JClass)]
 let childrenClasses: OrderedSet(ASTNode) = [superComplexType.getUniqueOclName() /]->closure(children: ASTNode |
   if children <> null and children.oclIsKindOf(ClassDeclaration) then
     children.oclAsType(ClassDeclaration).usagesInTypeAccess

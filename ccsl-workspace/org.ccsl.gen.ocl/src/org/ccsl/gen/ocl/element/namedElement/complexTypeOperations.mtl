@@ -46,18 +46,5 @@ let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: AS
 [complexType.generatesSetConditions('methods', complexType.methods, 'MethodDeclaration') /]
 [/template]
 
-[template public generatesConditionForSuperTypes(complexType: ComplexType, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0) /]
-
-[template public generatesConditionForSuperTypes(complexType: JClass, varname: String, metaclass: String) ? (complexType.superTypes->size() > 0)]
-let superType: ASTNode = if [varname /].oclIsKindOf(ClassDeclaration) then
-  [varname /].oclAsType(ClassDeclaration).superClass.type
-else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
-  [varname /].oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type
-else
-  null
-endif endif in (not superType.oclIsUndefined()) and
-let [complexType.superTypes->first().getUniqueOclName() /]: ASTNode = superType in
-[complexType.superTypes->first().writeElementConditions(complexType.superTypes->first().getUniqueOclName(), true, 'ASTNode') /]
-[/template]
 
 

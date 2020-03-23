@@ -15,12 +15,12 @@
 [varname /].oclIsKindOf(ParameterizedType)
 [/template]
 
-[template public writeTypeParametersConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.typeParameters->size() > 0)]
+[template public writeTypeParametersConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.mustWriteConditionFor('parameterizedType'))]
 let typeArguments: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
-[parameterizedType.generatesSetConditions('typeArguments', parameterizedType.typeParameters, 'ASTNode') /]
+[parameterizedType.generatesSetConditions('typeArguments', parameterizedType.typeArguments, 'ASTNode') /]
 [/template]
 
-[template public writeTypeConditions(parameterizedType: ParameterizedType, varname: String) ? (not parameterizedType.type.oclIsUndefined())] 
+[template public writeTypeConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.mustWriteConditionFor('type'))] 
 [parameterizedType.generatesMonovaluedFieldConditions(parameterizedType.type, varname, 'type.type', 'ASTNode') /]
 [/template]
 

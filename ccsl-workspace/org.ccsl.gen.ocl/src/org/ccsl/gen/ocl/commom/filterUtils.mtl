@@ -1,5 +1,8 @@
 [comment encoding = UTF-8 /]
 [module filterUtils('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher  /]
 [import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
@@ -10,6 +13,12 @@
 [cond.writeStr() /][/for][/let]
 [/template]
 
+[template public writeTemplateElementCondition(f: Filter, target: Element, templ: Element)]
+[let templCondition: String = templ.writeElementConditions(templ.getUniqueOclName(), f.isElementShouldBeChecked(target,templ), target.getDeclaredElementMetaclass())] 
+let [templ.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [target.getUniqueOclName() /] in [if not templCondition.isEmpty()]
+
+[templCondition /][else]true[/if][/let]
+[/template]
 
 [query public isElementShouldBeChecked(f: Filter, target: Element, templ: Element): Boolean =
   if target.eClass() = templ.eClass() then

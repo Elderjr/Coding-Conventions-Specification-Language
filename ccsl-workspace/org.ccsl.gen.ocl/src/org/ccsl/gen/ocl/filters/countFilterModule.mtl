@@ -1,0 +1,35 @@
+[comment encoding = UTF-8 /]
+[module countFilterModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+
+[template public writeCountFilterCondition(f: CountFilter, target: Element)]
+[f.writeGetCountValue(f.container, f.field) /]
+[f.writeCountValueCondition() /]
+[/template]
+
+[template private writeCountValueCondition(f: CountFilter)]
+[if f.min <> -1 and f.max <> -1]
+count >= [f.min /] and count <= [f.max /][elseif f.min <> -1]
+count >= [f.min /][else]
+count <=[f.max /][/if]
+[/template]
+
+[template private writeGetCountValue(f: CountFilter, container: Element, field: Element) /]
+
+[template private writeGetCountValue(f: CountFilter, container: SwitchStatement, field: SwitchCaseBlock)]
+let casesBlocks: OrderedSet(OrderedSet(Statement)) = [container.getUniqueOclName() /].statements->iterate(tmpStmt: Statement; acc: OrderedSet(OrderedSet(Statement)) = OrderedSet(OrderedSet(Statement)){} |
+	if(tmpStmt.oclIsKindOf(SwitchCase)) then
+	  acc->append(OrderedSet(Statement){tmpStmt})
+	else 
+	  let lastSetAcc: OrderedSet(Statement) = acc->last()->append(tmpStmt) in
+	  acc->excluding(acc->last())->including(lastSetAcc)
+	endif
+) in
+let count: Integer = casesBlocks->select([field.getUniqueOclName() /]: OrderedSet(Statement) |
+  [field.writeElementConditions(field.getUniqueOclName(), false, 'OrderedSet(Statement)') /]
+)->size() in
+[/template]
+

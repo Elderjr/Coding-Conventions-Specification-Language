@@ -8,6 +8,7 @@
 [varname /].oclIsKindOf(Block)
 [/template]
 
-[template public generatesConditionsForStatements(block: Block, varname: String) ? (block.mustWriteConditionFor('statements'))]
-[block.generatesMultivaluedFieldConditions(block.statements, varname, 'tmpStatements', 'statements', 'ASTNode') /]
+[template public generatesConditionsForStatements(block: Block, varname: String, metaclass: String) ? (block.mustWriteConditionFor('statements'))]
+let blockStatements: OrderedSet(Statement) = [varname /].statements in
+[block.writeSetConditions('blockStatements', block.statements, 'Statement', block.statementsKind) /]
 [/template]

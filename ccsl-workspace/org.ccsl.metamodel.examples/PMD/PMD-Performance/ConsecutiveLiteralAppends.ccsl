@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:MethodInvocation" elementAccessed="//@context/@contextElements.1/@methods.0">
+      <from xsi:type="statements:MethodInvocation" elementAccessed="//@context/@contextElements.1/@methods.0">
+        <args xsi:type="literalValues:LiteralValue"/>
+      </from>
+      <args xsi:type="literalValues:LiteralValue"/>
+    </contextElements>
+    <contextElements xsi:type="complexType:JClass">
+      <methods name="append"/>
+    </contextElements>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="java\\.lang\\.String(Buffer|Builder)"/>
+  </context>
+</ccsl:AtomicRule>

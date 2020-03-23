@@ -54,14 +54,19 @@ MethodDeclaration
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(variable: Variable)]
-[if variable.eContainer().oclIsKindOf(ComplexType) or (not variable.initialValue.oclIsUndefined())] then
-VariableDeclarationFragment[elseif variable.eContainer().oclIsKindOf(Method) or variable.eContainer().oclIsKindOf(CatchBlock)]
-SingleVariableDeclaration[else]
-SingleVariableDeclaration, VariableDeclarationFragment[/if]
+VariableDeclarationFragment, SingleVariableDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(fieldVariable: FieldVariable)]
+VariableDeclarationFragment
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(stmt: Statement)]
 Statement, Expression
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(block: Block)]
+Block
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(block: SynchronizedBlock)]
@@ -86,6 +91,10 @@ TypeAccess
 
 [template private writeElementMatchingJavaMetaclasses(variableAccess: VariableAccess)]
 SingleVariableAccess, FieldAccess, SuperFieldAccess
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(inst: InstanceCreation)]
+ClassInstanceCreation
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(methodInv: MethodInvocation)]

@@ -1,0 +1,8 @@
+[comment encoding = UTF-8 /]
+[module fieldVariableModule('http://www.example.org/ccsl')]
+
+
+[comment Type Check Conditions /]
+[template public writeFieldVariableTypecheckCondition(var: InitializableVariable, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(VariableDeclarationFragment) and (not [varname /].oclIsKindOf(UnresolvedItem)) and [varname /].oclContainer().oclIsKindOf(FieldDeclaration)
+[/template]

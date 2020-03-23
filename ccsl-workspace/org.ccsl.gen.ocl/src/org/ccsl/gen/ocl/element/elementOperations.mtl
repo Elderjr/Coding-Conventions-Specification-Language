@@ -4,36 +4,3 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 
 
-[comment conditions for properties /]
-[template public writePropertiesCondition(element: Element, varname: String, properties: OrderedSet(Property))  ? (properties->size() > 0)]
-[element.generatesGetModifierLetStatement(varname, properties) /] and
-[for (prop: Property | properties) separator(' and ')]
-[if prop.name ='public']
-[element.getUniqueOclName() /]Modifier.visibility = VisibilityKind::public[elseif prop.name ='final']
-[element.getUniqueOclName() /]Modifier.inheritance = InheritanceKind::final[elseif prop.name ='synchronized']
-[element.getUniqueOclName() /]Modifier.synchronized[elseif prop.name ='volatile']
-[element.getUniqueOclName() /]Modifier.volatile[elseif prop.name ='static']
-[element.getUniqueOclName() /]Modifier.static[/if][/for]
-[/template]
-
-[template private generatesGetModifierLetStatement(element: Element, varname: String, properties: OrderedSet(Property))]
-let [element.getUniqueOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(BodyDeclaration) then
-  [varname /].oclAsType(BodyDeclaration).modifier
-else
-  null
-endif in (not [element.getUniqueOclName() /]Modifier.oclIsUndefined())
-[/template]
-
-[template private generatesGetModifierLetStatement(var: Variable, varname: String, properties: OrderedSet(Property))]
-let [var.getUniqueOclName() /]Modifier: Modifier = if [varname /].oclIsKindOf(VariableDeclarationFragment) and 
- [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
-  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
-else if [varname /].oclIsKindOf(VariableDeclarationFragment) and
- [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
-  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
-else if [varname /].oclIsKindOf(SingleVariableDeclaration) then
-  [varname /].oclAsType(SingleVariableDeclaration).modifier
-else
-  null
-endif endif endif in (not [var.getUniqueOclName() /]Modifier.oclIsUndefined())
-[/template]

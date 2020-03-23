@@ -13,28 +13,29 @@
 [template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: Element) /]
 
 [template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (f.operatorExpression = target or f.operatorExpression = null)]
-[f.writeImplicityOperandSet(target) /] and
+[f.writeImplicityOperandSet(target) /]
 [f.writeImplicityOperandCondition() /]
 [/template]
 
 [template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (f.operatorExpression <> target and f.operatorExpression <> null)]
 [f.writeTemplateElementCondition(target, f.operatorExpression) /] and
-[f.writeImplicityOperandSet(target) /] and
+[f.writeImplicityOperandSet(target) /]
 [f.writeImplicityOperandCondition() /]
 [/template]
 
 [template private writeImplicityOperandSet(f: ImplicityOperandFilter, operatorExpression: OperatorExpression)]
-let implicityOperandSet: OrderedSet(ASTNode) = [operatorExpression.writeGetOperands(operatorExpression.getUniqueOclName(), operatorExpression.getDeclaredElementMetaclass()) /]->closure(n: ASTNode |
+let operands: OrderedSet(ASTNode) = [operatorExpression.writeGetOperands(operatorExpression.getUniqueOclName(), operatorExpression.getDeclaredElementMetaclass()) /] in
+let implicityOperandSet: OrderedSet(ASTNode) = operands->closure(n: ASTNode |
   if n.oclIsKindOf(InfixExpression) then
-    n.oclAsType(InfixExpression).operands->extendedOperands(n.oclAsType(InfixExpression).leftOperand)->append(n.oclAsType(InfixExpression).rightOperand)
-  else if n.oclIsKindOf(PrefixExpression) then
+    n.oclAsType(InfixExpression).extendedOperands->append(n.oclAsType(InfixExpression).leftOperand)->append(n.oclAsType(InfixExpression).rightOperand)
+  elseif n.oclIsKindOf(PrefixExpression) then
     n.oclAsType(PrefixExpression).operand
-  else if n.oclIsKindOf(ParenthesizedExpression) then
+  elseif n.oclIsKindOf(ParenthesizedExpression) then
     n.oclAsType(ParenthesizedExpression).expression
   else
     n
-  endif endif
-)->excluding([operatorExpression.getUniqueOclName() /])
+  endif
+)->excluding([operatorExpression.getUniqueOclName() /]) in
 [/template]
 
 [template private writeImplicityOperandCondition(f: ImplicityOperandFilter)]

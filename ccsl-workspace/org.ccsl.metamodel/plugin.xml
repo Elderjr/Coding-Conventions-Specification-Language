@@ -33,6 +33,30 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
+            uri="http://www.example.org/ccsl/elements/namedElements/variable"
+            class="ccsl.elements.namedElements.variable.VariablePackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/namedElements/complexType"
+            class="ccsl.elements.namedElements.complexType.ComplexTypePackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/namedElements/method"
+            class="ccsl.elements.namedElements.method.MethodPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
             uri="http://www.example.org/ccsl/elements/statements"
             class="ccsl.elements.statements.StatementsPackage"
             genModel="model/ccsl.genmodel"/>
@@ -81,22 +105,6 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
-            uri="http://www.example.org/ccsl/java"
-            class="ccsl.java.JavaPackage"
-            genModel="model/ccsl.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated ccsl -->
-      <package
-            uri="http://www.example.org/ccsl/filters"
-            class="ccsl.filters.FiltersPackage"
-            genModel="model/ccsl.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated ccsl -->
-      <package
             uri="http://www.example.org/ccsl/nonElements"
             class="ccsl.nonElements.NonElementsPackage"
             genModel="model/ccsl.genmodel"/>
@@ -131,6 +139,38 @@
       <package
             uri="http://www.example.org/ccsl/faultTypeDescription/strategy"
             class="ccsl.faultTypeDescription.strategy.StrategyPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/functions"
+            class="ccsl.functions.FunctionsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/functions/booleanFunctions"
+            class="ccsl.functions.booleanFunctions.BooleanFunctionsPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/filters"
+            class="ccsl.functions.booleanFunctions.filters.FiltersPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/functions/numberFunctions"
+            class="ccsl.functions.numberFunctions.NumberFunctionsPackage"
             genModel="model/ccsl.genmodel"/>
    </extension>
 

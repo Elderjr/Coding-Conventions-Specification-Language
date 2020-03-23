@@ -18,14 +18,17 @@
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::variableOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::javaClassOperations /]
 [import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
+
+[comment element/namedElements/variable /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::variableOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::initializableVariableModule /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::fieldVariableModule /]
 
 [comment statements /]
 [import org::ccsl::gen::ocl::element::statement::statementOperations /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
-[import org::ccsl::gen::ocl::element::statement::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::synchronizedBlockModule /]
@@ -35,11 +38,12 @@
 [import org::ccsl::gen::ocl::element::statement::throwStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
 [import org::ccsl::gen::ocl::element::statement::access::methodInvocationOperations /]
+[import org::ccsl::gen::ocl::element::statement::access::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
 [import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
 
 [ comment statements/controlFlow /]
-[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementOperations /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::ifStatementOperations /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::loopStatementModule /]
 
@@ -53,15 +57,17 @@
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
 
 [template private writeAllConditions(conditions: OrderedSet(String))]
-[for (condition: String | conditions->select(s | s.isNotEmpty())) separator(' and\n')]
-[condition.writeStr() /][/for]
+[let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
+[if conditionsNotBlank->size() > 0]
+[for (condition: String | conditionsNotBlank) separator(' and\n')]
+[condition.writeStr() /][/for][else]
+true[/if][/let]
 [/template]
 
 [comment queries to get element conditions /]
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 OrderedSet(String){
-  element.writeAncestorCondition(varname, metaclass),
-  element.writePropertiesCondition(varname, element.oclAsType(CodeElement).properties)
+  element.writeAncestorCondition(varname, metaclass)
 }
 /]
 
@@ -119,9 +125,8 @@ OrderedSet(String) {
   complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, concreteMetaclass),
   complexType.generatesBodyDeclarationVariable(completeVarname, concreteMetaclass),
   complexType.generatesConditionForFields(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForMethods(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForSuperTypes(completeVarname, concreteMetaclass)
-}->addAll(complexType.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+  complexType.generatesConditionForMethods(completeVarname, concreteMetaclass)
+}->addAll(complexType.getElementConditions(completeVarname, false, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
@@ -162,11 +167,30 @@ let completeVarname: String = var.getCompleteElementVarname(varname, metaclass) 
 let concreteMetaclass: String = var.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
   var.writeVariableTypecheckCondition(varname, typecheck),
-  var.writeSkipUnresolvedItemCondition(varname),
-  var.writeTypeCondition(completeVarname, concreteMetaclass),
-  var.writeInitialValueCondition(completeVarname, concreteMetaclass)
+  var.writeTypeCondition(completeVarname, concreteMetaclass)
 }->select(s | s.trim().size() > 0)
 ->addAll(var.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[query public getInitializableVariableConditions(initializableVar: InitializableVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = initializableVar.addElementAsVisited(metaclass) in
+let completeVarname: String = initializableVar.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = initializableVar.getConcreteElementMetaclass(metaclass) in
+OrderedSet(String) {
+  initializableVar.writeInitializableVariableTypecheckCondition(varname, typecheck),
+  initializableVar.writeInitialValueCondition(completeVarname, concreteMetaclass)
+}
+->addAll(initializableVar.getVariableConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[query public getFieldVariableConditions(fieldVar: FieldVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let void: OclVoid = fieldVar.addElementAsVisited(metaclass) in
+let completeVarname: String = fieldVar.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = fieldVar.getConcreteElementMetaclass(metaclass) in
+OrderedSet(String) {
+  fieldVar.writeFieldVariableTypecheckCondition(varname, typecheck)
+}
+->addAll(fieldVar.getInitializableVariableConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getArrayCreationConditions(inst: ArrayCreation, varname: String, typecheck: Boolean): OrderedSet(String) =
@@ -178,12 +202,14 @@ OrderedSet(String) {
 /]
 
 [query public getBlockConditions(block: Block, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'Block') in
+let void: OclVoid = block.addElementAsVisited(metaclass) in
+let concreteMetaclass: String = block.getConcreteElementMetaclass(metaclass) in
+let completeVarname: String = block.getCompleteElementVarname(varname, metaclass) in
 OrderedSet(String) {
   block.generatesBlockTypecheckConditions(varname, typecheck),
-  block.generatesConditionsForStatements(newVarname)
+  block.generatesConditionsForStatements(completeVarname, concreteMetaclass)
 }->select(s: String | s.isNotEmpty())
-->addAll(block.getElementConditions(newVarname, false, metaclass))
+->addAll(block.getElementConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getInstanceCreationConditions(inst: InstanceCreation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -192,9 +218,10 @@ let concreteMetaclass: String = inst.getConcreteElementMetaclass(metaclass) in
 let completeVarname: String = inst.getCompleteElementVarname(varname, metaclass) in
 OrderedSet(String) {
   inst.writeInstanceCreationTypecheckCondition(varname, typecheck),
-  inst.writeTypeCondition(completeVarname)
+  inst.writeTypeCondition(completeVarname),
+  inst.writeArgsCondition(completeVarname, concreteMetaclass)
 }
-->select(s | s.isNotEmpty())
+->addAll(inst.getStatementConditions(inst, completeVarname, false, concreteMetaclass))
 /]
 
 [query public getLiteralConditions(literal: LiteralValue, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
@@ -225,9 +252,9 @@ OrderedSet(String) {
 /]
 
 [query public getThrowStatementConditions(throwStmt: ThrowStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = throwStmt.addElementAsVisited(metaclass) in
-let concreteMetaclass: String = throwStmt.getConcreteElementMetaclass(metaclass) in
-let completeVarname: String = throwStmt.getCompleteElementVarname(varname, metaclass) in
+--let void: OclVoid = throwStmt.addElementAsVisited(metaclass) in
+--let concreteMetaclass: String = throwStmt.getConcreteElementMetaclass(metaclass) in
+--let completeVarname: String = throwStmt.getCompleteElementVarname(varname, metaclass) in
 OrderedSet(String) {
   throwStmt.writeThrowStatementTypechecker(varname, typecheck)
 }->select(s: String | s.isNotEmpty())
@@ -310,22 +337,13 @@ OrderedSet(String){
 /]
 
 [query public getSwitchStatementConditions(switch: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'SwitchStatement') in
-let conditions: OrderedSet(String) = OrderedSet(String){
-''}->select(s: String | s.trim().size() > 0) in
-if typecheck then
-  OrderedSet(String){varname.printKindOfCondition('SwitchStatement')}->addAll(conditions)
-else
-  conditions
-endif
-/]
-
-[query public getSwitchCaseBlockConditions(switchBlock: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'SwitchStatement') in
+let void: OclVoid = switch.addElementAsVisited(metaclass) in
+let completeVarname: String = switch.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = switch.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String){
-  switchBlock.generatesSwitchCaseBlockTypecheckCondition(varname, typecheck),
-  switchBlock.generatesConditionsForStatements(newVarname)
-}->select(s: String | s.trim().size() > 0)
+  switch.writeSwitchStatementTypecheckCondition(varname, typecheck, metaclass),
+  switch.writeCasesCondition(completeVarname, concreteMetaclass)
+}
 /]
 
 [query public getArithmeticExpressionConditions(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
@@ -416,6 +434,10 @@ OrderedSet(String) {
 [var.getVariableConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[template public writeElementConditions(var: FieldVariable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getFieldVariableConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
 [template public writeElementConditions(arrayCreation: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String)]
 
 [/template]
@@ -481,10 +503,9 @@ OrderedSet(String) {
 [switchStmt.getSwitchStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
-[template public writeElementConditions(switchCase: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String)]
-[switchCase.getSwitchCaseBlockConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[template public writeElementConditions(switchStmt: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String)]
+true
 [/template]
-
 
 [template public writeElementConditions(arithmeticExpression: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [arithmeticExpression.getArithmeticExpressionConditions(varname, typecheck, metaclass)->writeAllConditions() /]

@@ -9,6 +9,8 @@
 [import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
 [import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+
+
 [template private operation(logicOperator: LogicOperator)]
 [if logicOperator = LogicOperator::AND]
 ->intersect[elseif logicOperator = LogicOperator::OR]
@@ -16,7 +18,9 @@
 [/template]
 
 [template public writeOCL(rule: Rule)]
-let violations: Set(ASTNode) = [rule.writeOCLToSelectElements() /] in
+let violations: Set(ASTNode) = [rule.writeOCLToSelectElements() /] 
+[rule.generatesPostConditionToRemoveJavadocRelatedElements() /]
+[rule.generatesPostConditionToRemoveNonSourceElements() /] in
 violations
 [/template]
 
@@ -26,7 +30,8 @@ violations
   e.oclIsKindOf(Assignment) or
   e.oclIsKindOf(ArithmeticExpression) or
   e.oclIsKindOf(BooleanExpression) or 
-  e.oclIsKindOf(StringConcatenation)
+  e.oclIsKindOf(StringConcatenation) or
+  e.oclIsKindOf(FieldVariable)
 /]
 
 [template private writeGetAllInstances(metaclasses: OrderedSet(String))]
@@ -44,10 +49,7 @@ endif
 /]
 
 [query private isSubjectNeedsTypecheckOnStart(rule: AtomicRule): Boolean = 
-if rule.subject.oclIsKindOf(Assignment) or
-   rule.subject.oclIsKindOf(ArithmeticExpression) or
-   rule.subject.oclIsKindOf(BooleanExpression) or 
-   rule.subject.oclIsKindOf(StringConcatenation) then
+if rule.subject.isElementNeedsTypecheckOnStart() then
   true
 else if rule.subject.getMatchingJavaMetaclasses()->size() = 1 then
   false
@@ -71,14 +73,10 @@ endif endif
   [rule._context.writeCloseParenthesis() /][elseif subjectConditions.isEmpty() and filtersConditions.isNotEmpty()]
   [filtersConditions.writeStr() /]
   [rule._context.writeCloseParenthesis() /][/if][/let][/let][/let][/let]
-[rule.writePostConditions() /]
+
+)
 [/template]
 
-
-[template private writePostConditions(rule: AtomicRule)]
-[rule.subject.generatesPostConditionToRemoveJavadocRelatedElements() /]
-[rule.subject.generatesPostConditionToCollectFirstSourceElements() /]
-[/template]
 [template private writeOCLToSelectElements(compositeRule: CompositeRule)]
 (
 [for (subRules: Rule | compositeRule.rules) separator(compositeRule.operator.operation().concat('(\n'))]

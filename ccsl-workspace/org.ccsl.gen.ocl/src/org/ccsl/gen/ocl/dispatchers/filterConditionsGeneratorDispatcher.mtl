@@ -1,10 +1,8 @@
 [comment encoding = UTF-8 /]
 [module filterConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::filters::propertyFilterOperations /]
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
-[import org::ccsl::gen::ocl::filters::definesMethodFilterOperations /]
-[import org::ccsl::gen::ocl::filters::switchStatementCasesCounterOperations /]
+[import org::ccsl::gen::ocl::filters::countFilterModule /]
 [import org::ccsl::gen::ocl::filters::implicityOperandFilterModule /]
 [import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
 [import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
@@ -13,6 +11,7 @@
 [import org::ccsl::gen::ocl::filters::isStringFilterModule /]
 [import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+[import org::ccsl::gen::ocl::filters::fromClosureFilterModule /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
@@ -84,20 +83,8 @@ not (
 [atomicFilter.eClass() /] dispatcher not implemented
 [/template]
 
-[template public generatesSpecificFilterConditions(propertyFilter: PropertyFilter, target: Element)]
-[propertyFilter.generatesPropertyFilterConditions(target) /]
-[/template]
-
 [template public generatesSpecificFilterConditions(regexFilter: RegexMatch, target: Element)]
 [regexFilter.generatesRegexFilterConditions(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(definesMethodFilter: DefinesMethodFilter, target: Element)]
-[definesMethodFilter.generateDefinesMethodFilterConditions(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(casesCounter: SwitchCaseStatementCount, target: Element)]
-[casesCounter.generatesSwitchStatementCaseCounterFilterConditions(target) /]
 [/template]
 
 [template public generatesSpecificFilterConditions(templFilter: TemplateFilter, target: Element)]
@@ -132,6 +119,14 @@ not (
 [superMethodClosureFilter.writeSuperMethodClosureFilterModule(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(f: ChildComplexTypeFilter, target: Element)]
+[template public generatesSpecificFilterConditions(f: ChildClosureComplexTypeFilter, target: Element)]
 [f.writeChildComplexTypeFilter(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(f: FromClosureFilter, target: Element)]
+[f.writeFromClosureFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(f: CountFilter, target: Element)]
+[f.writeCountFilterCondition(target) /]
 [/template]

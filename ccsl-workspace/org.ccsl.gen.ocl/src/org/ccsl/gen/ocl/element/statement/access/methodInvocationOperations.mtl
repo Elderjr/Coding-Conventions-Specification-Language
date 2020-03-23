@@ -19,11 +19,18 @@
 [/template]
 
 [template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
-[methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration') /]
+[methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration', methodInv.getMethodInvocationMatchingMetaclasses()) /]
 [/template]
 
 [template public writeToCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('elementAccessed') and not methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
-[methodInv.generatesMonovaluedFieldConditions(methodInv.elementAccessed, varname, 'method', 'MethodDeclaration', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+let [methodInv.elementAccessed.getFieldName() /]: MethodDeclaration = if [varname /].oclIsKindOf(MethodInvocation) then
+  [varname /].oclAsType(MethodInvocation).method
+elseif [varname /].oclIsKindOf(SuperMethodInvocation) then
+  [varname /].oclAsType(SuperMethodInvocation).method
+else
+  null
+endif in 
+[methodInv.generatesFieldCondition(methodInv.elementAccessed,methodInv.elementAccessed.getFieldName(), 'MethodDeclaration') /]
 [/template]
 
 [template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('from') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
@@ -31,7 +38,12 @@
 [/template]
 
 [template public writeFromCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('from') and not methodInv.isMetaclassInMatchingMetaclasses(metaclass))]
-[methodInv.generatesMonovaluedFieldConditions(methodInv.from, varname, 'expression', 'ASTNode', methodInv.getMethodInvocationMatchingMetaclasses()) /]
+let [methodInv.from.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(MethodInvocation) then
+  [varname /].oclAsType(MethodInvocation).expression
+else
+  null
+endif in 
+[methodInv.generatesFieldCondition(methodInv.from, methodInv.from.getFieldName(), 'ASTNode') /]
 [/template]
 
 [template public writeArgsCondition(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.mustWriteConditionFor('args') and methodInv.isMetaclassInMatchingMetaclasses(metaclass))]

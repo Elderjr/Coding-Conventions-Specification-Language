@@ -22,7 +22,9 @@ if feature <> null and element.eIsSet(feature) and element.eGet(feature) = null 
 else if feature <> null and element.eIsSet(feature) and not feature.many then 
   element.eGet(feature)->asSet()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
 else if feature <> null and element.eIsSet(feature) and feature.many then
-  element.eGet(feature)->flatten()->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
+  let elements: Collection(OclAny) = element.eGet(feature)->flatten() in
+  elements->size() = 0 or
+  elements->exists(x: OclAny | x.oclIsKindOf(Element) and not element.isClosureRelation(element, x.oclAsType(Element)))
 else
   false
 endif endif endif

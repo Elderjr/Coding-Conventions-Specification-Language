@@ -1,60 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" operator="OR">
-  <rules xsi:type="ccsl:AtomicRule" violator="//@rules.0/@ruleElements.0/@fields.0">
-    <ruleElements xsi:type="namedElements:ComplexType">
-      <fields type="//@rules.0/@ruleElements.1">
-        <initialValue xsi:type="literalValues:NumberLiteral" value="0"/>
-      </fields>
-    </ruleElements>
-    <ruleElements xsi:type="datatype:PrimitiveType"/>
-    <filters xsi:type="filters:RegexMatch" targets="//@rules.0/@ruleElements.1" regex="(byte|short|char|int|long)"/>
-    <filters xsi:type="filters:PropertyFilter" negated="true" targets="//@rules.0/@ruleElements.0/@fields.0">
-      <properties name="final"/>
-    </filters>
-  </rules>
-  <rules xsi:type="ccsl:AtomicRule" violator="//@rules.1/@ruleElements.1/@fields.0">
-    <ruleElements xsi:type="datatype:PrimitiveType"/>
-    <ruleElements xsi:type="namedElements:ComplexType">
-      <fields type="//@rules.1/@ruleElements.0">
-        <initialValue xsi:type="literalValues:NumberLiteral"/>
-      </fields>
-    </ruleElements>
-    <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@ruleElements.0" regex="(float|double)"/>
-    <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@ruleElements.1/@fields.0/@initialValue" regex="(0|0\\.0|\\.0f|\\.0d)"/>
-    <filters xsi:type="filters:PropertyFilter" negated="true" targets="//@rules.1/@ruleElements.1/@fields.0">
-      <properties name="final"/>
-    </filters>
-  </rules>
-  <rules xsi:type="ccsl:AtomicRule" violator="//@rules.2/@ruleElements.0/@fields.0">
-    <ruleElements xsi:type="namedElements:ComplexType">
-      <fields type="//@rules.2/@ruleElements.1">
-        <initialValue xsi:type="literalValues:NullLiteral"/>
-      </fields>
-    </ruleElements>
-    <ruleElements xsi:type="datatype:ObjectType"/>
-    <filters xsi:type="filters:PropertyFilter" negated="true" targets="//@rules.2/@ruleElements.0/@fields.0">
-      <properties name="final"/>
-    </filters>
-  </rules>
-  <rules xsi:type="ccsl:AtomicRule" violator="//@rules.3/@ruleElements.0/@fields.0">
-    <ruleElements xsi:type="namedElements:ComplexType">
-      <fields xsi:type="namedElements:VariableVector">
-        <initialValue xsi:type="literalValues:NullLiteral"/>
-      </fields>
-    </ruleElements>
-    <filters xsi:type="filters:PropertyFilter" negated="true" targets="//@rules.3/@ruleElements.0/@fields.0">
-      <properties name="final"/>
-    </filters>
-  </rules>
-  <rules xsi:type="ccsl:AtomicRule" violator="//@rules.4/@ruleElements.0/@fields.0">
-    <ruleElements xsi:type="namedElements:ComplexType">
-      <fields type="//@rules.4/@ruleElements.1">
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:variable="http://www.example.org/ccsl/elements/namedElements/variable" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.0/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="variable:FieldVariable" type="//@rules.0/@context/@contextElements.1">
         <initialValue xsi:type="literalValues:BooleanLiteral" value="false"/>
-      </fields>
-    </ruleElements>
-    <ruleElements xsi:type="datatype:BooleanPrimitiveType"/>
-    <filters xsi:type="filters:PropertyFilter" negated="true" targets="//@rules.4/@ruleElements.0/@fields.0">
-      <properties name="final"/>
-    </filters>
+      </contextElements>
+      <contextElements xsi:type="datatype:BooleanPrimitiveType"/>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.1/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="variable:FieldVariable" type="//@rules.1/@context/@contextElements.1">
+        <initialValue xsi:type="literalValues:NumberLiteral"/>
+      </contextElements>
+      <contextElements xsi:type="datatype:PrimitiveType"/>
+      <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@context/@contextElements.1" regex="(byte|short|char|int|long|float|double)"/>
+      <filters xsi:type="filters:RegexMatch" targets="//@rules.1/@context/@contextElements.0/@initialValue" regex="((0)*|((0)*\\.(0)*)|(0\\.0f)|(0d))"/>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.2/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="variable:FieldVariable" type="//@rules.2/@context/@contextElements.1">
+        <initialValue xsi:type="literalValues:NullLiteral"/>
+      </contextElements>
+      <contextElements xsi:type="datatype:ObjectType"/>
+    </context>
   </rules>
 </ccsl:CompositeRule>

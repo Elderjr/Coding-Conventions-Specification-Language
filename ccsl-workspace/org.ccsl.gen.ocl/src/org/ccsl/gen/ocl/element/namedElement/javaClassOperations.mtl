@@ -8,14 +8,14 @@
 
 
 [template public generatesClassTypecheckCondition(class: JClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and not class.isMetaclassInMatchingMetaclasses(metaclass))]
-[varname /].oclIsKindOf(ClassDeclaration) or [varname /].oclIsKindOf(AnonymousClassDeclaration)
+([varname /].oclIsKindOf(ClassDeclaration) or [varname /].oclIsKindOf(AnonymousClassDeclaration))
 [/template]
 
 [template public generatesClassTypecheckCondition(class: JClass, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck and class.isMetaclassInMatchingMetaclasses(metaclass))]
 [varname /].oclIsKindOf([metaclass /])
 [/template]
 
-[template public generatesConditionsForImplements(class: JClass, varname: String) ? (class.implements->size() > 0)]
+[template public generatesConditionsForImplements(class: JClass, varname: String) ? (false)]
 let interfacesImplemented: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(ClassDeclaration) then
   [varname /].oclAsType(ClassDeclaration).superInterfaces->collect(type)->asOrderedSet()
 else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
@@ -29,5 +29,5 @@ else if [varname /].oclIsKindOf(AnonymousClassDeclaration) then
 else
   null
 endif endif in (not interfacesImplemented->oclIsUndefined()) and
-[class.generatesSetConditions('interfacesImplemented', class.implements, 'ASTNode') /]
+[class.generatesSetConditions('interfacesImplemented', null, 'ASTNode') /]
 [/template]

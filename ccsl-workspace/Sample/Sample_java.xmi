@@ -2,59 +2,191 @@
 <java:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://www.eclipse.org/MoDisco/Java/0.2.incubation/java" name="Sample">
   <ownedElements name="testPack">
     <ownedElements xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.0" name="SampleB">
-      <modifier visibility="public"/>
-      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="main">
-        <modifier visibility="public" static="true"/>
+      <modifier visibility="public" inheritance="abstract"/>
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="getId">
+        <modifier visibility="private" static="true"/>
+        <body originalCompilationUnit="//@compilationUnits.0">
+          <statements xsi:type="java:ReturnStatement" originalCompilationUnit="//@compilationUnits.0">
+            <expression xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;&quot;"/>
+          </statements>
+        </body>
+        <returnType type="//@ownedElements.1/@ownedPackages.1/@ownedElements.2"/>
+      </bodyDeclarations>
+      <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="foo">
+        <modifier visibility="public"/>
         <body originalCompilationUnit="//@compilationUnits.0">
           <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
-            <type type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
-            <fragments originalCompilationUnit="//@compilationUnits.0" name="x" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.1/@expression/@leftHandSide">
-              <initializer xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;&quot;"/>
+            <type type="//@ownedElements.1/@ownedPackages.1/@ownedElements.5"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="sb" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@body/@statements.0/@expression/@expression/@expression">
+              <initializer xsi:type="java:ClassInstanceCreation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.1/@ownedPackages.1/@ownedElements.5/@bodyDeclarations.0">
+                <type type="//@ownedElements.1/@ownedPackages.1/@ownedElements.5"/>
+              </initializer>
             </fragments>
             <modifier/>
           </statements>
-          <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
-            <expression xsi:type="java:Assignment" originalCompilationUnit="//@compilationUnits.0" operator="+=">
-              <leftHandSide xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@fragments.0"/>
-              <rightHandSide xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;dsadasd&quot;"/>
+          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@orphanTypes.8"/>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="bytes" extraArrayDimensions="1" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@expression/@rightOperand/@array">
+              <initializer xsi:type="java:NullLiteral" originalCompilationUnit="//@compilationUnits.0"/>
+            </fragments>
+            <modifier/>
+          </statements>
+          <statements xsi:type="java:ForStatement" originalCompilationUnit="//@compilationUnits.0">
+            <expression xsi:type="java:InfixExpression" originalCompilationUnit="//@compilationUnits.0" operator="&lt;">
+              <rightOperand xsi:type="java:ArrayLengthAccess" originalCompilationUnit="//@compilationUnits.0">
+                <array xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@fragments.0"/>
+              </rightOperand>
+              <leftOperand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@initializers.0/@fragments.0"/>
             </expression>
+            <updaters xsi:type="java:PostfixExpression" originalCompilationUnit="//@compilationUnits.0">
+              <operand xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@initializers.0/@fragments.0"/>
+            </updaters>
+            <initializers xsi:type="java:VariableDeclarationExpression" originalCompilationUnit="//@compilationUnits.0">
+              <type type="//@orphanTypes.0"/>
+              <fragments originalCompilationUnit="//@compilationUnits.0" name="i" usageInVariableAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@expression/@leftOperand //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@updaters.0/@operand">
+                <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="0"/>
+              </fragments>
+              <modifier/>
+            </initializers>
+            <body xsi:type="java:Block" originalCompilationUnit="//@compilationUnits.0">
+              <statements xsi:type="java:ExpressionStatement" originalCompilationUnit="//@compilationUnits.0">
+                <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.1/@ownedPackages.1/@ownedElements.5/@bodyDeclarations.1">
+                  <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;x&quot;"/>
+                  <expression xsi:type="java:MethodInvocation" originalCompilationUnit="//@compilationUnits.0" method="//@ownedElements.1/@ownedPackages.1/@ownedElements.5/@bodyDeclarations.1">
+                    <arguments xsi:type="java:StringLiteral" originalCompilationUnit="//@compilationUnits.0" escapedValue="&quot;x&quot;"/>
+                    <expression xsi:type="java:SingleVariableAccess" variable="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@fragments.0"/>
+                  </expression>
+                </expression>
+              </statements>
+            </body>
           </statements>
         </body>
-        <parameters originalCompilationUnit="//@compilationUnits.0" name="args">
-          <modifier/>
-          <type type="//@orphanTypes.9"/>
-        </parameters>
         <returnType type="//@orphanTypes.5"/>
+      </bodyDeclarations>
+    </ownedElements>
+    <ownedElements xsi:type="java:InterfaceDeclaration" originalCompilationUnit="//@compilationUnits.1" name="test">
+      <modifier visibility="public"/>
+      <bodyDeclarations xsi:type="java:InterfaceDeclaration" originalCompilationUnit="//@compilationUnits.1" name="oo">
+        <modifier visibility="public"/>
+      </bodyDeclarations>
+      <bodyDeclarations xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.1" name="foo">
+        <modifier visibility="public"/>
+      </bodyDeclarations>
+      <bodyDeclarations xsi:type="java:ClassDeclaration" originalCompilationUnit="//@compilationUnits.1" name="List">
+        <modifier visibility="public"/>
+        <typeParameters originalCompilationUnit="//@compilationUnits.1" name="String"/>
       </bodyDeclarations>
     </ownedElements>
   </ownedElements>
   <ownedElements name="java" proxy="true">
-    <ownedPackages name="lang" proxy="true">
-      <ownedElements xsi:type="java:ClassDeclaration" name="String" proxy="true" usagesInTypeAccess="//@orphanTypes.9/@elementType //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@type">
+    <ownedPackages name="util" proxy="true">
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Collection" proxy="true" usagesInImports="//@compilationUnits.0/@imports.0" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.3/@superInterfaces.0 //@ownedElements.1/@ownedPackages.0/@ownedElements.4/@superInterfaces.0 //@ownedElements.1/@ownedPackages.0/@ownedElements.8/@superInterfaces.0 //@ownedElements.1/@ownedPackages.0/@ownedElements.10/@superInterfaces.0">
         <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.0"/>
-        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.1"/>
-        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.2"/>
+        <typeParameters name="E" proxy="true"/>
       </ownedElements>
-      <ownedElements xsi:type="java:InterfaceDeclaration" name="Comparable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@superInterfaces.1">
+      <ownedElements xsi:type="java:ClassDeclaration" name="HashSet" proxy="true" usagesInImports="//@compilationUnits.0/@imports.1">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.4"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.1"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.2/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.0/@ownedElements.2"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="AbstractSet" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.1/@superClass">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.4"/>
+        <typeParameters name="E" proxy="true"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.0/@ownedElements.3"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="AbstractCollection" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.2/@superClass //@ownedElements.1/@ownedPackages.0/@ownedElements.7/@superClass">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Set" proxy="true" usagesInImports="//@compilationUnits.0/@imports.4" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.2/@superInterfaces.0 //@ownedElements.1/@ownedPackages.0/@ownedElements.1/@superInterfaces.0">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="LinkedList" proxy="true" usagesInImports="//@compilationUnits.0/@imports.2">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.8"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.9"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.1"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.2/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.0/@ownedElements.6"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="AbstractSequentialList" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.5/@superClass">
+        <typeParameters name="E" proxy="true"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.0/@ownedElements.7"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="AbstractList" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.6/@superClass">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.8"/>
+        <typeParameters name="E" proxy="true"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.0/@ownedElements.3"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="List" proxy="true" usagesInImports="//@compilationUnits.0/@imports.3 //@compilationUnits.1/@imports.0" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.7/@superInterfaces.0 //@ownedElements.1/@ownedPackages.0/@ownedElements.5/@superInterfaces.0">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Deque" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.5/@superInterfaces.1">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.10"/>
+        <typeParameters name="E" proxy="true"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Queue" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.9/@superInterfaces.0">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+        <typeParameters name="E" proxy="true"/>
+      </ownedElements>
+    </ownedPackages>
+    <ownedPackages name="lang" proxy="true">
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Iterable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@superInterfaces.0">
         <typeParameters name="T" proxy="true"/>
       </ownedElements>
-      <ownedElements xsi:type="java:InterfaceDeclaration" name="CharSequence" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@superInterfaces.2"/>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Cloneable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.1/@superInterfaces.1 //@ownedElements.1/@ownedPackages.0/@ownedElements.5/@superInterfaces.2"/>
+      <ownedElements xsi:type="java:ClassDeclaration" name="String" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@returnType //@ownedElements.1/@ownedPackages.1/@ownedElements.5/@bodyDeclarations.1/@parameters.0/@type">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.2/@ownedElements.0"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.3"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.4"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Comparable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.2/@superInterfaces.1 //@ownedElements.1/@ownedPackages.1/@ownedElements.5/@superInterfaces.1">
+        <typeParameters name="T" proxy="true"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="CharSequence" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.2/@superInterfaces.2 //@ownedElements.1/@ownedPackages.1/@ownedElements.6/@superInterfaces.1 //@ownedElements.1/@ownedPackages.1/@ownedElements.5/@superInterfaces.2"/>
+      <ownedElements xsi:type="java:ClassDeclaration" name="StringBuilder" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@fragments.0/@initializer/@type">
+        <bodyDeclarations xsi:type="java:ConstructorDeclaration" name="StringBuilder" proxy="true" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@fragments.0/@initializer"/>
+        <bodyDeclarations xsi:type="java:MethodDeclaration" name="append" proxy="true" usages="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@body/@statements.0/@expression/@expression //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@body/@statements.0/@expression">
+          <parameters name="arg0" proxy="true">
+            <type type="//@ownedElements.1/@ownedPackages.1/@ownedElements.2"/>
+          </parameters>
+        </bodyDeclarations>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.2/@ownedElements.0"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.3"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.4"/>
+        <superClass type="//@ownedElements.1/@ownedPackages.1/@ownedElements.6"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:ClassDeclaration" name="AbstractStringBuilder" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.5/@superClass">
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.7"/>
+        <superInterfaces type="//@ownedElements.1/@ownedPackages.1/@ownedElements.4"/>
+      </ownedElements>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Appendable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.1/@ownedElements.6/@superInterfaces.0"/>
     </ownedPackages>
     <ownedPackages name="io" proxy="true">
-      <ownedElements xsi:type="java:InterfaceDeclaration" name="Serializable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.0/@superInterfaces.0"/>
+      <ownedElements xsi:type="java:InterfaceDeclaration" name="Serializable" proxy="true" usagesInTypeAccess="//@ownedElements.1/@ownedPackages.0/@ownedElements.1/@superInterfaces.2 //@ownedElements.1/@ownedPackages.0/@ownedElements.5/@superInterfaces.3 //@ownedElements.1/@ownedPackages.1/@ownedElements.2/@superInterfaces.0 //@ownedElements.1/@ownedPackages.1/@ownedElements.5/@superInterfaces.0"/>
     </ownedPackages>
   </ownedElements>
-  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.2/@initializers.0/@type"/>
   <orphanTypes xsi:type="java:PrimitiveTypeLong" name="long"/>
   <orphanTypes xsi:type="java:PrimitiveTypeFloat" name="float"/>
   <orphanTypes xsi:type="java:PrimitiveTypeDouble" name="double"/>
   <orphanTypes xsi:type="java:PrimitiveTypeBoolean" name="boolean"/>
-  <orphanTypes xsi:type="java:PrimitiveTypeVoid" name="void" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@returnType"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeVoid" name="void" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@returnType"/>
   <orphanTypes xsi:type="java:PrimitiveTypeChar" name="char"/>
   <orphanTypes xsi:type="java:PrimitiveTypeShort" name="short"/>
-  <orphanTypes xsi:type="java:PrimitiveTypeByte" name="byte"/>
-  <orphanTypes xsi:type="java:ArrayType" name="java.lang.String[]" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@parameters.0/@type" dimensions="1">
-    <elementType type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
-  </orphanTypes>
-  <compilationUnits name="SampleB.java" originalFilePath="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\testPack\SampleB.java" package="//@ownedElements.0" types="//@ownedElements.0/@ownedElements.0"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeByte" name="byte" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.1/@type"/>
+  <compilationUnits name="SampleB.java" originalFilePath="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\testPack\SampleB.java" package="//@ownedElements.0" types="//@ownedElements.0/@ownedElements.0">
+    <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+    <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.1"/>
+    <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.5"/>
+    <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.8"/>
+    <imports originalCompilationUnit="//@compilationUnits.0" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.4"/>
+  </compilationUnits>
+  <compilationUnits name="test.java" originalFilePath="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\testPack\test.java" package="//@ownedElements.0" types="//@ownedElements.0/@ownedElements.1">
+    <imports originalCompilationUnit="//@compilationUnits.1" importedElement="//@ownedElements.1/@ownedPackages.0/@ownedElements.8"/>
+  </compilationUnits>
 </java:Model>
