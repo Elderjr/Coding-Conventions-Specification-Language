@@ -83,6 +83,11 @@ endif endif endif endif endif
 [varName /].oclIsKindOf([type /])[/for])
 [/template]
 
+[template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.value.startsWith('-')))]
+([varname /].oclContainer().oclIsKindOf(PrefixExpression) and [varname /].oclContainer().oclAsType(PrefixExpression).operator = PrefixExpressionKind::MINUS) and
+[varname /].oclAsType(NumberLiteral).tokenValue = '[literal.value.substring(2, literal.value.size()) /]'
+[/template]
+
 [template public generatesConditionForValue(literal: LiteralValue, varname: String, typecheck: Boolean) ? ((not literal.value.oclIsUndefined()) and (literal.getLiteralMatchingMetaclasses()->size() > 1))]
 [literal.generatesLetStatementToGetLiteralValue(varname, 'tmpValue') /] and
 tmpValue = [if literal.isStringLiteral()]'"[literal.value /]"'[else]'[literal.value /]'[/if]

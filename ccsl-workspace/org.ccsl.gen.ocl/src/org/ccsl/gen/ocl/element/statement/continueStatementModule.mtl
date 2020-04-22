@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module continueStatementModule('http://www.example.org/ccsl')]
+
+
+
+
+[template public writeContinueStatementTypecheckCondition(continueStmt: ContinueStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ContinueStatement)
+[/template]
+

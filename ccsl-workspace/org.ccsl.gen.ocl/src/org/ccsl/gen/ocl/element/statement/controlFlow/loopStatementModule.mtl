@@ -5,17 +5,17 @@
 
 
 [template public generatesLoopStatementTypecheckerCondition(loopStmt: LoopStatement, varname: String, typecheck: Boolean) ? (typecheck)]
-[varname /].oclIsKindOf(EnhancedForStatement) or [varname /].oclIsKindOf(ForStatement) or [varname /].oclIsKindOf(WhileStatement) or [varname /].oclIsKindOf(DoStatement) 
+([varname /].oclIsKindOf(EnhancedForStatement) or [varname /].oclIsKindOf(ForStatement) or [varname /].oclIsKindOf(WhileStatement) or [varname /].oclIsKindOf(DoStatement)) 
 [/template]
 
 [template public writeBodyCondition(loopStmt: LoopStatement, varname: String) ? (loopStmt.mustWriteConditionFor('body'))]
 let [loopStmt._body.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(EnhancedForStatement) then
   [varname /].oclAsType(EnhancedForStatement).body
-elseif
+elseif [varname /].oclIsKindOf(ForStatement) then
   [varname /].oclAsType(ForStatement).body
-elseif
+elseif [varname /].oclIsKindOf(WhileStatement) then
   [varname /].oclAsType(WhileStatement).body
-elseif
+elseif [varname /].oclIsKindOf(DoStatement) then
   [varname /].oclAsType(DoStatement).body
 else
   null

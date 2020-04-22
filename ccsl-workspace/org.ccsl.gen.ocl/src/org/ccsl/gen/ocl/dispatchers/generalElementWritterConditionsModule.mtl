@@ -16,10 +16,17 @@
 
 [comment element/namedElements /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::methodOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::complexTypeOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::javaClassOperations /]
-[import org::ccsl::gen::ocl::element::namedElement::interfaceOperations /]
+
+[comment element/namedElements/complexType /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::declaredTypeModule /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::javaClassOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::interfaceOperations /]
+
+[comment element/namedElements/method /]
+[import org::ccsl::gen::ocl::element::namedElement::method::simpleMethodModule /]
+[import org::ccsl::gen::ocl::element::namedElement::method::methodOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::method::constructorModule /]
 
 [comment element/namedElements/variable /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::variableOperations /]
@@ -28,19 +35,33 @@
 
 [comment statements /]
 [import org::ccsl::gen::ocl::element::statement::statementOperations /]
+[import org::ccsl::gen::ocl::element::statement::emptyStatementModule /]
+[import org::ccsl::gen::ocl::element::statement::thisStatementModule /]
+[import org::ccsl::gen::ocl::element::statement::breakStatementModule /]
+[import org::ccsl::gen::ocl::element::statement::continueStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::element::statement::arrayCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::blockOperations /]
 [import org::ccsl::gen::ocl::element::statement::synchronizedBlockModule /]
-[import org::ccsl::gen::ocl::element::statement::varAssignmentModule /]
+[import org::ccsl::gen::ocl::element::statement::instanceofModule /]
+[import org::ccsl::gen::ocl::element::statement::returnStatementModule /]
+
+[comment statements/assignment /]
+[import org::ccsl::gen::ocl::element::statement::assignment::abstractAssignmentModule /]
+[import org::ccsl::gen::ocl::element::statement::assignment::assignmentModule /]
 
 [comment statements/access /]
 [import org::ccsl::gen::ocl::element::statement::throwStatementModule /]
 [import org::ccsl::gen::ocl::element::statement::access::accessModule /]
-[import org::ccsl::gen::ocl::element::statement::access::methodInvocationOperations /]
 [import org::ccsl::gen::ocl::element::statement::access::instanceCreationOperations /]
 [import org::ccsl::gen::ocl::element::statement::access::variableAccessModule /]
 [import org::ccsl::gen::ocl::element::statement::access::dataTypeAccessOperations /]
+
+[comment statements/invocation /]
+[import org::ccsl::gen::ocl::element::statement::invocation::invocationModule /]
+[import org::ccsl::gen::ocl::element::statement::invocation::methodInvocationModule /]
+[import org::ccsl::gen::ocl::element::statement::invocation::superMethodInvocationModule /]
+[import org::ccsl::gen::ocl::element::statement::invocation::constructorInvocationModule /]
 
 [ comment statements/controlFlow /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementModule /]
@@ -54,7 +75,8 @@
 [import org::ccsl::gen::ocl::element::statement::expression::stringConcatenationOperations /]
 
 [ comment statements/tryCatch /]
-[import org::ccsl::gen::ocl::element::statement::tryCatch::catchBlockModule /]
+[import org::ccsl::gen::ocl::element::statement::tryCatch::tryStatementModule /]
+[import org::ccsl::gen::ocl::element::statement::tryCatch::catchClauseModule /]
 
 [template private writeAllConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
@@ -64,7 +86,22 @@
 true[/if][/let]
 [/template]
 
-[comment queries to get element conditions /]
+
+[comment This query mark the element as visited and returns a Tuple(String_1, String_2) where
+String_1 is the OCL expression that should be used to reference the element
+String_2 is the metaclass that represents the element.
+e.g.: element = IfStatement, varname = 'ifStmt' and metaclass = 'ASTNode'
+output: element is marked as visited, String_1 = ifStmt.oclAsType(IfStatement), String_2 = IfStatement
+e.g.: element = IfStatement, varname = 'ifStmt' and metaclass = 'IfStatement'
+output: element is marked as visited, String_1 = ifStmt, String_2 = IfStatement
+/]
+[query private visitElement(element: Element, varname: String, metaclass: String): OrderedSet(String) = 
+let void: OclVoid = element.addElementAsVisited(metaclass) in
+let completeVarname: String = element.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = element.getConcreteElementMetaclass(metaclass) in
+OrderedSet(String){completeVarname, concreteMetaclass}
+/]
+
 [query public getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 OrderedSet(String){
   element.writeAncestorCondition(varname, metaclass)
@@ -96,12 +133,15 @@ OrderedSet(String) {
 }->addAll(parameterizedType.getObjectTypeConditions(varname, false, concreteMetaclass))
 /]
 
+[comment @ArrayTypeQuery: Returns all conditions related to ArrayType as a OrderedSet(String) /]
 [query public getArrayTypeConditions(arrayType: ArrayType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let newVarname: String = varname.printVarname(typecheck, 'ArrayType') in
+let tuple: OrderedSet(String) = arrayType.visitElement(varname, metaclass) in
+let completeVarname: String =  tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
-  arrayType.generatesArraTypeTypecheckCondition(varname, typecheck),
-  arrayType.generatesConditionsForType(newVarname)
-}->addAll(arrayType.getObjectTypeConditions(varname, false, metaclass))
+  arrayType.writeArrayTypeTypecheckCondition(varname, typecheck),
+  arrayType.writeTypeCondition(completeVarname)
+}->addAll(arrayType.getObjectTypeConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getPrimitiveTypeConditions(primitiveType: PrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -110,54 +150,108 @@ OrderedSet(String){
 }->addAll(primitiveType.getDataTypeConditions(primitiveType, varname, false, metaclass))
 /]
 
+[comment @NamedElementQuery /]
 [query public getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
  OrderedSet(String){
-  namedElement.writeNameCondition(varname, metaclass)
+  namedElement.writeNameCondition(varname, metaclass),
+  namedElement.writeAvaliableInSourceCode(varname)
 }->select(s | s.trim().size() > 0)
 ->addAll(namedElement.getElementConditions(varname, typecheck, metaclass))
 /]
 
+[comment @ComplexTypeQuery /]
 [query public getComplexTypeConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = complexType.addElementAsVisited() in
 let completeVarname: String = complexType.getCompleteElementVarname(varname, metaclass) in
 let concreteMetaclass: String = complexType.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
   complexType.generatesComplexTypeTypecheckCondition(varname, typecheck, concreteMetaclass),
-  complexType.generatesBodyDeclarationVariable(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForFields(completeVarname, concreteMetaclass),
-  complexType.generatesConditionForMethods(completeVarname, concreteMetaclass)
+  complexType.writeGetBodyDeclarations(completeVarname, concreteMetaclass),
+  complexType.writeFieldsCondition(completeVarname, concreteMetaclass),
+  complexType.writeMethodsCondition(completeVarname, concreteMetaclass)
 }->addAll(complexType.getElementConditions(completeVarname, false, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
-[query public getInterfaceConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = interface.addElementAsVisited() in
+[comment @DeclaredTypeQuery /]
+[query public getDeclaredTypeConditions(type: DeclaredType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String =  tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
-  interface.generatesClassTypecheckCondition(varname, typecheck)
-}->select(cond | cond.isNotEmpty())
-->addAll(interface.getComplexTypeConditions(varname, typecheck, metaclass))
+  type.writeDeclaredTypeTypecheckCondition(varname, typecheck, concreteMetaclass)
+}
+->select(s | s.trim().size() > 0)
+->addAll(type.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+->addAll(type.getComplexTypeConditions(completeVarname, false, concreteMetaclass))
 /]
 
+[comment @JInterfaceQuery: Returns all conditions related to JInterface as a OrderedSet(String) /]
+[query public getInterfaceConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = interface.visitElement(varname, metaclass) in
+let completeVarname: String =  tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  interface.writeInterfaceTypecheckCondition(varname, typecheck)
+}->select(cond | cond.isNotEmpty())
+->addAll(interface.getDeclaredTypeConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @JClassQuery: Returns all conditions related to JClass as a OrderedSet(String) /]
 [query public getJavaClassConditions(javaClass: JClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = javaClass.addElementAsVisited() in
-let completeVarname: String = javaClass.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = javaClass.getConcreteElementMetaclass(metaclass) in 
+let tuple: OrderedSet(String) = javaClass.visitElement(varname, metaclass) in
+let completeVarname: String =  tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
   javaClass.generatesClassTypecheckCondition(varname, typecheck, metaclass),
-  javaClass.generatesConditionsForImplements(completeVarname)
+  javaClass.writeSuperInterfacesCondition(completeVarname),
+  javaClass.writeInheritanceCondition(completeVarname),
+  javaClass.writeVisibilityCondition(completeVarname),
+  javaClass.writeStaticCondition(completeVarname)
 }->select(cond | cond.isNotEmpty())
-->addAll(javaClass.getComplexTypeConditions(completeVarname, false, concreteMetaclass))
+->addAll(javaClass.getDeclaredTypeConditions(completeVarname, false, concreteMetaclass))
 /]
 
+
+[comment @SimpleMethodQuery: Returns all conditions related to SimpleMethod as a OrderedSet(String) /]
+[query public getSimpleMethodConditions(simpleMethod: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = simpleMethod.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  simpleMethod.writeSimpleMethodTypecheckCondition(varname, typecheck),
+  simpleMethod.writeParamsCondition(completeVarname),
+  simpleMethod.writeVisibilityCondition(completeVarname)
+}
+->addAll(simpleMethod.getElementConditions(completeVarname, false, concreteMetaclass))
+->select(s | s.trim().size() > 0)
+/]
+
+[comment @MethodQuery: Returns all conditions related to Method as a OrderedSet(String) /]
 [query public getMethodConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = method.addElementAsVisited(metaclass) in
-let completeVarname: String = method.getCompleteElementVarname(varname, metaclass) in
-let concreteMetaclass: String = method.getConcreteElementMetaclass(metaclass) in
+let tuple: OrderedSet(String) = method.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
   method.writeMethodTypecheckCondition(varname, typecheck),
   method.writeReturnTypeCondition(completeVarname),
-  method.writeParamsCondition(completeVarname, typecheck)
-}->addAll(method.getNamedElementConditions(completeVarname, typecheck, concreteMetaclass))
+  method.writeInheritanceCondition(completeVarname),
+  method.writeStaticCondition(completeVarname)
+}
+->addAll(method.getSimpleMethodConditions(completeVarname, false, concreteMetaclass))
+->addAll(method.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+->select(s | s.trim().size() > 0)
+/]
+
+[comment @ConstructorQuery: Returns all conditions related to Constructor as a OrderedSet(String) /]
+[query public getConstructorConditions(constructor: Constructor, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = constructor.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  constructor.writeConstructorTypecheckCondition(varname, typecheck)
+}
+->addAll(constructor.getSimpleMethodConditions(completeVarname, false, concreteMetaclass))
 ->select(s | s.trim().size() > 0)
 /]
 
@@ -183,12 +277,14 @@ OrderedSet(String) {
 ->addAll(initializableVar.getVariableConditions(completeVarname, false, concreteMetaclass))
 /]
 
+[comment @FieldVariableQuery: Returns all conditions related to FieldVariableQuery as a OrderedSet(String) /]
 [query public getFieldVariableConditions(fieldVar: FieldVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = fieldVar.addElementAsVisited(metaclass) in
 let completeVarname: String = fieldVar.getCompleteElementVarname(varname, metaclass) in
 let concreteMetaclass: String = fieldVar.getConcreteElementMetaclass(metaclass) in
 OrderedSet(String) {
-  fieldVar.writeFieldVariableTypecheckCondition(varname, typecheck)
+  fieldVar.writeFieldVariableTypecheckCondition(varname, typecheck),
+  fieldVar.writeFinalCondition(completeVarname)
 }
 ->addAll(fieldVar.getInitializableVariableConditions(completeVarname, false, concreteMetaclass))
 /]
@@ -242,6 +338,52 @@ OrderedSet(String) {
 ->addAll(stmt.getElementConditions(varname, false, metaclass))
 /]
 
+[comment @EmptyStatementQuery: Returns all conditions related to EmptyStatementConditions as a OrderedSet(String) /]
+[query public getEmptyStatementConditions(emptyStatement: EmptyStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = emptyStatement.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  emptyStatement.writeEmptyStatementTypecheckCondition(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(emptyStatement.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @BreakStatementQuery: Returns all conditions related to EmptyStatementConditions as a OrderedSet(String) /]
+[query public getBreakStatementConditions(breakStmt: BreakStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = breakStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  breakStmt.writeBreakStatementTypecheckCondition(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(breakStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+
+[comment @ContinueStatementQuery: Returns all conditions related to EmptyStatementConditions as a OrderedSet(String) /]
+[query public getContinueStatementConditions(continueStmt: ContinueStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = continueStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  continueStmt.writeContinueStatementTypecheckCondition(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(continueStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+
+[comment @ThisStatementQuery /]
+[query public getThisStatementConditions(thisStmt: ThisStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = thisStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  thisStmt.writeThisStatementTypecheckCondition(varname, typecheck)
+}->select(s: String | s.isNotEmpty())
+->addAll(thisStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
 [query public getSynchronizedBlockConditions(block: SynchronizedBlock, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let newVarname: String = varname.printVarname(typecheck, 'Block') in
 OrderedSet(String) {
@@ -260,6 +402,20 @@ OrderedSet(String) {
 }->select(s: String | s.isNotEmpty())
 /]
 
+[comment @AbstractAssignmentQuery: Returns all conditions related to AbstractAssignment as a OrderedSet(String) /]
+[query public getAbstractAssignmentConditions(assignment: AbstractAssignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = assignment.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  assignment.writeAbstractAssignmentTypecheckCondition(varname, typecheck),
+  assignment.writeLeftHandSideCondition(completeVarname)
+}
+->select(s | s.trim().size() > 0)
+->addAll(assignment.getStatementConditions(varname, false, metaclass))
+/]
+
+[comment @AssignmentQuery: Returns all conditions related to Assignment as a OrderedSet(String) /]
 [query public getAssignmentConditions(assignment: Assignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let void: OclVoid = assignment.addElementAsVisited() in
 let completeVarname: String = assignment.getCompleteElementVarname(varname, metaclass) in
@@ -295,17 +451,62 @@ OrderedSet(String) {
 ->select(s | s.isNotEmpty())
 /]
 
+[comment @InvocationQuery: Returns all conditions related to Invocation as a OrderedSet(String) /]
+[query public getInvocationConditions(invocation: Invocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  invocation.writeArgsCondition(completeVarname)
+}->select(s | s.trim().size() > 0)
+->addAll(invocation.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @MethodInvocationQuery: Returns all conditions related to MethodInvocation as a OrderedSet(String) /]
+[query public getSimpleMethodInvocationConditions(methodInv: SimpleMethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = methodInv.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  methodInv.writeSimpleMethodInvocationTypecheckCondition(varname, typecheck, metaclass),
+  methodInv.writeMethodCondition(completeVarname)
+}->select(s | s.trim().size() > 0)
+->addAll(methodInv.getInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @MethodInvocationQuery: Returns all conditions related to MethodInvocation as a OrderedSet(String) /]
 [query public getMethodInvocationConditions(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = methodInv.addElementAsVisited(metaclass) in
-let concreteMetaclass: String = methodInv.getConcreteElementMetaclass(metaclass) in
-let completeVarname: String = methodInv.getCompleteElementVarname(varname, metaclass) in
+let tuple: OrderedSet(String) = methodInv.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
   methodInv.writeMethodInvocationTypecheckCondition(varname, typecheck, metaclass),
-  methodInv.writeToCondition(completeVarname, concreteMetaclass),
-  methodInv.writeFromCondition(completeVarname, concreteMetaclass),
-  methodInv.writeArgsCondition(completeVarname, concreteMetaclass)
+  methodInv.writeFromCondition(completeVarname)
 }->select(s | s.trim().size() > 0)
-->addAll(methodInv.getStatementConditions(completeVarname, false, concreteMetaclass))
+->addAll(methodInv.getSimpleMethodInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @SuperMethodInvocationQuery:  /]
+[query public getSuperMethodInvocationConditions(invocation: SuperMethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  invocation.writeSuperMethodInvocationTypecheckCondition(varname, typecheck)
+}->select(s | s.trim().size() > 0)
+->addAll(invocation.getSimpleMethodInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @ConstructorInvocationQuery: Returns all conditions related to ConstructorInvocation as a OrderedSet(String) /]
+[query public getConstructorInvocationConditions(constructorInv: ConstructorInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = constructorInv.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  constructorInv.writeConstructorInvocationTypecheckCondition(varname, typecheck, metaclass),
+  constructorInv.writeConstructorCondition(completeVarname)
+}->select(s | s.trim().size() > 0)
+->addAll(constructorInv.getInvocationConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getVariableAccessConditions(varAccess: VariableAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -318,22 +519,29 @@ OrderedSet(String) {
 ->select(s | s.isNotEmpty())
 /]
 
+[comment @IfStatementQuery: Returns all conditions related to IfStatement as a OrderedSet(String) /]
 [query public getIfStatementConditions(ifStatement: IfStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = ifStatement.addElementAsVisited() in
-let newVarname: String = varname.printVarname(typecheck, 'IfStatement') in
+let tuple: OrderedSet(String) = ifStatement.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   ifStatement.writeIfStatementTypecheckCondition(varname, typecheck),
-  ifStatement.writeConditionCondition(newVarname),
-  ifStatement.writeThenCondition(newVarname),
-  ifStatement.writeElseCondition(newVarname)
+  ifStatement.writeConditionCondition(completeVarname),
+  ifStatement.writeThenCondition(completeVarname),
+  ifStatement.writeElseCondition(completeVarname)
 }->select(s: String | s.isNotEmpty())
 /]
 
+[comment @LoopStatementQuery: Returns all conditions related to LoopStatement as a OrderedSet(String) /]
 [query public getLoopStatementConditions(loopStmt: LoopStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = loopStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   loopStmt.generatesLoopStatementTypecheckerCondition(varname, typecheck),
-  loopStmt.writeBodyCondition(varname)
+  loopStmt.writeBodyCondition(completeVarname)
 }->select(s: String | s.isNotEmpty())
+->addAll(loopStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getSwitchStatementConditions(switch: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
@@ -357,6 +565,7 @@ OrderedSet(String){
 ->addAll(arithmeticExpression.getOperatorExpressionConditions(completeVarname, false, concreteMetaclass))
 /]
 
+[comment @BooleanExpressionQuery /]
 [query public getBooleanExpressionConditions(booleanExpression: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
 let void: OclVoid = booleanExpression.addElementAsVisited(metaclass) in
 let completeVarname: String = booleanExpression.getCompleteElementVarname(varname, metaclass) in
@@ -369,11 +578,14 @@ OrderedSet(String){
 /]
 
 [query public getOperatorExpressionConditions(operatorExpression: OperatorExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
+let tuple: OrderedSet(String) = operatorExpression.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   operatorExpression.writeOperatorExpressionTypecheckCondition(varname, typecheck, metaclass),
-  operatorExpression.writeOperandsCondition(varname, metaclass)
+  operatorExpression.writeOperandsCondition(completeVarname, concreteMetaclass)
 }->select(s | s.isNotEmpty())
-->addAll(operatorExpression.getStatementConditions(varname, false, metaclass))
+->addAll(operatorExpression.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [query public getStringConcatenationConditions(strConcat: StringConcatenation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) = 
@@ -385,13 +597,52 @@ OrderedSet(String) {
 }->addAll(strConcat.getOperatorExpressionConditions(varname, false, 'ASTNode'))
 /]
 
-[query public getCatchBlockConditions(catch: CatchBlock, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-let void: OclVoid = catch.addElementAsVisited() in
-let completeVarname: String = catch.getCompleteElementVarname(varname, metaclass) in
+[comment @TryStatementQuery: Returns all conditions related to TryStatement as a OrderedSet(String) /]
+[query public getTryStatementConditions(tryStmt: TryStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = tryStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String) {
-  catch.generatesCatchBlockTypecheckConditions(varname, typecheck),
-  catch.generatesExceptionHandlingConditions(completeVarname)
+  tryStmt.writeTryStatementTypecheckCondition(varname, typecheck),
+  tryStmt.writeFinallyBlockCondition(completeVarname)
 }->select(s: String | s.isNotEmpty())
+/]
+
+[comment @CatchClauseQuery: Returns all conditions related to CatchClause as a OrderedSet(String) /]
+[query public getCatchBlockConditions(catch: CatchClause, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = catch.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  catch.writeCatchClauseTypecheckCondition(varname, typecheck),
+  catch.writeCatchBlockCondition(completeVarname),
+  catch.writeHandledExceptionsCondition(completeVarname)
+}->select(s: String | s.isNotEmpty())
+->addAll(catch.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @InstanceOfStatementQuery: Returns all conditions related to InstanceOfStatement as a OrderedSet(String) /]
+[query public getInstanceOfConditions(instanceofStmt: InstanceOf, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = instanceofStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  instanceofStmt.writeInstanceOfTypecheckCondition(varname, typecheck),
+  instanceofStmt.writeLeftHandSideCondition(completeVarname)
+}->select(s: String | s.isNotEmpty())
+->addAll(instanceofStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+
+[comment @ReturnStatement: Returns all conditions related to ReturnStatement as a OrderedSet(String) /]
+[query public getReturnStatementConditions(returnStmt: ReturnStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = returnStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  returnStmt.writeReturnStatementTypecheckCondition(varname, typecheck),
+  returnStmt.writeStatementCondition(completeVarname)
+}->select(s: String | s.isNotEmpty())
+->addAll(returnStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 
 [template public writeElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String)]
@@ -410,10 +661,16 @@ OrderedSet(String) {
 [parameterizedType.getParameterizedTypeConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @ArrayTypeTemplate: Write all conditions related to ArrayType instance /]
+[template public writeElementConditions(arrayType: ArrayType, varname: String, typecheck: Boolean, metaclass: String)]
+[arrayType.getArrayTypeConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
 [template public writeElementConditions(primitiveType: PrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
 [primitiveType.getPrimitiveTypeConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @ComplexTypeTemplate /]
 [template public writeElementConditions(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
 [complexType.getComplexTypeConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
@@ -422,12 +679,19 @@ OrderedSet(String) {
 [interface.getInterfaceConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @JClassTemplate: Write all conditions related to JClass instance /]
 [template public writeElementConditions(jClass: JClass, varname: String, typecheck: Boolean, metaclass: String)]
 [jClass.getJavaClassConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @MethodTemplate: Write all conditions related to Method instance /]
 [template public writeElementConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String)]
 [method.getMethodConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @ConstructorTemplate: Write all conditions related to Constructor instance /]
+[template public writeElementConditions(constructor: Constructor, varname: String, typecheck: Boolean, metaclass: String)]
+[constructor.getConstructorConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
 [template public writeElementConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
@@ -454,8 +718,14 @@ OrderedSet(String) {
 [lit.getLiteralConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @StatementTemplate: Write conditions related to Element instance /]
 [template public writeElementConditions(stmt: Statement, varname: String, typecheck: Boolean, metaclass: String)]
 [stmt.getStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @EmptyStatementTemplate: Write conditions related to EmptyStatement instance /]
+[template public writeElementConditions(stmt: EmptyStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[stmt.getEmptyStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
 [template public writeElementConditions(syncBlock: SynchronizedBlock, varname: String, typecheck: Boolean, metaclass: String)]
@@ -466,6 +736,12 @@ OrderedSet(String) {
 [throwStmt.getThrowStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @AbstractAssignmentTemplate: Write conditions related to AbstractAssignment instance /]
+[template public writeElementConditions(assignment: AbstractAssignment, varname: String, typecheck: Boolean, metaclass: String)]
+[assignment.getAbstractAssignmentConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @AssignmentTemplate: Write conditions related to Assignment instance /]
 [template public writeElementConditions(assignment: Assignment, varname: String, typecheck: Boolean, metaclass: String)]
 [assignment.getAssignmentConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
@@ -525,8 +801,62 @@ true
 [strConcat.getStringConcatenationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
-[template public writeElementConditions(catchBlock: CatchBlock, varname: String, typecheck: Boolean, metaclass: String)]
+[comment @CatchClauseTemplate: Write conditions related to CatchClause instance /]
+[template public writeElementConditions(catchBlock: CatchClause, varname: String, typecheck: Boolean, metaclass: String)]
 [catchBlock.getCatchBlockConditions(varname, typecheck, metaclass)->writeAllConditions() /]
 [/template]
 
+[comment @TryStatementTemplate: Write conditions related to TryStatement instance /]
+[template public writeElementConditions(tryStmt: TryStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[tryStmt.getTryStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
 
+[comment @InstanceOfStatementTemplate: Write conditions related to InstanceOfStatement instance /]
+[template public writeElementConditions(instanceofStmt: InstanceOf, varname: String, typecheck: Boolean, metaclass: String)]
+[instanceofStmt.getInstanceOfConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @ReturnStatementTemplate: Write conditions related to ReturnStatement instance /]
+[template public writeElementConditions(returnStmt: ReturnStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[returnStmt.getReturnStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @InvocationTemplate: Write conditions related to Invocation instance /]
+[template public writeElementConditions(invocation: Invocation, varname: String, typecheck: Boolean, metaclass: String)]
+[invocation.getInvocationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @InvocationTemplate: Write conditions related to Invocation instance /]
+[template public writeElementConditions(invocation: SimpleMethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[invocation.getSimpleMethodInvocationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @SuperMethodInvocationTemplate /]
+[template public writeElementConditions(invocation: SuperMethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[invocation.getSuperMethodInvocationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @ConstructorInvocationTemplate: Write conditions related to ConstructorInvocation instance /]
+[template public writeElementConditions(constructorInv: ConstructorInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[constructorInv.getConstructorInvocationConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @SuperMethodInvocationTemplate /]
+[template public writeElementConditions(thisStmt: ThisStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[thisStmt.getThisStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @DeclaredType /]
+[template public writeElementConditions(type: DeclaredType, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getDeclaredTypeConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @BreakStatement /]
+[template public writeElementConditions(breakStmt: BreakStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[breakStmt.getBreakStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]
+
+[comment @ContinueStatement /]
+[template public writeElementConditions(continueStmt: ContinueStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[continueStmt.getContinueStatementConditions(varname, typecheck, metaclass)->writeAllConditions() /]
+[/template]

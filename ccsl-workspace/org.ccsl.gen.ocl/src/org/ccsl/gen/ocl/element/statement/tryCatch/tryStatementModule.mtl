@@ -1,0 +1,16 @@
+[comment encoding = UTF-8 /]
+[module tryStatementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+[template public writeTryStatementTypecheckCondition(tryStmt: TryStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(TryStatement)
+[/template]
+
+
+[template public writeFinallyBlockCondition(tryStmt: TryStatement, varname: String) ? (tryStmt.mustWriteConditionFor('finallyBlock'))]
+[let finallyBlockName: String = tryStmt.finallyBlock.getFieldName()]
+let [finallyBlockName /]: Block = [varname /].finally in
+[tryStmt.generatesFieldCondition(tryStmt.finallyBlock, finallyBlockName, 'Block') /][/let]
+[/template]
+

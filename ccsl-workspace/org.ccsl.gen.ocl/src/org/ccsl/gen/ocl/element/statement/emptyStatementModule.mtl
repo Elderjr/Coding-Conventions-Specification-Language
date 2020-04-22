@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module emptyStatementModule('http://www.example.org/ccsl')]
+
+
+
+
+[template public writeEmptyStatementTypecheckCondition(emptyStmt: EmptyStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(EmptyStatement)
+[/template]
+

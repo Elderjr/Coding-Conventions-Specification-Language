@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module declaredTypeModule('http://www.example.org/ccsl')]
+
+
+[template public writeDeclaredTypeTypecheckCondition(declaredType: DeclaredType, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+([varname /].oclIsKindOf(ClassDeclaration) or [varname /].oclIsKindOf(InterfaceDeclaration))
+[/template]
+
+
+

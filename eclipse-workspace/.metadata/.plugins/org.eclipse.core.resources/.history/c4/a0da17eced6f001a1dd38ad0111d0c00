@@ -1,0 +1,264 @@
+/* JNativeHook: Global keyboard and mouse hooking for Java.
+ * Copyright (C) 2006-2018 Alexander Barker.  All Rights Received.
+ * https://github.com/kwhat/jnativehook/
+ *
+ * JNativeHook is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JNativeHook is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package pxgSokobox.pxgSokobox;
+
+// Imports.
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.NativeInputEvent;
+import org.jnativehook.dispatcher.SwingDispatchService;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.text.BadLocationException;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.ItemSelectable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+/**
+ * A demonstration of how to use the JNativeHook library.
+ *
+ * @author Alexander Barker
+ *         (<a href="mailto:alex@1stleg.com">alex@1stleg.com</a>)
+ * @version 2.0
+ * @since 1.0
+ *
+ * @see GlobalScreen
+ * @see NativeKeyListener
+ */
+public class Window extends JFrame implements NativeKeyListener {
+
+	private int currentDirection;
+	private ArrayList<Direction> directions;
+	
+	private final JFileChooser fileChooser = new JFileChooser();
+	
+	/* SWING COMPONENTS */
+	private JLabel lbMoviments;
+	private JLabel lbDirection;
+	private JButton btLoadMap;
+	private JButton btResetMap;
+	private JPanel panel;
+	public Window() {
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		initComponents();
+
+		setAlwaysOnTop(true);
+		getContentPane().setLayout(new BoxLayout (getContentPane(), BoxLayout.Y_AXIS));
+		pack();
+		setVisible(true);
+	}
+
+	private String formatNumber(int val) {
+		if (val < 10) {
+			return "00" + val;
+		} else if (val >= 10 && val < 100) {
+			return "0" + val;
+		} else {
+			return "" + val;
+		}
+	}
+
+	private Direction getCurrentDirection() {
+		if (currentDirection >= 0 && currentDirection < directions.size()) {
+			return directions.get(currentDirection);
+		}
+		return null;
+	}
+
+	private void showCurrentDirection() {
+		Direction d = getCurrentDirection();
+		if (d != null) {
+			if (d == Direction.UP) {
+				lbDirection.setText("UP   ");
+			} else if (d == Direction.LEFT) {
+				lbDirection.setText("LEFT ");
+			} else if (d == Direction.RIGHT) {
+				lbDirection.setText("RIGHT");
+			} else if (d == Direction.DOWN) {
+				lbDirection.setText("DOWN ");
+			}
+
+		} else {
+			lbDirection.setText("");
+		}
+		lbMoviments.setText(formatNumber(currentDirection) + " / " + formatNumber(directions.size()));
+	}
+
+	private void loadMap(String path) {
+		directions = new ArrayList<>();
+		int returnVal = fileChooser.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File f = fileChooser.getSelectedFile();
+			try {
+				FileReader fr = new FileReader(f);
+				BufferedReader bufferReader = new BufferedReader(fr);
+				String directionsStr[];
+				while (bufferReader.ready()) {
+					directionsStr = bufferReader.readLine().split(" ");
+					for (String direction : directionsStr) {
+						if (direction.equals("8")) {
+							directions.add(Direction.UP);
+						} else if (direction.equals("2") || direction.equals("5")) {
+							directions.add(Direction.DOWN);
+						} else if (direction.equals("4")) {
+							directions.add(Direction.LEFT);
+						} else if (direction.equals("6")) {
+							directions.add(Direction.RIGHT);
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Arquivo mal formatado. Caracter nao identificado: " + direction);
+							directions.clear();
+							break;
+						}
+					}
+				}
+				bufferReader.close();
+				fr.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		resetMap();
+	}
+
+	private void resetMap() {
+		currentDirection = 0;
+		showCurrentDirection();
+	}
+
+	private void initComponents() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		add(panel);
+		lbMoviments = new JLabel("000 / 000");
+		panel.add(lbMoviments, BorderLayout.NORTH);
+
+		lbDirection = new JLabel("-----");
+		panel.add(lbDirection, BorderLayout.NORTH);
+
+		btLoadMap = new JButton("Carregar Mapa");
+		btLoadMap.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loadMap("");
+			}
+		});
+		panel.add(btLoadMap, BorderLayout.SOUTH);
+
+		btResetMap = new JButton("Resetar Mapa");
+		btResetMap.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				resetMap();
+			}
+		});
+		panel.add(btResetMap, BorderLayout.SOUTH);
+	}
+
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		Direction directionPressed = null;
+		if (e.getKeyCode() == NativeKeyEvent.VC_UP) {
+			directionPressed = Direction.UP;
+		} else if (e.getKeyCode() == NativeKeyEvent.VC_DOWN) {
+			directionPressed = Direction.DOWN;
+		} else if (e.getKeyCode() == NativeKeyEvent.VC_LEFT) {
+			directionPressed = Direction.LEFT;
+		} else if (e.getKeyCode() == NativeKeyEvent.VC_RIGHT) {
+			directionPressed = Direction.RIGHT;
+		}
+		if (directionPressed != null && directionPressed.equals(getCurrentDirection())) {
+			currentDirection++;
+			showCurrentDirection();
+		}
+	}
+
+	@Override
+	public void nativeKeyReleased(NativeKeyEvent e) {
+
+	}
+
+	@Override
+	public void nativeKeyTyped(NativeKeyEvent e) {
+
+	}
+
+	@Override
+	public void dispose() {
+		try {
+			GlobalScreen.unregisterNativeHook();
+		} catch (NativeHookException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		super.dispose();
+	}
+
+	public static void main(String[] args) {
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException ex) {
+			System.err.println("There was a problem registering the native hook.");
+			System.err.println(ex.getMessage());
+			System.exit(1);
+		}
+		GlobalScreen.addNativeKeyListener(new Window());
+	}
+
+}

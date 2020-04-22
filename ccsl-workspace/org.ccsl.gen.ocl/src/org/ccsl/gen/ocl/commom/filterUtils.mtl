@@ -30,3 +30,13 @@ let [templ.getUniqueOclName() /]: [target.getDeclaredElementMetaclass() /] = [ta
     templ.eClass().eAllSuperTypes->includes(target.eClass())
   endif
 /]
+
+[query public isElementDeclaredInFilter(f: Filter, e: Element): Boolean =
+  e.eContainer()->asOrderedSet()->closure(c: ecore::EObject | 
+   if(c <> null and c.oclIsKindOf(ecore::EObject)) then
+     c.oclAsType(ecore::EObject).eContainer()
+   else
+     c
+   endif
+  )->exists(c | c = f) 
+/]

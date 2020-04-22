@@ -9,9 +9,11 @@
 [import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
 [import org::ccsl::gen::ocl::filters::isTypeOfFilterModule /]
 [import org::ccsl::gen::ocl::filters::isStringFilterModule /]
+[import org::ccsl::gen::ocl::filters::superClassClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::fromClosureFilterModule /]
+[import org::ccsl::gen::ocl::filters::blockLastStatementFilterModule /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
@@ -21,11 +23,6 @@
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
 [/template]
 
-[template public writeFiltersConditions(filters: OrderedSet(Filter))]
-[let filterConditions: Sequence(String) = filters.generatesFilterConditions()->select(s| s.isNotEmpty())]
-[for(cond: String | filterConditions) separator(' and\n')]
-[cond.writeStr() /][/for][/let]
-[/template]
 
 [template public generatesFilterConditions(filter : Filter) /]
 
@@ -70,12 +67,12 @@ not (
 
 [template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (atomicFilter.negated)]
 not (
-  [atomicFilter.generatesSpecificFilterConditions(atomicFilter.targets->first()) /]
+  [atomicFilter.writeSameNameFilterConditions() /]
 )
 [/template]
 
 [template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (not atomicFilter.negated)]
-[atomicFilter.generatesSpecificFilterConditions(atomicFilter.targets->first()) /]
+[atomicFilter.writeSameNameFilterConditions() /]
 [/template]
 
 [comment dispatchers /]
@@ -95,12 +92,9 @@ not (
 [f.writeImplicityContainerFilter(target) /]
 [/template]
 
+[comment @ImplicityOperandFilter - Write conditions for the ImplicityOperandFilter instance /]
 [template public generatesSpecificFilterConditions(implicityOperandFilter: ImplicityOperandFilter, target: Element)]
 [implicityOperandFilter.writeImplicityOperandFilterCondition(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(sameNameFilter: SameNameFilter, target: Element)]
-[sameNameFilter.generatesSameNameFilterConditions(sameNameFilter, target) /]
 [/template]
 
 [template public generatesSpecificFilterConditions(isKindOfFilter: IsKindOfFilter, target: Element)]
@@ -129,4 +123,12 @@ not (
 
 [template public generatesSpecificFilterConditions(f: CountFilter, target: Element)]
 [f.writeCountFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(f: SuperClassClosureFilter, target: Element)]
+[f.writeSuperClassClosureFilterModule(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(f: BlockLastStatementFilter, target: Element)]
+[f.writeBlockLastStatementFilterCondition(target) /]
 [/template]

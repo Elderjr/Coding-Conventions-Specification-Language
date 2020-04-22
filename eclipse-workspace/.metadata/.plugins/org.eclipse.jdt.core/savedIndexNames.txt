@@ -1,0 +1,5 @@
+INDEX VERSION 1.131+D:\git-repositories\Coding-Conventions-Specification-Language\eclipse-workspace\.metadata\.plugins\org.eclipse.jdt.core
+2842528100.index
+114033713.index
+2104679342.index
+4025470332.index

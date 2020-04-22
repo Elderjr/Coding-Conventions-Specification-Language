@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRecommendationRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:namedElements="http://www.example.org/ccsl/elements/namedElements" subject="//@contextElements.0/@fields.0">
-  <contextElements xsi:type="namedElements:ComplexType">
-    <fields/>
-  </contextElements>
-  <filters xsi:type="filters:SameNameFilter" targets="//@contextElements.0/@fields.0 //@contextElements.0"/>
-</ccsl:AtomicRecommendationRule>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" subject="//@context/@contextElements.0/@fields.0">
+  <context>
+    <contextElements xsi:type="complexType:DeclaredType">
+      <fields/>
+    </contextElements>
+    <filters xsi:type="filters:SameNameFilter" targets="//@context/@contextElements.0/@fields.0 //@context/@contextElements.0"/>
+  </context>
+</ccsl:AtomicRule>

@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module thisStatementModule('http://www.example.org/ccsl')]
+
+
+
+
+[template public writeThisStatementTypecheckCondition(thisStmt: ThisStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ThisExpression)
+[/template]
+

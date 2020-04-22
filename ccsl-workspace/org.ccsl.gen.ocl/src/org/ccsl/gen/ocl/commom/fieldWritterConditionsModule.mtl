@@ -157,6 +157,23 @@ exists([fieldName /] | [field.addElementExistsDeclaration() /]
 [/template]
 
 
+
+[comment write ANY set Conditions /]
+[template public writeSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? ((element.getElementsNotInClosureRelation(fields)->size() > 0) and collectionKind = CollectionKind::ANY)]
+[let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
+[for (field: Element | tmpFields) separator(' and \n')]
+[element.writeFieldExistsCondition(field, setOclName, mappedFieldMetaclass) /][/for][/let]
+[/template]
+
+[comment write EXACT set Conditions /]
+[template public writeSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? ((fields->size() = 0 or element.getElementsNotInClosureRelation(fields)->size() > 0) and collectionKind = CollectionKind::EXACT)]
+[let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
+[for (field: Element | tmpFields) separator(' and \n')]
+[element.writeFieldExistsCondition(field, setOclName, mappedFieldMetaclass) /][/for][if tmpFields->size() > 0]
+ and
+[/if][setOclName /]->size() = [fields->size() /][/let]
+[/template]
+
 [comment write IMMEDIATE set conditions/]
 [query private getPreviousElement(fields: OrderedSet(Element), element: Element): Element =
 if(fields->first() <> element) then

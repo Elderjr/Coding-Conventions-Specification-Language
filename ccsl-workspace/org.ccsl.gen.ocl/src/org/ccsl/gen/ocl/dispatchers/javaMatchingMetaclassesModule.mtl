@@ -46,7 +46,7 @@ InterfaceDeclaration
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(javaClass: JClass)]
-ClassDeclaration, AnonymousClassDeclaration
+ClassDeclaration
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(method: Method)]
@@ -97,8 +97,12 @@ SingleVariableAccess, FieldAccess, SuperFieldAccess
 ClassInstanceCreation
 [/template]
 
-[template private writeElementMatchingJavaMetaclasses(methodInv: MethodInvocation)]
+[template private writeElementMatchingJavaMetaclasses(methodInv: SimpleMethodInvocation)]
 MethodInvocation, SuperMethodInvocation
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(methodInv: MethodInvocation)]
+MethodInvocation
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(ifStmt: IfStatement)]
@@ -122,20 +126,71 @@ InfixExpression, PrefixExpression
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(booleanExp: BooleanExpression)]
-[if (booleanExp.booleanOperator = BooleanOperator::UNDEFINED)]
+[if (booleanExp.booleanOperator = BooleanOperator::ANY)]
 InfixExpression, PrefixExpression[elseif(booleanExp.booleanOperator = BooleanOperator::NOT)]
 PrefixExpression[else]
 InfixExpression[/if]
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(operatorExp: OperatorExpression)]
-InfixExpression, PrefixExpression
+InfixExpression, PrefixExpression, PostfixExpression
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(strConcat: StringConcatenation)]
 InfixExpression
 [/template]
 
-[template private writeElementMatchingJavaMetaclasses(catchBlock: CatchBlock)]
+[comment @TryStatementTemplate: Write all possible Modisco metaclass represented by the Ccsl TryStatement metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(tryStmt: TryStatement)]
+TryStatement
+[/template]
+
+[comment @CatchClauseTemplate: Write all possible Modisco metaclass represented by the Ccsl CatchClause metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(catchBlock: CatchClause)]
 CatchClause
+[/template]
+
+[comment @EmptyStatementTemplate: Write all possible Modisco metaclass represented by the Ccsl EmptyStatement metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(emptyStatement: EmptyStatement)]
+EmptyStatement
+[/template]
+
+[comment @InstanceOfStatementTemplate: Write all possible Modisco metaclass represented by the Ccsl InstanceOfStatement metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(instanceofStmt: InstanceOf)]
+InstanceofExpression
+[/template]
+
+[comment @ReturnStatementTemplate: Write all possible Modisco metaclass represented by the Ccsl ReturnStatement metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(returnStatement: ReturnStatement)]
+ReturnStatement
+[/template]
+
+[comment @ReturnStatementTemplate: Write all possible Modisco metaclass represented by the Ccsl ReturnStatement metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(constructorInv: ConstructorInvocation)]
+ClassInstanceCreation
+[/template]
+
+[comment @ConstrcutorTemplate: Write all possible Modisco metaclass represented by the Ccsl Constrcutor metaclass  /]
+[template private writeElementMatchingJavaMetaclasses(constructor: Constructor)]
+ConstructorDeclaration
+[/template]
+
+[comment @SuperMethodInvocationTemplate /]
+[template private writeElementMatchingJavaMetaclasses(invocation: SuperMethodInvocation)]
+SuperMethodInvocation
+[/template]
+
+[comment @ThisStatement /]
+[template private writeElementMatchingJavaMetaclasses(thisStmt: ThisStatement)]
+ThisExpression
+[/template]
+
+[comment @BreakStatement  /]
+[template private writeElementMatchingJavaMetaclasses(breakStatement: BreakStatement)]
+BreakStatement
+[/template]
+
+[comment @ContinueStatement  /]
+[template private writeElementMatchingJavaMetaclasses(continueStmt: ContinueStatement)]
+ContinueStatement
 [/template]

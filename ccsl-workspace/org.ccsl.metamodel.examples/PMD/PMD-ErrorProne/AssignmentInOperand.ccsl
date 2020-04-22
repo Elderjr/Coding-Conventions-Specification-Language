@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRecommendationRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="assignment">
-  <contextElements xsi:type="statements:VarAssignment" uniqueName="assignment"/>
-  <filters xsi:type="filters:ImplicityContainer" targets="assignment" subject="tmpAssignment" maxDepth="-1" minDepth="-1" closureElement="implicityInfixExpressionContainer">
-    <contextElements xsi:type="expressions:InfixExpression" uniqueName="implicityInfixExpressionContainer">
-      <operands xsi:type="statements:VarAssignment" uniqueName="tmpAssignment"/>
-    </contextElements>
-  </filters>
-</ccsl:AtomicRecommendationRule>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:assignment="http://www.example.org/ccsl/elements/statements/assignment" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="expressions:OperatorExpression"/>
+    <filters xsi:type="filters:ImplicityOperandFilter" targets="//@context/@contextElements.0" implicityOperand="//@context/@filters.0/@context/@contextElements.0" operatorExpression="//@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="assignment:Assignment"/>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

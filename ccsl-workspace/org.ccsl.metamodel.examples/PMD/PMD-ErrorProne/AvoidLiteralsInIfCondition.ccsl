@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:expressions="http://www.example.org/ccsl/elements/statements/expressions" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:invocation="http://www.example.org/ccsl/elements/statements/invocation" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.0/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="controlFlow:IfStatement">
+        <condition xsi:type="expressions:OperatorExpression">
+          <operands xsi:type="literalValues:LiteralValue"/>
+        </condition>
+      </contextElements>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.0/@context/@contextElements.0/@condition/@operands.0" targetTemplate="//@rules.0/@context/@filters.0/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="literalValues:NumberLiteral" value="0"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.0/@context/@contextElements.0/@condition/@operands.0" targetTemplate="//@rules.0/@context/@filters.1/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="literalValues:NumberLiteral" value="-1"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.0/@context/@contextElements.0/@condition/@operands.0" targetTemplate="//@rules.0/@context/@filters.2/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="literalValues:NullLiteral"/>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.0/@context/@contextElements.0/@condition/@operands.0" targetTemplate="//@rules.0/@context/@filters.3/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="literalValues:BooleanLiteral"/>
+        </context>
+      </filters>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.1/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="controlFlow:IfStatement">
+        <condition xsi:type="expressions:OperatorExpression">
+          <operands xsi:type="invocation:MethodInvocation">
+            <from xsi:type="literalValues:StringLiteral"/>
+          </operands>
+        </condition>
+      </contextElements>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.2/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="controlFlow:IfStatement">
+        <condition xsi:type="invocation:MethodInvocation">
+          <from xsi:type="literalValues:StringLiteral"/>
+        </condition>
+      </contextElements>
+    </context>
+  </rules>
+</ccsl:CompositeRule>

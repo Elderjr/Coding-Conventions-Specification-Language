@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module breakStatementModule('http://www.example.org/ccsl')]
+
+
+
+
+[template public writeBreakStatementTypecheckCondition(emptyStmt: BreakStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(BreakStatement)
+[/template]
+

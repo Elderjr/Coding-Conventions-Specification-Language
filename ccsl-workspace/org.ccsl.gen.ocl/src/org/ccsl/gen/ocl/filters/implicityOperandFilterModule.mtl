@@ -10,24 +10,27 @@
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 
-[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: Element) /]
+[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: Element)]
+### ImplicityOperandFilter error ###
+[/template]
 
-[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (f.operatorExpression = target or f.operatorExpression = null)]
+[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (not f.isElementDeclaredInFilter(f.operatorExpression))]
 [f.writeImplicityOperandSet(target) /]
 [f.writeImplicityOperandCondition() /]
 [/template]
 
-[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (f.operatorExpression <> target and f.operatorExpression <> null)]
+[template public writeImplicityOperandFilterCondition(f: ImplicityOperandFilter, target: OperatorExpression) ? (f.isElementDeclaredInFilter(f.operatorExpression))]
 [f.writeTemplateElementCondition(target, f.operatorExpression) /] and
 [f.writeImplicityOperandSet(target) /]
 [f.writeImplicityOperandCondition() /]
 [/template]
 
 [template private writeImplicityOperandSet(f: ImplicityOperandFilter, operatorExpression: OperatorExpression)]
-let operands: OrderedSet(ASTNode) = [operatorExpression.writeGetOperands(operatorExpression.getUniqueOclName(), operatorExpression.getDeclaredElementMetaclass()) /] in
-let implicityOperandSet: OrderedSet(ASTNode) = operands->closure(n: ASTNode |
+let implicityOperandSet: OrderedSet(ASTNode) = [operatorExpression.getUniqueOclName() /]->closure(n: ASTNode |
   if n.oclIsKindOf(InfixExpression) then
     n.oclAsType(InfixExpression).extendedOperands->append(n.oclAsType(InfixExpression).leftOperand)->append(n.oclAsType(InfixExpression).rightOperand)
+  elseif n.oclIsKindOf(PostfixExpression) then
+    n.oclAsType(PostfixExpression).operand
   elseif n.oclIsKindOf(PrefixExpression) then
     n.oclAsType(PrefixExpression).operand
   elseif n.oclIsKindOf(ParenthesizedExpression) then

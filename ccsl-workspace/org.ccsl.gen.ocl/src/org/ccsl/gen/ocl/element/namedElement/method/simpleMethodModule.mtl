@@ -1,0 +1,24 @@
+[comment encoding = UTF-8 /]
+[module simpleMethodModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+
+[template public writeSimpleMethodTypecheckCondition(simpleMethod: SimpleMethod, varname: String, typecheck: Boolean) ? (typecheck)]
+([varname/].oclIsKindOf(MethodDeclaration) or [varname /].oclIsKindOf(ConstructorDeclaration)) 
+[/template]
+
+[template public writeParamsCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.mustWriteConditionFor('params'))]
+let parameters: OrderedSet(SingleVariableDeclaration) = [varname /].parameters in
+[simpleMethod.writeSetConditions('parameters', simpleMethod.params, 'SingleVariableDeclaration', CollectionKind::ANY) /]
+[/template]
+
+[template public writeVisibilityCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.visibility <> Visibility::ANY)]
+[if (simpleMethod.visibility = Visibility::PUBLIC)]
+([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::public)[elseif(simpleMethod.visibility = Visibility::PROTECTED)]
+([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::protected)[elseif(simpleMethod.visibility = Visibility::PRIVATE)]
+([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::private)[elseif(simpleMethod.visibility = Visibility::PACKAGE)]
+([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::none)[/if]
+[/template]

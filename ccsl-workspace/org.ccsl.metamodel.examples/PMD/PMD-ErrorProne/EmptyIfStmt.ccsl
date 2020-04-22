@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="controlFlow:IfStatement"/>
+    <filters xsi:type="filters:CompositeFilter" operator="OR">
+      <filters xsi:type="filters:TemplateFilter" targets="//@context/@contextElements.0" targetTemplate="ifWithEmptyStatement">
+        <context>
+          <contextElements xsi:type="controlFlow:IfStatement" uniqueName="ifWithEmptyStatement">
+            <thenStatement xsi:type="statements:EmptyStatement"/>
+          </contextElements>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="//@context/@contextElements.0" targetTemplate="ifWIthBlockWithoutStmt">
+        <context>
+          <contextElements xsi:type="controlFlow:IfStatement" uniqueName="ifWIthBlockWithoutStmt">
+            <thenStatement xsi:type="statements:Block" statements="" statementsKind="EXACT"/>
+          </contextElements>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="//@context/@contextElements.0" targetTemplate="elseWithEmptyStatement">
+        <context>
+          <contextElements xsi:type="controlFlow:IfStatement" uniqueName="elseWithEmptyStatement">
+            <elseStatement xsi:type="statements:EmptyStatement"/>
+          </contextElements>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" targets="//@context/@contextElements.0" targetTemplate="elseWithBlockWithoutStmt">
+        <context>
+          <contextElements xsi:type="controlFlow:IfStatement" uniqueName="elseWithBlockWithoutStmt">
+            <elseStatement xsi:type="statements:Block" statements="" statementsKind="EXACT"/>
+          </contextElements>
+        </context>
+      </filters>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

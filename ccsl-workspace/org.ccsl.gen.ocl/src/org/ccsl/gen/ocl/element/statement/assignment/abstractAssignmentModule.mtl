@@ -1,0 +1,26 @@
+[comment encoding = UTF-8 /]
+[module abstractAssignmentModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+[template public writeAbstractAssignmentTypecheckCondition(assignment: AbstractAssignment, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  if [varname /].oclIsKindOf(PrefixExpression) then
+    let prefixAssignmentOperators: Set(PrefixExpressionKind) = Set(PrefixExpressionKind){
+      PrefixExpressionKind::PLUS, PrefixExpressionKind::MINUS
+    } in prefixAssignmentOperators->exists(op | op = [varname /].oclAsType(PrefixExpression).operator)
+  elseif [varname /].oclIsKindOf(PostfixExpression) then
+    let postfixAssignmentOperators: Set(PostfixExpressionKind) = Set(PostfixExpressionKind){
+      PostfixExpressionKind::INCREMENT, PostfixExpressionKind::DECREMENT
+    } in postfixAssignmentOperators->exists(op | op = [varname /].oclAsType(PostfixExpression).operator)
+  elseif [varname /].oclIsKindOf(Assignment) then
+    true
+  else
+    false
+  endif
+)
+[/template]
+
+[template public writeLeftHandSideCondition(assignment: AbstractAssignment, varname: String) ? (assignment.mustWriteConditionFor('leftHandSide'))]
+[assignment.generatesMonovaluedFieldConditions(assignment.leftHandSide, varname, 'leftHandSide', 'ASTNode') /]
+[/template]

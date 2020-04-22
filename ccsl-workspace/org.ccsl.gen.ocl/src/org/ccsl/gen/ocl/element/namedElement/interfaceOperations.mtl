@@ -1,8 +1,0 @@
-[comment encoding = UTF-8 /]
-[module interfaceOperations('http://www.example.org/ccsl')]
-[import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::commom::walkHelperModule /]
-
-[template public generatesClassTypecheckCondition(interface: JInterface, varname: String, typecheck: Boolean) ? (typecheck)]
-[varname /].oclIsKindOf(InterfaceDeclaration)
-[/template]

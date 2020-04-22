@@ -7,6 +7,7 @@
 [import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
 
 
 
@@ -15,5 +16,5 @@
 [f.writeTemplateElementCondition(target, f.targetTemplate) /] [if f._context.filters->size() > 0]
   and
 [f._context.filters->writeFiltersConditions() /]
-[/if]
+[/if][f._context.writeCloseParenthesis() /]
 [/template]

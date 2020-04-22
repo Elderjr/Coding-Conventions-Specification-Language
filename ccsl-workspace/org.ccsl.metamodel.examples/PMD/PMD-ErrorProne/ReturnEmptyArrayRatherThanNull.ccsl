@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="statements:ReturnStatement">
+      <statement xsi:type="literalValues:NullLiteral"/>
+    </contextElements>
+    <filters xsi:type="filters:ImplicityContainerFilter" targets="//@context/@contextElements.0" implicityContainer="//@context/@filters.0/@context/@contextElements.0" implicityField="//@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="method:Method" returnType="//@context/@filters.0/@context/@contextElements.1"/>
+        <contextElements xsi:type="datatype:ArrayType"/>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

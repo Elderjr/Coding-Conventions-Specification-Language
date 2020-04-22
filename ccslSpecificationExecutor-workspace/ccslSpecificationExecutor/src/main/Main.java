@@ -1,55 +1,12 @@
 package main;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EStructuralFeature.Setting;
-import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.BasicEObjectImpl;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer;
-import org.eclipse.emf.ecore.util.EcoreUtil.ProxyCrossReferencer;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.gmt.modisco.java.ClassDeclaration;
-import org.eclipse.gmt.modisco.java.CompilationUnit;
-import org.eclipse.gmt.modisco.java.MethodInvocation;
-import org.eclipse.gmt.modisco.java.Model;
-import org.eclipse.gmt.modisco.java.emf.JavaPackage;
-import org.eclipse.gmt.modisco.omg.kdm.kdm.KdmPackage;
-import org.eclipse.modisco.java.composition.javaapplication.Java2File;
-import org.eclipse.modisco.java.composition.javaapplication.JavaApplication;
-import org.eclipse.modisco.java.composition.javaapplication.JavaapplicationPackage;
-import org.eclipse.modisco.kdm.source.extension.ASTNodeSourceRegion;
-import org.eclipse.modisco.kdm.source.extension.CodeUnit2File;
-import org.eclipse.ocl.pivot.ExpressionInOCL;
-import org.eclipse.ocl.pivot.utilities.OCL;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
 import org.eclipse.ocl.pivot.utilities.ParserException;
-import org.eclipse.ocl.pivot.utilities.Query;
-import org.eclipse.ocl.xtext.essentialocl.EssentialOCLStandaloneSetup;
-import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.gmt.modisco.java.Package;
 import ccslSpecification.CcslSpecificationRunner;
 import fileUtils.FileUtils;
-import ocl.OclQuery;
-
 public class Main {
 
 	
@@ -61,6 +18,7 @@ public class Main {
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\chrome-dev-tools\\chrome-dev-tools_java.xmi",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\cia\\cia_java.xmi", 
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\client-side-filtering\\client-side-filtering_java.xmi", 
+				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\command-injection\\command-injection_java.xmi",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\cross-site-scripting\\cross-site-scripting_java.xmi", 
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\crypto\\crypto_java.xmi",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\csrf\\csrf_java.xmi", 
@@ -93,7 +51,8 @@ public class Main {
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\challenge\\java2kdmFragments",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\chrome-dev-tools\\java2kdmFragments",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\cia\\java2kdmFragments", 
-				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\client-side-filtering\\java2kdmFragments", 
+				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\client-side-filtering\\java2kdmFragments",
+				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\command-injection\\java2kdmFragments",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\cross-site-scripting\\java2kdmFragments", 
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\crypto\\java2kdmFragments",
 				"D:\\git-repositories\\pmd-vs-ccsl-workspace\\WebGoat-develop\\webgoat-lessons\\csrf\\java2kdmFragments", 
@@ -160,9 +119,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws ParserException, IOException {
-		String oclQuery = FileUtils.fileToString("D:\\git-repositories\\pmd-vs-ccsl-workspace\\ocls\\pmd\\performance\\ConsecutiveLiteralAppends.ocl");
+		String oclQuery = FileUtils.fileToString("D:\\git-repositories\\pmd-vs-ccsl-workspace\\ocls\\pmd\\errorProne\\AvoidBranchingStatementAsLastInLoop.ocl");
 		//runCCSLSpecificationInTeaStore(oclQuery);
 		runCCSLSpecificationInWebGoat(oclQuery);
 		//runCCSLSpecificationInSampleProject(oclQuery);
+		
 	}
 }

@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module methodOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+
+[template public writeMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(MethodDeclaration)
+[/template]
+
+[template public writeReturnTypeCondition(method: Method, varname: String) ? (method.mustWriteConditionFor('returnType'))]
+(not [varname /].returnType.oclIsUndefined()) and
+[method.generatesMonovaluedFieldConditions(method.returnType, varname, 'returnType.type', 'OclAny') /]
+[/template]
+
+[template public writeInheritanceCondition(method: Method, varname: String) ? (method.inheritance <> Inheritance::ANY)]
+[if (method.inheritance = Inheritance::FINAL)]
+([varname /].modifier <> null and [varname /].modifier.inheritance = InheritanceKind::final)[elseif(method.inheritance = Inheritance::ABSTRACT)]
+([varname /].modifier <> null and [varname /].modifier.inheritance = InheritanceKind::abstract)[elseif(method.inheritance = Inheritance::NONE)]
+([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::none)[/if]
+[/template]
+
+[template public writeStaticCondition(method: Method, varname: String)? (not method._static.oclIsUndefined())]
+[if (method._static)]
+([varname /].modifier <> null and [varname /].modifier.static)[else]
+([varname /].modifier <> null and not [varname /].modifier.static)[/if]
+[/template]

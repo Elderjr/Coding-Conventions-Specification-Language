@@ -7,24 +7,17 @@
 [import org::ccsl::gen::ocl::commom::filterUtils /]
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
 
 
-[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer = target or f.implicityContainer = null)]
+[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element)]
+[f.writeImplicityFieldCondition(target) /]
 [f.writeImplicityContainerSet() /]
-implicityContainerSet->exists([f.implicityContainer.getUniqueOclName() /]: ASTNode |
-  [f.implicityContainer.writeElementConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /]
-)
+[f.writeImplicityContainerCondition() /]
 [/template]
 
-[template public writeImplicityContainerFilter(f: ImplicityContainerFilter, target: Element) ? (f.implicityContainer <> target and f.implicityContainer <> null)]
-[f.writeTemplateElementCondition(target, f.implicityContainer) /] and
-[f.writeImplicityContainerSet() /]
-implicityContainerSet->exists([f.implicityContainer.getUniqueOclName() /]: ASTNode |
-  [f.implicityContainer.writeElementConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /] [if f.implicityContainer.getRelationName(f.implicityField) <> null]
-  and
-  [f.writeRelationCondition(f.implicityContainer, f.implicityField) /]
-[/if]
-)
+[template public writeImplicityFieldCondition(f: ImplicityContainerFilter, target: Element) ? (not getElementsVisited()->includes(f.implicityField))]
+[f.writeTemplateElementCondition(target, f.implicityField) /] and
 [/template]
 
 [template private writeImplicityContainerSet(filter: ImplicityContainerFilter)]
@@ -35,7 +28,26 @@ let implicityContainerSet: OrderedSet(ASTNode) = [filter.implicityField.getUniqu
   else
     null
   endif
-) in
+)->select(node: ASTNode | node <> null) in
+[/template]
+
+[template public writeImplicityContainerCondition(f: ImplicityContainerFilter) ? (getElementsVisited()->includes(f.implicityContainer))]
+implicityContainerSet->exists(tmp: ASTNode | tmp = [f.implicityContainer.getUniqueOclName() /] [if f.implicityContainer.getRelationName(f.implicityField) <> null]
+  and
+  [f.writeRelationCondition(f.implicityContainer, f.implicityField) /][/if]
+) [if (f._context.filters->size() > 0)]
+  and
+[f._context.filters->writeFiltersConditions() /][f._context.writeCloseParenthesis() /][/if]
+[/template]
+
+[template public writeImplicityContainerCondition(f: ImplicityContainerFilter) ? (not getElementsVisited()->includes(f.implicityContainer))]
+implicityContainerSet->exists([f.implicityContainer.getUniqueOclName() /]: ASTNode |
+  [f.implicityContainer.writeElementConditions(f.implicityContainer.getUniqueOclName(), true, 'ASTNode') /] [if f.implicityContainer.getRelationName(f.implicityField) <> null]
+  and
+  [f.writeRelationCondition(f.implicityContainer, f.implicityField) /][/if] [if f._context.filters->size() > 0]
+  and
+[f._context.filters->writeFiltersConditions() /][f._context.writeCloseParenthesis() /][/if]
+)
 [/template]
 
 [template private writeRelationCondition(implicityContainerFilter: ImplicityContainerFilter, container: Element, field: Element) /]

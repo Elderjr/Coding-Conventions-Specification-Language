@@ -1,23 +1,31 @@
 package testPack;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Random;
 
-public abstract class SampleB {
-
-
-	private static String getId() {
-		return "";
+public class SampleB extends SampleA{
+	
+	private final Integer x;
+	
+	public SampleB() {
+		x = null;
+		k();
+		SampleB b = new SampleB();
+		b.k();
+		foo();
 	}
 	
-	public void foo() {
-		StringBuilder sb = new StringBuilder();
-		byte bytes[] = null;
-		for (int i = 0; i < bytes.length; i++) {
-	        sb.append("x").append("x");
-	    }
+	public void k () {
+		
+	}
+	
+	public final void foo() {
+		Random random = new Random();
+		if (random.nextDouble() > 0.5) {
+			String eastWest = " West ";
+		}
+		
 	}
 }

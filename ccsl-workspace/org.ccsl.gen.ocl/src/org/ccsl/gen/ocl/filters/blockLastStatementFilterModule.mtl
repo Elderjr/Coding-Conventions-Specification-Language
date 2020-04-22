@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module blockLastStatementFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+
+[template public writeBlockLastStatementFilterCondition(f: BlockLastStatementFilter, target: Element)]
+### ERROR BlockStatementFilter ###
+[/template]
+
+[template private writeGetLastStatement(f: BlockLastStatementFilter, target: Block)]
+if [target.getUniqueOclName() /].oclIsKindOf(Block) and [target.getUniqueOclName() /].oclAsType(Block).statements <> null and
+      [target.getUniqueOclName() /].oclAsType(Block).statements->size() > 0 then
+  [target.getUniqueOclName() /].oclAsType(Block).statements->last()
+else
+  null
+endif
+[/template]
+
+[template public writeBlockLastStatementFilterCondition(f: BlockLastStatementFilter, target: Block) ? (not getElementsVisited()->includes(f.lastStatement))]
+let [f.lastStatement.getUniqueOclName() /]: ASTNode = [f.writeGetLastStatement(target) /] in
+[f.lastStatement.writeElementConditions(f.lastStatement.getUniqueOclName(), true, 'ASTNode') /]
+[/template]
+
+
+[template public writeBlockLastStatementFilterCondition(f: BlockLastStatementFilter, target: Block) ? (getElementsVisited()->includes(f.lastStatement))]
+let lastTmp: ASTNode = [f.writeGetLastStatement(target) /] in lastTmp = [f.lastStatement.getUniqueOclName() /]
+[/template]

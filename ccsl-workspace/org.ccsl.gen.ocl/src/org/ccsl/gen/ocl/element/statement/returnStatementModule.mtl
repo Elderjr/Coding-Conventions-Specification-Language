@@ -1,0 +1,22 @@
+[comment encoding = UTF-8 /]
+[module returnStatementModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+
+[template public writeReturnStatementTypecheckCondition(returnStatement: ReturnStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ReturnStatement)
+[/template]
+
+[template public writeStatementCondition(returnStatement: ReturnStatement, varname: String) ? (returnStatement.mustWriteConditionFor('statement'))]
+let [returnStatement.statement.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(p: ASTNode |
+  if (p.oclIsKindOf(ParenthesizedExpression)) then
+    p.oclAsType(ParenthesizedExpression).expression
+  else
+    p
+  endif
+)->last() in
+[returnStatement.generatesFieldCondition(returnStatement.statement, returnStatement.statement.getFieldName(), 'ASTNode') /]
+[/template]
+

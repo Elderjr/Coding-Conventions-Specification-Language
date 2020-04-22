@@ -32,5 +32,5 @@ endif in
 [comment Condition for getting type of a variable of SingleVariableDeclaration metaclass /]
 [template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('type') and metaclass = 'SingleVariableDeclaration')]
 [varname /].type <> null and
-([var.generatesMonovaluedFieldConditions(var.type, varname, 'type.type', 'ASTNode') /]
+[var.generatesMonovaluedFieldConditions(var.type, varname, 'type.type', 'ASTNode') /]
 [/template]

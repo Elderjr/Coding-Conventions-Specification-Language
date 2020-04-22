@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module catchClauseModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+[template public writeCatchClauseTypecheckCondition(catch: CatchClause, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(CatchClause)
+[/template]
+
+[template public writeCatchBlockCondition(catch: CatchClause, varname: String) ? (catch.mustWriteConditionFor('body'))]
+let [catch._body.getFieldName() /]: Block = [varname /].body in
+[catch.generatesFieldCondition(catch._body, catch._body.getFieldName(), 'Block') /]
+[/template]
+
+[template public writeHandledExceptionsCondition(catch: CatchClause, varname: String) ? (catch.mustWriteConditionFor('handledExceptions'))]
+let handledExceptions: OrderedSet(ASTNode) = [varname /].exception.type.type->asOrderedSet() in
+[catch.writeSetConditions('handledExceptions', catch.handledExceptions, 'ASTNode', CollectionKind::ANY) /]
+[/template]

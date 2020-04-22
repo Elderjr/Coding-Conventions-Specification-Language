@@ -1,0 +1,23 @@
+[comment encoding = UTF-8 /]
+[module instanceofModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeInstanceOfTypecheckCondition(instanceOfStmt: InstanceOf, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(InstanceOfStatement)
+[/template]
+
+[template public writeLeftHandSideCondition(instanceofStmt: InstanceOf, varname: String) ? (instanceofStmt.mustWriteConditionFor('leftOperand')) ]
+let [instanceofStmt.leftOperand.getFieldName() /]: ASTNode = [varname /].leftOperand->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[instanceofStmt.generatesFieldCondition(instanceofStmt.leftOperand, instanceofStmt.leftOperand.getFieldName(), 'ASTNode') /]
+[/template]
+
+
+

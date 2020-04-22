@@ -3,49 +3,14 @@
 
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 
-[query private getElementsBefore(filter: OrderedSet(Element), element: Element): OrderedSet(Element) = 
-  filter->select(e: Element | filter->indexOf(e) < filter->indexOf(element))
-/]
-
-[query private isGenericMetaclass(str: String): Boolean = str = 'OclAny' or str = 'ASTNode' /]
-
-[template public generatesSameNameFilterConditions(filter: SameNameFilter, target: Element)]
---Same name Filter
-(
-[for (e : Element | filter.targets) separator(' and \n')]
-  [filter.generatesLetGetNameProperty(e, e.getDeclaredElementMetaclass(), e.getUniqueOclName(), e.getUniqueOclName().concat('Name')) /][let elementsBefore: OrderedSet(Element) = filter.targets->getElementsBefore(e)]
-[if elementsBefore->size() > 0]
- and
-[for(eToCompare: Element | elementsBefore) separator('and \n')]
-  [e.getUniqueOclName() /]Name[if filter.ignoreCase].toLowerCase()[/if] = [eToCompare.getUniqueOclName() /]Name[if filter.ignoreCase].toLowerCase()[/if]
-[/for][/if][/let][/for]
-)
---End Same name Filter
-[/template]
-
-[template private generatesLetGetNameProperty(filter: SameNameFilter, target: Element, targetVarname: String, letVarname: String, targetMetaclass: String) /]
-
-[template private generatesLetGetNameProperty(filter: SameNameFilter, target: NamedElement, targetMetaclass: String, targetVarname: String, letVarname: String) ? (not targetMetaclass.isGenericMetaclass())]
-let [letVarname /]: String = [targetVarname /].name in (not [letVarname /].oclIsUndefined())
-[/template]
-
-[template private generatesLetGetNameProperty(filter: SameNameFilter, target: NamedElement, targetMetaclass: String, targetVarname: String, letVarname: String) ? (targetMetaclass.isGenericMetaclass())]
-let [letVarname /]: String = [targetVarname /].oclAsType(NamedElement).name in (not [letVarname /].oclIsUndefined())
-[/template]
-
-[template private generatesLetGetNameProperty(filter: SameNameFilter, target: ComplexType, targetMetaclass: String, targetVarname: String, letVarname: String) ? (targetMetaclass.isGenericMetaclass())]
-let [letVarname /]: String = [targetVarname /]->asOrderedSet()->closure(e: OclAny |
-  if e.oclIsKindOf(AnonymousClassDeclaration) then
-    e.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type
-  else if e.oclIsKindOf(ParameterizedType) then
-    e.oclAsType(ParameterizedType).type.type
-  else if e.oclIsKindOf(NamedElement) then
-    e.oclAsType(NamedElement).name
-  else if e.oclIsKindOf(String) then
-    e
-  else
-    null
-  endif endif endif endif
-)->last() in (not [letVarname /].oclIsUndefined())
+[template public writeSameNameFilterConditions(f: SameNameFilter)]
+[let firstValue: NamedElement = f.targets->first().oclAsType(NamedElement)]
+let name: String = [firstValue.getUniqueOclName() /].oclAsType(NamedElement).name in
+[for (namedElement: NamedElement | f.targets->excluding(firstValue).oclAsType(NamedElement))]
+[if f.ignoreCase]
+[namedElement.getUniqueOclName() /].oclAsType(NamedElement).name.equalsIgnoreCase(name)[else]
+[namedElement.getUniqueOclName() /].oclAsType(NamedElement).name = name[/if]
+[/for][/let]
 [/template]

@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module constructorModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+
+[template public writeConstructorTypecheckCondition(constructor: Constructor, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ConstructorDeclaration)
+[/template]

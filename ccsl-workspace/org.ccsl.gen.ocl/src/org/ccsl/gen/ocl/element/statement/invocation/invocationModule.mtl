@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module invocationModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+[template public writeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('args'))]
+let args: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[invocation.writeSetConditions('args', invocation.args, 'ASTNode', invocation.argsKind) /]
+[/template]

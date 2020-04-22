@@ -97,16 +97,24 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
-            uri="http://www.example.org/ccsl/elements/datatype"
-            class="ccsl.elements.datatype.DatatypePackage"
+            uri="http://www.example.org/ccsl/elements/statements/assignment"
+            class="ccsl.elements.statements.assignment.AssignmentPackage"
             genModel="model/ccsl.genmodel"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
-            uri="http://www.example.org/ccsl/nonElements"
-            class="ccsl.nonElements.NonElementsPackage"
+            uri="http://www.example.org/ccsl/elements/statements/invocation"
+            class="ccsl.elements.statements.invocation.InvocationPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/datatype"
+            class="ccsl.elements.datatype.DatatypePackage"
             genModel="model/ccsl.genmodel"/>
    </extension>
 

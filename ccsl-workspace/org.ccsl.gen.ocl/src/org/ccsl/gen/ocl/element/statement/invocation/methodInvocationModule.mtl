@@ -1,0 +1,58 @@
+[comment encoding = UTF-8 /]
+[module methodInvocationModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+[template public writeSimpleMethodInvocationTypecheckCondition(methodInv: SimpleMethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+([varname /].oclIsKindOf(MethodInvocation) or [varname /].oclIsKindOf(SuperMethodInvocation))
+[/template]
+
+[template public writeMethodInvocationTypecheckCondition(methodInv: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[varname /].oclIsKindOf(MethodInvocation)
+[/template]
+
+[template public writeMethodCondition(methodInv: SimpleMethodInvocation, varname: String) ? (methodInv.mustWriteConditionFor('method'))]
+let [methodInv.method.getFieldName() /]: MethodDeclaration = if [varname /].oclIsKindOf(MethodInvocation) then
+  [varname /].oclAsType(MethodInvocation).method 
+elseif [varname /].oclIsKindOf(SuperMethodInvocation) then
+  [varname /].oclAsType(SuperMethodInvocation).method
+else
+  null
+endif in
+[methodInv.generatesFieldCondition(methodInv.method, methodInv.method.getFieldName(), 'MethodDeclaration') /]
+[/template]
+
+[template public writeMethodCondition(methodInv: MethodInvocation, varname: String) ? (methodInv.mustWriteConditionFor('method'))]
+let [methodInv.method.getFieldName() /]: MethodDeclaration = [varname /].method in
+[methodInv.generatesFieldCondition(methodInv.method, methodInv.method.getFieldName(), 'MethodDeclaration') /]
+[/template]
+
+[template public writeFromCondition(methodInv: MethodInvocation, varname: String) ? (methodInv.mustWriteConditionFor('from'))]
+let fromSet: OrderedSet(ASTNode) = [varname /].expression->asOrderedSet()->closure(p: ASTNode | 
+  if p.oclIsKindOf(ParenthesizedExpression) then
+    p.oclAsType(ParenthesizedExpression).expression
+  else
+    p
+  endif
+) in
+let [methodInv.from.getFieldName() /]: ASTNode = if fromSet->size() > 0 then
+  fromSet->last()
+else
+  null
+endif in
+[methodInv.generatesFieldCondition(methodInv.from, methodInv.from.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeArgsCondition(methodInv: MethodInvocation, varname: String) ? (methodInv.mustWriteConditionFor('args'))]
+let args: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[methodInv.writeSetConditions('args', methodInv.args, 'ASTNode', methodInv.argsKind) /]
+[/template]

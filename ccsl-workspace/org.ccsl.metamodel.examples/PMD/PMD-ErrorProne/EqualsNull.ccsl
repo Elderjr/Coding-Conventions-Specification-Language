@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:invocation="http://www.example.org/ccsl/elements/statements/invocation" xmlns:literalValues="http://www.example.org/ccsl/elements/statements/literalValues" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="invocation:MethodInvocation" method="//@context/@contextElements.1">
+      <args xsi:type="literalValues:NullLiteral"/>
+    </contextElements>
+    <contextElements xsi:type="method:Method" name="equals"/>
+  </context>
+</ccsl:AtomicRule>
