@@ -194,3 +194,33 @@ BreakStatement
 [template private writeElementMatchingJavaMetaclasses(continueStmt: ContinueStatement)]
 ContinueStatement
 [/template]
+
+[comment @ImportStatement  /]
+[template private writeElementMatchingJavaMetaclasses(importStmt: ImportStatement)]
+ImportDeclaration
+[/template]
+
+[comment @Package  /]
+[template private writeElementMatchingJavaMetaclasses(packageElement: Package)]
+Package
+[/template]
+
+[comment @AnnotationType  /]
+[template private writeElementMatchingJavaMetaclasses(annotationType: AnnotationType)]
+AnnnotationTypeDeclaration, UnresolvedTypeDeclaration
+[/template]
+
+[comment @Annotation  /]
+[template private writeElementMatchingJavaMetaclasses(annotation: Annotation)]
+Annotation
+[/template]
+
+[comment @Annotation  /]
+[template private writeElementMatchingJavaMetaclasses(strLit: StringLiteral)]
+StringLiteral
+[/template]
+
+[comment @VoidType  /]
+[template private writeElementMatchingJavaMetaclasses(voidType: VoidType)]
+PrimitiveTypeVoid
+[/template]

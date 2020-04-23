@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="complexType:JClass">
+      <constructors visibility="PRIVATE" avaliableInSourceCode="true"/>
+    </contextElements>
+    <filters xsi:type="filters:CompositeFilter">
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.0/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="complexType:JClass">
+            <constructors visibility="PACKAGE"/>
+          </contextElements>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.1/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="complexType:JClass">
+            <constructors visibility="PUBLIC"/>
+          </contextElements>
+        </context>
+      </filters>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.2/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="complexType:JClass">
+            <constructors visibility="PROTECTED"/>
+          </contextElements>
+        </context>
+      </filters>
+    </filters>
+    <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.1/@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="complexType:JClass">
+          <constructors>
+            <annotations/>
+          </constructors>
+        </contextElements>
+      </context>
+    </filters>
+    <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.2/@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="complexType:JClass">
+          <fields static="true"/>
+        </contextElements>
+      </context>
+    </filters>
+    <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.3/@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="complexType:JClass">
+          <methods static="true"/>
+        </contextElements>
+      </context>
+    </filters>
+    <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0" targetTemplate="//@context/@filters.4/@context/@contextElements.0/@nestedTypes.0">
+      <context>
+        <contextElements xsi:type="complexType:DeclaredType">
+          <nestedTypes xsi:type="complexType:JClass"/>
+        </contextElements>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

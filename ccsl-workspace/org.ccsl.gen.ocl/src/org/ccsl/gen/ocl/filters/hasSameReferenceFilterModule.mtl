@@ -1,0 +1,23 @@
+[comment encoding = UTF-8 /]
+[module hasSameReferenceFilterModule('http://www.example.org/ccsl')]
+
+
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+[template private writeEqualityOperator(f: HasSameReferenceFilter)]
+[if f.negated]
+<>[else]
+=[/if]
+[/template]
+
+[template public writeHasSameReferenceFilterConditions(f: HasSameReferenceFilter)]
+[for (e1: Element | f.targets)]
+[if (not(i = 1 or i = f.targets->size()))]
+ and
+[/if]
+[let firstForIndex: Integer = i]
+[for (e2: Element | f.targets->select(x | f.targets->indexOf(x) > i)) separator(' and ')]
+[e1.getUniqueOclName() /] [f.writeEqualityOperator() /] [e2.getUniqueOclName() /][/for][/let][/for]
+[/template]

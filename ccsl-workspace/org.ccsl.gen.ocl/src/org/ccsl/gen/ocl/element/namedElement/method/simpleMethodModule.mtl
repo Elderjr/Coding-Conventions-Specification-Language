@@ -12,7 +12,7 @@
 
 [template public writeParamsCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.mustWriteConditionFor('params'))]
 let parameters: OrderedSet(SingleVariableDeclaration) = [varname /].parameters in
-[simpleMethod.writeSetConditions('parameters', simpleMethod.params, 'SingleVariableDeclaration', CollectionKind::ANY) /]
+[simpleMethod.writeSetConditions('parameters', simpleMethod.params, 'SingleVariableDeclaration', simpleMethod.paramsKind) /]
 [/template]
 
 [template public writeVisibilityCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.visibility <> Visibility::ANY)]
@@ -22,3 +22,4 @@ let parameters: OrderedSet(SingleVariableDeclaration) = [varname /].parameters i
 ([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::private)[elseif(simpleMethod.visibility = Visibility::PACKAGE)]
 ([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::none)[/if]
 [/template]
+

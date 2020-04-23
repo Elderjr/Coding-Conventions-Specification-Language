@@ -9,3 +9,7 @@
 [template public writeConstructorTypecheckCondition(constructor: Constructor, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ConstructorDeclaration)
 [/template]
+
+[template public writeAvaliableInSourceCodeCondition(constructor: Constructor, varname: String) ? (not constructor.avaliableInSourceCode.oclIsUndefined())]
+([if constructor.avaliableInSourceCode]not [ /if][varname /].proxy)
+[/template]

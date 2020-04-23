@@ -32,7 +32,7 @@ superClassesClosureSet->exists(tmp: ClassDeclaration | tmp = [f.superClass.getUn
 [/template]
 
 [template private writeSuperClassCondition(f: SuperClassClosureFilter) ? (not getElementsVisited()->includes(f.superClass))]
-superClassesClosureSet->exists([f.superClass.getUniqueOclName() /]: ClassDeclaration
+superClassesClosureSet->exists([f.superClass.getUniqueOclName() /]: ClassDeclaration |
   [f.superClass.writeElementConditions(f.superClass.getUniqueOclName(), false, 'ClassDeclaration') /]
 )
 [/template]

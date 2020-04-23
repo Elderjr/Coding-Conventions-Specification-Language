@@ -69,3 +69,7 @@ ifStmt
 [template public getBaseName(element : VariableAccess)]
 varAccess
 [/template]
+
+[template public getBaseName(element : Constructor)]
+constructor
+[/template]

@@ -40,6 +40,10 @@ endif)->last()
 [stmt.writeGetAncestorExpressionSkippingParanthesis(varname, metaclass) /]
 [/template]
 
+[template public writeGetAncestorExpression(stmt: ImportStatement, varname: String, metaclass: String)]
+[varname /].oclContainer().oclAsType(CompilationUnit).types->first()
+[/template]
+
 [template public writeGetAncestorExpression(var: Variable, varname: String, metaclass: String)]
 if ([varname /].oclContainer() <> null and (not [varname /].oclIsKindOf(SingleVariableDeclaration))) then
   [varname /].oclContainer().oclContainer()

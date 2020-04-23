@@ -1,0 +1,13 @@
+[comment encoding = UTF-8 /]
+[module annotableElementModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+
+[template public writeAnnotationsCondition(annotableElement: AnnotableElement, varname: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(Annotation) = [varname /].annotations in
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'Annotation', annotableElement.annotationsKind) /]
+[/template]

@@ -1,0 +1,16 @@
+[comment encoding = UTF-8 /]
+[module annotationTypeModule('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+
+[template public writeAnnotationTypeTypecheckCondition(annotation: AnnotationType, varname: String, typecheck: Boolean) ? (typecheck)]
+if [varname /].oclIsKindOf(AnnotationTypeDeclaration) then
+  true
+elseif [varname /].oclIsKindOf(UnresolvedTypeDeclaration) then
+  [varname /].oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+    ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+else
+  false
+endif
+[/template]

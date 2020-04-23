@@ -46,6 +46,16 @@ classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; f
 ).concat(className).matches('[regexFilter.regex /]')
 [/template]
 
+[template private generatesRegexFilterConditions(regexFilter: RegexMatch, target: AnnotationType)]
+if([target.getUniqueOclName() /].oclIsKindOf(AnnotationTypeDeclaration)) then
+  [target.getUniqueOclName() /].oclAsType(AnnotationTypeDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat([target.getUniqueOclName() /].oclAsType(AnnotationTypeDeclaration).name).matches('[regexFilter.regex /]')
+else
+  [target.getUniqueOclName() /].oclAsType(NamedElement).name.matches('[regexFilter.regex /]')
+endif
+[/template]
+
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() > 1)]
 [target.generatesLetStatementToGetLiteralValue(target.getUniqueOclName(), 'literalNameRegex') /]
 literalNameRegex.matches('[regexFilter.regex /]')

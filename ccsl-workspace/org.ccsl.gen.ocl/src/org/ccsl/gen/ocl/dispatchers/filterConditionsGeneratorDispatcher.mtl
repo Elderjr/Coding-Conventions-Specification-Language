@@ -14,6 +14,7 @@
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::fromClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::blockLastStatementFilterModule /]
+[import org::ccsl::gen::ocl::filters::hasSameReferenceFilterModule /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
@@ -73,6 +74,10 @@ not (
 
 [template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (not atomicFilter.negated)]
 [atomicFilter.writeSameNameFilterConditions() /]
+[/template]
+
+[template public generatesFilterConditions(atomicFilter : HasSameReferenceFilter)]
+[atomicFilter.writeHasSameReferenceFilterConditions() /]
 [/template]
 
 [comment dispatchers /]

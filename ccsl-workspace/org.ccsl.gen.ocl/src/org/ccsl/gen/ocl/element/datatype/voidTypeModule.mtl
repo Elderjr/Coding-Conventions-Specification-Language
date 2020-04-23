@@ -1,0 +1,8 @@
+[comment encoding = UTF-8 /]
+[module voidTypeModule('http://www.example.org/ccsl')]
+
+
+
+[template public writeVoidTypeTypecheckCondition(voidType: VoidType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeVoid)
+[/template]

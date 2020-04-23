@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module packageModule('http://www.example.org/ccsl/elements/namedElements')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writePackageTypecheckCondition(packageElement: Package, varname: String)]
+[varname /].oclIsKindOf(Package)
+[/template]
+
+[template public writeDeclaredTypesCondition(packageElement: Package, varname: String) ? (packageElement.mustWriteConditionFor('declaredTypes'))]
+let declaredTypes: OrderedSet(ASTNode) = [varname /].ownedElements in
+[packageElement.writeSetConditions('declaredTypes', packageElement.declaredTypes, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+

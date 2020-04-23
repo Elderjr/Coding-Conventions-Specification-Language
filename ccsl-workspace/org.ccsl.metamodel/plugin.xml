@@ -113,6 +113,22 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated ccsl -->
       <package
+            uri="http://www.example.org/ccsl/elements/statements/import"
+            class="ccsl.elements.statements.import_.ImportPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
+            uri="http://www.example.org/ccsl/elements/statements/annotation"
+            class="ccsl.elements.statements.annotation.AnnotationPackage"
+            genModel="model/ccsl.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ccsl -->
+      <package
             uri="http://www.example.org/ccsl/elements/datatype"
             class="ccsl.elements.datatype.DatatypePackage"
             genModel="model/ccsl.genmodel"/>

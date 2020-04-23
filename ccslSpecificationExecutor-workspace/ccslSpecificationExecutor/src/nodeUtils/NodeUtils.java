@@ -2,12 +2,16 @@ package nodeUtils;
 import java.util.ArrayList;
 
 import org.eclipse.gmt.modisco.java.ASTNode;
+import org.eclipse.gmt.modisco.java.ImportDeclaration;
 import org.eclipse.gmt.modisco.java.Package;
 
 public class NodeUtils {
 
 	
 	public static Package getNodePackage(ASTNode node) {
+		if(node instanceof ImportDeclaration) {
+			return getNodePackage((ImportDeclaration) node);
+		}
 		ASTNode content = node;
 		while(content != null && !(content instanceof Package)) {
 			if(content.eContainer() instanceof ASTNode) {
@@ -20,6 +24,10 @@ public class NodeUtils {
 			return (Package) content;
 		}
 		return null;
+	}
+	
+	public static Package getNodePackage(ImportDeclaration node) {
+		return getNodePackage(node.getOriginalCompilationUnit().getTypes().get(0));
 	}
 	
 	public static String getFullPackageName(Package modiscoPackage) {

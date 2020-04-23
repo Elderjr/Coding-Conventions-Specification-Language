@@ -7,7 +7,7 @@
 [varname /].oclAsType(NamedElement).name
 [/template]
 
-[template public writeGetNameExpression(javaClassOrInterface: DeclaredType, varname: String, metaclass: String) ? ( (not javaClassOrInterface.name.oclIsUndefined()) and (javaClassOrInterface.name.contains('.')))]
+[template public writeGetNameExpression(declaredType: DeclaredType, varname: String, metaclass: String) ? ( (not declaredType.name.oclIsUndefined()) and (declaredType.name.contains('.')))]
 [varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
 ).concat([varname /].name)

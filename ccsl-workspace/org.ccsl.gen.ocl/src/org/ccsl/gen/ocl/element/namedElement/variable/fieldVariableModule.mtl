@@ -9,6 +9,12 @@
 
 [template public writeFinalCondition(var: FieldVariable, varname: String) ? (not var.final.oclIsUndefined())]
 [if(var.final)]
-[varname /].oclContainer().oclAsType(FieldDeclaration).modifier.inheritance = InheritanceKind::final
-[else][varname /].oclContainer().oclAsType(FieldDeclaration).modifier.inheritance <> InheritanceKind::final[/if]
+([varname /].oclContainer().oclAsType(FieldDeclaration).modifier <> null and [varname /].oclContainer().oclAsType(FieldDeclaration).modifier.inheritance = InheritanceKind::final)
+[else]([varname /].oclContainer().oclAsType(FieldDeclaration).modifier <> null and [varname /].oclContainer().oclAsType(FieldDeclaration).modifier.inheritance <> InheritanceKind::final)[/if]
+[/template]
+
+[template public writeStaticCondition(var: FieldVariable, varname: String)? (not var._static.oclIsUndefined())]
+[if (var._static)]
+([varname /].oclContainer().oclAsType(FieldDeclaration).modifier <> null and [varname /].oclContainer().oclAsType(FieldDeclaration).modifier.static)[else]
+([varname /].oclContainer().oclAsType(FieldDeclaration).modifier <> null and not [varname /].oclContainer().oclAsType(FieldDeclaration).modifier.static)[/if]
 [/template]

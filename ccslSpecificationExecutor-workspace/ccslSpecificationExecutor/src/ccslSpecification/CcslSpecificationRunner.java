@@ -100,7 +100,6 @@ public class CcslSpecificationRunner {
 		}
 
 		List<String> violations = new LinkedList<>();
-		int violationsWithLine = 0;
 		Resource packageResource;
 		// Get line per package
 		for (Entry<Package, Resource> entry : resourcesMap.entrySet()) {
@@ -122,7 +121,6 @@ public class CcslSpecificationRunner {
 								if (equalsASTNode(node, (ASTNode) region.getNode())) {
 									violations.add(
 											"[VIOLATION] Violation found on " + filePath + ":" + region.getStartLine());
-									violationsWithLine++;
 									nodesIterator.remove();
 									regions.remove();
 									break;

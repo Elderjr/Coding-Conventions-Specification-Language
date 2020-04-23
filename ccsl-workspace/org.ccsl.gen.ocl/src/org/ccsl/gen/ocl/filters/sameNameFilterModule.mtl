@@ -5,12 +5,22 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
 
+[template private writeGetNameExpression(target: Element) /]
+
+[template private writeGetNameExpression(target: NamedElement)]
+[target.getUniqueOclName() /].oclAsType(NamedElement).name
+[/template]
+
+[template private writeGetNameExpression(target: StringLiteral)]
+[target.getUniqueOclName() /].oclAsType(StringLiteral).escapedValue
+[/template]
+
 [template public writeSameNameFilterConditions(f: SameNameFilter)]
-[let firstValue: NamedElement = f.targets->first().oclAsType(NamedElement)]
-let name: String = [firstValue.getUniqueOclName() /].oclAsType(NamedElement).name in
-[for (namedElement: NamedElement | f.targets->excluding(firstValue).oclAsType(NamedElement))]
+[let firstValue: Element = f.targets->first()]
+let name: String = [firstValue.writeGetNameExpression() /] in
+[for (e: Element | f.targets->excluding(firstValue)) separator(' and\n')]
 [if f.ignoreCase]
-[namedElement.getUniqueOclName() /].oclAsType(NamedElement).name.equalsIgnoreCase(name)[else]
-[namedElement.getUniqueOclName() /].oclAsType(NamedElement).name = name[/if]
+[e.writeGetNameExpression() /].equalsIgnoreCase(name)[else]
+[e.writeGetNameExpression() /] = name[/if]
 [/for][/let]
 [/template]

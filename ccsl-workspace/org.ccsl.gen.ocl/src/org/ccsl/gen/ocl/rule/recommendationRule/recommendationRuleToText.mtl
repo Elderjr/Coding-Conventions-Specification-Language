@@ -40,18 +40,18 @@ violations
 [/template]
 
 
-[query private getSubjectMetaclass(rule: AtomicRule): String = 
-if rule.subject.getMatchingJavaMetaclasses()->size() = 1 then
-  rule.subject.getMatchingJavaMetaclasses()->first()
+[query private getSubjectMetaclass(e: Element): String = 
+if e.getMatchingJavaMetaclasses()->size() = 1 then
+  e.getMatchingJavaMetaclasses()->first()
 else
   'ASTNode'
 endif 
 /]
 
-[query private isSubjectNeedsTypecheckOnStart(rule: AtomicRule): Boolean = 
-if rule.subject.isElementNeedsTypecheckOnStart() then
+[query private isSubjectNeedsTypecheckOnStart(e: Element): Boolean = 
+if e.isElementNeedsTypecheckOnStart() then
   true
-else if rule.subject.getMatchingJavaMetaclasses()->size() = 1 then
+else if e.getMatchingJavaMetaclasses()->size() = 1 then
   false
 else
   true
@@ -60,21 +60,26 @@ endif endif
 
 [template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
 [rule.clearAllContexts() /]
-[let subjectMetaclass: String = rule.getSubjectMetaclass()]
-[let typecheck: Boolean = rule.isSubjectNeedsTypecheckOnStart()]
+[let subjectMetaclass: String = rule.subject.getSubjectMetaclass()]
+[let typecheck: Boolean = rule.subject.isSubjectNeedsTypecheckOnStart()]
 [let subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass)]
+[let remainingElementConditions: OrderedSet(String) = rule._context.contextElements
+  ->select(e: Element | not getElementsVisited()->includes(e)).writeElementConditionWithExists()->asOrderedSet()]
 [let filtersConditions: String = rule._context.filters->writeFiltersConditions()]
 [rule.subject.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([rule.subject.getUniqueOclName() /]: [subjectMetaclass /] |
-[if subjectConditions.isNotEmpty() and filtersConditions.isNotEmpty()]
-  [subjectConditions.writeStr() /] and
-  [filtersConditions.writeStr() /]
-  [rule._context.writeCloseParenthesis() /][elseif subjectConditions.isNotEmpty() and filtersConditions.isEmpty()]
-  [subjectConditions.writeStr() /]
-  [rule._context.writeCloseParenthesis() /][elseif subjectConditions.isEmpty() and filtersConditions.isNotEmpty()]
-  [filtersConditions.writeStr() /]
-  [rule._context.writeCloseParenthesis() /][/if][/let][/let][/let][/let]
+[for (condition: String | OrderedSet(String){subjectConditions}->union(remainingElementConditions)->including(filtersConditions)) separator(' and\n')]
+  [condition.writeStr() /][/for]
+[rule._context.writeCloseParenthesis() /][/let][/let][/let][/let][/let]
 
 )
+[/template]
+
+[template private writeElementConditionWithExists(e: Element)]
+[let subjectMetaclass: String = e.getSubjectMetaclass()]
+[let typecheck: Boolean = e.isSubjectNeedsTypecheckOnStart()]
+[e.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->exists([e.getUniqueOclName() /]: [subjectMetaclass /] | [addElementExistsDeclaration() /]
+[e.writeElementConditions(e.getUniqueOclName(), typecheck, subjectMetaclass) /]
+[/let][/let]
 [/template]
 
 [template private writeOCLToSelectElements(compositeRule: CompositeRule)]

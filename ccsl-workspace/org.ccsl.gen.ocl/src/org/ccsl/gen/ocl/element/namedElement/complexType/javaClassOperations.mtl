@@ -36,3 +36,8 @@ let superInterfaces: OrderedSet(ASTNode) = [varname /].superInterfaces->collect(
 ([varname /].modifier <> null and [varname /].modifier.static)[else]
 ([varname /].modifier <> null and not [varname /].modifier.static)[/if]
 [/template]
+
+[template public writeConstructorsCondition(class: JClass, varname: String) ? (class.mustWriteConditionFor('constructors'))]
+let constructors: OrderedSet(ConstructorDeclaration) = [varname /].bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+[class.writeSetConditions('constructors', class.constructors, 'ConstructorDeclaration', CollectionKind::ANY) /]
+[/template]

@@ -9,11 +9,14 @@
 [import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
 
 
+
 [template public generatesComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
 ([varname /].oclIsKindOf(ClassDeclaration) or [varname /].oclIsKindOf(InterfaceDeclaration) or [varname /].oclIsKindOf(AnonymousClassDeclaration))
 [/template]
 
-[template public writeGetBodyDeclarations(complexType: ComplexType, varname: String, metaclass: String) ? (metaclass <> 'ClassDeclaration' and metaclass <> 'InterfaceDeclaration')]
+[query private mustWriteGetBodyDeclarations(complexType: ComplexType): Boolean =
+  complexType.mustWriteConditionFor('fields') or complexType.mustWriteConditionFor('methods') or complexType.mustWriteConditionFor('constructors') /]
+[template public writeGetBodyDeclarations(complexType: ComplexType, varname: String, metaclass: String) ? (metaclass <> 'ClassDeclaration' and metaclass <> 'InterfaceDeclaration' and complexType.mustWriteGetBodyDeclarations())]
 let bodyDeclarations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
   [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations
 elseif [varname /].oclIsKindOf(AnonymousClassDeclaration) then
@@ -23,7 +26,7 @@ else
 endif in bodyDeclarations <> null
 [/template]
 
-[template public writeGetBodyDeclarations(complexType: ComplexType, varname: String, metaclass: String) ? ((not complexType.oclIsTypeOf(ComplexType)) and (complexType.mustWriteConditionFor('fields') or complexType.mustWriteConditionFor('methods')))]
+[template public writeGetBodyDeclarations(complexType: ComplexType, varname: String, metaclass: String) ? ((not complexType.oclIsTypeOf(ComplexType)) and complexType.mustWriteGetBodyDeclarations() )]
 let bodyDeclarations: OrderedSet(ASTNode) = [varname /].bodyDeclarations in bodyDeclarations <> null
 [/template]
 
@@ -41,6 +44,7 @@ endif
 let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
 [complexType.generatesSetConditions('methods', complexType.methods, 'MethodDeclaration') /]
 [/template]
+
 
 
 
