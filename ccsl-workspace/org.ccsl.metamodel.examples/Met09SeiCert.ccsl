@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" subject="class">
+  <context>
+    <contextElements xsi:type="complexType:JClass" uniqueName="class">
+      <methods uniqueName="equals" name="equals"/>
+    </contextElements>
+    <filters xsi:type="filters:SuperClassClosureFilter" negated="true" targets="class" superClass="superClass" subClass="class">
+      <context>
+        <contextElements xsi:type="complexType:JClass" uniqueName="superClass">
+          <methods uniqueName="hashCode" name="hashCode"/>
+        </contextElements>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:invocation="http://www.example.org/ccsl/elements/statements/invocation" subject="runInvocation">
+  <context>
+    <contextElements xsi:type="complexType:JClass" uniqueName="threadClass" name="java.lang.Thread">
+      <methods uniqueName="runMethod" name="run"/>
+    </contextElements>
+    <contextElements xsi:type="invocation:MethodInvocation" uniqueName="runInvocation" method="runMethod"/>
+  </context>
+</ccsl:AtomicRule>

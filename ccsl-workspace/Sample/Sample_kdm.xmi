@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ASCII"?>
+<kdm:Segment xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:kdm="http://www.eclipse.org/MoDisco/kdm/kdm" xmlns:source="http://www.eclipse.org/MoDisco/kdm/source">
+  <model xsi:type="source:InventoryModel" name="Sample">
+    <inventoryElement xsi:type="source:Project" name="Sample">
+      <inventoryElement xsi:type="source:Configuration" name=".classpath" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\.classpath"/>
+      <inventoryElement xsi:type="source:SourceFile" name=".gitignore" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\.gitignore"/>
+      <inventoryElement xsi:type="source:Configuration" name=".project" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\.project"/>
+      <inventoryElement xsi:type="source:Directory" name=".settings" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\.settings">
+        <inventoryElement xsi:type="source:Configuration" name="org.eclipse.jdt.core.prefs" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\.settings\org.eclipse.jdt.core.prefs"/>
+      </inventoryElement>
+      <inventoryElement xsi:type="source:Directory" name="bin" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\bin">
+        <inventoryElement xsi:type="source:BinaryFile" name="ClassB.class" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\bin\ClassB.class"/>
+      </inventoryElement>
+      <inventoryElement xsi:type="source:Directory" name="libs" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\libs">
+        <inventoryElement xsi:type="source:BinaryFile" name="org.eclipse.ocl.common_1.8.400.v20191209-1145.jar" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\libs\org.eclipse.ocl.common_1.8.400.v20191209-1145.jar"/>
+        <inventoryElement xsi:type="source:BinaryFile" name="org.eclipse.ocl.pivot_1.9.0.v20190910-0937.jar" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\libs\org.eclipse.ocl.pivot_1.9.0.v20190910-0937.jar"/>
+        <inventoryElement xsi:type="source:BinaryFile" name="org.eclipse.ocl.xtext.base_1.9.0.v20190910-0937.jar" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\libs\org.eclipse.ocl.xtext.base_1.9.0.v20190910-0937.jar"/>
+        <inventoryElement xsi:type="source:BinaryFile" name="org.eclipse.ocl.xtext.essentialocl_1.9.0.v20190910-0937.jar" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\libs\org.eclipse.ocl.xtext.essentialocl_1.9.0.v20190910-0937.jar"/>
+      </inventoryElement>
+      <inventoryElement xsi:type="source:SourceFile" name="Sample_java.xmi" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\Sample_java.xmi"/>
+      <inventoryElement xsi:type="source:Directory" name="src" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src">
+        <inventoryElement xsi:type="source:SourceFile" name="ClassB.java" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\ClassB.java"/>
+        <inventoryElement xsi:type="source:Directory" name="test" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\test">
+          <inventoryElement xsi:type="source:SourceFile" name="ClassA.java" path="D:\git-repositories\Coding-Conventions-Specification-Language\ccsl-workspace\Sample\src\test\ClassA.java"/>
+        </inventoryElement>
+      </inventoryElement>
+    </inventoryElement>
+  </model>
+</kdm:Segment>

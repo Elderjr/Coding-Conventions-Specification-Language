@@ -119,9 +119,9 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws ParserException, IOException {
-		String oclQuery = FileUtils.fileToString("D:\\git-repositories\\pmd-vs-ccsl-workspace\\ocls\\pmd\\errorProne\\MissingStaticMethodInNonInstantiatableClass.ocl");
-		runCCSLSpecificationInTeaStore(oclQuery);
-		//runCCSLSpecificationInWebGoat(oclQuery);
+		String oclQuery = FileUtils.fileToString("D:\\git-repositories\\pmd-vs-ccsl-workspace\\ocls\\pmd\\performance\\InsufficientStringBufferDeclaration.ocl");
+		//runCCSLSpecificationInTeaStore(oclQuery);
+		runCCSLSpecificationInWebGoat(oclQuery);
 		//runCCSLSpecificationInSampleProject(oclQuery);
 		
 	}

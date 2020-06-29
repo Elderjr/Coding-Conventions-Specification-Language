@@ -11,6 +11,7 @@
 [f.writeSubClassCondition(target) /]
 [f.writeSuperClassesClosureSet() /]
 [f.writeSuperClassCondition() /]
+[f._context.writeCloseParenthesis() /]
 [/template]
 
 [template private writeSubClassCondition(f: SuperClassClosureFilter, target: Element) ? (not getElementsVisited()->includes(f.subClass))]
