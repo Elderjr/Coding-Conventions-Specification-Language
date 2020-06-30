@@ -221,7 +221,6 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//elements/statements/Statement"
             containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="ThisStatement" eSuperTypes="#//elements/statements/Statement"/>
       <eClassifiers xsi:type="ecore:EClass" name="BreakStatement" eSuperTypes="#//elements/statements/Statement"/>
       <eClassifiers xsi:type="ecore:EClass" name="ContinueStatement" eSuperTypes="#//elements/statements/Statement"/>
       <eClassifiers xsi:type="ecore:EClass" name="AssertStatement" eSuperTypes="#//elements/statements/Statement">
