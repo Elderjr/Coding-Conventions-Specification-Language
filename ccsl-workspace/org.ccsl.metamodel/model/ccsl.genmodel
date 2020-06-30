@@ -324,8 +324,8 @@
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/kind"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/operator"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/operandsKind"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/BinaryExpression/operands.1"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/Expression.1"/>
         <nestedGenPackages prefix="Invocations" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/expressions/invocations">
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/invocations/MethodInvocation">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/invocations/MethodInvocation/from"/>
