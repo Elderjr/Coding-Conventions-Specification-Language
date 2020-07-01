@@ -324,7 +324,6 @@
             eType="#//elements/datatype/ObjectType"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/namedElements/complexType/TypeDeclaration"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//elements/namedElements/complexType/ComplexType"/>
       <eClassifiers xsi:type="ecore:EClass" name="IntPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//elements/datatype/ObjectType">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimensions" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
@@ -332,6 +331,20 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/DataType"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="VoidType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="TypeParameter" eSuperTypes="#//elements/datatype/ObjectType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="bounds" upperBound="-1"
+            eType="#//elements/datatype/ObjectType"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="boundsKind" eType="#//CollectionKind"
+            defaultValueLiteral="ANY"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="WildCardType" eSuperTypes="#//elements/datatype/ObjectType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="bound" eType="#//elements/datatype/ObjectType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BytePrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="CharPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DoublePrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="FloatPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="LongPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
     </eSubpackages>
     <eSubpackages name="expressions" nsURI="http://www.example.org/ccsl/elements/expressions"
         nsPrefix="expressions">

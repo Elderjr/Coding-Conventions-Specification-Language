@@ -1,19 +1,17 @@
-
+import java.util.Collections;
+import java.util.List;
 
 public abstract class ClassA {
 
 	public static int a;
 	
-	
+	public <T> List<T> test() {
+		List<Integer> a = this.<Integer>test();
+		return null;
+	}
 	public static void main(String... args) {
-		new ClassA() {
-			
-		};
-		main(new String[] {"a"});
-		int a = ~3;
-		int b = 2;
-		int c = a >> b;
-	
+		
+		Collections.<Integer>emptyList();
 	
 	}
 }
