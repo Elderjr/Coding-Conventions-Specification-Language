@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module typeDeclarationConditionsBuilder('http://www.example.org/ccsl/elements/namedElements')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment Modisco map:
+	*AbstractTypeDeclaration 
+/]
+
+[comment TypeDeclaration properties: 
+	
+/]
+[template public writeTypeDeclarationTypecheckCondition(type: TypeDeclaration, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AbstractTypeDeclaration)
+[/template]
+
+

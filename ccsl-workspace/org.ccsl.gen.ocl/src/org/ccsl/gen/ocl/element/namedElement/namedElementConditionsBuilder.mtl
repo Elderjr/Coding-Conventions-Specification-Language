@@ -33,6 +33,11 @@
 TODO
 [/template]
 
+[comment write Annotations condition when namedElement = Package /]
+[template public writeAnnotationsCondition(namedElement: Package, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
+false
+[/template]
+
 [comment write Annotations condition when namedElement = Variable /]
 [template public writeAnnotationsCondition(namedElement: Variable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
 let annotations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
@@ -94,3 +99,4 @@ endif in annotations <> null and
 annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
+

@@ -14,14 +14,26 @@ e
 var
 [/template]
 
+[template public getBaseName(e: Package)]
+package
+[/template]
+
+[template public getBaseName(e: TypeDeclaration)]
+customType
+[/template]
+
+
 [template public getBaseName(e: DataType)]
 type
+[/template]
+
+
+[template public getBaseName(e: Expression)]
+expression
 [/template]
 
 [template public getBaseName(e: Annotation)]
 annotation
 [/template]
 
-[template public getBaseName(e: Expression)]
-expression
-[/template]
+

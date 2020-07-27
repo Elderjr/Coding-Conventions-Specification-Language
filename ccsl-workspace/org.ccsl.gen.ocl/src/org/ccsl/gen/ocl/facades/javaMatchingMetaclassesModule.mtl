@@ -15,6 +15,10 @@ ASTNode
 NamedElement
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: Package)]
+Package
+[/template]
+
 [comment Variable package /]
 [template private writeElementMatchingJavaMetaclasses(e: Variable)]
 SingleVariableDeclaration,VariableDeclarationFragment
@@ -34,6 +38,11 @@ VariableDeclarationFragment
 
 [template private writeElementMatchingJavaMetaclasses(e: LocalVariable)]
 VariableDeclarationFragment
+[/template]
+
+[comment ComplexType package /]
+[template private writeElementMatchingJavaMetaclasses(e: TypeDeclaration)]
+AbstractTypeDeclaration
 [/template]
 
 [comment DataType package /]

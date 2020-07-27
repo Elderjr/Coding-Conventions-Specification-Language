@@ -12,6 +12,7 @@
 
 [comment NamedElement package /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::packageConditionsBuilder /]
 
 [comment Variable package /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::variableConditionsBuilder /]
@@ -20,6 +21,8 @@
 [import org::ccsl::gen::ocl::element::namedElement::variable::fieldVariableConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::localVariableConditionsBuilder /]
 
+[comment ComplexType package /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
@@ -72,8 +75,6 @@ OrderedSet(String){
 [e.getDataTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-
-
 [comment NamedElement Package /]
 
 [comment Write @NamedElement conditions /]
@@ -88,6 +89,19 @@ OrderedSet(String){
 }->addAll(namedElement.getElementConditions(varname, false, concreteMetaclass))
 /]
 
+[comment Write @Package conditions /]
+[query private getPackageConditions(pack: Package, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = pack.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  pack.writePackageTypecheckCondition(varname, typecheck),
+  pack.writeDeclaredTypesCondition(completeVarname)
+}->addAll(pack.getNamedElementConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(pack: Package, varname: String, typecheck: Boolean, metaclass: String)]
+[pack.getPackageConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Variable Package /]
 
 [comment Write @Variable conditions /]
@@ -160,7 +174,19 @@ OrderedSet(String){
 [var.getLocalVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-
+[comment Write @TypeDeclaration conditions /]
+[query private getLocalVariableConditions(type: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeTypeDeclarationTypecheckCondition(varname, typecheck)
+}->addAll(type.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+->addAll(type.getDataTypeConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(var: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getLocalVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Expression Package /]
 
 [comment write @Expression conditions/]
