@@ -39,7 +39,7 @@ public class WalkHelper {
 		if (element.getUniqueName() != null) {
 			return element.getUniqueName();
 		} else {
-			String uniqueName = baseName + uniqueId;
+			String uniqueName = baseName + "_" + uniqueId;
 			uniqueId++;
 			return uniqueName;
 		}

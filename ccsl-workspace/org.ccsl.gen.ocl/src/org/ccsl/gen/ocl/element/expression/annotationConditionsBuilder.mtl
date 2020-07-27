@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module annotationConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*Annotation
+/]
+
+[template public writeAnnotationTypecheckCondition(annotation: Annotation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Annotation)
+[/template]

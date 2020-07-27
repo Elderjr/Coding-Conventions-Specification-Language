@@ -4,10 +4,13 @@ public class Sample {
 	
 	
 	public void foo(int x) {
-		final int a = 3;
+		@Deprecated
+		final int foo = 3;
 	}
 	
-	public static void qux() {/* code */}
+	public static void qux() {
+		int foo;
+	}
 }
 
 

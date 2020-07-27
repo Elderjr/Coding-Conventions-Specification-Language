@@ -3,7 +3,7 @@
 
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::element::namedElement::namedElementOperations /]
+[import org::ccsl::gen::ocl::element::namedElement::namedElementConditionsBuilder /]
 
 [template private writeGetNameExpression(target: Element) /]
 

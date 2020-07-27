@@ -2,9 +2,9 @@
 [module filterUtils('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
-[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
-[import org::ccsl::gen::ocl::dispatchers::filterConditionsGeneratorDispatcher  /]
-[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+[import org::ccsl::gen::ocl::facades::filterConditionsGeneratorDispatcher  /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
 [template public writeFiltersConditions(filters: OrderedSet(Filter))]

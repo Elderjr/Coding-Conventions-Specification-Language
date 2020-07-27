@@ -1,0 +1,53 @@
+[comment encoding = UTF-8 /]
+[module namedElementConditionsBuilder('http://www.example.org/ccsl/elements/namedElements')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+[template public writeNamedElementTypecheckCondition(namedElement: NamedElement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(NamedElement)
+[/template]
+
+[template public writeGetNameExpression(namedElement: NamedElement, varname: String, metaclass: String)]
+[varname /].oclAsType(NamedElement).name
+[/template]
+
+[template public writeGetNameExpression(declaredType: TypeDeclaration, varname: String, metaclass: String) ? ( (not declaredType.name.oclIsUndefined()) and (declaredType.name.contains('.')))]
+[varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+  fullName.concat(p.name).concat('.')
+).concat([varname /].name)
+[/template]
+
+[template public writeNameCondition(namedElement: NamedElement, varname: String, metaclass: String) ? (not namedElement.name.oclIsUndefined())]
+[namedElement.writeGetNameExpression(varname, metaclass) /] = '[namedElement.name /]'
+[/template]
+
+[template public writeAvaliableInSourceCode(namedElement: NamedElement, varname: String) ? (not namedElement.availableInSourceCode.oclIsUndefined())]
+[varname /].proxy = [namedElement.availableInSourceCode /]
+[/template]
+
+
+[comment write Annotations condition when namedElement.oclIsTypeOf(Variable) /]
+[template public writeAnnotationsCondition(namedElement: NamedElement, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
+TODO
+[/template]
+
+[template public writeAnnotationsCondition(namedElement: Variable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations') and namedElement.oclIsTypeOf(Variable))]
+let annotations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
+  [varname /].oclAsType(SingleVariableDeclaration).annotations
+elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
+  if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).annotations
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+  else
+    null
+  endif
+else
+  null
+endif in annotations <> null and
+[namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]

@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module dataTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*Type
+/]
+
+[template public writeDatatypeTypecheckCondition(type: DataType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Type)
+[/template]

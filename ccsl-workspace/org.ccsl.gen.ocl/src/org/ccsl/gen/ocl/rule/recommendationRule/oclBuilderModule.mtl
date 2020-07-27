@@ -7,8 +7,8 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::rule::context::contextModule /]
 [import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
-[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
-[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
 
 
 [template private operation(logicOperator: LogicOperator)]
@@ -58,20 +58,26 @@ else
 endif endif
 /]
 
-[template private writeOCLToSelectElements(rule: AtomicRule) post(trim())]
-[rule.clearAllContexts() /]
-[let subjectMetaclass: String = rule.subject.getSubjectMetaclass()]
-[let typecheck: Boolean = rule.subject.isSubjectNeedsTypecheckOnStart()]
-[let subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass)]
-[let remainingElementConditions: OrderedSet(String) = rule._context.contextElements
-  ->select(e: Element | not getElementsVisited()->includes(e)).writeElementConditionWithExists()->asOrderedSet()]
-[let filtersConditions: String = rule._context.filters->writeFiltersConditions()]
-[rule.subject.getMatchingJavaMetaclasses()->writeGetAllInstances() /]->select([rule.subject.getUniqueOclName() /]: [subjectMetaclass /] |
-[for (condition: String | OrderedSet(String){subjectConditions}->union(remainingElementConditions)->including(filtersConditions)) separator(' and\n')]
-  [condition.writeStr() /][/for]
-[rule._context.writeCloseParenthesis() /][/let][/let][/let][/let][/let]
-
-)
+[template private writeOCLToSelectElements(rule: AtomicRule) post(trim())
+  {
+    void: OclVoid = rule.clearAllContexts();
+    allInstances: String = rule.subject.getMatchingJavaMetaclasses()->writeGetAllInstances();
+    subjectMetaclass: String = rule.subject.getSubjectMetaclass();
+	subjectVarname: String = rule.subject.getUniqueOclName();
+    typecheck: Boolean = rule.subject.isElementNeedsTypecheckOnStart();
+    subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass);
+    filtersConditions: String = rule._context.filters->writeFiltersConditions();
+  }
+]
+[allInstances /]->select([subjectVarname /]: [subjectMetaclass /] |
+[for (condition: String | subjectConditions->asOrderedSet()->including(filtersConditions)->select(s: String | s.isNotEmpty())) separator(' and\n')]
+  [condition.writeStr() /]
+[/for]
+[if rule._context.getTotalElementsDeclaredInExists() > 0]
+--Close exists declarations
+[rule._context.writeCloseParenthesis() /]
+)[else]
+)[/if]
 [/template]
 
 [template private writeElementConditionWithExists(e: Element)]

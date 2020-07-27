@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:variable="http://www.example.org/ccsl/elements/namedElements/variable" subject="//@context/@contextElements.0">
   <context>
-    <contextElements xsi:type="variable:Variable" type="//@context/@contextElements.1" final="true"/>
-    <contextElements xsi:type="datatype:IntPrimitiveType"/>
+    <contextElements xsi:type="variable:Variable" name="foo" type="//@context/@contextElements.1" final="true">
+      <annotations/>
+    </contextElements>
+    <contextElements xsi:type="datatype:DataType"/>
   </context>
 </ccsl:AtomicRule>

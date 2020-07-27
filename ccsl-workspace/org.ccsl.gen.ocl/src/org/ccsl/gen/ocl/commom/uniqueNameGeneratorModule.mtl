@@ -6,70 +6,18 @@
 [element.getUniqueName(element.getBaseName()) /]
 [/template]
 
-[template public getBaseName(element: Element)]
+[template public getBaseName(e: Element)]
 e
 [/template]
 
-[template public getBaseName(element : ComplexType)]
-complexType
-[/template]
-
-[template public getBaseName(element : JClass)]
-clazz
-[/template]
-
-[template public getBaseName(element : JInterface)]
-interface
-[/template]
-
-[template public getBaseName(element : Variable)]
+[template public getBaseName(e: Variable)]
 var
 [/template]
 
-[template public getBaseName(element : Method)]
-method
+[template public getBaseName(e: DataType)]
+type
 [/template]
 
-[template public getBaseName(element : Statement)]
-stmt
-[/template]
-
-[template public getBaseName(element : MethodInvocation)]
-methodInv
-[/template]
-
-[template public getBaseName(element : PrimitiveType)]
-primitiveType
-[/template]
-
-[template public getBaseName(element : LiteralValue)]
-literal
-[/template]
-
-[template public getBaseName(element : VarDeclaration)]
-varDecl
-[/template]
-
-[template public getBaseName(element : StringConcatenation)]
-strConcat
-[/template]
-
-[template public getBaseName(element : Block)]
-block
-[/template]
-
-[template public getBaseName(element : SwitchCaseBlock)]
-caseBlock
-[/template]
-
-[template public getBaseName(element : IfStatement)]
-ifStmt
-[/template]
-
-[template public getBaseName(element : VariableAccess)]
-varAccess
-[/template]
-
-[template public getBaseName(element : Constructor)]
-constructor
+[template public getBaseName(e: Annotation)]
+annotation
 [/template]

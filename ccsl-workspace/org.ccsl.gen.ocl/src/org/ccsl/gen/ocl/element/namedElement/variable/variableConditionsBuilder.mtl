@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module variableModule('http://www.example.org/ccsl')]
+[module variableConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
@@ -44,13 +44,13 @@ let [var.type.getFieldName() /]: ASTNode = [varname /].variablesContainer.type.t
 
 [comment Write type condition when var.oclIsKindOf(ParameterVariable) /]
 [template public writeTypeCondition(var: ParameterVariable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('type'))]
-[varname /].type.type <> null and
+[varname /].type <> null and
 let [var.type.getFieldName() /]: ASTNode = [varname /].type.type in
 [var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
 [/template]
 
 [comment Write final condition when var.oclIsTypeOf(Variable) /]
-[template public writeFinalCondition(var: Variable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('final') and var.oclIsTypeOf(Variable))]
+[template public writeFinalCondition(var: Variable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()) and var.oclIsTypeOf(Variable))]
 let modifier: Modifier = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
   [varname /].oclAsType(SingleVariableDeclaration).modifier
 elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
@@ -65,5 +65,5 @@ elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
   endif
 else
   null
-endif in modifier <> null and modifier.static
+endif in modifier <> null and [if var.final = false](not[/if]modifier.inheritance = InheritanceKind::final[if var.final = false])[/if]
 [/template]

@@ -4,7 +4,7 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils  /]
-[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
 
 [comment conditions for the ancestor /]
 [query private isAncestorNotRegistered(element: Element): Boolean = 

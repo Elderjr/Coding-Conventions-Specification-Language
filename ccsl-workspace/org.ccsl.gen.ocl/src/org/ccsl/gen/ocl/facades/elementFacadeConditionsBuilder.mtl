@@ -1,0 +1,122 @@
+[comment encoding = UTF-8 /]
+[module elementFacadeConditionsBuilder('http://www.example.org/ccsl')]
+
+
+[comment Utils modules /]
+[import org::ccsl::gen::ocl::commom::stringUtils/]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+
+[comment Datatype package /]
+[import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
+
+[comment NamedElement package /]
+[import org::ccsl::gen::ocl::element::namedElement::namedElementConditionsBuilder /]
+
+[comment Variable package /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::variableConditionsBuilder /]
+
+[comment Expression package /]
+[import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
+
+[template private writeConditions(conditions: OrderedSet(String))]
+[let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
+[if conditionsNotBlank->size() > 0]
+[for (condition: String | conditionsNotBlank) separator(' and\n')]
+[condition.writeStr() /][/for][else]
+true[/if][/let]
+[/template]
+
+
+[comment This query mark the element as visited and returns a Tuple(String_1, String_2) where
+String_1 is the OCL expression that should be used to reference the element
+String_2 is the metaclass that represents the element.
+e.g.: element = IfStatement, varname = 'ifStmt' and metaclass = 'ASTNode'
+output: element is marked as visited, String_1 = ifStmt.oclAsType(IfStatement), String_2 = IfStatement
+e.g.: element = IfStatement, varname = 'ifStmt' and metaclass = 'IfStatement'
+output: element is marked as visited, String_1 = ifStmt, String_2 = IfStatement
+/]
+[query private visitElement(element: Element, varname: String, metaclass: String): OrderedSet(String) = 
+let void: OclVoid = element.addElementAsVisited(metaclass) in
+let completeVarname: String = element.getCompleteElementVarname(varname, metaclass) in
+let concreteMetaclass: String = element.getConcreteElementMetaclass(metaclass) in
+OrderedSet(String){completeVarname, concreteMetaclass}
+/]
+
+[comment write @Element conditions/]
+[query private getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+OrderedSet(String){}
+/]
+[template public writeElementConditions(e: Element, varname: String, typecheck: Boolean, metaclass: String)]
+
+[/template]
+
+
+[comment DataType Package /]
+
+[comment Write @DataType conditions /]
+[query private getDataTypeConditions(dataType: DataType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = dataType.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  dataType.writeDatatypeTypecheckCondition(varname, typecheck)
+ }->addAll(dataType.getElementConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: DataType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getDataTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+
+
+[comment NamedElement Package /]
+
+[comment Write @NamedElement conditions /]
+[query private getNamedElementConditions(namedElement: NamedElement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = namedElement.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  namedElement.writeNamedElementTypecheckCondition(varname, typecheck),
+  namedElement.writeNameCondition(completeVarname, concreteMetaclass),
+  namedElement.writeAnnotationsCondition(completeVarname, concreteMetaclass)
+}->addAll(namedElement.getElementConditions(varname, false, concreteMetaclass))
+/]
+
+[comment Variable Package /]
+
+[comment Write @Variable conditions /]
+[query private getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  var.writeVariableTypecheckCondition(varname, typecheck),
+  var.writeTypeCondition(completeVarname, concreteMetaclass),
+  var.writeFinalCondition(completeVarname, concreteMetaclass)
+}->addAll(var.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Expression Package /]
+
+[comment write @Expression conditions/]
+[query private getExpressionConditions(expression: Expression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+OrderedSet(String){
+}->addAll(expression.getElementConditions(varname, false, metaclass))
+/]
+
+[comment Write @Annotation conditions /]
+[query private getAnnotationConditions(annotation: Annotation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = annotation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  annotation.writeAnnotationTypecheckCondition(varname, typecheck)
+ }->addAll(annotation.getExpressionConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: Annotation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getAnnotationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]

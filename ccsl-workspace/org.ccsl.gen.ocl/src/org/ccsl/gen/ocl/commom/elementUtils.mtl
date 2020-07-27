@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module elementUtils('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then

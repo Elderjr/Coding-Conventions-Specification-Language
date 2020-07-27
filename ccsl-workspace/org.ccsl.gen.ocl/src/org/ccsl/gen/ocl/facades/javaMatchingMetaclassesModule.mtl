@@ -6,6 +6,18 @@
   element.writeElementMatchingJavaMetaclasses().tokenize(',').trim()->asOrderedSet()
 /]
 
-[template private writeElementMatchingJavaMetaclasses(element: Element)]
+[template private writeElementMatchingJavaMetaclasses(e: Element)]
 ASTNode
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: Variable)]
+SingleVariableDeclaration,VariableDeclarationFragment
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: DataType)]
+Type
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: Annotation)]
+Annotation
 [/template]

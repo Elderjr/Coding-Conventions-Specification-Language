@@ -6,7 +6,7 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
-[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
 
 
 

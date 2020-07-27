@@ -6,8 +6,8 @@
 [import org::ccsl::gen::ocl::commom::getOclElementReferenceModule /] 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::dispatchers::generalElementWritterConditionsModule /]
-[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 
 [template public getFieldName(field: Element)]
 [if field = null]
@@ -53,7 +53,7 @@ else
 [let isTypecheckNeeded: Boolean = not field.getMatchingJavaMetaclasses()->includes(mappedFieldMetaclass)]
 [let fieldCondition: String = field.writeElementConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
 [fieldOclVarname /] <> null[if not fieldCondition.isEmpty()] and
-  [fieldCondition.writeStr() /][/if][/let][/let]
+[fieldCondition.writeStr() /][/if][/let][/let]
 [/template]
 
 [template public generatesFieldCondition(element: Element, field: Element, fieldOclVarname: String, mappedFieldMetaclass: String) ? (not element.isClosureRelation(field))]
@@ -152,8 +152,8 @@ exists([fieldName /] | [field.addElementExistsDeclaration() /]
 [let fieldCondition: String = field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass)]
 [setOclName /]->exists([fieldName /]: [mappedFieldMetaclass /] | [field.addElementExistsDeclaration() /] 
 [if not fieldCondition.isEmpty()]
-  [fieldCondition.writeStr() /][else]
-  true[/if][/let][/let]
+[fieldCondition.writeStr() /][else]
+true[/if][/let][/let]
 [/template]
 
 
