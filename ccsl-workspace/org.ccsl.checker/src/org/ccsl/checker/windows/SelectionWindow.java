@@ -28,13 +28,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
-public class CcslCheckerTargetProjectWindow {
+public class SelectionWindow {
 
 	private JFrame frmCcslChecker;
 
@@ -43,19 +45,22 @@ public class CcslCheckerTargetProjectWindow {
 	 */
 	private JTextField tfOutputFolder;
 	private JFileChooser outputFolderFileChooser;
-	private JComboBox<IJavaProject> cbTargetProjects;
-	private DefaultComboBoxModel<IJavaProject> defaultComboBoxModelTargetProjets;
-	private JList<IJavaProject> jListJavaProjects;
-	private DefaultListModel<IJavaProject> defaultListModelJavaProjects;
+	private JComboBox<String> cbTargetProjects;
+	private DefaultComboBoxModel<String> defaultComboBoxModelTargetProjets;
+	private JList<String> jListJavaProjects;
+	private DefaultListModel<String> defaultListModelJavaProjects;
 	private JList<File> jListRules;
 	private DefaultListModel<File> defaultListModelRules;
 	private JFileChooser ruleFileChooser;
 
+	//Java Project map (Java Project Name) -> (IJavaProject)
+	private Map<String, IJavaProject> javaProjects;
+	
 	public void show() {
 		frmCcslChecker.setVisible(true);
 	}
 
-	public CcslCheckerTargetProjectWindow(Collection<IJavaProject> javaProjects) {
+	public SelectionWindow(Collection<IJavaProject> javaProjects) {
 		setLookAndFeel();
 		initialize();
 		initializeFileChoosers();
@@ -88,15 +93,17 @@ public class CcslCheckerTargetProjectWindow {
 	}
 
 	private final void fillTargetProjectComboBox(Collection<IJavaProject> javaProjects) {
+		this.javaProjects = new HashMap<>();
 		for (IJavaProject p : javaProjects) {
-			defaultComboBoxModelTargetProjets.addElement(p);
+			this.javaProjects.put(p.getElementName(), p);
+			defaultComboBoxModelTargetProjets.addElement(p.getElementName());
 		}
 	}
 
 	private final void addTargetProject() {
 		if (cbTargetProjects.getSelectedItem() != null) {
-			IJavaProject javaProject = (IJavaProject) cbTargetProjects.getSelectedItem();
-			defaultListModelJavaProjects.addElement(javaProject);
+			String javaProjectName = (String) cbTargetProjects.getSelectedItem();			
+			defaultListModelJavaProjects.addElement(javaProjectName);
 		}
 
 	}
@@ -127,8 +134,10 @@ public class CcslCheckerTargetProjectWindow {
 	private final void runChecker() {
 		File outputFolder = new File(tfOutputFolder.getText());
 		Set<IJavaProject> targetProjects = new HashSet<IJavaProject>();
+		String javaProjectName;
 		for (int i = 0; i < defaultListModelJavaProjects.getSize(); i++) {
-			targetProjects.add(defaultListModelJavaProjects.get(i));
+			javaProjectName = defaultListModelJavaProjects.get(i);
+			targetProjects.add(this.javaProjects.get(javaProjectName));
 		}
 		Set<File> specificationFiles = new HashSet<>();
 		for (int i = 0; i < defaultListModelRules.getSize(); i++) {
@@ -161,8 +170,8 @@ public class CcslCheckerTargetProjectWindow {
 		targetProjectsPanel.setBorder(
 				new TitledBorder(null, "Target Projects", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		cbTargetProjects = new JComboBox<IJavaProject>();
-		defaultComboBoxModelTargetProjets = new DefaultComboBoxModel<IJavaProject>();
+		cbTargetProjects = new JComboBox<>();
+		defaultComboBoxModelTargetProjets = new DefaultComboBoxModel<>();
 		cbTargetProjects.setModel(defaultComboBoxModelTargetProjets);
 		JScrollPane scrollPane = new JScrollPane();
 
@@ -201,8 +210,8 @@ public class CcslCheckerTargetProjectWindow {
 						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel)
 						.addContainerGap(20, Short.MAX_VALUE)));
 
-		jListJavaProjects = new JList<IJavaProject>();
-		defaultListModelJavaProjects = new DefaultListModel<IJavaProject>();
+		jListJavaProjects = new JList<>();
+		defaultListModelJavaProjects = new DefaultListModel<>();
 		jListJavaProjects.setModel(defaultListModelJavaProjects);
 		jListJavaProjects.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent evt) {

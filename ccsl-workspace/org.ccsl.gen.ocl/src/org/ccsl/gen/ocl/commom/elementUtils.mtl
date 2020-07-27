@@ -52,8 +52,8 @@ endif
 
 [query public isClosureRelation(element: Element, field: Element): Boolean = 
 ImplicityOperandFilter.allInstances()->exists(f: ImplicityOperandFilter | 
-  (f.operatorExpression = element and f.implicityOperand = field) or
-  (f.operatorExpression = field and f.implicityOperand = element)
+  (f.expression = element and f.implicityOperand = field) or
+  (f.expression = field and f.implicityOperand = element)
 ) or
 ImplicityContainerFilter.allInstances()->exists(f: ImplicityContainerFilter |
   (f.implicityField = element and f.implicityContainer = field) or

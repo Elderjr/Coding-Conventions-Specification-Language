@@ -3,8 +3,6 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
 [import org::ccsl::gen::ocl::filters::countFilterModule /]
-[import org::ccsl::gen::ocl::filters::implicityOperandFilterModule /]
-[import org::ccsl::gen::ocl::filters::implicityContainerFilterModule /]
 [import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
 [import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
 [import org::ccsl::gen::ocl::filters::isTypeOfFilterModule /]
@@ -12,7 +10,6 @@
 [import org::ccsl::gen::ocl::filters::superClassClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
-[import org::ccsl::gen::ocl::filters::fromClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::blockLastStatementFilterModule /]
 [import org::ccsl::gen::ocl::filters::hasSameReferenceFilterModule /]
 
@@ -93,14 +90,7 @@ not (
 [templFilter.writeTemplateFilterCondition(target) /]
 [/template]
 
-[template public generatesSpecificFilterConditions(f: ImplicityContainerFilter, target: Element)]
-[f.writeImplicityContainerFilter(target) /]
-[/template]
 
-[comment @ImplicityOperandFilter - Write conditions for the ImplicityOperandFilter instance /]
-[template public generatesSpecificFilterConditions(implicityOperandFilter: ImplicityOperandFilter, target: Element)]
-[implicityOperandFilter.writeImplicityOperandFilterCondition(target) /]
-[/template]
 
 [template public generatesSpecificFilterConditions(isKindOfFilter: IsKindOfFilter, target: Element)]
 [isKindOfFilter.writeIsKindOfFilterCondition(target) /]
@@ -120,10 +110,6 @@ not (
 
 [template public generatesSpecificFilterConditions(f: ChildClosureComplexTypeFilter, target: Element)]
 [f.writeChildComplexTypeFilter(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(f: FromClosureFilter, target: Element)]
-[f.writeFromClosureFilterCondition(target) /]
 [/template]
 
 [template public generatesSpecificFilterConditions(f: CountFilter, target: Element)]

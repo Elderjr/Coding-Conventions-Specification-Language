@@ -56,12 +56,12 @@ return false;
 [/template]
 
 [template private writeJavaArithmeticOperator(op: ArithmeticOperator)]
-[if op = ArithmeticOperator::ADDITION]
-+[elseif op = ArithmeticOperator::DIVISION]
-/[elseif op = ArithmeticOperator::MODULUS]
-%[elseif op = ArithmeticOperator::MULTIPLICATION]
-*[elseif op = ArithmeticOperator::SUBTRACTION]
--[/if]
+[comment if op = ArithmeticOperator::ADDITION /]
++[comment elseif op = ArithmeticOperator::DIVISION /]
+/[comment elseif op = ArithmeticOperator::MODULUS /]
+%[comment elseif op = ArithmeticOperator::MULTIPLICATION /]
+*[comment elseif op = ArithmeticOperator::SUBTRACTION /]
+-[comment /]
 [/template]
 
 [template private writeGetTargetBody(action: InjectionAction, root: Element) ? (root = action.target)]
@@ -100,22 +100,6 @@ return null;
 if (root instanceof IfStatement) {
   IfStatement ifStmt = (IfStatement) root;
   return ifStmt.getElseStatement();
-}
-return null;
-[/template]
-
-[template private writeGetTargetBody(action: InjectionAction, root: OperatorExpression) ? (root.getRelationName(action.target) = 'operands')]
-if (root instanceof PrefixExpression) {
-  PrefixExpression prefixExpression = (PrefixExpression) root;
-  return prefixExpression.getOperand();
-} else if (root instanceof InfixExpression) {
-  InfixExpression infixExpression = (InfixExpression) root;
-  int extendedOperandsSize = infixExpression.getExtendedOperands().size();
-  if(extendedOperandsSize > 0) {
-    return infixExpression.getExtendedOperands().get(extendedOperandsSize - 1);
-  } else {
-    return infixExpression.getRightOperand();
-  }
 }
 return null;
 [/template]

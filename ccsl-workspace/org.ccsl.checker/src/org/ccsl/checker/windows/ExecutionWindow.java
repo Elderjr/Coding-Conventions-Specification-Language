@@ -20,6 +20,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultCaret;
 
 import org.ccsl.checker.ccslChecker.CcslCheckerRunner;
 import org.ccsl.checker.ccslChecker.Violation;
@@ -77,14 +78,14 @@ public class ExecutionWindow {
 				for (IJavaProject javaProject : javaProjects) {
 					if (Thread.interrupted())
 						break;
-					updateProgress("Discovering Java Model of project " + javaProject.getElementName() + " ("
+					updateProgress("Discovering java model of project: " + javaProject.getElementName() + " ("
 							+ progressBarValue + " / " + javaProjects.size() +")", progressBarValue);
 					try {
 						ModiscoJavaModel javaModel = ModiscoJavaModelDiscover.getInstance()
 								.discoverProject(javaProject);
 						discoverProjects.add(javaModel);
-						addLog("Extraction of Java Model from project " + javaProject.getElementName()
-								+ "was successfully completed");
+						addLog("Extraction of java model from project " + javaProject.getElementName()
+								+ " was successfully completed");
 					} catch (DiscoveryException ex) {
 						addErrorLog("An error occurred while trying to extract Java Model from project "
 								+ javaProject.getElementName() + ": " + ex.getMessage());
@@ -254,6 +255,7 @@ public class ExecutionWindow {
 
 		taErrorLog = new JTextArea();
 		taErrorLog.setLineWrap(true);
+		((DefaultCaret) taErrorLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		scrollPane_1.setViewportView(taErrorLog);
 		panel_1.setLayout(gl_panel_1);
 
@@ -266,6 +268,7 @@ public class ExecutionWindow {
 
 		taLog = new JTextArea();
 		taLog.setLineWrap(true);
+		((DefaultCaret) taLog.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		scrollPane.setViewportView(taLog);
 		panel.setLayout(gl_panel);
 		frame.getContentPane().setLayout(groupLayout);

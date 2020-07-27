@@ -2,14 +2,14 @@
 [module faultTypeDescriptionToXMLModule('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
-[import org::ccsl::gen::ocl::rule::recommendationRule::recommendationRuleToText /]
+[import org::ccsl::gen::ocl::rule::recommendationRule::oclBuilderModule /]
 
 
 [template public writeXMLFile(faultType: FaultTypeDescription)]
 [file (faultType.name.concat('/').concat(faultType.name).concat('.xml'), false, 'UTF-8')]
 <faultTypeRule>
   [faultType.writeOclTag() /]
-  [faultType.writeStrategyTag(faultType.strategy) /]
+  [comment faultType.writeStrategyTag(faultType.strategy) /]
   [faultType.writeActionsTag() /]
 </faultTypeRule>
 [/file]

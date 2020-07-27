@@ -57,6 +57,7 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/NamedElement">
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/NamedElement/name"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/NamedElement/availableInSourceCode"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/NamedElement/annotations"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Package">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Package/declaredTypes"/>
@@ -86,13 +87,13 @@
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/JClass">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/JClass/superClass"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/JClass/inheritance"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/static"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/imports"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/nestedTypes"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/importsKind"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/visibility"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/inheritance"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/ComplexType">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ComplexType/fields"/>
@@ -102,7 +103,6 @@
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/AnnotationType">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/AnnotationType/fields"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/AnnotationType/fieldsKind"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/AnnotationField">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/AnnotationField/default"/>
@@ -111,16 +111,13 @@
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/JEnum">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/JEnum/enumConstants"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/JEnum/enumConstantsKind"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/ComplexTypeDeclaration">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ComplexTypeDeclaration/superInterfaces"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/ComplexTypeDeclaration/visibility"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/ConstructComplexTypeDeclaration">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/ConstructComplexTypeDeclaration/constructors"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/ConstructComplexTypeDeclaration/constructorsKind"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/EnumConstant">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/EnumConstant/arguments"/>
@@ -130,6 +127,7 @@
         <nestedGenPackages prefix="Method" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/method">
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Constructor">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/Constructor/avaliableInSourceCode"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/Constructor/annotations"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/SimpleMethod">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/params"/>

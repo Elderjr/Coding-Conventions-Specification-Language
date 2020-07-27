@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module javaMatchingMetaclassesModule('http://www.example.org/ccsl')]
+
+
+[query public getMatchingJavaMetaclasses(element: Element): OrderedSet(String) =
+  element.writeElementMatchingJavaMetaclasses().tokenize(',').trim()->asOrderedSet()
+/]
+
+[template private writeElementMatchingJavaMetaclasses(element: Element)]
+ASTNode
+[/template]

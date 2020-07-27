@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.ccsl.checker.modisco.ModiscoJavaModelDiscover;
 import org.ccsl.checker.ocl.OclFacade;
-import org.ccsl.checker.windows.CcslCheckerTargetProjectWindow;
+import org.ccsl.checker.windows.SelectionWindow;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -44,9 +44,7 @@ public class SampleHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		MessageDialog.openInformation(window.getShell(), "Checker", "Hello, Eclipse world");
 		Set<IJavaProject> javaProjects = new HashSet<>();
-
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 		IProject[] projects = workspaceRoot.getProjects();
 		for (int i = 0; i < projects.length; i++) {
@@ -56,7 +54,7 @@ public class SampleHandler extends AbstractHandler {
 				javaProjects.add(javaProject);
 			}
 		}
-		new CcslCheckerTargetProjectWindow(javaProjects).show();
+		new SelectionWindow(javaProjects).show();
 		return null;
 	}
 }

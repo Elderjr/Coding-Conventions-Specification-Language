@@ -1,0 +1,69 @@
+[comment encoding = UTF-8 /]
+[module variableModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /] 
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule/]
+
+[comment MoDisco map:
+	*VariableDeclarationFragment
+	*SingleVariableDeclaration
+ /]
+
+[comment Variable properties: 
+	*type
+	*final
+/]
+
+[template public writeVariableTypecheckCondition(var: Variable, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  [varname /].oclIsKindOf(VariableDeclarationFragment) or 
+  [varname /].oclIsKindOf(SingleVariableDeclaration)
+)
+[/template]
+
+[comment Write type condition when var.oclIsKindOf(Variable) /]
+[template public writeTypeCondition(var: Variable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('type'))]
+let [var.type.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(SingleVariableDeclaration) and [varname /].oclAsType(SingleVariableDeclaration).type <> null then
+  [varname /].oclAsType(SingleVariableDeclaration).type.type
+elseif [varname /].oclIsKindOf(VariableDeclarationFragment) and [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.type <> null then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+else
+  null
+endif in
+[var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[comment Write type condition when var.oclIsKindOf(InitializableVariable) /]
+[template public writeTypeCondition(var: InitializableVariable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('type'))]
+[varname /].variablesContainer.type <> null and
+let [var.type.getFieldName() /]: ASTNode = [varname /].variablesContainer.type.type in
+[var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[comment Write type condition when var.oclIsKindOf(ParameterVariable) /]
+[template public writeTypeCondition(var: ParameterVariable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('type'))]
+[varname /].type.type <> null and
+let [var.type.getFieldName() /]: ASTNode = [varname /].type.type in
+[var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[comment Write final condition when var.oclIsTypeOf(Variable) /]
+[template public writeFinalCondition(var: Variable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('final') and var.oclIsTypeOf(Variable))]
+let modifier: Modifier = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
+  [varname /].oclAsType(SingleVariableDeclaration).modifier
+elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
+  if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).modifier
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
+  else
+    null
+  endif
+else
+  null
+endif in modifier <> null and modifier.static
+[/template]

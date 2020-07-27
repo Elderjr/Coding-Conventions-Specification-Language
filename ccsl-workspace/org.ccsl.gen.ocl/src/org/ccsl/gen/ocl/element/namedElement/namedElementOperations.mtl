@@ -7,7 +7,7 @@
 [varname /].oclAsType(NamedElement).name
 [/template]
 
-[template public writeGetNameExpression(declaredType: DeclaredType, varname: String, metaclass: String) ? ( (not declaredType.name.oclIsUndefined()) and (declaredType.name.contains('.')))]
+[template public writeGetNameExpression(declaredType: TypeDeclaration, varname: String, metaclass: String) ? ( (not declaredType.name.oclIsUndefined()) and (declaredType.name.contains('.')))]
 [varname /].package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
   fullName.concat(p.name).concat('.')
 ).concat([varname /].name)
@@ -17,6 +17,6 @@
 [namedElement.writeGetNameExpression(varname, metaclass) /] = '[namedElement.name /]'
 [/template]
 
-[template public writeAvaliableInSourceCode(namedElement: NamedElement, varname: String) ? (not namedElement.avaliableInSourceCode.oclIsUndefined())]
-[varname /].proxy = [namedElement.avaliableInSourceCode /]
+[template public writeAvaliableInSourceCode(namedElement: NamedElement, varname: String) ? (not namedElement.availableInSourceCode.oclIsUndefined())]
+[varname /].proxy = [namedElement.availableInSourceCode /]
 [/template]

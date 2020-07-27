@@ -3,7 +3,7 @@
 
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::faultTypeDescriptionToXMLModule /]
 [import org::ccsl::gen::ocl::rule::faultTypeDescription::injectionActionToJavaClassModule /]
-[import org::ccsl::gen::ocl::rule::recommendationRule::recommendationRuleToText /]
+[import org::ccsl::gen::ocl::rule::recommendationRule::oclBuilderModule /]
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [template public main(root: Root) ? (root.eContainer().oclIsUndefined())]
 [comment @main/]
