@@ -4,10 +4,10 @@
 /ccsl-workspace/org.ccsl.metamodel/src-gen/
 /ccsl-workspace/org.ccsl.metamodel/bin/
 /runtime-EclipseApplication/
-/ccsl-workspace/org.ccsl.gen.ocl/ocls-gen/
+/ccsl-workspace/org.ccsl.gen.ocl/gen-code/
 /ccsl-workspace/org.ccsl.gen.ocl/bin/
 /ccsl-workspace/org.ccsl.gen.ocl/.classpath
 /ccsl-workspace/.metadata/
-/ccsl-workspace/sampleProject/
+/ccsl-workspace/Sample/
 /faultTypeRuleExecutor-workspace/.metadata/
 /faultTypeRuleExecutor-workspace/org.eclipse.*/

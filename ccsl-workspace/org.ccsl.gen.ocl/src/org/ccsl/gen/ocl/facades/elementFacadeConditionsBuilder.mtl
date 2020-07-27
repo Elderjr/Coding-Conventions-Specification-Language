@@ -15,6 +15,7 @@
 
 [comment Variable package /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::variableConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::parameterVariableConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
@@ -100,6 +101,18 @@ OrderedSet(String){
 [var.getVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @Variable conditions /]
+[query private getParameterVariableConditions(var: ParameterVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  var.writeParameterVariableTypecheckCondition(varname, typecheck)
+}->addAll(var.getVariableConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(var: ParameterVariable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getParameterVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Expression Package /]
 
 [comment write @Expression conditions/]

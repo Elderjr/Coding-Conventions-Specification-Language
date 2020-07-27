@@ -8,40 +8,36 @@
         <body originalCompilationUnit="//@compilationUnits.0">
           <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
             <type type="//@orphanTypes.0"/>
-            <fragments originalCompilationUnit="//@compilationUnits.0" name="foo">
-              <initializer xsi:type="java:NumberLiteral" originalCompilationUnit="//@compilationUnits.0" tokenValue="3"/>
-            </fragments>
-            <modifier inheritance="final"/>
-            <annotations originalCompilationUnit="//@compilationUnits.0">
-              <type type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
-            </annotations>
+            <fragments originalCompilationUnit="//@compilationUnits.0" name="foo"/>
+            <modifier/>
           </statements>
         </body>
         <parameters originalCompilationUnit="//@compilationUnits.0" name="x">
-          <modifier/>
+          <modifier inheritance="final"/>
           <type type="//@orphanTypes.0"/>
         </parameters>
         <returnType type="//@orphanTypes.5"/>
       </bodyDeclarations>
       <bodyDeclarations xsi:type="java:MethodDeclaration" originalCompilationUnit="//@compilationUnits.0" name="qux">
         <modifier visibility="public" static="true"/>
-        <body originalCompilationUnit="//@compilationUnits.0">
-          <statements xsi:type="java:VariableDeclarationStatement" originalCompilationUnit="//@compilationUnits.0">
-            <type type="//@orphanTypes.0"/>
-            <fragments originalCompilationUnit="//@compilationUnits.0" name="foo"/>
-            <modifier/>
-          </statements>
-        </body>
+        <body originalCompilationUnit="//@compilationUnits.0"/>
+        <parameters originalCompilationUnit="//@compilationUnits.0" name="foo">
+          <modifier inheritance="final"/>
+          <type type="//@orphanTypes.0"/>
+          <annotations originalCompilationUnit="//@compilationUnits.0">
+            <type type="//@ownedElements.1/@ownedPackages.0/@ownedElements.0"/>
+          </annotations>
+        </parameters>
         <returnType type="//@orphanTypes.5"/>
       </bodyDeclarations>
     </ownedElements>
   </ownedElements>
   <ownedElements name="java" proxy="true">
     <ownedPackages name="lang" proxy="true">
-      <ownedElements xsi:type="java:AnnotationTypeDeclaration" name="Deprecated" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@annotations.0/@type"/>
+      <ownedElements xsi:type="java:AnnotationTypeDeclaration" name="Deprecated" proxy="true" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@parameters.0/@annotations.0/@type"/>
     </ownedPackages>
   </ownedElements>
-  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@parameters.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@body/@statements.0/@type"/>
+  <orphanTypes xsi:type="java:PrimitiveTypeInt" name="int" usagesInTypeAccess="//@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@parameters.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.0/@body/@statements.0/@type //@ownedElements.0/@ownedElements.0/@bodyDeclarations.1/@parameters.0/@type"/>
   <orphanTypes xsi:type="java:PrimitiveTypeLong" name="long"/>
   <orphanTypes xsi:type="java:PrimitiveTypeFloat" name="float"/>
   <orphanTypes xsi:type="java:PrimitiveTypeDouble" name="double"/>

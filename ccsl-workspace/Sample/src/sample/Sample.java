@@ -3,13 +3,12 @@ package sample;
 public class Sample {
 	
 	
-	public void foo(int x) {
-		@Deprecated
-		final int foo = 3;
+	public void foo(final int x) {
+		int foo;
 	}
 	
-	public static void qux() {
-		int foo;
+	public static void qux(@Deprecated final int foo) {
+		
 	}
 }
 
