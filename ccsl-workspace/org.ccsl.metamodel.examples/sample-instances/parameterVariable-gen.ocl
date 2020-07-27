@@ -3,8 +3,11 @@ let violations: Set(ASTNode) = SingleVariableDeclaration.allInstances()->select(
   let type_2: ASTNode = var_1.type.type in
   type_2 <> null and
   type_2.oclIsKindOf(Type) and
+  let modifier: Modifier = var_1.modifier in
+  modifier <> null and 
+  (modifier.inheritance = InheritanceKind::final) and
   var_1.oclAsType(NamedElement).name = 'foo' and
-  let annotations: OrderedSet(ASTNode) = var_1.oclAsType(SingleVariableDeclaration).annotations in 
+  let annotations: OrderedSet(ASTNode) = var_1.annotations in 
   annotations <> null and
   annotations->exists(annotation_3: ASTNode |  
   annotation_3 <> null and

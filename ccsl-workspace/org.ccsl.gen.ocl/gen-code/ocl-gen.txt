@@ -1,50 +1,17 @@
-let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(var_1: VariableDeclarationFragment |
-  let initializerTmp: ASTNode = if not var_1.oclAsType(VariableDeclarationFragment).variablesContainer.fragments->oclIsUndefined() then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.fragments->asOrderedSet()->last().initializer
-  else
-    null
-  endif in
-  let expression_2: ASTNode = if initializerTmp <> null then
-    initializerTmp->asOrderedSet()->closure(v: ASTNode | 
-      if v.oclIsKindOf(ParenthesizedExpression) then 
-        v.oclAsType(ParenthesizedExpression).expression 
-      else 
-        v 
-      endif
-    )->last()
-  else
-    null
-  endif in
-  expression_2 <> null and
-  expression_2.oclIsKindOf(Expression) and
-  var_1.variablesContainer.type <> null and
-  let type_3: ASTNode = var_1.variablesContainer.type.type in
-  type_3 <> null and
-  type_3.oclIsKindOf(Type) and
-  let modifier: Modifier = if var_1.variablesContainer.oclIsKindOf(FieldDeclaration) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
-  elseif var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).modifier
-  elseif var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
-  else
-    null
-  endif in modifier <> null and 
-  (modifier.inheritance <> InheritanceKind::final) and
+let violations: Set(ASTNode) = SingleVariableDeclaration.allInstances()->select(var_1: SingleVariableDeclaration |
+  var_1.type <> null and
+  let type_2: ASTNode = var_1.type.type in
+  type_2 <> null and
+  type_2.oclIsKindOf(Type) and
+  let modifier: Modifier = var_1.modifier in
+  modifier <> null and 
+  (modifier.inheritance = InheritanceKind::final) and
   var_1.oclAsType(NamedElement).name = 'foo' and
-  let annotations: OrderedSet(ASTNode) = if var_1.variablesContainer.oclIsKindOf(FieldDeclaration) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).annotations
-  elseif var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).annotations
-  elseif var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
-    var_1.oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).annotations
-  else
-    null
-  endif in annotations <> null and 
+  let annotations: OrderedSet(ASTNode) = var_1.annotations in 
   annotations <> null and
-  annotations->exists(annotation_4: ASTNode |  
-  annotation_4 <> null and
-  annotation_4.oclIsKindOf(Annotation)
+  annotations->exists(annotation_3: ASTNode |  
+  annotation_3 <> null and
+  annotation_3.oclIsKindOf(Annotation)
 --Close exists declarations
 )
 ) 

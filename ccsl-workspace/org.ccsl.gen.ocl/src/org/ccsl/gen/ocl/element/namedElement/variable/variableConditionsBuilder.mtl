@@ -69,6 +69,13 @@ else
 (modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final)
 [/template]
 
+[comment Write final condition when var = ParameterVariable /]
+[template public writeFinalCondition(var: ParameterVariable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()))]
+let modifier: Modifier = [varname /].modifier in
+modifier <> null and 
+(modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final)
+[/template]
+
 [comment Write final condition when var = InitializableVariable /]
 [template public writeFinalCondition(var: InitializableVariable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()))]
 let modifier: Modifier = if [varname /].variablesContainer.oclIsKindOf(FieldDeclaration) then

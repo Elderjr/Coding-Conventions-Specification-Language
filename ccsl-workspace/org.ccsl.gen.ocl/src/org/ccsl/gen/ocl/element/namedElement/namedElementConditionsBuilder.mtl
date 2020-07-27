@@ -55,7 +55,7 @@ endif in annotations <> null and
 
 [comment write Annotations condition when namedElement = ParameterVariable /]
 [template public writeAnnotationsCondition(namedElement: ParameterVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
-let annotations: OrderedSet(ASTNode) = [varname /].oclAsType(SingleVariableDeclaration).annotations in 
+let annotations: OrderedSet(ASTNode) = [varname /].annotations in 
 annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
