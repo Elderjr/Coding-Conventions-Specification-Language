@@ -16,8 +16,10 @@
 [comment Variable package /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::variableConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::parameterVariableConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::initializableVariableConditionsBuilder /]
 
 [comment Expression package /]
+[import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
 
 [template private writeConditions(conditions: OrderedSet(String))]
@@ -101,7 +103,7 @@ OrderedSet(String){
 [var.getVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-[comment Write @Variable conditions /]
+[comment Write @ParameterVariable conditions /]
 [query private getParameterVariableConditions(var: ParameterVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
@@ -113,13 +115,33 @@ OrderedSet(String){
 [template public writeElementConditions(var: ParameterVariable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.getParameterVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @InitializableVariable conditions /]
+[query private getInitializableVariableConditions(var: InitializableVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  var.writeInitializableVariableTypecheckCondition(varname, typecheck),
+  var.writeInitialValueCondition(completeVarname, concreteMetaclass)
+}->addAll(var.getVariableConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(var: InitializableVariable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getInitializableVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+
 [comment Expression Package /]
 
 [comment write @Expression conditions/]
-[query private getExpressionConditions(expression: Expression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+[query private getExpressionConditions(exp: Expression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 OrderedSet(String){
-}->addAll(expression.getElementConditions(varname, false, metaclass))
+  exp.writeExpressionTypecheckCondition(varname, typecheck)
+}->addAll(exp.getElementConditions(varname, false, metaclass))
 /]
+[template public writeElementConditions(e: Expression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 
 [comment Write @Annotation conditions /]
 [query private getAnnotationConditions(annotation: Annotation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =

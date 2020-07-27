@@ -21,3 +21,7 @@ type
 [template public getBaseName(e: Annotation)]
 annotation
 [/template]
+
+[template public getBaseName(e: Expression)]
+expression
+[/template]

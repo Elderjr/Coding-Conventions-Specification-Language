@@ -49,8 +49,9 @@ let [var.type.getFieldName() /]: ASTNode = [varname /].type.type in
 [var.generatesFieldCondition(var.type, var.type.getFieldName(), 'ASTNode') /]
 [/template]
 
-[comment Write final condition when var.oclIsTypeOf(Variable) /]
-[template public writeFinalCondition(var: Variable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()) and var.oclIsTypeOf(Variable))]
+
+[comment Write final condition when var = Variable /]
+[template public writeFinalCondition(var: Variable, varname: String, metaclass: String) ? (not var.final.oclIsUndefined())]
 let modifier: Modifier = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
   [varname /].oclAsType(SingleVariableDeclaration).modifier
 elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
@@ -65,5 +66,19 @@ elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
   endif
 else
   null
-endif in modifier <> null and [if var.final = false](not[/if]modifier.inheritance = InheritanceKind::final[if var.final = false])[/if]
+(modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final)
+[/template]
+
+[comment Write final condition when var = InitializableVariable /]
+[template public writeFinalCondition(var: InitializableVariable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()))]
+let modifier: Modifier = if [varname /].variablesContainer.oclIsKindOf(FieldDeclaration) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).modifier
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).modifier
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
+else
+  null
+endif in modifier <> null and 
+(modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final)
 [/template]

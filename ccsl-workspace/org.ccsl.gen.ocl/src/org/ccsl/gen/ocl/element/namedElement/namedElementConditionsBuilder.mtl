@@ -33,7 +33,8 @@
 TODO
 [/template]
 
-[template public writeAnnotationsCondition(namedElement: Variable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations') and namedElement.oclIsTypeOf(Variable))]
+[comment write Annotations condition when namedElement = Variable /]
+[template public writeAnnotationsCondition(namedElement: Variable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
 let annotations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
   [varname /].oclAsType(SingleVariableDeclaration).annotations
 elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
@@ -52,8 +53,24 @@ endif in annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
 
+[comment write Annotations condition when namedElement = ParameterVariable /]
 [template public writeAnnotationsCondition(namedElement: ParameterVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
 let annotations: OrderedSet(ASTNode) = [varname /].oclAsType(SingleVariableDeclaration).annotations in 
+annotations <> null and
+[namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when namedElement = InitializableVariable /]
+[template public writeAnnotationsCondition(namedElement: InitializableVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = if [varname /].variablesContainer.oclIsKindOf(FieldDeclaration) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+else
+  null
+endif in annotations <> null and 
 annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]

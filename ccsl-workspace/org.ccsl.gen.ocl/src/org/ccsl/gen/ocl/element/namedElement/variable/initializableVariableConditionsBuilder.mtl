@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module initializableVariableModule('http://www.example.org/ccsl')]
+[module initializableVariableConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
@@ -7,17 +7,30 @@
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule/]
 
 
-[comment Type Check Conditions /]
+[comment MoDisco map:
+	*VariableDeclarationFragment
+ /]
+
 [template public writeInitializableVariableTypecheckCondition(var: InitializableVariable, varname: String, typecheck: Boolean) ? (typecheck)]
-[varname /].oclIsKindOf(VariableDeclarationFragment) and (not [varname /].oclIsKindOf(UnresolvedItem)) 
+[varname /].oclIsKindOf(VariableDeclarationFragment) 
 [/template]
 
 [template public writeInitialValueCondition(var: InitializableVariable, varname: String, metaclass: String) ? (var.mustWriteConditionFor('initialValue'))]
-let [var.initialValue.getFieldName() /]: ASTNode = if not [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.fragments->oclIsUndefined() then
+let initializerTmp: ASTNode = if not [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.fragments->oclIsUndefined() then
   [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.fragments->asOrderedSet()->last().initializer
 else
   null
 endif in
-[var.initialValue.writeClosureToSkipParenthesis(var.initialValue.getFieldName(), 'ASTNode') /]
+let [var.initialValue.getFieldName() /]: ASTNode = if initializerTmp <> null then
+  initializerTmp->asOrderedSet()->closure(v: ASTNode | 
+    if v.oclIsKindOf(ParenthesizedExpression) then 
+      v.oclAsType(ParenthesizedExpression).expression 
+    else 
+      v 
+    endif
+  )->last()
+else
+  null
+endif in
 [var.generatesFieldCondition(var.initialValue, var.initialValue.getFieldName(), 'ASTNode') /]
 [/template]
