@@ -11,6 +11,10 @@
 	*VariableDeclarationFragment
  /]
 
+[comment InitializableVariable properties: 
+	*initialValue
+/]
+
 [template public writeInitializableVariableTypecheckCondition(var: InitializableVariable, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(VariableDeclarationFragment) 
 [/template]

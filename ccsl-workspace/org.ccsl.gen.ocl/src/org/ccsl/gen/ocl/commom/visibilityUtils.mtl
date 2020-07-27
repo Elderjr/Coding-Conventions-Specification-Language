@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module visibilityUtils('http://www.example.org/ccsl')]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PUBLIC)]
+VisibilityKind::public
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PROTECTED)]
+VisibilityKind::protected
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PRIVATE)]
+VisibilityKind::private
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PACKAGE)]
+VisibilityKind::none
+[/template]

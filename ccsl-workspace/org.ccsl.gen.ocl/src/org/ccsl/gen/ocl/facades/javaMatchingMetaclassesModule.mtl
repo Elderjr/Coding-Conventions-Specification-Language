@@ -28,6 +28,10 @@ SingleVariableDeclaration
 VariableDeclarationFragment
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: FieldVariable)]
+VariableDeclarationFragment
+[/template]
+
 [comment DataType package /]
 [template private writeElementMatchingJavaMetaclasses(e: DataType)]
 Type

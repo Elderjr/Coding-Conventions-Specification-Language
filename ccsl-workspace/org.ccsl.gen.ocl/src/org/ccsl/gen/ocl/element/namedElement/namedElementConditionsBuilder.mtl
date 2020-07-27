@@ -63,14 +63,21 @@ annotations <> null and
 [comment write Annotations condition when namedElement = InitializableVariable /]
 [template public writeAnnotationsCondition(namedElement: InitializableVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
 let annotations: OrderedSet(ASTNode) = if [varname /].variablesContainer.oclIsKindOf(FieldDeclaration) then
-  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).annotations
+  [varname /].variablesContainer.oclAsType(FieldDeclaration).annotations
 elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
-  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+  [varname /].variablesContainer.oclAsType(VariableDeclarationExpression).annotations
 elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
-  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+  [varname /].variablesContainer.oclAsType(VariableDeclarationStatement).annotations
 else
   null
 endif in annotations <> null and 
+annotations <> null and
+[namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when namedElement = FieldVariable /]
+[template public writeAnnotationsCondition(namedElement: FieldVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = [varname /].variablesContainer.oclAsType(FieldDeclaration).annotations in 
 annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]

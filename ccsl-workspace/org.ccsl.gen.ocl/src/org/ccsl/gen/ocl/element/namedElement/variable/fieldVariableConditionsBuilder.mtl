@@ -1,0 +1,32 @@
+[comment encoding = UTF-8 /]
+[module fieldVariableConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::visibilityUtils /]
+
+
+[comment MoDisco map:
+	*VariableDeclarationFragment
+ /]
+
+[comment FieldVariable properties: 
+	*visibility
+	*static
+/]
+
+[comment Type Check Conditions /]
+[template public writeFieldVariableTypecheckCondition(var: InitializableVariable, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(VariableDeclarationFragment) and [varname /].oclContainer().oclIsKindOf(FieldDeclaration)
+[/template]
+
+[template public writeStaticCondition(var: FieldVariable, varname: String)? (not var._static.oclIsUndefined())]
+let modifier: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
+modifier <> null and
+[if (var._static = false)](not [/if]modifier.static[if (var._static = false)])[/if]
+[/template]
+
+[template public writeVisibilityCondition(var: FieldVariable, varname: String)? (var.visibility <> Visibility::ANY)]
+let modifier: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
+modifier <> null and
+modifier.visibility = [var.visibility.writeVisibility() /]
+[/template]
