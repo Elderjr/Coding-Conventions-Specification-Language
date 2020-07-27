@@ -31,7 +31,8 @@ violations
   e.oclIsKindOf(ArithmeticExpression) or
   e.oclIsKindOf(BooleanExpression) or 
   e.oclIsKindOf(StringConcatenation) or
-  e.oclIsKindOf(FieldVariable)
+  e.oclIsKindOf(FieldVariable) or
+  e.oclIsKindOf(LocalVariable)
 /]
 
 [template private writeGetAllInstances(metaclasses: OrderedSet(String))]

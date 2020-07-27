@@ -18,6 +18,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::variable::parameterVariableConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::initializableVariableConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::fieldVariableConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::variable::localVariableConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
@@ -144,6 +145,19 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(var: FieldVariable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.getFieldVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @LocalVariable conditions /]
+[query private getLocalVariableConditions(var: LocalVariable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  var.writeLocalVariableTypecheckCondition(varname, typecheck)
+}->addAll(var.getInitializableVariableConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(var: LocalVariable, varname: String, typecheck: Boolean, metaclass: String)]
+[var.getLocalVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 

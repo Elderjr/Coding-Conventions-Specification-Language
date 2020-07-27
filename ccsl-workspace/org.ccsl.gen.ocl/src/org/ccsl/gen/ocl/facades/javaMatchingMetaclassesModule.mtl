@@ -32,6 +32,10 @@ VariableDeclarationFragment
 VariableDeclarationFragment
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: LocalVariable)]
+VariableDeclarationFragment
+[/template]
+
 [comment DataType package /]
 [template private writeElementMatchingJavaMetaclasses(e: DataType)]
 Type

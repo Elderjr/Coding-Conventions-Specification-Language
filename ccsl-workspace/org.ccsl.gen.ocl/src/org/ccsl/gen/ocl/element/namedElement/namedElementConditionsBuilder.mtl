@@ -81,3 +81,16 @@ let annotations: OrderedSet(ASTNode) = [varname /].variablesContainer.oclAsType(
 annotations <> null and
 [namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
+
+[comment write Annotations condition when namedElement = LocalVariable /]
+[template public writeAnnotationsCondition(namedElement: LocalVariable, varname: String, metaclass: String) ? (namedElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+else
+  null
+endif in annotations <> null and 
+annotations <> null and
+[namedElement.writeSetConditions('annotations', namedElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]

@@ -96,3 +96,15 @@ let modifier: Modifier = [varname /].variablesContainer.oclAsType(FieldDeclarati
 modifier <> null and 
 modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final
 [/template]
+
+[comment Write final condition when var = LocalVariable /]
+[template public writeFinalCondition(var: LocalVariable, varname: String, metaclass: String) ? ((not var.final.oclIsUndefined()))]
+let modifier: Modifier = if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).modifier
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).modifier
+else
+  null
+endif in modifier <> null and 
+modifier.inheritance [if var.final = true]=[else]<>[/if] InheritanceKind::final
+[/template]
