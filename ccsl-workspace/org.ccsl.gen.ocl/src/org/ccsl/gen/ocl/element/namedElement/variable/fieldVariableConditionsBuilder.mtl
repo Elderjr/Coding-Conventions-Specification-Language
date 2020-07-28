@@ -2,7 +2,7 @@
 [module fieldVariableConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::visibilityUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 
 
 [comment MoDisco map:
@@ -19,14 +19,11 @@
 [varname /].oclIsKindOf(VariableDeclarationFragment) and [varname /].oclContainer().oclIsKindOf(FieldDeclaration)
 [/template]
 
-[template public writeStaticCondition(var: FieldVariable, varname: String)? (not var._static.oclIsUndefined())]
-let modifier: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
-modifier <> null and
-[if (var._static = false)](not [/if]modifier.static[if (var._static = false)])[/if]
+[template public writeStaticCondition(var: FieldVariable, varname: String)? (not var._static.oclIsUndefined()){
+  modifier: String = var.getUniqueOclName().concat('_modifier');
+}]
+let [modifier /]: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
+[modifier /] <> null and
+[if (var._static = false)](not [/if][modifier /].static[if (var._static = false)])[/if]
 [/template]
 
-[template public writeVisibilityCondition(var: FieldVariable, varname: String)? (var.visibility <> Visibility::ANY)]
-let modifier: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
-modifier <> null and
-modifier.visibility = [var.visibility.writeVisibility() /]
-[/template]

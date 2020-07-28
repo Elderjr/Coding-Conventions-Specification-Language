@@ -4,22 +4,19 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
-[import org::ccsl::gen::ocl::commom::visibilityUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 
 
 [template public writeSimpleMethodTypecheckCondition(simpleMethod: SimpleMethod, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname/].oclIsKindOf(AbstractMethodDeclaration) 
 [/template]
 
-[template public writeParamsCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.mustWriteConditionFor('params'))]
-let parameters: OrderedSet(SingleVariableDeclaration) = [varname /].parameters in 
-parameters <> null and
-[simpleMethod.writeSetConditions('parameters', simpleMethod.params, 'SingleVariableDeclaration', simpleMethod.paramsKind) /]
+[template public writeParamsCondition(m: SimpleMethod, varname: String) ? (m.mustWriteConditionFor('params')){
+  parameters: String = m.getUniqueOclName().concat('_parameters');
+}]
+let [parameters /]: OrderedSet(SingleVariableDeclaration) = [varname /].parameters in 
+[parameters /] <> null and
+[m.writeSetConditions(parameters, m.params, 'SingleVariableDeclaration', m.paramsKind) /]
 [/template]
 
-[template public writeVisibilityCondition(simpleMethod: SimpleMethod, varname: String) ? (simpleMethod.visibility <> Visibility::ANY)]
-let modifier: Modifier = [varname /].modifier in
-modifier <> null and
-modifier.visibility = [simpleMethod.visibility.writeVisibility() /]
-[/template]
 

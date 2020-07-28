@@ -7,6 +7,10 @@
 [import org::ccsl::gen::ocl::commom::walkHelperModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
+[comment Element package /]
+[import org::ccsl::gen::ocl::element::annotableElementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::controlledAccessElementConditionsBuilder /]
+
 [comment Datatype package /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
 
@@ -62,6 +66,7 @@ OrderedSet(String){}
 [template public writeElementConditions(e: Element, varname: String, typecheck: Boolean, metaclass: String)]
 
 [/template]
+
 
 
 [comment DataType Package /]
@@ -187,7 +192,8 @@ let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   method.writeSimpleMethodTypecheckCondition(varname, typecheck),
   method.writeParamsCondition(completeVarname),
-  method.writeVisibilityCondition(completeVarname)
+  method.writeVisibilityCondition(completeVarname),
+  method.writeAnnotationsCondition(completeVarname, concreteMetaclass)
 }->addAll(method.getElementConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(method: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String)]

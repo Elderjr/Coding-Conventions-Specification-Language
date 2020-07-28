@@ -1,7 +1,7 @@
 [comment encoding = UTF-8 /]
 [module primitiveTypeOperations('http://www.example.org/ccsl')]
 
-[import org::ccsl::gen::ocl::dispatchers::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 
 [template public writePrimitiveTypecheckCondition(primitiveType: PrimitiveType, varname: String)]
 ([for (javaMetaclass: String | primitiveType.getMatchingJavaMetaclasses()) separator (' or ')]

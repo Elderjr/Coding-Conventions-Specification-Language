@@ -1,0 +1,47 @@
+let violations: Set(ASTNode) = AbstractMethodDeclaration.allInstances()->select(simpleMethod_1: AbstractMethodDeclaration |
+  let simpleMethod_1_parameters: OrderedSet(SingleVariableDeclaration) = simpleMethod_1.parameters in 
+  simpleMethod_1_parameters <> null and
+  simpleMethod_1_parameters->exists(var_2: SingleVariableDeclaration |  
+  var_2 <> null and
+  let var_2_modifier: Modifier = var_2.modifier in
+  var_2_modifier <> null and 
+  var_2_modifier.inheritance <> InheritanceKind::final and 
+  simpleMethod_1_parameters->exists(var_3: SingleVariableDeclaration |  
+  var_3 <> null and
+  let var_3_modifier: Modifier = var_3.modifier in
+  var_3_modifier <> null and 
+  var_3_modifier.inheritance = InheritanceKind::final and
+  let simpleMethod_1_modifier: Modifier = simpleMethod_1.modifier in
+  simpleMethod_1_modifier <> null and
+  simpleMethod_1_modifier.visibility = VisibilityKind::public and
+  let simpleMethod_1_annotations: OrderedSet(ASTNode) = simpleMethod_1.annotations in 
+  simpleMethod_1_annotations <> null and
+  simpleMethod_1_annotations->exists(annotation_4: ASTNode |  
+  annotation_4 <> null and
+  annotation_4.oclIsKindOf(Annotation)
+--Close exists declarations
+)))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

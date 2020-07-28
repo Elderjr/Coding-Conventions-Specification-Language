@@ -1,0 +1,41 @@
+[comment encoding = UTF-8 /]
+[module controlledAccessElementConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+[template public writeVisibilityCondition(var: ControlledAccessElement, varname: String)? (var.visibility <> Visibility::ANY)]
+TODO
+[/template]
+
+[template public writeVisibilityCondition(var: FieldVariable, varname: String)? (var.visibility <> Visibility::ANY){
+  modifier: String = var.getUniqueOclName().concat('_modifier');
+}]
+let [modifier /]: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
+[modifier /] <> null and
+[modifier /].visibility = [var.visibility.writeVisibility() /]
+[/template]
+
+[template public writeVisibilityCondition(m: SimpleMethod, varname: String)? (m.visibility <> Visibility::ANY){
+  modifier: String = m.getUniqueOclName().concat('_modifier');
+}]
+let [modifier /]: Modifier = [varname /].modifier in
+[modifier /] <> null and
+[modifier /].visibility = [m.visibility.writeVisibility() /]
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PUBLIC)]
+VisibilityKind::public
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PROTECTED)]
+VisibilityKind::protected
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PRIVATE)]
+VisibilityKind::private
+[/template]
+
+[template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PACKAGE)]
+VisibilityKind::none
+[/template]
