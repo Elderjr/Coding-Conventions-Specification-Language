@@ -1,0 +1,11 @@
+let violations: Set(ASTNode) = TypeParameter.allInstances()->select(typeParameter_1: TypeParameter |
+  typeParameter_1.oclIsKindOf(TypeParameter) and
+  let typeParameter_1_bounds: OrderedSet(ASTNode) = typeParameter_1.bounds->collect(type) in
+  typeParameter_1_bounds->exists(customType_2: ASTNode |  
+  customType_2 <> null and
+  customType_2.oclIsKindOf(AbstractTypeDeclaration) 
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

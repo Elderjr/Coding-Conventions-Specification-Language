@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module parameterizedTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+[template public writeParameterizedTypeTypecheckCondition(parameterizedType: ParameterizedType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ParameterizedType)
+[/template]
+
+[template public writeTypeParametersConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.mustWriteConditionFor('typeArguments')){
+  typeArguments: String = parameterizedType.getUniqueOclName().concat('_typeArguments');
+}]
+let [typeArguments /]: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in 
+[parameterizedType.writeSetConditions(typeArguments, parameterizedType.typeArguments, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[template public writeTypeConditions(parameterizedType: ParameterizedType, varname: String) ? (parameterizedType.mustWriteConditionFor('type'))]
+let [parameterizedType.type.getFieldName() /]: ASTNode = [varname /].type.type in
+[parameterizedType.generatesFieldCondition(parameterizedType.type, parameterizedType.type.getFieldName(), 'ASTNode') /]
+[/template]
+

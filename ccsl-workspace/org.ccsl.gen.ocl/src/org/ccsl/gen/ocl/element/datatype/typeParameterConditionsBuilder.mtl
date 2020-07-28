@@ -1,0 +1,19 @@
+[comment encoding = UTF-8 /]
+[module typeParameterConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+[template public writeTypeParameterTypecheckCondition(type: TypeParameter, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(TypeParameter)
+[/template]
+
+
+[template public writeBoundsCondition(type: TypeParameter, varname: String) ? (type.mustWriteConditionFor('bounds')){
+  bounds: String = type.getUniqueOclName().concat('_bounds');
+}]
+let [bounds /]: OrderedSet(ASTNode) = [varname /].bounds->collect(type) in
+[type.writeSetConditions(bounds, type.bounds, 'ASTNode', type.boundsKind) /] 
+[/template]
+

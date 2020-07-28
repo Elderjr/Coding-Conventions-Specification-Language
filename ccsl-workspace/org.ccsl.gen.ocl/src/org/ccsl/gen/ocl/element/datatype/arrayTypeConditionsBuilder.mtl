@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module arrayTypeConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+[template public writeArrayTypeTypecheckCondition(arrayType: ArrayType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayType)
+[/template]
+
+[template public writeTypeCondition(arrayType: ArrayType, varname: String) ? (arrayType.mustWriteConditionFor('type'))]
+[varname /].elementType <> null and
+let [arrayType.type.getFieldName() /]: ASTNode = [varname /].elementType.type in
+[arrayType.generatesFieldCondition(arrayType.type, arrayType.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeDimensionsCondition(arrayType: ArrayType, varname: String) ? ((not arrayType.dimensions.oclIsUndefined()) or arrayType.dimensions > 0)]
+[varname /].dimensions = [arrayType.dimensions /]
+[/template]

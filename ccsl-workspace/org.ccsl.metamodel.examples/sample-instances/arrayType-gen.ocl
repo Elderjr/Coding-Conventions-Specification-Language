@@ -1,0 +1,10 @@
+let violations: Set(ASTNode) = ArrayType.allInstances()->select(type_1: ArrayType |
+  type_1.oclIsKindOf(ArrayType) and
+  type_1.dimensions = 2 and
+  type_1.elementType <> null and
+  let type_2: ASTNode = type_1.elementType.type in
+  type_2 <> null and
+  type_2.oclIsKindOf(Type)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

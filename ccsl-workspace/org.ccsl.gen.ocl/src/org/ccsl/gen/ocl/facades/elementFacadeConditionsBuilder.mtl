@@ -14,7 +14,10 @@
 [comment Datatype package /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::objectTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::arrayTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::wildCardTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::parameterizedTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::typeParameterConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::primitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::booleanPrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::bytePrimitiveTypeConditionsBuilder /]
@@ -95,6 +98,8 @@ OrderedSet(String){
 /]
 
 [comment DataType Package /]
+
+[comment Write @DataType conditions /]
 [query private getDataTypeConditions(dataType: DataType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = dataType.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
@@ -121,6 +126,35 @@ OrderedSet(String){
 [e.getWildCardTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @TypeParameter conditions /]
+[query private getTypeParameterConditions(type: TypeParameter, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeTypeParameterTypecheckCondition(varname, typecheck),
+  type.writeBoundsCondition(completeVarname)
+ }->addAll(type.getDataTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: TypeParameter, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getTypeParameterConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ParameterizedType conditions /]
+[query private getParameterizedTypeConditions(type: ParameterizedType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeParameterizedTypeTypecheckCondition(varname, typecheck),
+  type.writeTypeParametersConditions(completeVarname),
+  type.writeTypeConditions(completeVarname)
+ }->addAll(type.getDataTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ParameterizedType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getParameterizedTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 [comment Write @ObjectType conditions /]
 [query private getObjectTypeConditions(type: ObjectType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
@@ -132,6 +166,21 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: ObjectType, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getObjectTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ArrayType conditions /]
+[query private getArrayTypeConditions(type: ArrayType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeArrayTypeTypecheckCondition(varname, typecheck),
+  type.writeDimensionsCondition(completeVarname),
+  type.writeTypeCondition(completeVarname)
+ }->addAll(type.getObjectTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ArrayType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getArrayTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Write @PrimitiveType conditions /]

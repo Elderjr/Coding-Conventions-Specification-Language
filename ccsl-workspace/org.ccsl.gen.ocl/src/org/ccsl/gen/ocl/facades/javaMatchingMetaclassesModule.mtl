@@ -66,8 +66,20 @@ Type
 Type
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: ArrayType)]
+ArrayType
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: WildCardType)]
 WildCardType
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ParameterizedType)]
+ParameterizedType
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: TypeParameter)]
+TypeParameter
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(e: PrimitiveType)]

@@ -1,0 +1,14 @@
+let violations: Set(ASTNode) = ParameterizedType.allInstances()->select(parameterizedType_1: ParameterizedType |
+  parameterizedType_1.oclIsKindOf(ParameterizedType) and
+  let parameterizedType_1_typeArguments: OrderedSet(ASTNode) = parameterizedType_1.typeArguments->collect(type) in 
+  parameterizedType_1_typeArguments->exists(wildCardType_2: ASTNode |  
+  wildCardType_2 <> null and
+  wildCardType_2.oclIsKindOf(WildCardType) and
+  let customType_3: ASTNode = parameterizedType_1.type.type in
+  customType_3 <> null and
+  customType_3.oclIsKindOf(AbstractTypeDeclaration)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

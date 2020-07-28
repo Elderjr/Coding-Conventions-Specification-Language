@@ -34,7 +34,27 @@ simpleMethod
 
 [comment DataType Package /]
 [template public getBaseName(e: DataType)]
-type
+dataType
+[/template]
+
+[template public getBaseName(e: ObjectType)]
+objType
+[/template]
+
+[template public getBaseName(e: ArrayType)]
+arrayType
+[/template]
+
+[template public getBaseName(e: ParameterizedType)]
+parameterizedType
+[/template]
+
+[template public getBaseName(e: WildCardType)]
+wildCardType
+[/template]
+
+[template public getBaseName(e: TypeParameter)]
+typeParameter
 [/template]
 
 [template private getBaseName(e: PrimitiveType)]
