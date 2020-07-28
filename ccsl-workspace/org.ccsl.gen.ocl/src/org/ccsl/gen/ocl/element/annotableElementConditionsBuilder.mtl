@@ -1,0 +1,76 @@
+[comment encoding = UTF-8 /]
+[module annotableElementConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment write Annotations condition when annotation.oclIsTypeOf(Variable) /]
+[template public writeAnnotationsCondition(annotableElement: Annotation, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+TODO
+[/template]
+
+[comment write Annotations condition when annotation = Package /]
+[template public writeAnnotationsCondition(annotableElement: Package, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+false
+[/template]
+
+[comment write Annotations condition when annotation = Variable /]
+[template public writeAnnotationsCondition(annotableElement: Variable, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(SingleVariableDeclaration) then
+  [varname /].oclAsType(SingleVariableDeclaration).annotations
+elseif [varname /].oclIsKindOf(VariableDeclarationFragment) then
+  if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(FieldDeclaration) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(FieldDeclaration).annotations
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+  elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+    [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+  else
+    null
+  endif
+else
+  null
+endif in annotations <> null and
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when annotation = ParameterVariable /]
+[template public writeAnnotationsCondition(annotableElement: ParameterVariable, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = [varname /].annotations in 
+annotations <> null and
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when annotation = InitializableVariable /]
+[template public writeAnnotationsCondition(annotableElement: InitializableVariable, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = if [varname /].variablesContainer.oclIsKindOf(FieldDeclaration) then
+  [varname /].variablesContainer.oclAsType(FieldDeclaration).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+else
+  null
+endif in annotations <> null and 
+annotations <> null and
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when annotableElement = FieldVariable /]
+[template public writeAnnotationsCondition(annotableElement: FieldVariable, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = [varname /].variablesContainer.oclAsType(FieldDeclaration).annotations in 
+annotations <> null and
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[comment write Annotations condition when annotableElement = LocalVariable /]
+[template public writeAnnotationsCondition(annotableElement: LocalVariable, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))]
+let annotations: OrderedSet(ASTNode) = if [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationExpression) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationExpression).annotations
+elseif [varname /].oclAsType(VariableDeclarationFragment).variablesContainer.oclIsKindOf(VariableDeclarationStatement) then
+  [varname /].variablesContainer.oclAsType(VariableDeclarationStatement).annotations
+else
+  null
+endif in annotations <> null and 
+annotations <> null and
+[annotableElement.writeSetConditions('annotations', annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]

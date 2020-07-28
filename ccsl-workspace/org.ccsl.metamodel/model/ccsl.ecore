@@ -58,14 +58,13 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="#//elements/Visibility"
           defaultValueLiteral="ANY"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="AnnotableElement" abstract="true"
-        eSuperTypes="#//elements/Element">
+    <eClassifiers xsi:type="ecore:EClass" name="Annotable" abstract="true" eSuperTypes="#//elements/Element">
       <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
           eType="#//elements/expressions/annotation/Annotation" containment="true"/>
     </eClassifiers>
     <eSubpackages name="namedElements" nsURI="http://www.example.org/ccsl/elements/namedElements"
         nsPrefix="namedElements">
-      <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//elements/Element #//elements/AnnotableElement">
+      <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//elements/Element #//elements/Annotable">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
             unsettable="true"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="availableInSourceCode"
@@ -163,11 +162,11 @@
       </eSubpackages>
       <eSubpackages name="method" nsURI="http://www.example.org/ccsl/elements/namedElements/method"
           nsPrefix="method">
-        <eClassifiers xsi:type="ecore:EClass" name="Constructor" eSuperTypes="#//elements/namedElements/method/SimpleMethod #//elements/AnnotableElement">
+        <eClassifiers xsi:type="ecore:EClass" name="Constructor" eSuperTypes="#//elements/namedElements/method/SimpleMethod">
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="avaliableInSourceCode"
               eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//BooleanObject"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="SimpleMethod" eSuperTypes="#//elements/Element #//elements/ControlledAccessElement">
+        <eClassifiers xsi:type="ecore:EClass" name="SimpleMethod" eSuperTypes="#//elements/Element #//elements/ControlledAccessElement #//elements/Annotable">
           <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
               eType="#//elements/namedElements/variable/ParameterVariable" unsettable="true"
               containment="true"/>
