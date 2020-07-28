@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module voidPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeVoid
+/]
+
+[template public writeVoidPrimitiveTypeTypecheckCondition(type: VoidType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeVoid)
+[/template]

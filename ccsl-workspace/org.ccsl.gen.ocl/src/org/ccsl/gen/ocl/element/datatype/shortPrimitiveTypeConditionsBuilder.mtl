@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module shortPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeShort
+/]
+
+[template public writeShortPrimitiveTypeTypecheckCondition(type: ShortPrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeShort)
+[/template]

@@ -13,6 +13,16 @@
 
 [comment Datatype package /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::booleanPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::bytePrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::charPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::doublePrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::floatPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::intPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::longPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::primitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::shortPrimitiveTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::voidPrimitiveTypeConditionsBuilder /]
 
 [comment NamedElement package /]
 [import org::ccsl::gen::ocl::element::namedElement::namedElementConditionsBuilder /]
@@ -83,8 +93,6 @@ OrderedSet(String){
 /]
 
 [comment DataType Package /]
-
-[comment Write @DataType conditions /]
 [query private getDataTypeConditions(dataType: DataType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = dataType.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
@@ -97,6 +105,135 @@ OrderedSet(String){
 [e.getDataTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @PrimitiveType conditions /]
+[query private getPrimitiveTypeConditions(type: PrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writePrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getDataTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: PrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BooleanPrimitiveType conditions /]
+[query private getBooleanPrimitiveTypeConditions(type: BooleanPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeBooleanPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: BooleanPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getBooleanPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BytePrimitiveType conditions /]
+[query private getBytePrimitiveTypeConditions(type: BytePrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeBytePrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: BytePrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getBytePrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BytePrimitiveType conditions /]
+[query private getCharPrimitiveTypeConditions(type: CharPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeCharPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: CharPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getCharPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @DoublePrimitiveType conditions /]
+[query private getDoublePrimitiveTypeConditions(type: DoublePrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeDoublePrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: DoublePrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getDoublePrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BytePrimitiveType conditions /]
+[query private getShortPrimitiveTypeConditions(type: ShortPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeShortPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ShortPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getShortPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BytePrimitiveType conditions /]
+[query private getFloatPrimitiveTypeConditions(type: FloatPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeFloatPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: FloatPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getFloatPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @LongPrimitiveType conditions /]
+[query private getLongPrimitiveTypeConditions(type: LongPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeLongPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: LongPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getLongPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @VoidPrimitiveType conditions /]
+[query private getVoidPrimitiveTypeConditions(type: VoidType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeVoidPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: VoidType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getVoidPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @IntPrimitiveType conditions /]
+[query private getIntPrimitiveTypeConditions(type: IntPrimitiveType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeIntPrimitiveTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getPrimitiveTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: IntPrimitiveType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getIntPrimitiveTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment NamedElement Package /]
 
 [comment Write @NamedElement conditions /]

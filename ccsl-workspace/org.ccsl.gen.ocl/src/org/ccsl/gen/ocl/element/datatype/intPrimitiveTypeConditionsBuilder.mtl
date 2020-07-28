@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module intPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeInt
+/]
+
+[template public writeIntPrimitiveTypeTypecheckCondition(type: IntPrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeInt)
+[/template]

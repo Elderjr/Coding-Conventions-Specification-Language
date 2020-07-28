@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module charPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeChar
+/]
+
+[template public writeCharPrimitiveTypeTypecheckCondition(type: CharPrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeChar)
+[/template]
