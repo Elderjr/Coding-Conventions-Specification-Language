@@ -19,8 +19,7 @@
 
 [template public writeOCL(rule: Rule)]
 let violations: Set(ASTNode) = [rule.writeOCLToSelectElements() /] 
-[rule.generatesPostConditionToRemoveJavadocRelatedElements() /]
-[rule.generatesPostConditionToRemoveNonSourceElements() /] in
+[rule.generatesPostConditionToRemoveJavadocRelatedElements() /] in
 violations
 [/template]
 
@@ -32,7 +31,8 @@ violations
   e.oclIsKindOf(BooleanExpression) or 
   e.oclIsKindOf(StringConcatenation) or
   e.oclIsKindOf(FieldVariable) or
-  e.oclIsKindOf(LocalVariable)
+  e.oclIsKindOf(LocalVariable) or
+  e.oclIsKindOf(ObjectType)
 /]
 
 [template private writeGetAllInstances(metaclasses: OrderedSet(String))]

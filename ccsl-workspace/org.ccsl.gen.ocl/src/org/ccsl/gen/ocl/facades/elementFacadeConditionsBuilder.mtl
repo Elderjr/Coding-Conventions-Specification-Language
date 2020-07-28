@@ -13,6 +13,9 @@
 
 [comment Datatype package /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::objectTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::wildCardTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::datatype::primitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::booleanPrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::bytePrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::charPrimitiveTypeConditionsBuilder /]
@@ -20,7 +23,6 @@
 [import org::ccsl::gen::ocl::element::datatype::floatPrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::intPrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::longPrimitiveTypeConditionsBuilder /]
-[import org::ccsl::gen::ocl::element::datatype::primitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::shortPrimitiveTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::datatype::voidPrimitiveTypeConditionsBuilder /]
 
@@ -103,6 +105,33 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: DataType, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getDataTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @WildCardType conditions /]
+[query private getWildCardTypeConditions(type: WildCardType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeWildCardTypeTypecheckCondition(varname, typecheck),
+  type.writeBoundCondition(completeVarname)
+ }->addAll(type.getDataTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: WildCardType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getWildCardTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ObjectType conditions /]
+[query private getObjectTypeConditions(type: ObjectType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeObjectTypeTypecheckCondition(varname, typecheck)
+ }->addAll(type.getDataTypeConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ObjectType, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getObjectTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Write @PrimitiveType conditions /]

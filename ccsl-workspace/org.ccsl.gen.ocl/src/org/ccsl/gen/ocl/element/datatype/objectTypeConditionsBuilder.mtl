@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module objectTypeConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+[template public writeObjectTypeTypecheckCondition(obj: ObjectType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Type) and (not [varname /].oclIsKindOf(PrimitiveType))
+[/template]

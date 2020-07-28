@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module wildCardTypeConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeWildCardTypeTypecheckCondition(type: WildCardType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(WildCardType)
+[/template]
+
+
+[template public writeBoundCondition(type: WildCardType, varname: String) ? (type.mustWriteConditionFor('bound'))]
+let [type.bound.getFieldName() /]: ASTNode = if [varname /].bound <> null then
+  [varname /].bound.type
+else
+  null
+endif in
+[type.generatesFieldCondition(type.bound, type.bound.getFieldName(), 'ASTNode') /]
+[/template]
+

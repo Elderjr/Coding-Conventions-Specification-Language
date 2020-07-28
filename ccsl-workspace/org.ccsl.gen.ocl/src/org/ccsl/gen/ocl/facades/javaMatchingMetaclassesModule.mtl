@@ -62,6 +62,14 @@ AbstractTypeDeclaration
 Type
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: ObjectType)]
+Type
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: WildCardType)]
+WildCardType
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: PrimitiveType)]
 PrimitiveType
 [/template]

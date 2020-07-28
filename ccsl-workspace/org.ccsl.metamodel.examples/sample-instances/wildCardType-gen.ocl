@@ -1,0 +1,12 @@
+let violations: Set(ASTNode) = WildCardType.allInstances()->select(type_1: WildCardType |
+  type_1.oclIsKindOf(WildCardType) and
+  let customType_2: ASTNode = if type_1.bound <> null then
+    type_1.bound.type
+  else
+    null
+  endif in
+  customType_2 <> null and
+  customType_2.oclIsKindOf(AbstractTypeDeclaration)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
