@@ -10,6 +10,8 @@
 e
 [/template]
 
+[comment Variable Package /]
+
 [template public getBaseName(e: Variable)]
 var
 [/template]
@@ -18,16 +20,24 @@ var
 package
 [/template]
 
+[comment ComplexType Package /]
+
 [template public getBaseName(e: TypeDeclaration)]
 customType
 [/template]
 
+[comment Method Package /]
 
+[template public getBaseName(e: SimpleMethod)]
+simpleMethod
+[/template]
+
+[comment DataType Package /]
 [template public getBaseName(e: DataType)]
 type
 [/template]
 
-
+[comment Expression Package /]
 [template public getBaseName(e: Expression)]
 expression
 [/template]

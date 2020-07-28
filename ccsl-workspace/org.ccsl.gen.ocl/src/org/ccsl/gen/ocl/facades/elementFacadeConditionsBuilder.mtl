@@ -21,8 +21,12 @@
 [import org::ccsl::gen::ocl::element::namedElement::variable::fieldVariableConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::variable::localVariableConditionsBuilder /]
 
+[comment Method package /]
+[import org::ccsl::gen::ocl::element::namedElement::method::simpleMethodConditionsBuilder /]
+
 [comment ComplexType package /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
+
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
@@ -102,8 +106,8 @@ OrderedSet(String){
 [template public writeElementConditions(pack: Package, varname: String, typecheck: Boolean, metaclass: String)]
 [pack.getPackageConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
-[comment Variable Package /]
 
+[comment Variable Package /]
 [comment Write @Variable conditions /]
 [query private getVariableConditions(var: Variable, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = var.visitElement(varname, metaclass) in
@@ -174,8 +178,25 @@ OrderedSet(String){
 [var.getLocalVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Method package /]
+[comment Write @SimpleMethod conditions /]
+[query private getSimpleMethodConditions(method: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = method.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  method.writeSimpleMethodTypecheckCondition(varname, typecheck),
+  method.writeParamsCondition(completeVarname),
+  method.writeVisibilityCondition(completeVarname)
+}->addAll(method.getElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(method: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String)]
+[method.getSimpleMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment ComplexType package /]
 [comment Write @TypeDeclaration conditions /]
-[query private getLocalVariableConditions(type: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+[query private getTypeDeclarationConditions(type: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
@@ -185,7 +206,7 @@ OrderedSet(String){
 ->addAll(type.getDataTypeConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(var: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
-[var.getLocalVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
+[var.getTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Expression Package /]
 

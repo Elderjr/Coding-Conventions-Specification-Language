@@ -53,11 +53,17 @@
       <genClasses ecoreClass="ccsl.ecore#//elements/Element">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/Element/uniqueName"/>
       </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//elements/ControlledAccessElement">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/ControlledAccessElement/visibility"/>
+      </genClasses>
+      <genClasses ecoreClass="ccsl.ecore#//elements/AnnotableElement">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/AnnotableElement/annotations"/>
+      </genClasses>
       <nestedGenPackages prefix="NamedElements" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements">
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/NamedElement">
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/NamedElement/name"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/NamedElement/availableInSourceCode"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/NamedElement/annotations"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/AnnotableElement/annotations"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/Package">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/Package/declaredTypes"/>
@@ -75,7 +81,6 @@
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/FieldVariable">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/variable/FieldVariable/static"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/variable/FieldVariable/visibility"/>
           </genClasses>
         </nestedGenPackages>
         <nestedGenPackages prefix="ComplexType" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/complexType">
@@ -92,7 +97,6 @@
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/static"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/imports"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/nestedTypes"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/visibility"/>
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/complexType/TypeDeclaration/inheritance"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/complexType/ComplexType">
@@ -127,11 +131,9 @@
         <nestedGenPackages prefix="Method" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/method">
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Constructor">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/Constructor/avaliableInSourceCode"/>
-            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/Constructor/annotations"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/SimpleMethod">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/params"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/SimpleMethod/visibility"/>
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/SimpleMethod/paramsKind"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Method">

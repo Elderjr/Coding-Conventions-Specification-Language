@@ -40,6 +40,11 @@ VariableDeclarationFragment
 VariableDeclarationFragment
 [/template]
 
+[comment Method package /]
+[template private writeElementMatchingJavaMetaclasses(e: SimpleMethod)]
+AbstractMethodDeclaration
+[/template]
+
 [comment ComplexType package /]
 [template private writeElementMatchingJavaMetaclasses(e: TypeDeclaration)]
 AbstractTypeDeclaration
