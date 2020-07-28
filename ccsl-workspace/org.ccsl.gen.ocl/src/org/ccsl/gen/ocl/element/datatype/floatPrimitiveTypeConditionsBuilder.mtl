@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module floatPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeFloat
+/]
+
+[template public writeFloatPrimitiveTypeTypecheckCondition(type: FloatPrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeFloat)
+[/template]

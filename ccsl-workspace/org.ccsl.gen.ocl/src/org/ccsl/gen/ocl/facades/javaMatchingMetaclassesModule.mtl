@@ -62,6 +62,46 @@ AbstractTypeDeclaration
 Type
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: PrimitiveType)]
+PrimitiveType
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: BytePrimitiveType)]
+PrimitiveTypeByte
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: BooleanPrimitiveType)]
+PrimitiveTypeBoolean
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: CharPrimitiveType)]
+PrimitiveTypeChar
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: DoublePrimitiveType)]
+PrimitiveTypeDouble
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ShortPrimitiveType)]
+PrimitiveTypeShort
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: FloatPrimitiveType)]
+PrimitiveTypeFloat
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: LongPrimitiveType)]
+PrimitiveTypeLong
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: VoidType)]
+PrimitiveTypeVoid
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: IntPrimitiveType)]
+PrimitiveTypeInt
+[/template]
+
 [comment Expression package /]
 [template private writeElementMatchingJavaMetaclasses(e: Expression)]
 Expression

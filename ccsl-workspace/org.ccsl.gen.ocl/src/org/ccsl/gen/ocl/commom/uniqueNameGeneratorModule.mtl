@@ -37,6 +37,46 @@ simpleMethod
 type
 [/template]
 
+[template private getBaseName(e: PrimitiveType)]
+primitiveType
+[/template]
+
+[template private getBaseName(e: BytePrimitiveType)]
+bytePrimitive
+[/template]
+
+[template private getBaseName(e: BooleanPrimitiveType)]
+booleanPrimitive
+[/template]
+
+[template private getBaseName(e: CharPrimitiveType)]
+charPrimitive
+[/template]
+
+[template private getBaseName(e: DoublePrimitiveType)]
+doublePrimitive
+[/template]
+
+[template private getBaseName(e: ShortPrimitiveType)]
+shortPrimitive
+[/template]
+
+[template private getBaseName(e: FloatPrimitiveType)]
+floatPrimitive
+[/template]
+
+[template private getBaseName(e: LongPrimitiveType)]
+longPrimitive
+[/template]
+
+[template private getBaseName(e: VoidType)]
+voidPrimitive
+[/template]
+
+[template private getBaseName(e: IntPrimitiveType)]
+intPrimitive
+[/template]
+
 [comment Expression Package /]
 [template public getBaseName(e: Expression)]
 expression

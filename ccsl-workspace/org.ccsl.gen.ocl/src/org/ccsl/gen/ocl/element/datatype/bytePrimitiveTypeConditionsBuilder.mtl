@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module bytePrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeByte
+/]
+
+[template public writeBytePrimitiveTypeTypecheckCondition(type: BytePrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeByte)
+[/template]

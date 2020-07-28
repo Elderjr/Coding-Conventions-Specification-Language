@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module longPrimitiveTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*PrimitiveTypeLong
+/]
+
+[template public writeLongPrimitiveTypeTypecheckCondition(type: LongPrimitiveType, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(PrimitiveTypeLong)
+[/template]
