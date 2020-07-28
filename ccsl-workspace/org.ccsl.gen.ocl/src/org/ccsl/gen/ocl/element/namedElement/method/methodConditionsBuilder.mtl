@@ -1,29 +1,36 @@
 [comment encoding = UTF-8 /]
-[module methodOperations('http://www.example.org/ccsl')]
+[module methodConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::inheritanceUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 
-
+[comment Modisco map:
+	*MethodDeclaration
+ /]
+[comment Method properties:
+	*returnType
+	*static
+	*inheritance
+ /]
 [template public writeMethodTypecheckCondition(method: Method, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(MethodDeclaration)
 [/template]
 
 [template public writeReturnTypeCondition(method: Method, varname: String) ? (method.mustWriteConditionFor('returnType'))]
 (not [varname /].returnType.oclIsUndefined()) and
-[method.generatesMonovaluedFieldConditions(method.returnType, varname, 'returnType.type', 'OclAny') /]
+let [method.returnType.getFieldName() /]: ASTNode = [varname /].returnType.type in
+[method.generatesFieldCondition(method.returnType, method.returnType.getFieldName(), 'ASTNode') /]
 [/template]
 
 [template public writeInheritanceCondition(method: Method, varname: String) ? (method.inheritance <> Inheritance::ANY)]
-[if (method.inheritance = Inheritance::FINAL)]
-([varname /].modifier <> null and [varname /].modifier.inheritance = InheritanceKind::final)[elseif(method.inheritance = Inheritance::ABSTRACT)]
-([varname /].modifier <> null and [varname /].modifier.inheritance = InheritanceKind::abstract)[elseif(method.inheritance = Inheritance::NONE)]
-([varname /].modifier <> null and [varname /].modifier.visibility = VisibilityKind::none)[/if]
+[varname /].modifier <> null and
+[varname /].modifier.inheritance = [method.inheritance.writeInheritance() /]
 [/template]
 
 [template public writeStaticCondition(method: Method, varname: String)? (not method._static.oclIsUndefined())]
-[if (method._static)]
-([varname /].modifier <> null and [varname /].modifier.static)[else]
-([varname /].modifier <> null and not [varname /].modifier.static)[/if]
+[varname /].modifier <> null and
+[if (method._static = false)](not [/if][varname /].modifier.static[if (method._static = false)])[/if]
 [/template]

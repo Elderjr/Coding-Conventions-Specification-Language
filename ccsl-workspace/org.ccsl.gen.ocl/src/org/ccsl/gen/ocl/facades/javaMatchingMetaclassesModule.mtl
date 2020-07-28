@@ -49,6 +49,9 @@ AbstractMethodDeclaration
 ConstructorDeclaration
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: Method)]
+MethodDeclaration
+[/template]
 [comment ComplexType package /]
 [template private writeElementMatchingJavaMetaclasses(e: TypeDeclaration)]
 AbstractTypeDeclaration

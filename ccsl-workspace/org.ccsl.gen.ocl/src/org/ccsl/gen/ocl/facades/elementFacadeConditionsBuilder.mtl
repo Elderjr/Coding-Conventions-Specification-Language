@@ -28,6 +28,7 @@
 [comment Method package /]
 [import org::ccsl::gen::ocl::element::namedElement::method::simpleMethodConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::method::constructorConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::method::methodConditionsBuilder /]
 
 [comment ComplexType package /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
@@ -68,7 +69,18 @@ OrderedSet(String){}
 
 [/template]
 
+[comment write @Element conditions/]
+[query private getAnnotableConditions(annotable: Annotable, varname: String, metaclass: String): OrderedSet(String) =
+OrderedSet(String){
+  annotable.writeAnnotationsCondition(varname, metaclass)
+}
+/]
 
+[query private getVisibilityConditions(element: ControlledAccessElement, varname: String, metaclass: String): OrderedSet(String) =
+OrderedSet(String){
+  element.writeVisibilityCondition(varname)
+}
+/]
 
 [comment DataType Package /]
 
@@ -94,9 +106,9 @@ let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   namedElement.writeNamedElementTypecheckCondition(varname, typecheck),
-  namedElement.writeNameCondition(completeVarname, concreteMetaclass),
-  namedElement.writeAnnotationsCondition(completeVarname, concreteMetaclass)
-}->addAll(namedElement.getElementConditions(varname, false, concreteMetaclass))
+  namedElement.writeNameCondition(completeVarname, concreteMetaclass)
+}->addAll(namedElement.getElementConditions(completeVarname, false, concreteMetaclass))
+->addAll(namedElement.getAnnotableConditions(completeVarname, concreteMetaclass))
 /]
 
 [comment Write @Package conditions /]
@@ -163,9 +175,9 @@ let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   var.writeFieldVariableTypecheckCondition(varname, typecheck),
-  var.writeStaticCondition(completeVarname),
-  var.writeVisibilityCondition(completeVarname)
+  var.writeStaticCondition(completeVarname)
 }->addAll(var.getInitializableVariableConditions(completeVarname, false, concreteMetaclass))
+->addAll(var.getVisibilityConditions(completeVarname, concreteMetaclass))
 /]
 [template public writeElementConditions(var: FieldVariable, varname: String, typecheck: Boolean, metaclass: String)]
 [var.getFieldVariableConditions(varname, typecheck, metaclass)->writeConditions() /]
@@ -192,10 +204,10 @@ let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   method.writeSimpleMethodTypecheckCondition(varname, typecheck),
-  method.writeParamsCondition(completeVarname),
-  method.writeVisibilityCondition(completeVarname),
-  method.writeAnnotationsCondition(completeVarname, concreteMetaclass)
+  method.writeParamsCondition(completeVarname)
 }->addAll(method.getElementConditions(completeVarname, false, concreteMetaclass))
+->addAll(method.getAnnotableConditions(completeVarname, concreteMetaclass))
+->addAll(method.getVisibilityConditions(completeVarname, concreteMetaclass))
 /]
 [template public writeElementConditions(method: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String)]
 [method.getSimpleMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
@@ -211,8 +223,27 @@ OrderedSet(String){
 }->addAll(method.getSimpleMethodConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(method: Constructor, varname: String, typecheck: Boolean, metaclass: String)]
-[method.getSimpleMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
+[method.getConstructorConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @Method conditions /]
+[query private getMethodConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = method.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  method.writeMethodTypecheckCondition(varname, typecheck),
+  method.writeReturnTypeCondition(completeVarname),
+  method.writeInheritanceCondition(completeVarname),
+  method.writeStaticCondition(completeVarname)
+}
+->addAll(method.getSimpleMethodConditions(completeVarname, false, concreteMetaclass))
+->addAll(method.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(method: Method, varname: String, typecheck: Boolean, metaclass: String)]
+[method.getMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 
 [comment ComplexType package /]
 [comment Write @TypeDeclaration conditions /]

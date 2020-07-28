@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module inheritanceUtils('http://www.example.org/ccsl')]
+
+[template public writeInheritance(inheritance: Inheritance) ? (inheritance = Inheritance::FINAL)]
+InheritanceKind::final
+[/template]
+
+[template public writeInheritance(inheritance: Inheritance) ? (inheritance = Inheritance::ABSTRACT)]
+InheritanceKind::abstract
+[/template]
