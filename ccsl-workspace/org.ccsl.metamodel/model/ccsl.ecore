@@ -310,7 +310,6 @@
         nsPrefix="datatype">
       <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//elements/Element"/>
       <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//elements/datatype/DataType"/>
-      <eClassifiers xsi:type="ecore:EClass" name="StringPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="BooleanPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="ShortPrimitiveType" eSuperTypes="#//elements/datatype/PrimitiveType"/>
       <eClassifiers xsi:type="ecore:EClass" name="ObjectType" eSuperTypes="#//elements/datatype/DataType"/>
