@@ -27,6 +27,7 @@
 
 [comment Method package /]
 [import org::ccsl::gen::ocl::element::namedElement::method::simpleMethodConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::method::constructorConditionsBuilder /]
 
 [comment ComplexType package /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
@@ -197,6 +198,19 @@ OrderedSet(String){
 }->addAll(method.getElementConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(method: SimpleMethod, varname: String, typecheck: Boolean, metaclass: String)]
+[method.getSimpleMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @Constructor conditions /]
+[query private getConstructorConditions(method: Constructor, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = method.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  method.writeConstructorTypecheckCondition(varname, typecheck)
+}->addAll(method.getSimpleMethodConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(method: Constructor, varname: String, typecheck: Boolean, metaclass: String)]
 [method.getSimpleMethodConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 

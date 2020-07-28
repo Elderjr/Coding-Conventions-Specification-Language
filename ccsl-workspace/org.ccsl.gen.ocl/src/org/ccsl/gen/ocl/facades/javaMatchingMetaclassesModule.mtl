@@ -45,6 +45,10 @@ VariableDeclarationFragment
 AbstractMethodDeclaration
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: Constructor)]
+ConstructorDeclaration
+[/template]
+
 [comment ComplexType package /]
 [template private writeElementMatchingJavaMetaclasses(e: TypeDeclaration)]
 AbstractTypeDeclaration
