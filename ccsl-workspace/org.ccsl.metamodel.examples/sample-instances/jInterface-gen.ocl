@@ -1,0 +1,49 @@
+let violations: Set(ASTNode) = InterfaceDeclaration.allInstances()->select(interface_1: InterfaceDeclaration |
+  let interface_1_superInterfaces: OrderedSet(ASTNode) = interface_1.superInterfaces->collect(type) in
+  interface_1_superInterfaces->exists(interface_2: ASTNode |  
+  interface_2 <> null and
+  interface_2.oclIsKindOf(InterfaceDeclaration) and
+  let interface_1_fields: OrderedSet(VariableDeclarationFragment) = interface_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  interface_1_fields->exists(var_3: VariableDeclarationFragment |  
+  var_3 <> null and
+  var_3.oclIsKindOf(VariableDeclarationFragment) and var_3.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let interface_1_methods: OrderedSet(MethodDeclaration) = interface_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  interface_1_methods->exists(method_4: MethodDeclaration |  
+  method_4 <> null and
+  true and
+  let interface_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(interface_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in interface_1_imports <> null and
+  interface_1_imports->exists(importStmt_5: ImportDeclaration |  
+  importStmt_5 <> null and
+  true and
+  let interface_1_nestedTypes: OrderedSet(ASTNode) = interface_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  interface_1_nestedTypes <> null and
+  interface_1_nestedTypes->exists(customType_6: ASTNode |  
+  customType_6 <> null and
+  customType_6.oclIsKindOf(AbstractTypeDeclaration) and
+  interface_1.oclAsType(NamedElement).name = 'CustomInterface' and
+  let interface_1_annotations: OrderedSet(ASTNode) = interface_1.annotations in 
+  interface_1_annotations <> null and
+  interface_1_annotations->exists(annotation_7: ASTNode |  
+  annotation_7 <> null and
+  annotation_7.oclIsKindOf(Annotation)
+--Close exists declarations
+))))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
