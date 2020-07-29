@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module importStatementModule('http://www.example.org/ccsl')]
+[module importStatementConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]

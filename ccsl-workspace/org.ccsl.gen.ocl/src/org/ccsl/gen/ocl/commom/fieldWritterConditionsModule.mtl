@@ -50,7 +50,7 @@ else
 [/template]
 
 [template private generatesFieldConditionPrvt(element: Element, field: Element, fieldOclVarname: String,  mappedFieldMetaclass: String) ? (field <> null and not getElementsVisited()->includes(field))]
-[let isTypecheckNeeded: Boolean = not field.getMatchingJavaMetaclasses()->includes(mappedFieldMetaclass)]
+[let isTypecheckNeeded: Boolean = (not field.getMatchingJavaMetaclasses()->includes(mappedFieldMetaclass)) or (field.isTypecheckAlwaysNeeded())]
 [let fieldCondition: String = field.writeElementConditions(field.getUniqueOclName(), isTypecheckNeeded, mappedFieldMetaclass)]
 [fieldOclVarname /] <> null[if not fieldCondition.isEmpty()] and
 [fieldCondition.writeStr() /][/if][/let][/let]
@@ -144,7 +144,7 @@ exists([fieldName /] | [field.addElementExistsDeclaration() /]
 
 [template private writeFieldExistsCondition(element: Element, field: Element, setOclName: String, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
 [let fieldName: String = field.getFieldName()]
-[setOclName /]->exists([fieldName /] | [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /])[/let]
+[setOclName /]->exists([fieldName /] | [element.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /])[/let]
 [/template]
 
 [template private writeFieldExistsCondition(element: Element, field: Element, setOclName: String, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]

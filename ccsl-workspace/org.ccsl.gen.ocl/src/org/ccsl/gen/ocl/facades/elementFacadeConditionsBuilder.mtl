@@ -52,6 +52,9 @@
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
 
+[comment Statement package /]
+[import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
+
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
 [if conditionsNotBlank->size() > 0]
@@ -467,9 +470,15 @@ let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
-  type.writeTypeDeclarationTypecheckCondition(varname, typecheck)
+  type.writeTypeDeclarationTypecheckCondition(varname, typecheck),
+  type.writeImportsCondition(completeVarname),
+  type.writeNestedTypeConditions(completeVarname),
+  type.writeStaticCondition(completeVarname),
+  type.writeInheritanceCondition(completeVarname)
 }->addAll(type.getNamedElementConditions(completeVarname, false, concreteMetaclass))
 ->addAll(type.getDataTypeConditions(completeVarname, false, concreteMetaclass))
+->addAll(type.getAnnotableConditions(completeVarname, concreteMetaclass))
+->addAll(type.getVisibilityConditions(completeVarname, concreteMetaclass))
 /]
 [template public writeElementConditions(var: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
 [var.getTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
@@ -493,8 +502,31 @@ let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   annotation.writeAnnotationTypecheckCondition(varname, typecheck)
- }->addAll(annotation.getExpressionConditions(varname, false, concreteMetaclass))
+ }->addAll(annotation.getExpressionConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(e: Annotation, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getAnnotationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Statement package /]
+
+[comment Write @Statement conditions /]
+[query private getStatementConditions(stmt: Statement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+  stmt.getElementConditions(varname, typecheck, metaclass)
+/]
+[template public writeElementConditions(e: Statement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ImportStatement conditions /]
+[query private getImportStatementConditions(importStmt: ImportStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = importStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  importStmt.writeImportStatementTypecheckCondition(varname, typecheck)
+ }->addAll(importStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ImportStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getImportStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]

@@ -130,3 +130,8 @@ Expression
 [template private writeElementMatchingJavaMetaclasses(e: Annotation)]
 Annotation
 [/template]
+
+[comment Statement package /]
+[template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
+ImportDeclaration
+[/template]

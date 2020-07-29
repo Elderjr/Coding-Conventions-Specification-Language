@@ -106,4 +106,7 @@ expression
 annotation
 [/template]
 
-
+[comment Statement Package /]
+[template public getBaseName(e: ImportStatement)]
+importStmt
+[/template]

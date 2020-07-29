@@ -16,12 +16,14 @@ let [modifier /]: Modifier = [varname /].oclContainer().oclAsType(FieldDeclarati
 [modifier /].visibility = [var.visibility.writeVisibility() /]
 [/template]
 
-[template public writeVisibilityCondition(m: SimpleMethod, varname: String)? (m.visibility <> Visibility::ANY){
-  modifier: String = m.getUniqueOclName().concat('_modifier');
-}]
-let [modifier /]: Modifier = [varname /].modifier in
-[modifier /] <> null and
-[modifier /].visibility = [m.visibility.writeVisibility() /]
+[template public writeVisibilityCondition(m: SimpleMethod, varname: String)? (m.visibility <> Visibility::ANY)]
+[varname /].modifier <> null and
+[varname /].modifier.visibility = [m.visibility.writeVisibility() /]
+[/template]
+
+[template public writeVisibilityCondition(type: TypeDeclaration, varname: String)? (type.visibility <> Visibility::ANY)]
+[varname /].modifier <> null and
+[varname /].modifier.visibility = [type.visibility.writeVisibility() /]
 [/template]
 
 [template public writeVisibility(visibility: Visibility) ? (visibility = Visibility::PUBLIC)]

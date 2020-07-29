@@ -5,6 +5,7 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::filterUtils /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::rule::context::contextModule /]
 [import org::ccsl::gen::ocl::rule::context::postConditionsModule /]
 [import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
@@ -25,15 +26,7 @@ violations
 
 [template private writeOCLToSelectElements(rule: Rule) /]
 
-[query private isElementNeedsTypecheckOnStart(e: Element): Boolean = 
-  e.oclIsKindOf(Assignment) or
-  e.oclIsKindOf(ArithmeticExpression) or
-  e.oclIsKindOf(BooleanExpression) or 
-  e.oclIsKindOf(StringConcatenation) or
-  e.oclIsKindOf(FieldVariable) or
-  e.oclIsKindOf(LocalVariable) or
-  e.oclIsKindOf(ObjectType)
-/]
+
 
 [template private writeGetAllInstances(metaclasses: OrderedSet(String))]
 [for (metaclassesTarget: String | metaclasses) separator('->union(')]
@@ -50,7 +43,7 @@ endif
 /]
 
 [query private isSubjectNeedsTypecheckOnStart(e: Element): Boolean = 
-if e.isElementNeedsTypecheckOnStart() then
+if e.isTypecheckAlwaysNeeded() then
   true
 else if e.getMatchingJavaMetaclasses()->size() = 1 then
   false
@@ -65,7 +58,7 @@ endif endif
     allInstances: String = rule.subject.getMatchingJavaMetaclasses()->writeGetAllInstances();
     subjectMetaclass: String = rule.subject.getSubjectMetaclass();
 	subjectVarname: String = rule.subject.getUniqueOclName();
-    typecheck: Boolean = rule.subject.isElementNeedsTypecheckOnStart();
+    typecheck: Boolean = rule.subject.isSubjectNeedsTypecheckOnStart();
     subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass);
     filtersConditions: String = rule._context.filters->writeFiltersConditions();
   }

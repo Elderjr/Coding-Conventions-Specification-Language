@@ -1,0 +1,35 @@
+let violations: Set(ASTNode) = AbstractTypeDeclaration.allInstances()->select(customType_1: AbstractTypeDeclaration |
+  let customType_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(customType_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in customType_1_imports <> null and
+  customType_1_imports->exists(importStmt_2: ImportDeclaration |  
+  importStmt_2 <> null and
+  true and
+  let customType_1_nestedTypes: OrderedSet(ASTNode) = customType_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  customType_1_nestedTypes <> null and
+  customType_1_nestedTypes->exists(customType_3: ASTNode |  
+  customType_3 <> null and
+  customType_3.oclIsKindOf(AbstractTypeDeclaration) and
+  customType_1.modifier <> null and
+  (not customType_1.modifier.static) and
+  customType_1.modifier <> null and
+  customType_1.modifier.inheritance = InheritanceKind::abstract and
+  customType_1.oclAsType(NamedElement).name = 'FooClass' and
+  let customType_1_annotations: OrderedSet(ASTNode) = customType_1.annotations in 
+  customType_1_annotations <> null and
+  customType_1_annotations->exists(annotation_4: ASTNode |  
+  annotation_4 <> null and
+  annotation_4.oclIsKindOf(Annotation) and
+  customType_1.modifier <> null and
+  customType_1.modifier.visibility = VisibilityKind::public
+--Close exists declarations
+)))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

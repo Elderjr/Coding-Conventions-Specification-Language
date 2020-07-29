@@ -99,3 +99,13 @@ let [annotationsSet /]: OrderedSet(ASTNode) = [varname /].annotations in
 [annotationsSet /] <> null and
 [annotableElement.writeSetConditions(annotationsSet, annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
+
+[comment write Annotations condition when annotableElement = TypeDeclaration /]
+[template public writeAnnotationsCondition(annotableElement: TypeDeclaration, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))
+{
+  annotationsSet: String = annotableElement.getUniqueOclName().concat('_annotations');
+}]
+let [annotationsSet /]: OrderedSet(ASTNode) = [varname /].annotations in 
+[annotationsSet /] <> null and
+[annotableElement.writeSetConditions(annotationsSet, annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]

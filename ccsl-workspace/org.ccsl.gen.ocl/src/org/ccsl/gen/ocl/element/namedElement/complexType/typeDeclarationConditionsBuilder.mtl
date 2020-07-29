@@ -2,6 +2,8 @@
 [module typeDeclarationConditionsBuilder('http://www.example.org/ccsl/elements/namedElements')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::inheritanceUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 
 [comment Modisco map:
@@ -9,10 +11,45 @@
 /]
 
 [comment TypeDeclaration properties: 
-	
+	*static
+	*imports
+	*nestedTypes
+	*inheritance
 /]
 [template public writeTypeDeclarationTypecheckCondition(type: TypeDeclaration, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(AbstractTypeDeclaration)
 [/template]
 
+[template public writeImportsCondition(type: TypeDeclaration, varname: String) ? (type.mustWriteConditionFor('imports')){
+  imports: String = type.getUniqueOclName().concat('_imports');
+}]
+let [imports /]: OrderedSet(ImportDeclaration) = 
+  let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+    compilationUnit.types->includes([type.getUniqueOclName() /])) in
+  if compilationUnits->size() > 0 then
+    compilationUnits->asOrderedSet()->first().imports
+  else
+    null
+  endif
+in [imports /] <> null and
+[type.writeSetConditions(imports, type.imports, 'ImportDeclaration', CollectionKind::ANY) /]
+[/template]
+
+[template public writeNestedTypeConditions(type: TypeDeclaration, varname: String) ? (type.mustWriteConditionFor('imports')){
+  nestedTypes: String = type.getUniqueOclName().concat('_nestedTypes');
+}]
+let [nestedTypes /]: OrderedSet(ASTNode) = [varname /].bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+[nestedTypes /] <> null and
+[type.writeSetConditions(nestedTypes, type.nestedTypes, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[template public writeInheritanceCondition(type: TypeDeclaration, varname: String) ? (type.inheritance <> Inheritance::ANY)]
+[varname /].modifier <> null and
+[varname /].modifier.inheritance = [type.inheritance.writeInheritance() /]
+[/template]
+
+[template public writeStaticCondition(type: TypeDeclaration, varname: String)? (not type._static.oclIsUndefined())]
+[varname /].modifier <> null and
+[if (type._static = false)](not [/if][varname /].modifier.static[if (type._static = false)])[/if]
+[/template]
 

@@ -3,6 +3,15 @@
 
 [import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 
+[query public isTypecheckAlwaysNeeded(e: Element): Boolean =
+  e.oclIsKindOf(Assignment) or
+  e.oclIsKindOf(ArithmeticExpression) or
+  e.oclIsKindOf(BooleanExpression) or 
+  e.oclIsKindOf(StringConcatenation) or
+  e.oclIsKindOf(FieldVariable) or
+  e.oclIsKindOf(LocalVariable) or
+  e.oclIsTypeOf(ObjectType)
+/]
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then
     let targetMetaclasses: OrderedSet(String) = element.getMatchingJavaMetaclasses() in
