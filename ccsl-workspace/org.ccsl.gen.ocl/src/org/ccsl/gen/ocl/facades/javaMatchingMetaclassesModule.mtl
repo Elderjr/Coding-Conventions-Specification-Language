@@ -57,6 +57,10 @@ MethodDeclaration
 AbstractTypeDeclaration
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: AnnotationType)]
+AnnotationTypeDeclaration
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: AnnotationField)]
 AnnotationTypeMemberDeclaration
 [/template]

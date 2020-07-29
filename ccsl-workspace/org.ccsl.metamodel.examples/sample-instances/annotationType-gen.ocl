@@ -1,0 +1,48 @@
+let violations: Set(ASTNode) = AnnotationTypeDeclaration.allInstances()->select(annotationType_1: AnnotationTypeDeclaration |
+  if annotationType_1.oclIsKindOf(AnnotationTypeDeclaration) then
+    true
+  elseif annotationType_1.oclIsKindOf(UnresolvedTypeDeclaration) then
+    annotationType_1.oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+      ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+  else
+    false
+  endif and
+  let annotationType_1_fields: OrderedSet(AnnotationTypeDeclaration) =annotationType_1.bodyDeclarations->select(f | f.oclIsKindOf(AnnotationTypeMemberDeclaration)) in 
+  annotationType_1_fields <> null and
+  annotationType_1_fields->exists(annotationField_2: AnnotationTypeDeclaration |  
+  annotationField_2 <> null and
+  annotationField_2.oclIsKindOf(AnnotationTypeMemberDeclaration) and
+  let annotationType_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(annotationType_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in annotationType_1_imports <> null and
+  annotationType_1_imports->exists(importStmt_3: ImportDeclaration |  
+  importStmt_3 <> null and
+  true and
+  let annotationType_1_nestedTypes: OrderedSet(ASTNode) = annotationType_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  annotationType_1_nestedTypes <> null and
+  annotationType_1_nestedTypes->exists(customType_4: ASTNode |  
+  customType_4 <> null and
+  customType_4.oclIsKindOf(AbstractTypeDeclaration) and
+  annotationType_1.modifier <> null and
+  (not annotationType_1.modifier.static) and
+  annotationType_1.modifier <> null and
+  annotationType_1.modifier.inheritance = InheritanceKind::abstract and
+  annotationType_1.oclAsType(NamedElement).name = 'CustomAnnotation' and
+  let annotationType_1_annotations: OrderedSet(ASTNode) = annotationType_1.annotations in 
+  annotationType_1_annotations <> null and
+  annotationType_1_annotations->exists(annotation_5: ASTNode |  
+  annotation_5 <> null and
+  annotation_5.oclIsKindOf(Annotation) and
+  annotationType_1.modifier <> null and
+  annotationType_1.modifier.visibility = VisibilityKind::none
+--Close exists declarations
+))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module annotationTypeConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment properties:
+	*fields
+/]
+[template public writeAnnotationTypeTypecheckCondition(annotation: AnnotationType, varname: String, typecheck: Boolean) ? (typecheck)]
+if [varname /].oclIsKindOf(AnnotationTypeDeclaration) then
+  true
+elseif [varname /].oclIsKindOf(UnresolvedTypeDeclaration) then
+  [varname /].oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+    ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+else
+  false
+endif
+[/template]
+
+[template public writeFieldsCondition(type: AnnotationType, varname: String) ? (type.mustWriteConditionFor('fields')) {
+  fields: String = type.getUniqueOclName().concat('_fields');
+}]
+let [fields /]: OrderedSet(AnnotationTypeDeclaration) =[varname /].bodyDeclarations->select(f | f.oclIsKindOf(AnnotationTypeMemberDeclaration)) in 
+[fields /] <> null and
+[type.writeSetConditions(fields, type.fields, 'AnnotationTypeDeclaration', CollectionKind::ANY) /]
+[/template]

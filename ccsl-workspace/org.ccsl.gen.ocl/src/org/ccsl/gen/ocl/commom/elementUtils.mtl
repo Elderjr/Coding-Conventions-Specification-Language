@@ -10,7 +10,8 @@
   e.oclIsKindOf(StringConcatenation) or
   e.oclIsKindOf(FieldVariable) or
   e.oclIsKindOf(LocalVariable) or
-  e.oclIsTypeOf(ObjectType)
+  e.oclIsTypeOf(ObjectType) or
+  e.oclIsTypeOf(AnnotationType)
 /]
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then

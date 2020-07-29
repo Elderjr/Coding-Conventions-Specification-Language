@@ -47,6 +47,7 @@
 
 [comment ComplexType package /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::annotationTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationFieldConditionsBuilder /]
 
 [comment Expression package /]
@@ -478,11 +479,24 @@ OrderedSet(String){
   type.writeInheritanceCondition(completeVarname)
 }->addAll(type.getNamedElementConditions(completeVarname, false, concreteMetaclass))
 ->addAll(type.getDataTypeConditions(completeVarname, false, concreteMetaclass))
-->addAll(type.getAnnotableConditions(completeVarname, concreteMetaclass))
 ->addAll(type.getVisibilityConditions(completeVarname, concreteMetaclass))
 /]
-[template public writeElementConditions(var: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
-[var.getTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[template public writeElementConditions(type: TypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @AnnotationType conditions /]
+[query private getAnnotationTypeConditions(type: AnnotationType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeAnnotationTypeTypecheckCondition(varname, typecheck),
+  type.writeFieldsCondition(completeVarname)
+}->addAll(type.getTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(type: AnnotationType, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getAnnotationTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Write @AnnotationField conditions /]

@@ -26,6 +26,10 @@ package
 customType
 [/template]
 
+[template public getBaseName(e: AnnotationType)]
+annotationType
+[/template]
+
 [template public getBaseName(e: AnnotationField)]
 annotationField
 [/template]
