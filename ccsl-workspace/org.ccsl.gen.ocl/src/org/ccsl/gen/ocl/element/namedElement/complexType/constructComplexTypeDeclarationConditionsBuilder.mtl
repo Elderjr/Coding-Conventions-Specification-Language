@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module constructComplexTypeDeclarationConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+
+
+
+[template public writeConstructComplexTypeDeclarationTypecheckCondition(complexType: ConstructComplexTypeDeclaration, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  [varname /].oclIsKindOf(AbstractTypeDeclaration) and 
+  not(
+    [varname /].oclIsKindOf(AnnotationTypeDeclaration) or
+    [varname /].oclIsKindOf(InterfaceDeclaration) 
+  )
+)
+[/template]
+
+
+[template public writeConstructorsCondition(complexType: ConstructComplexTypeDeclaration, varname: String) ? (complexType.mustWriteConditionFor('constructors')){
+  constructors: String = complexType.getUniqueOclName().concat('_constructors');
+}]
+let [constructors /]: OrderedSet(ASTNode) = [varname /].bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+[complexType.writeSetConditions(constructors, complexType.constructors, 'ASTNode', CollectionKind::ANY) /]
+[/template]

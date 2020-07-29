@@ -13,7 +13,8 @@
   e.oclIsTypeOf(ObjectType) or
   e.oclIsTypeOf(AnnotationType) or
   e.oclIsTypeOf(ComplexType) or
-  e.oclIsTypeOf(ComplexTypeDeclaration)
+  e.oclIsTypeOf(ComplexTypeDeclaration) or
+  e.oclIsTypeOf(ConstructComplexTypeDeclaration) 
 /]
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then

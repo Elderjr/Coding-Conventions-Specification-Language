@@ -1,0 +1,64 @@
+let violations: Set(ASTNode) = ClassDeclaration.allInstances()->select(clazz_1: ClassDeclaration |
+  let clazz_2: ASTNode = if clazz_1.superClass <> null then
+    clazz_1.superClass.type
+  else
+    null
+  endif in
+  clazz_2 <> null and
+  clazz_2.oclIsKindOf(ClassDeclaration) and
+  let clazz_1_constructors: OrderedSet(ASTNode) = clazz_1.bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+  clazz_1_constructors->exists(constructor_3: ASTNode |  
+  constructor_3 <> null and
+  constructor_3.oclIsKindOf(ConstructorDeclaration) and
+  let clazz_1_superInterfaces: OrderedSet(ASTNode) = clazz_1.superInterfaces->collect(type) in
+  clazz_1_superInterfaces->exists(interface_4: ASTNode |  
+  interface_4 <> null and
+  interface_4.oclIsKindOf(InterfaceDeclaration) and
+  let clazz_1_fields: OrderedSet(VariableDeclarationFragment) = clazz_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  clazz_1_fields->exists(var_5: VariableDeclarationFragment |  
+  var_5 <> null and
+  var_5.oclIsKindOf(VariableDeclarationFragment) and var_5.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let clazz_1_methods: OrderedSet(MethodDeclaration) = clazz_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  clazz_1_methods->exists(method_6: MethodDeclaration |  
+  method_6 <> null and
+  true and
+  let clazz_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(clazz_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in clazz_1_imports <> null and
+  clazz_1_imports->exists(importStmt_7: ImportDeclaration |  
+  importStmt_7 <> null and
+  true and
+  let clazz_1_nestedTypes: OrderedSet(ASTNode) = clazz_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  clazz_1_nestedTypes <> null and
+  clazz_1_nestedTypes->exists(customType_8: ASTNode |  
+  customType_8 <> null and
+  customType_8.oclIsKindOf(AbstractTypeDeclaration) and
+  clazz_1.modifier <> null and
+  (not clazz_1.modifier.static) and
+  clazz_1.oclAsType(NamedElement).name = 'CustomComplexType' and
+  let clazz_1_annotations: OrderedSet(ASTNode) = clazz_1.annotations in 
+  clazz_1_annotations <> null and
+  clazz_1_annotations->exists(annotation_9: ASTNode |  
+  annotation_9 <> null and
+  annotation_9.oclIsKindOf(Annotation) and
+  clazz_1.modifier <> null and
+  clazz_1.modifier.visibility = VisibilityKind::public
+--Close exists declarations
+)))))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -119,3 +119,13 @@ let [annotationsSet /]: OrderedSet(ASTNode) = [varname /].annotations in
 [annotationsSet /] <> null and
 [annotableElement.writeSetConditions(annotationsSet, annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
 [/template]
+
+[comment write Annotations condition when annotation = EnumConstant /]
+[template public writeAnnotationsCondition(annotableElement: EnumConstant, varname: String, metaclass: String) ? (annotableElement.mustWriteConditionFor('annotations'))
+{
+  annotationsSet: String = annotableElement.getUniqueOclName().concat('_annotations');
+}]
+let [annotationsSet /]: OrderedSet(ASTNode) = [varname /].annotations in 
+[annotationsSet /] <> null and
+[annotableElement.writeSetConditions(annotationsSet, annotableElement.annotations, 'ASTNode', CollectionKind::ANY) /]
+[/template]

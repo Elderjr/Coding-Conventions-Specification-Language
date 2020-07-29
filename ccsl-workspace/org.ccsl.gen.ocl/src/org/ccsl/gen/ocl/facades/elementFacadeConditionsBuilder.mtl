@@ -51,7 +51,10 @@
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationFieldConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeDeclarationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::constructComplexTypeDeclarationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::jClassConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::jInterfaceConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::enumConstantConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
@@ -548,6 +551,34 @@ OrderedSet(String){
 [type.getComplexTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @ConstructComplexTypeDeclaration conditions /]
+[query private getConstructComplexTypeDeclarationConditions(type: ConstructComplexTypeDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeConstructComplexTypeDeclarationTypecheckCondition(varname, typecheck),
+  type.writeConstructorsCondition(completeVarname)
+}->addAll(type.getComplexTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(type: ConstructComplexTypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getConstructComplexTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @JClass conditions /]
+[query private getJClassConditions(clazz: JClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = clazz.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  clazz.writeJClassTypecheckCondition(varname, typecheck),
+  clazz.writeSuperclassCondition(completeVarname)
+}->addAll(clazz.getConstructComplexTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(clazz: JClass, varname: String, typecheck: Boolean, metaclass: String)]
+[clazz.getJClassConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 [comment Write @JInterface conditions /]
 [query private getJInterfaceConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = interface.visitElement(varname, metaclass) in
@@ -561,6 +592,19 @@ OrderedSet(String){
 [interface.getJInterfaceConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @EnumConstant conditions /]
+[query private getEnumConstantConditions(enumConstant: EnumConstant, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = enumConstant.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  enumConstant.writeEnumConstantTypecheckCondition(varname, typecheck),
+  enumConstant.writeArgumentsCondition(completeVarname)
+}->addAll(enumConstant.getNamedElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(enumConstant: EnumConstant, varname: String, typecheck: Boolean, metaclass: String)]
+[enumConstant.getEnumConstantConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Expression Package /]
 
 [comment write @Expression conditions/]

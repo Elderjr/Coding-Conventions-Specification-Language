@@ -1,0 +1,47 @@
+let violations: Set(ASTNode) = AbstractTypeDeclaration.allInstances()->select(constructComplexTypeDeclaration_1: AbstractTypeDeclaration |
+  (
+    constructComplexTypeDeclaration_1.oclIsKindOf(AbstractTypeDeclaration) and 
+    not(
+      constructComplexTypeDeclaration_1.oclIsKindOf(AnnotationTypeDeclaration) or
+      constructComplexTypeDeclaration_1.oclIsKindOf(InterfaceDeclaration) 
+    )
+  ) and
+  let constructComplexTypeDeclaration_1_constructors: OrderedSet(ASTNode) = constructComplexTypeDeclaration_1.bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+  constructComplexTypeDeclaration_1_constructors->exists(constructor_2: ASTNode |  
+  constructor_2 <> null and
+  constructor_2.oclIsKindOf(ConstructorDeclaration) and
+  let constructComplexTypeDeclaration_1_superInterfaces: OrderedSet(ASTNode) = constructComplexTypeDeclaration_1.superInterfaces->collect(type) in
+  constructComplexTypeDeclaration_1_superInterfaces->exists(interface_3: ASTNode |  
+  interface_3 <> null and
+  interface_3.oclIsKindOf(InterfaceDeclaration) and
+  let constructComplexTypeDeclaration_1_fields: OrderedSet(VariableDeclarationFragment) = constructComplexTypeDeclaration_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  constructComplexTypeDeclaration_1_fields->exists(var_4: VariableDeclarationFragment |  
+  var_4 <> null and
+  var_4.oclIsKindOf(VariableDeclarationFragment) and var_4.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let constructComplexTypeDeclaration_1_methods: OrderedSet(MethodDeclaration) = constructComplexTypeDeclaration_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  constructComplexTypeDeclaration_1_methods->exists(method_5: MethodDeclaration |  
+  method_5 <> null and
+  true and
+  constructComplexTypeDeclaration_1.modifier <> null and
+  (not constructComplexTypeDeclaration_1.modifier.static) and
+  constructComplexTypeDeclaration_1.oclAsType(NamedElement).name = 'CustomComplexType' and
+  let constructComplexTypeDeclaration_1_annotations: OrderedSet(ASTNode) = constructComplexTypeDeclaration_1.annotations in 
+  constructComplexTypeDeclaration_1_annotations <> null and
+  constructComplexTypeDeclaration_1_annotations->exists(annotation_6: ASTNode |  
+  annotation_6 <> null and
+  annotation_6.oclIsKindOf(Annotation) and
+  constructComplexTypeDeclaration_1.modifier <> null and
+  constructComplexTypeDeclaration_1.modifier.visibility = VisibilityKind::none
+--Close exists declarations
+)))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

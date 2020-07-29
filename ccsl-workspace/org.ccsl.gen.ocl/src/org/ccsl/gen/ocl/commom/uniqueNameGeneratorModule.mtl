@@ -34,10 +34,21 @@ complexType
 complexTypeDecl
 [/template]
 
+[template public getBaseName(e: ConstructComplexTypeDeclaration)]
+constructComplexTypeDeclaration
+[/template]
+
+[template public getBaseName(e: JClass)]
+clazz
+[/template]
+
 [template public getBaseName(e: JInterface)]
 interface
 [/template]
 
+[template public getBaseName(e: EnumConstant)]
+enumConstant
+[/template]
 
 [template public getBaseName(e: AnnotationType)]
 annotationType

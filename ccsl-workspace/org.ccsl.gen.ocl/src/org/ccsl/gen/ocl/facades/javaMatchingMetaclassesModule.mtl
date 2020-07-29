@@ -65,8 +65,20 @@ AbstractTypeDeclaration,AnonymousClassDeclaration
 AbstractTypeDeclaration
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: ConstructComplexTypeDeclaration)]
+AbstractTypeDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: JClass)]
+ClassDeclaration
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: JInterface)]
 InterfaceDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: EnumConstant)]
+EnumConstantDeclaration
 [/template]
 
 [template private writeElementMatchingJavaMetaclasses(e: AnnotationType)]

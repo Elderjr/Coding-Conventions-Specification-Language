@@ -1,0 +1,16 @@
+let violations: Set(ASTNode) = EnumConstantDeclaration.allInstances()->select(enumConstant_1: EnumConstantDeclaration |
+  let enumConstant_1_arguments: OrderedSet(ASTNode) = enumConstant_1.arguments in
+  enumConstant_1_arguments->exists(expression_2: ASTNode |  
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  enumConstant_1.oclAsType(NamedElement).name = 'foo' and
+  let enumConstant_1_annotations: OrderedSet(ASTNode) = enumConstant_1.annotations in 
+  enumConstant_1_annotations <> null and
+  enumConstant_1_annotations->exists(annotation_3: ASTNode |  
+  annotation_3 <> null and
+  annotation_3.oclIsKindOf(Annotation)
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

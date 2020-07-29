@@ -1,0 +1,19 @@
+[comment encoding = UTF-8 /]
+[module jClassConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+[template public writeJClassTypecheckCondition(class: JClass, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ClassDeclaration)
+[/template]
+
+[template public writeSuperclassCondition(class: JClass, varname: String) ? (class.mustWriteConditionFor('superClass'))]
+let [class.superClass.getFieldName() /]: ASTNode = if [varname /].superClass <> null then
+  [varname /].superClass.type
+else
+  null
+endif in
+[class.generatesFieldCondition(class.superClass, class.superClass.getFieldName(), 'ASTNode') /]
+[/template]
