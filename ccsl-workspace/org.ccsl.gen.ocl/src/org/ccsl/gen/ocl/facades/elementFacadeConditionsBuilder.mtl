@@ -50,6 +50,8 @@
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationFieldConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeDeclarationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::jInterfaceConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
@@ -529,6 +531,34 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(type: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
 [type.getComplexTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ComplexTypeDeclaration conditions /]
+[query private getComplexTypeDeclarationConditions(type: ComplexTypeDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeComplexTypeDeclarationTypecheckCondition(varname, typecheck),
+  type.writeSuperInterfacesCondition(completeVarname)
+}->addAll(type.getComplexTypeConditions(completeVarname, false, concreteMetaclass))
+->addAll(type.getTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(type: ComplexTypeDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getComplexTypeDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @JInterface conditions /]
+[query private getJInterfaceConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = interface.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  interface.writeJInterfaceTypecheckCondition(varname, typecheck)
+}->addAll(interface.getComplexTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(interface: JInterface, varname: String, typecheck: Boolean, metaclass: String)]
+[interface.getJInterfaceConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Expression Package /]

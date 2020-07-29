@@ -1,0 +1,54 @@
+let violations: Set(ASTNode) = AbstractTypeDeclaration.allInstances()->select(complexTypeDecl_1: AbstractTypeDeclaration |
+  (complexTypeDecl_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexTypeDecl_1.oclIsKindOf(AnnotationTypeDeclaration))) and
+  let complexTypeDecl_1_superInterfaces: OrderedSet(ASTNode) = complexTypeDecl_1.superInterfaces->collect(type) in
+  complexTypeDecl_1_superInterfaces->exists(interface_2: ASTNode |  
+  interface_2 <> null and
+  interface_2.oclIsKindOf(InterfaceDeclaration) and
+  let complexTypeDecl_1_fields: OrderedSet(VariableDeclarationFragment) = complexTypeDecl_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  complexTypeDecl_1_fields->exists(var_3: VariableDeclarationFragment |  
+  var_3 <> null and
+  var_3.oclIsKindOf(VariableDeclarationFragment) and var_3.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let complexTypeDecl_1_methods: OrderedSet(MethodDeclaration) = complexTypeDecl_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  complexTypeDecl_1_methods->exists(method_4: MethodDeclaration |  
+  method_4 <> null and
+  true and
+  let complexTypeDecl_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(complexTypeDecl_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in complexTypeDecl_1_imports <> null and
+  complexTypeDecl_1_imports->exists(importStmt_5: ImportDeclaration |  
+  importStmt_5 <> null and
+  true and
+  let complexTypeDecl_1_nestedTypes: OrderedSet(ASTNode) = complexTypeDecl_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  complexTypeDecl_1_nestedTypes <> null and
+  complexTypeDecl_1_nestedTypes->exists(customType_6: ASTNode |  
+  customType_6 <> null and
+  customType_6.oclIsKindOf(AbstractTypeDeclaration) and
+  complexTypeDecl_1.modifier <> null and
+  (not complexTypeDecl_1.modifier.static) and
+  complexTypeDecl_1.modifier <> null and
+  complexTypeDecl_1.modifier.inheritance = InheritanceKind::final and
+  complexTypeDecl_1.oclAsType(NamedElement).name = 'CustomComplexType' and
+  let complexTypeDecl_1_annotations: OrderedSet(ASTNode) = complexTypeDecl_1.annotations in 
+  complexTypeDecl_1_annotations <> null and
+  complexTypeDecl_1_annotations->exists(annotation_7: ASTNode |  
+  annotation_7 <> null and
+  annotation_7.oclIsKindOf(Annotation)
+--Close exists declarations
+))))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

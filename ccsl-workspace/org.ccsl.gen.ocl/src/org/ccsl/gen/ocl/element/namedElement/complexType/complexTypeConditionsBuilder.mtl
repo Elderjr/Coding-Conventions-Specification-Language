@@ -41,10 +41,23 @@ endif in
 [complexType.writeSetConditions(fields, complexType.fields, 'VariableDeclarationFragment', CollectionKind::ANY) /]
 [/template]
 
+[template public writeFieldsCondition(complexType: ComplexTypeDeclaration, varname: String) ? (complexType.mustWriteConditionFor('fields')){
+  fields: String = complexType.getUniqueOclName().concat('_fields');
+}]
+let [fields /]: OrderedSet(VariableDeclarationFragment) = [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+  if field.oclIsKindOf(FieldDeclaration) then
+    field.oclAsType(FieldDeclaration).fragments
+  else
+    null
+  endif
+)->select(field: ASTNode | field <> null)->flatten() in
+[complexType.writeSetConditions(fields, complexType.fields, 'VariableDeclarationFragment', CollectionKind::ANY) /]
+[/template]
+
 [template public writeMethodsCondition(complexType: ComplexType, varname: String) ? (complexType.mustWriteConditionFor('methods')){
   methods: String = complexType.getUniqueOclName().concat('_methods');
 }]
-let [methods /]: OrderedSet(VariableDeclarationFragment) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
+let [methods /]: OrderedSet(MethodDeclaration) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
   [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
     m.oclIsKindOf(MethodDeclaration)
   )
@@ -56,6 +69,14 @@ endif in
 [complexType.writeSetConditions(methods, complexType.methods, 'MethodDeclaration', CollectionKind::ANY) /]
 [/template]
 
+[template public writeMethodsCondition(complexType: ComplexTypeDeclaration, varname: String) ? (complexType.mustWriteConditionFor('methods')){
+  methods: String = complexType.getUniqueOclName().concat('_methods');
+}]
+let [methods /]: OrderedSet(MethodDeclaration) = [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+  m.oclIsKindOf(MethodDeclaration)
+) in
+[complexType.writeSetConditions(methods, complexType.methods, 'MethodDeclaration', CollectionKind::ANY) /]
+[/template]
 
 
 

@@ -30,6 +30,15 @@ customType
 complexType
 [/template]
 
+[template public getBaseName(e: ComplexTypeDeclaration)]
+complexTypeDecl
+[/template]
+
+[template public getBaseName(e: JInterface)]
+interface
+[/template]
+
+
 [template public getBaseName(e: AnnotationType)]
 annotationType
 [/template]
