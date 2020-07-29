@@ -1,0 +1,18 @@
+let violations: Set(ASTNode) = AnnotationTypeMemberDeclaration.allInstances()->select(annotationField_1: AnnotationTypeMemberDeclaration |
+  let expression_2: ASTNode = annotationField_1.default in
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let intPrimitive_3: ASTNode = annotationField_1.type.type in
+  intPrimitive_3 <> null and
+  intPrimitive_3.oclIsKindOf(PrimitiveTypeInt) and
+  annotationField_1.oclAsType(NamedElement).name = 'value' and
+  let annotationField_1_annotations: OrderedSet(ASTNode) = annotationField_1.annotations in 
+  annotationField_1_annotations <> null and
+  annotationField_1_annotations->exists(annotation_4: ASTNode |  
+  annotation_4 <> null and
+  annotation_4.oclIsKindOf(Annotation)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

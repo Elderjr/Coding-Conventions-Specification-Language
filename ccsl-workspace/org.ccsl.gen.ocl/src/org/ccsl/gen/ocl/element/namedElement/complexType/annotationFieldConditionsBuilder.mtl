@@ -1,0 +1,30 @@
+[comment encoding = UTF-8 /]
+[module annotationFieldConditionsBuilder('http://www.example.org/ccsl/elements/namedElements')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::inheritanceUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment Modisco map:
+	*AnnotationTypeMemberDeclaration 
+/]
+
+[comment TypeDeclaration properties: 
+	*default
+	*type
+/]
+[template public writeAnnotationFieldTypecheckCondition(field: AnnotationField, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AnnotationTypeMemberDeclaration)
+[/template]
+
+[template public writeDefaultCondition(field: AnnotationField, varname: String) ? (field.mustWriteConditionFor('default'))]
+let [field.default.getFieldName() /]: ASTNode = [varname /].default in
+[field.generatesFieldCondition(field.default, field.default.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeTypeCondition(field: AnnotationField, varname: String) ? (field.mustWriteConditionFor('type'))]
+let [field.type.getFieldName() /]: ASTNode = [varname /].type.type in
+[field.generatesFieldCondition(field.type, field.type.getFieldName(), 'ASTNode') /]
+[/template]
+

@@ -26,6 +26,9 @@ package
 customType
 [/template]
 
+[template public getBaseName(e: AnnotationField)]
+annotationField
+[/template]
 [comment Method Package /]
 
 [template public getBaseName(e: SimpleMethod)]
