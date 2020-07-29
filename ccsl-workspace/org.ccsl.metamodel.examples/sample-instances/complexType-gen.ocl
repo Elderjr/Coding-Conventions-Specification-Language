@@ -1,0 +1,42 @@
+let violations: Set(ASTNode) = AbstractTypeDeclaration.allInstances()->union(AnonymousClassDeclaration.allInstances())->select(complexType_1: ASTNode |
+  (
+    (complexType_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexType_1.oclIsKindOf(AnnotationTypeDeclaration))) or 
+    (complexType_1.oclIsKindOf(AnonymousClassDeclaration))
+  ) and
+  let complexType_1_fields: OrderedSet(VariableDeclarationFragment) = if complexType_1.oclIsKindOf(AbstractTypeDeclaration) then
+    complexType_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+      if field.oclIsKindOf(FieldDeclaration) then
+        field.oclAsType(FieldDeclaration).fragments
+      else
+        null
+      endif
+    )->select(field: ASTNode | field <> null)->flatten()
+  else
+    complexType_1.oclAsType(AnonymousClassDeclaration).bodyDeclarations->collect(field: ASTNode | 
+      if field.oclIsKindOf(FieldDeclaration) then
+        field.oclAsType(FieldDeclaration).fragments
+      else
+        null
+      endif
+    )->select(field: ASTNode | field <> null)->flatten()
+  endif in
+  complexType_1_fields->exists(var_2: VariableDeclarationFragment |  
+  var_2 <> null and
+  var_2.oclIsKindOf(VariableDeclarationFragment) and var_2.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let complexType_1_methods: OrderedSet(VariableDeclarationFragment) = if complexType_1.oclIsKindOf(AbstractTypeDeclaration) then
+    complexType_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+      m.oclIsKindOf(MethodDeclaration)
+    )
+  else
+    complexType_1.oclAsType(AnonymousClassDeclaration).bodyDeclarations->select(m: ASTNode | 
+      m.oclIsKindOf(MethodDeclaration)
+    )
+  endif in
+  complexType_1_methods->exists(method_3: MethodDeclaration |  
+  method_3 <> null and
+  true
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

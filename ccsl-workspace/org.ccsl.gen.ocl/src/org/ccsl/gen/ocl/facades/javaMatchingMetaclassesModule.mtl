@@ -57,6 +57,12 @@ MethodDeclaration
 AbstractTypeDeclaration
 [/template]
 
+
+[template private writeElementMatchingJavaMetaclasses(e: ComplexType)]
+AbstractTypeDeclaration,AnonymousClassDeclaration
+[/template]
+
+
 [template private writeElementMatchingJavaMetaclasses(e: AnnotationType)]
 AnnotationTypeDeclaration
 [/template]

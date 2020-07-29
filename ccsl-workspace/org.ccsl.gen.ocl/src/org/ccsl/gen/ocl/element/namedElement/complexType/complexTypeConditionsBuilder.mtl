@@ -1,0 +1,61 @@
+[comment encoding = UTF-8 /]
+[module complexTypeConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+
+
+
+[template public writeComplexTypeTypecheckCondition(complexType: ComplexType, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  ([varname /].oclIsKindOf(AbstractTypeDeclaration) and (not [varname /].oclIsKindOf(AnnotationTypeDeclaration))) or 
+  ([varname /].oclIsKindOf(AnonymousClassDeclaration))
+)
+[/template]
+
+
+[template public writeFieldsCondition(complexType: ComplexType, varname: String) ? (complexType.mustWriteConditionFor('fields')){
+  fields: String = complexType.getUniqueOclName().concat('_fields');
+}]
+let [fields /]: OrderedSet(VariableDeclarationFragment) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
+  [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten()
+else
+  [varname /].oclAsType(AnonymousClassDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten()
+endif in
+[complexType.writeSetConditions(fields, complexType.fields, 'VariableDeclarationFragment', CollectionKind::ANY) /]
+[/template]
+
+[template public writeMethodsCondition(complexType: ComplexType, varname: String) ? (complexType.mustWriteConditionFor('methods')){
+  methods: String = complexType.getUniqueOclName().concat('_methods');
+}]
+let [methods /]: OrderedSet(VariableDeclarationFragment) = if [varname /].oclIsKindOf(AbstractTypeDeclaration) then
+  [varname /].oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  )
+else
+  [varname /].oclAsType(AnonymousClassDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  )
+endif in
+[complexType.writeSetConditions(methods, complexType.methods, 'MethodDeclaration', CollectionKind::ANY) /]
+[/template]
+
+
+
+

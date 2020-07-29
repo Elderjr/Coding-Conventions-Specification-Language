@@ -49,6 +49,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::complexType::typeDeclarationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationTypeConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::annotationFieldConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::complexTypeConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
@@ -513,6 +514,21 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(field: AnnotationField, varname: String, typecheck: Boolean, metaclass: String)]
 [field.getAnnotationFieldConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ComplexType conditions /]
+[query private getComplexTypeConditions(type: ComplexType, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = type.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  type.writeComplexTypeTypecheckCondition(varname, typecheck),
+  type.writeFieldsCondition(completeVarname),
+  type.writeMethodsCondition(completeVarname)
+}->addAll(type.getElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(type: ComplexType, varname: String, typecheck: Boolean, metaclass: String)]
+[type.getComplexTypeConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Expression Package /]

@@ -11,7 +11,8 @@
   e.oclIsKindOf(FieldVariable) or
   e.oclIsKindOf(LocalVariable) or
   e.oclIsTypeOf(ObjectType) or
-  e.oclIsTypeOf(AnnotationType)
+  e.oclIsTypeOf(AnnotationType) or
+  e.oclIsTypeOf(ComplexType)
 /]
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then

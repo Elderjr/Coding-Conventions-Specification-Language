@@ -26,6 +26,10 @@ package
 customType
 [/template]
 
+[template public getBaseName(e: ComplexType)]
+complexType
+[/template]
+
 [template public getBaseName(e: AnnotationType)]
 annotationType
 [/template]
@@ -37,6 +41,14 @@ annotationField
 
 [template public getBaseName(e: SimpleMethod)]
 simpleMethod
+[/template]
+
+[template public getBaseName(e: Constructor)]
+constructor
+[/template]
+
+[template public getBaseName(e: Method)]
+method
 [/template]
 
 [comment DataType Package /]
