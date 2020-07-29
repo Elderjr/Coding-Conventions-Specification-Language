@@ -77,6 +77,10 @@ ClassDeclaration
 InterfaceDeclaration
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: JEnum)]
+EnumDeclaration
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: EnumConstant)]
 EnumConstantDeclaration
 [/template]

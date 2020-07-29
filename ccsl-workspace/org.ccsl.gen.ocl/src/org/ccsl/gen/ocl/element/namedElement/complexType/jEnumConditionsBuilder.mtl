@@ -1,0 +1,18 @@
+[comment encoding = UTF-8 /]
+[module jEnumConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+[template public writeEnumConstantTypecheckCondition(enum: JEnum, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(EnumDeclaration)
+[/template]
+
+[template public writeConstantsCondition(enum: JEnum, varname: String) ? (enum.mustWriteConditionFor('enumConstants')){
+  constants: String = enum.getUniqueOclName().concat('_constants');
+}]
+let [constants /]: OrderedSet(ASTNode) = [varname /].enumConstants in
+[enum.writeSetConditions(constants, enum.enumConstants, 'ASTNode', CollectionKind::ANY) /]
+[/template]

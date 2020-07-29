@@ -592,6 +592,20 @@ OrderedSet(String){
 [interface.getJInterfaceConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @JEnum conditions /]
+[query private getJEnumConditions(enum: JEnum, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = enum.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  enum.writeJEnumTypecheckCondition(varname, typecheck),
+  enum.writeConstantsCondition(completeVarname)
+}->addAll(enum.getConstructComplexTypeDeclarationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(enum: JEnum, varname: String, typecheck: Boolean, metaclass: String)]
+[enum.getJEnumConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 [comment Write @EnumConstant conditions /]
 [query private getEnumConstantConditions(enumConstant: EnumConstant, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = enumConstant.visitElement(varname, metaclass) in

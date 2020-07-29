@@ -46,6 +46,10 @@ clazz
 interface
 [/template]
 
+[template public getBaseName(e: JEnum)]
+EnumDeclaration
+[/template]
+
 [template public getBaseName(e: EnumConstant)]
 enumConstant
 [/template]
