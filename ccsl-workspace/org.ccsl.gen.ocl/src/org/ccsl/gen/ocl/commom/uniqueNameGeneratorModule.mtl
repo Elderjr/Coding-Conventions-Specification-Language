@@ -153,6 +153,10 @@ annotation
 instanceof
 [/template]
 
+[template public getBaseName(e: CastExpression)]
+castExp
+[/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

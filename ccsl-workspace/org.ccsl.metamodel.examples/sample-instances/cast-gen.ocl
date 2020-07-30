@@ -1,0 +1,16 @@
+let violations: Set(ASTNode) = CastExpression.allInstances()->select(castExp_1: CastExpression |
+  let expression_2: ASTNode = castExp_1.expression->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let customType_3: ASTNode = castExp_1.type.type in
+  customType_3 <> null and
+  customType_3.oclIsKindOf(AbstractTypeDeclaration)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

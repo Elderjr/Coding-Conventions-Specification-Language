@@ -60,6 +60,8 @@
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::instanceofConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::castExpressionConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -645,6 +647,36 @@ OrderedSet(String){
 [e.getAnnotationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+
+[comment Write @InstanceofExpression conditions /]
+[query private getInstanceofExpressionConditions(instanceof: InstanceofExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = instanceof.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  instanceof.writeInstanceofExpressionTypecheckCondition(varname, typecheck),
+  instanceof.writeObjectExpressionCondition(completeVarname),
+  instanceof.writeTypeCondition(completeVarname)
+ }->addAll(instanceof.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: InstanceofExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getInstanceofExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @CastExpression conditions /]
+[query private getCastExpressionConditions(cast: CastExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = cast.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  cast.writeCastExpressionTypecheckCondition(varname, typecheck),
+  cast.writeExpressionCondition(completeVarname),
+  cast.writeTypeCondition(completeVarname)
+ }->addAll(cast.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: CastExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getCastExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Statement package /]
 
 [comment Write @Statement conditions /]

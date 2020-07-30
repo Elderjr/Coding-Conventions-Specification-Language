@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module castExpressionConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment Modisco map:
+	*CastExpression
+/]
+
+[template public writeCastExpressionTypecheckCondition(cast: CastExpression, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(CastExpression)
+[/template]
+
+[template public writeExpressionCondition(cast: CastExpression, varname: String) ? (cast.mustWriteConditionFor('expression'))]
+let [cast.expression.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[cast.generatesFieldCondition(cast.expression, cast.expression.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeTypeCondition(cast: CastExpression, varname: String) ? (cast.mustWriteConditionFor('type'))]
+let [cast.type.getFieldName() /]: ASTNode = [varname /].type.type in
+[cast.generatesFieldCondition(cast.type, cast.type.getFieldName(), 'ASTNode') /]
+[/template]

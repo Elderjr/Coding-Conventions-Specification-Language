@@ -16,7 +16,7 @@
 [varname /].oclIsKindOf(InstanceofExpression)
 [/template]
 
-[template public writeObjectExpression(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('objectExpression'))]
+[template public writeObjectExpressionCondition(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('objectExpression'))]
 let [instanceof.objectExpression.getFieldName() /]: ASTNode = [varname /].leftOperand->asOrderedSet()->closure(x: ASTNode |
   if x.oclIsKindOf(ParenthesizedExpression) then
     x.oclAsType(ParenthesizedExpression).expression
@@ -27,7 +27,7 @@ let [instanceof.objectExpression.getFieldName() /]: ASTNode = [varname /].leftOp
 [instanceof.generatesFieldCondition(instanceof.objectExpression, instanceof.objectExpression.getFieldName(), 'ASTNode') /]
 [/template]
 
-[template public writeObjectExpression(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('type'))]
+[template public writeTypeCondition(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('type'))]
 let [instanceof.type.getFieldName() /]: ASTNode = [varname /].rightOperand.type in
 [instanceof.generatesFieldCondition(instanceof.type, instanceof.type.getFieldName(), 'ASTNode') /]
 [/template]

@@ -171,6 +171,10 @@ Annotation
 InstanceofExpression
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: CastExpression)]
+CastExpression
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration
