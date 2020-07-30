@@ -65,6 +65,7 @@
 [import org::ccsl::gen::ocl::element::expression::ternaryExpressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::invocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::methodInvocationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::constructorInvocationConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -713,6 +714,7 @@ OrderedSet(String){
 [e.getInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @MethodInvocation conditions /]
 [query private getMethodInvocationConditions(invocation: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
@@ -724,6 +726,19 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getMethodInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ConstructorInvocation conditions /]
+[query private getConstructorInvocationConditions(invocation: ConstructorInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  invocation.writeConstructorInvocationTypecheckCondition(varname, typecheck)
+ }->addAll(invocation.getInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ConstructorInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getConstructorInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Statement package /]

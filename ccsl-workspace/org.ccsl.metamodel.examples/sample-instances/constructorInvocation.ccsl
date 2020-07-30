@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="invocations:ConstructorInvocation" method="//@context/@contextElements.1" typeArgs="//@context/@contextElements.2">
+      <args/>
+    </contextElements>
+    <contextElements xsi:type="method:Constructor"/>
+    <contextElements xsi:type="complexType:TypeDeclaration"/>
+  </context>
+</ccsl:AtomicRule>

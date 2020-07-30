@@ -1,0 +1,23 @@
+let violations: Set(ASTNode) = ClassInstanceCreation.allInstances()->union(ConstructorInvocation.allInstances())->union(SuperConstructorInvocation.allInstances())->select(constructorInv_1: ASTNode |
+  let constructorInv_1_args: OrderedSet(ASTNode) = constructorInv_1.oclAsType(AbstractMethodInvocation).arguments->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  constructorInv_1_args->exists(expression_2: ASTNode |  
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let constructorInv_1_typeArgs: OrderedSet(ASTNode) = constructorInv_1.oclAsType(AbstractMethodInvocation).typeArguments->collect(type) in
+  constructorInv_1_typeArgs->exists(customType_3: ASTNode |  
+  customType_3 <> null and
+  customType_3.oclIsKindOf(AbstractTypeDeclaration) and
+  let constructor_4: ASTNode = constructorInv_1.oclAsType(AbstractMethodInvocation).method in 
+  constructor_4 <> null and
+  constructor_4.oclIsKindOf(ConstructorDeclaration)
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

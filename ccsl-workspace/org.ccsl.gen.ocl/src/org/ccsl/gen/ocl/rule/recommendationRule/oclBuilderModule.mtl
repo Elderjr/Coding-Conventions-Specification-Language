@@ -43,13 +43,7 @@ endif
 /]
 
 [query private isSubjectNeedsTypecheckOnStart(e: Element): Boolean = 
-if e.isTypecheckAlwaysNeeded() then
-  true
-else if e.getMatchingJavaMetaclasses()->size() = 1 then
-  false
-else
-  true
-endif endif
+e.isTypecheckAlwaysNeeded()
 /]
 
 [template private writeOCLToSelectElements(rule: AtomicRule) post(trim())

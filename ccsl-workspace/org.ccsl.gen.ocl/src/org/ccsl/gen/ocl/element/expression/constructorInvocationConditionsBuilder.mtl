@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module constructorInvocationConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeConstructorInvocationTypecheckCondition(invocation: ConstructorInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  [varname /].oclIsKindOf(ConstructorInvocation) or 
+  [varname /].oclIsKindOf(ClassInstanceCreation) or
+  [varname /].oclIsKindOf(SuperConstructorInvocation)
+)
+[/template]
