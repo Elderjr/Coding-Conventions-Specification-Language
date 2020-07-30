@@ -1,16 +1,59 @@
-let violations: Set(ASTNode) = EnumConstantDeclaration.allInstances()->select(enumConstant_1: EnumConstantDeclaration |
-  let enumConstant_1_arguments: OrderedSet(ASTNode) = enumConstant_1.arguments in
-  enumConstant_1_arguments->exists(expression_2: ASTNode |  
-  expression_2 <> null and
-  expression_2.oclIsKindOf(Expression) and
-  enumConstant_1.oclAsType(NamedElement).name = 'foo' and
-  let enumConstant_1_annotations: OrderedSet(ASTNode) = enumConstant_1.annotations in 
-  enumConstant_1_annotations <> null and
-  enumConstant_1_annotations->exists(annotation_3: ASTNode |  
-  annotation_3 <> null and
-  annotation_3.oclIsKindOf(Annotation)
+let violations: Set(ASTNode) = EnumDeclaration.allInstances()->select(enum_1: EnumDeclaration |
+  let enum_1_constants: OrderedSet(ASTNode) = enum_1.enumConstants in
+  enum_1_constants->exists(enumConstant_2: ASTNode |  
+  enumConstant_2 <> null and
+  enumConstant_2.oclIsKindOf(EnumConstantDeclaration) and
+  let enum_1_constructors: OrderedSet(ASTNode) = enum_1.bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+  enum_1_constructors->exists(constructor_3: ASTNode |  
+  constructor_3 <> null and
+  constructor_3.oclIsKindOf(ConstructorDeclaration) and
+  let enum_1_superInterfaces: OrderedSet(ASTNode) = enum_1.superInterfaces->collect(type) in
+  enum_1_superInterfaces->exists(interface_4: ASTNode |  
+  interface_4 <> null and
+  interface_4.oclIsKindOf(InterfaceDeclaration) and
+  let enum_1_fields: OrderedSet(VariableDeclarationFragment) = enum_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  enum_1_fields->exists(var_5: VariableDeclarationFragment |  
+  var_5 <> null and
+  var_5.oclIsKindOf(VariableDeclarationFragment) and var_5.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let enum_1_methods: OrderedSet(MethodDeclaration) = enum_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  enum_1_methods->exists(method_6: MethodDeclaration |  
+  method_6 <> null and
+  true and
+  let enum_1_imports: OrderedSet(ImportDeclaration) = 
+    let compilationUnits: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(compilationUnit: CompilationUnit | 
+      compilationUnit.types->includes(enum_1)) in
+    if compilationUnits->size() > 0 then
+      compilationUnits->asOrderedSet()->first().imports
+    else
+      null
+    endif
+  in enum_1_imports <> null and
+  enum_1_imports->exists(importStmt_7: ImportDeclaration |  
+  importStmt_7 <> null and
+  true and
+  let enum_1_nestedTypes: OrderedSet(ASTNode) = enum_1.bodyDeclarations->select(t | t.oclIsKindOf(AbstractTypeDeclaration)) in
+  enum_1_nestedTypes <> null and
+  enum_1_nestedTypes->exists(customType_8: ASTNode |  
+  customType_8 <> null and
+  customType_8.oclIsKindOf(AbstractTypeDeclaration) and
+  enum_1.oclAsType(NamedElement).name = 'CustomEnum' and
+  let enum_1_annotations: OrderedSet(ASTNode) = enum_1.annotations in 
+  enum_1_annotations <> null and
+  enum_1_annotations->exists(annotation_9: ASTNode |  
+  annotation_9 <> null and
+  annotation_9.oclIsKindOf(Annotation) and
+  enum_1.modifier <> null and
+  enum_1.modifier.visibility = VisibilityKind::none
 --Close exists declarations
-))
+))))))))
 ) 
 ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
 violations

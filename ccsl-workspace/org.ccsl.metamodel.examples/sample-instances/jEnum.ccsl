@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType">
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" subject="//@context/@contextElements.0">
   <context>
-    <contextElements xsi:type="complexType:JEnum">
+    <contextElements xsi:type="complexType:JEnum" name="CustomEnum" visibility="PACKAGE" superInterfaces="//@context/@contextElements.1">
       <annotations/>
       <imports/>
       <nestedTypes/>
@@ -10,5 +10,6 @@
       <constructors/>
       <enumConstants/>
     </contextElements>
+    <contextElements xsi:type="complexType:JInterface"/>
   </context>
 </ccsl:AtomicRule>

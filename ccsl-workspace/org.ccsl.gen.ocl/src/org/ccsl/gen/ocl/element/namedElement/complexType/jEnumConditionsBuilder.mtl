@@ -6,7 +6,7 @@
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 
 
-[template public writeEnumConstantTypecheckCondition(enum: JEnum, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeJEnumTypecheckCondition(enum: JEnum, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(EnumDeclaration)
 [/template]
 

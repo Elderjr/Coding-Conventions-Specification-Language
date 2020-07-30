@@ -47,7 +47,7 @@ interface
 [/template]
 
 [template public getBaseName(e: JEnum)]
-EnumDeclaration
+enum
 [/template]
 
 [template public getBaseName(e: EnumConstant)]
@@ -147,6 +147,10 @@ expression
 
 [template public getBaseName(e: Annotation)]
 annotation
+[/template]
+
+[template public getBaseName(e: InstanceofExpression)]
+instanceof
 [/template]
 
 [comment Statement Package /]

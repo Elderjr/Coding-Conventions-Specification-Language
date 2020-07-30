@@ -55,6 +55,7 @@
 [import org::ccsl::gen::ocl::element::namedElement::complexType::jClassConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::jInterfaceConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::namedElement::complexType::enumConstantConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::namedElement::complexType::jEnumConditionsBuilder /]
 
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]

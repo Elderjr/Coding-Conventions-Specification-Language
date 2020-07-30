@@ -1,6 +1,9 @@
 [comment encoding = UTF-8 /]
 [module instanceofConditionsBuilder('http://www.example.org/ccsl')]
 
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
 [comment Modisco map:
 	*InstanceofExpression
 /]
@@ -9,6 +12,22 @@
 	*InstanceofExpression
 /]
 
-[template public writeInstanceofExpressionTypecheckCondition(instanceof: InstanceOfExpression, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeInstanceofExpressionTypecheckCondition(instanceof: InstanceofExpression, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(InstanceofExpression)
+[/template]
+
+[template public writeObjectExpression(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('objectExpression'))]
+let [instanceof.objectExpression.getFieldName() /]: ASTNode = [varname /].leftOperand->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[instanceof.generatesFieldCondition(instanceof.objectExpression, instanceof.objectExpression.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeObjectExpression(instanceof: InstanceofExpression, varname: String) ? (instanceof.mustWriteConditionFor('type'))]
+let [instanceof.type.getFieldName() /]: ASTNode = [varname /].rightOperand.type in
+[instanceof.generatesFieldCondition(instanceof.type, instanceof.type.getFieldName(), 'ASTNode') /]
 [/template]
