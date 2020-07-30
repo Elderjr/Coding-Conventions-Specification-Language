@@ -1,0 +1,20 @@
+[comment encoding = UTF-8 /]
+[module methodInvocationConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeMethodInvocationTypecheckCondition(invocation: MethodInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
+([varname /].oclIsKindOf(MethodInvocation) or [varname /].oclIsKindOf(SuperMethodInvocation))
+[/template]
+
+[template public writeFromCondition(invocation: MethodInvocation, varname: String, typecheck: Boolean) ? (invocation.mustWriteConditionFor('from'))]
+let [invocation.from.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(MethodInvocation) then
+  [varname /].oclAsType(MethodInvocation).expression
+else
+  null
+endif
+[invocation.generatesFieldCondition(invocation.from, invocation.from.getFieldName(), 'ASTNode') /]
+[/template]

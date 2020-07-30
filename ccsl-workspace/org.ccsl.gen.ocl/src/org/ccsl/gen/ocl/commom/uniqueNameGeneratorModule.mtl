@@ -161,6 +161,14 @@ castExp
 ternary
 [/template]
 
+[template public getBaseName(e: Invocation)]
+inv
+[/template]
+
+[template public getBaseName(e: MethodInvocation)]
+methodInv
+[/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

@@ -429,7 +429,7 @@
       <eSubpackages name="invocations" nsURI="http://www.example.org/ccsl/elements/expressions/invocations"
           nsPrefix="invocations">
         <eClassifiers xsi:type="ecore:EClass" name="MethodInvocation" eSuperTypes="#//elements/expressions/invocations/Invocation">
-          <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/statements/Statement"
+          <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/expressions/Expression"
               unsettable="true" containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="Invocation" eSuperTypes="#//elements/expressions/Expression">

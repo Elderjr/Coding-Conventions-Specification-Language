@@ -63,6 +63,8 @@
 [import org::ccsl::gen::ocl::element::expression::instanceofConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::castExpressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::ternaryExpressionConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::invocationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::methodInvocationConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -694,6 +696,36 @@ OrderedSet(String){
 [template public writeElementConditions(e: TernaryExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getTernaryExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @Invocation conditions /]
+[query private getInvocationConditions(invocation: Invocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  invocation.writeInvocationTypecheckCondition(varname, typecheck),
+  invocation.writeArgsCondition(completeVarname),
+  invocation.writeTypeArgsCondition(completeVarname),
+  invocation.writeMethodCondition(completeVarname)
+ }->addAll(invocation.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: Invocation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[query private getInvocationConditions(invocation: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  invocation.writeMethodInvocationTypecheckCondition(varname, typecheck),
+  invocation.writeFromCondition(completeVarname)
+ }->addAll(invocation.getInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getMethodInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 [comment Statement package /]
 
 [comment Write @Statement conditions /]

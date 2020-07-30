@@ -1,0 +1,23 @@
+let violations: Set(ASTNode) = AbstractMethodInvocation.allInstances()->select(inv_1: AbstractMethodInvocation |
+  let inv_1_args: OrderedSet(ASTNode) = inv_1.arguments->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  inv_1_args->exists(expression_2: ASTNode |  
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let inv_1_typeArgs: OrderedSet(ASTNode) = inv_1.typeArguments->collect(type) in
+  inv_1_typeArgs->exists(customType_3: ASTNode |  
+  customType_3 <> null and
+  customType_3.oclIsKindOf(AbstractTypeDeclaration) and
+  let simpleMethod_4: ASTNode = inv_1.method in 
+  simpleMethod_4 <> null and
+  simpleMethod_4.oclIsKindOf(AbstractMethodDeclaration) 
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -178,6 +178,14 @@ CastExpression
 [template private writeElementMatchingJavaMetaclasses(e: TernaryExpression)]
 ConditionalExpression
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: Invocation)]
+AbstractMethodInvocation
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: MethodInvocation)]
+MethodInvocation,SuperMethodInvocation
+[/template]
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

@@ -3,16 +3,34 @@
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 
+[template public writeInvocationTypecheckCondition(invocation: Invocation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AbstractMethodInvocation)
+[/template]
 
-[template public writeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('args'))]
-let args: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
+[template public writeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('args')){
+  args: String = invocation.getUniqueOclName().concat('_args');
+}]
+let [args /]: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
   arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
     v.oclAsType(ParenthesizedExpression).expression
   else
     v
   endif)
 ) in
-[invocation.writeSetConditions('args', invocation.args, 'ASTNode', invocation.argsKind) /]
+[invocation.writeSetConditions(args, invocation.args, 'ASTNode', invocation.argsKind) /]
+[/template]
+
+[template public writeTypeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('typeArgs')){
+  args: String = invocation.getUniqueOclName().concat('_typeArgs');
+}]
+let [args /]: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in
+[invocation.writeSetConditions(args, invocation.typeArgs, 'ASTNode', invocation.typeArgsKind) /]
+[/template]
+
+[template public writeMethodCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('method'))]
+let [invocation.method.getFieldName() /]: ASTNode = [varname /].method in 
+[invocation.generatesFieldCondition(invocation.method, invocation.method.getFieldName(), 'ASTNode') /]
 [/template]
