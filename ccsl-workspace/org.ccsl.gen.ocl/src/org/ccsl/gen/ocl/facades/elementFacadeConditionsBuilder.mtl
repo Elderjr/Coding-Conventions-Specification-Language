@@ -713,7 +713,7 @@ OrderedSet(String){
 [e.getInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-[query private getInvocationConditions(invocation: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+[query private getMethodInvocationConditions(invocation: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in

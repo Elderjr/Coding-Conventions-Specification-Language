@@ -1,0 +1,37 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv_1: ASTNode |
+  (methodInv_1.oclIsKindOf(MethodInvocation) or methodInv_1.oclIsKindOf(SuperMethodInvocation)) and
+  let expression_2: ASTNode = if methodInv_1.oclIsKindOf(MethodInvocation) then
+    methodInv_1.oclAsType(MethodInvocation).expression->asOrderedSet()->closure(v: ASTNode | 
+      if v.oclIsKindOf(ParenthesizedExpression) then
+        v.oclAsType(ParenthesizedExpression).expression
+      else
+        v
+      endif
+    )->last()
+  else
+    null
+  endif in
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let methodInv_1_args: OrderedSet(ASTNode) = methodInv_1.oclAsType(AbstractMethodInvocation).arguments->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  methodInv_1_args->exists(expression_3: ASTNode |  
+  expression_3 <> null and
+  expression_3.oclIsKindOf(Expression) and
+  let methodInv_1_typeArgs: OrderedSet(ASTNode) = methodInv_1.oclAsType(AbstractMethodInvocation).typeArguments->collect(type) in
+  methodInv_1_typeArgs->exists(customType_4: ASTNode |  
+  customType_4 <> null and
+  customType_4.oclIsKindOf(AbstractTypeDeclaration) and
+  let simpleMethod_5: ASTNode = methodInv_1.oclAsType(AbstractMethodInvocation).method in 
+  simpleMethod_5 <> null and
+  simpleMethod_5.oclIsKindOf(AbstractMethodDeclaration) 
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -10,11 +10,17 @@
 ([varname /].oclIsKindOf(MethodInvocation) or [varname /].oclIsKindOf(SuperMethodInvocation))
 [/template]
 
-[template public writeFromCondition(invocation: MethodInvocation, varname: String, typecheck: Boolean) ? (invocation.mustWriteConditionFor('from'))]
+[template public writeFromCondition(invocation: MethodInvocation, varname: String) ? (invocation.mustWriteConditionFor('from'))]
 let [invocation.from.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(MethodInvocation) then
-  [varname /].oclAsType(MethodInvocation).expression
+  [varname /].oclAsType(MethodInvocation).expression->asOrderedSet()->closure(v: ASTNode | 
+    if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif
+  )->last()
 else
   null
-endif
+endif in
 [invocation.generatesFieldCondition(invocation.from, invocation.from.getFieldName(), 'ASTNode') /]
 [/template]

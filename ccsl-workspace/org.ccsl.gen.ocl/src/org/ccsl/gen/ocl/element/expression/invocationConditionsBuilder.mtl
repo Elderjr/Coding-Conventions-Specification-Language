@@ -13,7 +13,7 @@
 [template public writeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('args')){
   args: String = invocation.getUniqueOclName().concat('_args');
 }]
-let [args /]: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode |
+let [args /]: OrderedSet(ASTNode) = [varname /].oclAsType(AbstractMethodInvocation).arguments->collect(arg: ASTNode |
   arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
     v.oclAsType(ParenthesizedExpression).expression
   else
@@ -26,11 +26,12 @@ let [args /]: OrderedSet(ASTNode) = [varname /].arguments->collect(arg: ASTNode 
 [template public writeTypeArgsCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('typeArgs')){
   args: String = invocation.getUniqueOclName().concat('_typeArgs');
 }]
-let [args /]: OrderedSet(ASTNode) = [varname /].typeArguments->collect(type) in
+let [args /]: OrderedSet(ASTNode) = [varname /].oclAsType(AbstractMethodInvocation).typeArguments->collect(type) in
 [invocation.writeSetConditions(args, invocation.typeArgs, 'ASTNode', invocation.typeArgsKind) /]
 [/template]
 
+
 [template public writeMethodCondition(invocation: Invocation, varname: String) ? (invocation.mustWriteConditionFor('method'))]
-let [invocation.method.getFieldName() /]: ASTNode = [varname /].method in 
+let [invocation.method.getFieldName() /]: ASTNode = [varname /].oclAsType(AbstractMethodInvocation).method in 
 [invocation.generatesFieldCondition(invocation.method, invocation.method.getFieldName(), 'ASTNode') /]
 [/template]
