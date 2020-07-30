@@ -157,6 +157,10 @@ instanceof
 castExp
 [/template]
 
+[template public getBaseName(e: TernaryExpression)]
+ternary
+[/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

@@ -1,0 +1,46 @@
+[comment encoding = UTF-8 /]
+[module ternaryExpressionConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment Modisco map:
+	*ConditionalExpression
+/]
+
+[template public writeTernaryExpressionTypecheckCondition(ternary: TernaryExpression, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ConditionalExpression)
+[/template]
+
+[template public writeThenExpressionCondition(ternary: TernaryExpression, varname: String) ? (ternary.mustWriteConditionFor('thenExpression'))]
+let [ternary.thenExpression.getFieldName() /]: ASTNode = [varname /].thenExpression->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[ternary.generatesFieldCondition(ternary.thenExpression, ternary.thenExpression.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeElseExpressionCondition(ternary: TernaryExpression, varname: String) ? (ternary.mustWriteConditionFor('elseExpression'))]
+let [ternary.elseExpression.getFieldName() /]: ASTNode = [varname /].elseExpression->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[ternary.generatesFieldCondition(ternary.elseExpression, ternary.elseExpression.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeConditionCondition(ternary: TernaryExpression, varname: String) ? (ternary.mustWriteConditionFor('condition'))]
+let [ternary.condition.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[ternary.generatesFieldCondition(ternary.condition, ternary.condition.getFieldName(), 'ASTNode') /]
+[/template]

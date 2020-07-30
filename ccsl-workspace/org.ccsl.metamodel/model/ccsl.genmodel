@@ -344,6 +344,9 @@
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/invocations/Invocation/method"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/invocations/Invocation/args"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/invocations/Invocation/typeArgs"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/invocations/Invocation/typeArgsKind"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/invocations/ConstructorInvocation">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"

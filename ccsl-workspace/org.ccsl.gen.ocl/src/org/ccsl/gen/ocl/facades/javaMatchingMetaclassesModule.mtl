@@ -175,6 +175,9 @@ InstanceofExpression
 CastExpression
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: TernaryExpression)]
+ConditionalExpression
+[/template]
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

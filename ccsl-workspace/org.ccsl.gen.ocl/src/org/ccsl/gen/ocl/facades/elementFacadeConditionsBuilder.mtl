@@ -62,6 +62,7 @@
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::instanceofConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::castExpressionConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::ternaryExpressionConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -676,6 +677,22 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: CastExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getCastExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @TernaryExpression conditions /]
+[query private getTernaryExpressionConditions(ternary: TernaryExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = ternary.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  ternary.writeTernaryExpressionTypecheckCondition(varname, typecheck),
+  ternary.writeThenExpressionCondition(completeVarname),
+  ternary.writeElseExpressionCondition(completeVarname),
+  ternary.writeConditionCondition(completeVarname)
+ }->addAll(ternary.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: TernaryExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getTernaryExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 

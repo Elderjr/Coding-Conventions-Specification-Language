@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module invocationModule('http://www.example.org/ccsl')]
+[module invocationConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::commom::elementUtils /]

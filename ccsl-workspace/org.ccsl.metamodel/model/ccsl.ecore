@@ -438,6 +438,10 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="method" eType="#//elements/namedElements/method/SimpleMethod"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1"
               eType="#//elements/expressions/Expression" unsettable="true" containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="typeArgs" upperBound="-1"
+              eType="#//elements/datatype/ObjectType"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeArgsKind" eType="#//CollectionKind"
+              defaultValueLiteral="ANY"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="ConstructorInvocation" eSuperTypes="#//elements/expressions/invocations/Invocation">
           <eStructuralFeatures xsi:type="ecore:EReference" name="constructor" eType="#//elements/namedElements/method/Constructor"/>

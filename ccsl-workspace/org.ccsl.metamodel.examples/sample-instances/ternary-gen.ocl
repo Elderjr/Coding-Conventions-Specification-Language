@@ -1,0 +1,31 @@
+let violations: Set(ASTNode) = ConditionalExpression.allInstances()->select(ternary_1: ConditionalExpression |
+  let expression_2: ASTNode = ternary_1.thenExpression->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression) and
+  let expression_3: ASTNode = ternary_1.elseExpression->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_3 <> null and
+  expression_3.oclIsKindOf(Expression) and
+  let expression_4: ASTNode = ternary_1.expression->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_4 <> null and
+  expression_4.oclIsKindOf(Expression)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
