@@ -309,10 +309,10 @@
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/TernaryExpression/elseExpression"/>
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/TernaryExpression/thenExpression"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/InstanceOfExpression">
+        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/InstanceofExpression">
           <genFeatures notify="false" createChild="false" propertySortChoices="true"
-              ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/InstanceOfExpression/type"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/InstanceOfExpression/expression"/>
+              ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/InstanceofExpression/type"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/InstanceofExpression/objectExpression"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/expressions/ArithmeticExpression">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/ArithmeticExpression/operands"/>

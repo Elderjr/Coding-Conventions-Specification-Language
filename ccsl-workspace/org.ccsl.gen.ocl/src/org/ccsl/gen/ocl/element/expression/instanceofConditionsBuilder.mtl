@@ -1,0 +1,14 @@
+[comment encoding = UTF-8 /]
+[module instanceofConditionsBuilder('http://www.example.org/ccsl')]
+
+[comment Modisco map:
+	*InstanceofExpression
+/]
+
+[comment properties:
+	*InstanceofExpression
+/]
+
+[template public writeInstanceofExpressionTypecheckCondition(instanceof: InstanceOfExpression, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(InstanceofExpression)
+[/template]

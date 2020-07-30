@@ -360,9 +360,9 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpression" eType="#//elements/expressions/Expression"
             containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="InstanceOfExpression" eSuperTypes="#//elements/expressions/Expression">
+      <eClassifiers xsi:type="ecore:EClass" name="InstanceofExpression" eSuperTypes="#//elements/expressions/Expression">
         <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//elements/datatype/ObjectType"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//elements/expressions/Expression"
+        <eStructuralFeatures xsi:type="ecore:EReference" name="objectExpression" eType="#//elements/expressions/Expression"
             unsettable="true" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpression" eSuperTypes="#//elements/expressions/Expression">
