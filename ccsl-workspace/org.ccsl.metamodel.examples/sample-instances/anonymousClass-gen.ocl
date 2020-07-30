@@ -1,0 +1,25 @@
+let violations: Set(ASTNode) = AnonymousClassDeclaration.allInstances()->select(anonymousClass_1: AnonymousClassDeclaration |
+  let customType_2: ASTNode = anonymousClass_1.classInstanceCreation.type.type in
+  customType_2 <> null and
+  customType_2.oclIsKindOf(AbstractTypeDeclaration) and
+  let anonymousClass_1_fields: OrderedSet(VariableDeclarationFragment) = anonymousClass_1.bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  anonymousClass_1_fields->exists(var_3: VariableDeclarationFragment |  
+  var_3 <> null and
+  var_3.oclIsKindOf(VariableDeclarationFragment) and var_3.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let anonymousClass_1_methods: OrderedSet(MethodDeclaration) = anonymousClass_1.bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  anonymousClass_1_methods->exists(method_4: MethodDeclaration |  
+  method_4 <> null and
+  true
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

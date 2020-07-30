@@ -1,7 +1,0 @@
-[comment encoding = UTF-8 /]
-[module variableAccessModule('http://www.example.org/ccsl')]
-
-
-[template public writeVariableAccessTypecheckCondition(varAccess: VariableAccess, varname: String, typecheck: Boolean) ? (typecheck)]
-([varname /].oclIsKindOf(SingleVariableAccess) or [varname /].oclIsKindOf(FieldAccess) or [varname /].oclIsKindOf(SuperFieldAccess))  
-[/template]

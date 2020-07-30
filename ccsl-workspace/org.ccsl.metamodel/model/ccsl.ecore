@@ -449,11 +449,15 @@
       </eSubpackages>
       <eSubpackages name="accesses" nsURI="http://www.example.org/ccsl/elements/expressions/accesses"
           nsPrefix="accesses">
-        <eClassifiers xsi:type="ecore:EClass" name="VariableAccess" eSuperTypes="#//elements/expressions/Expression">
+        <eClassifiers xsi:type="ecore:EClass" name="VariableAccess" eSuperTypes="#//elements/expressions/accesses/Access">
           <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//elements/namedElements/variable/Variable"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="DataTypeAccess" eSuperTypes="#//elements/expressions/Expression">
+        <eClassifiers xsi:type="ecore:EClass" name="DataTypeAccess" eSuperTypes="#//elements/expressions/accesses/Access">
           <eStructuralFeatures xsi:type="ecore:EReference" name="datatype" eType="#//elements/datatype/DataType"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Access" eSuperTypes="#//elements/expressions/Expression">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//elements/expressions/Expression"
+              containment="true"/>
         </eClassifiers>
       </eSubpackages>
       <eSubpackages name="arrays" nsURI="http://www.example.org/ccsl/elements/expressions/arrays"

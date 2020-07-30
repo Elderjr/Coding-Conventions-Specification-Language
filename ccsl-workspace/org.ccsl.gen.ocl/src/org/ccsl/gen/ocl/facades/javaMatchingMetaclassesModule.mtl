@@ -191,6 +191,15 @@ MethodInvocation,SuperMethodInvocation
 ClassInstanceCreation,ConstructorInvocation,SuperConstructorInvocation
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: AnonymousClass)]
+AnonymousClassDeclaration
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: VariableAccess)]
+[if e.variable <> null and (e.variable.oclIsKindOf(FieldVariable) or e.variable.oclIsTypeOf(Variable))]
+SingleVariableAccess,FieldAccess,SuperFieldAccess[else]SingleVariableAccess[/if]
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

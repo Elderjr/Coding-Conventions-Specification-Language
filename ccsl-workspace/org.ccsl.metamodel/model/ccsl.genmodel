@@ -362,6 +362,9 @@
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/accesses/DataTypeAccess/datatype"/>
           </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/expressions/accesses/Access">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/accesses/Access/from"/>
+          </genClasses>
         </nestedGenPackages>
         <nestedGenPackages prefix="Arrays" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/expressions/arrays">
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/arrays/ArrayCreation">

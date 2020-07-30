@@ -1,0 +1,32 @@
+[comment encoding = UTF-8 /]
+[module variableAccessConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeVariableAccessTypecheckCondition(varAccess: VariableAccess, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  [varname /].oclIsKindOf(SingleVariableAccess) or 
+  [varname /].oclIsKindOf(FieldAccess) or 
+  [varname /].oclIsKindOf(SuperFieldAccess)
+)  
+[/template]
+
+[template public writeVariableCondition(varAccess: VariableAccess, varname: String, metaclass: String) ? (varAccess.mustWriteConditionFor('variable') and metaclass <> 'SingleVariableAccess')]
+let [varAccess.variable.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(SingleVariableAccess) then
+  [varname /].oclAsType(SingleVariableAccess).variable
+elseif [varname /].oclIsKindOf(FieldAccess) then
+  [varname /].oclAsType(FieldAccess).field.variable
+elseif [varname /].oclIsKindOf(SuperFieldAccess) then
+  [varname /].oclAsType(SuperFieldAccess).field.variable
+else
+  null
+endif in
+[varAccess.generatesFieldCondition(varAccess.variable, varAccess.variable.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeVariableCondition(varAccess: VariableAccess, varname: String, metaclass: String) ? (varAccess.mustWriteConditionFor('variable') and metaclass = 'SingleVariableAccess')]
+let [varAccess.variable.getFieldName() /]: ASTNode = [varname /].oclAsType(SingleVariableAccess).variable in
+[varAccess.generatesFieldCondition(varAccess.variable, varAccess.variable.getFieldName(), 'ASTNode') /]
+[/template]

@@ -1,0 +1,14 @@
+[comment encoding = UTF-8 /]
+[module anonymousClassConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeAnonymousClassTypecheckCondition(anonymousClass: AnonymousClass, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AnonymousClassDeclaration)
+[/template]
+
+[template public writeTypeCondition(anonymousClass: AnonymousClass, varname: String) ? (anonymousClass.mustWriteConditionFor('type'))]
+let [anonymousClass.type.getFieldName() /]: ASTNode = [varname /].classInstanceCreation.type.type in
+[anonymousClass.generatesFieldCondition(anonymousClass.type, anonymousClass.type.getFieldName(), 'ASTNode') /]
+[/template]

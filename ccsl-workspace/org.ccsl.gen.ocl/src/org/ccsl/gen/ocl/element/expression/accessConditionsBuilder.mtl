@@ -1,0 +1,28 @@
+[comment encoding = UTF-8 /]
+[module accessConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeFromCondition(access: Access, varname: String, metaclass: String) ? (access.mustWriteConditionFor('from'))]
+TODO
+[/template]
+
+[template public writeFromCondition(varAccess: VariableAccess, varname: String, metaclass: String) ? (varAccess.mustWriteConditionFor('from') and metaclass <> 'SingleVariableAccess')]
+let [varAccess.from.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(SingleVariableAccess) then
+  [varname /].oclAsType(SingleVariableAccess).qualifier
+elseif [varname /].oclIsKindOf(FieldAccess) then
+  [varname /].oclAsType(FieldAccess).field.qualifier
+elseif [varname /].oclIsKindOf(SuperFieldAccess) then
+  [varname /].oclAsType(SuperFieldAccess).field.qualifier
+else
+  null
+endif in
+[varAccess.generatesFieldCondition(varAccess.from, varAccess.from.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeFromCondition(varAccess: VariableAccess, varname: String, metaclass: String) ? (varAccess.mustWriteConditionFor('from') and metaclass = 'SingleVariableAccess')]
+let [varAccess.from.getFieldName() /]: ASTNode = [varname /].qualifier in
+[varAccess.generatesFieldCondition(varAccess.from, varAccess.from.getFieldName(), 'ASTNode') /]
+[/template]

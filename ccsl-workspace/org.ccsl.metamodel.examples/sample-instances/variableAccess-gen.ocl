@@ -1,0 +1,29 @@
+let violations: Set(ASTNode) = SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->union(SuperFieldAccess.allInstances())->select(varAccess_1: ASTNode |
+  let var_2: ASTNode = if varAccess_1.oclIsKindOf(SingleVariableAccess) then
+    varAccess_1.oclAsType(SingleVariableAccess).variable
+  elseif varAccess_1.oclIsKindOf(FieldAccess) then
+    varAccess_1.oclAsType(FieldAccess).field.variable
+  elseif varAccess_1.oclIsKindOf(SuperFieldAccess) then
+    varAccess_1.oclAsType(SuperFieldAccess).field.variable
+  else
+    null
+  endif in
+  var_2 <> null and
+  (
+    var_2.oclIsKindOf(VariableDeclarationFragment) or 
+    var_2.oclIsKindOf(SingleVariableDeclaration)
+  ) and
+  let expression_3: ASTNode = if varAccess_1.oclIsKindOf(SingleVariableAccess) then
+    varAccess_1.oclAsType(SingleVariableAccess).qualifier
+  elseif varAccess_1.oclIsKindOf(FieldAccess) then
+    varAccess_1.oclAsType(FieldAccess).field.qualifier
+  elseif varAccess_1.oclIsKindOf(SuperFieldAccess) then
+    varAccess_1.oclAsType(SuperFieldAccess).field.qualifier
+  else
+    null
+  endif in
+  expression_3 <> null and
+  expression_3.oclIsKindOf(Expression)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

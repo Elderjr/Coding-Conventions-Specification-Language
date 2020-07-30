@@ -173,6 +173,14 @@ methodInv
 constructorInv
 [/template]
 
+[template public getBaseName(e: AnonymousClass)]
+anonymousClass
+[/template]
+
+[template public getBaseName(e: VariableAccess)]
+varAccess
+[/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

@@ -66,6 +66,9 @@
 [import org::ccsl::gen::ocl::element::expression::invocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::methodInvocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::constructorInvocationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::anonymousClassConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::accessConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::variableAccessConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -741,6 +744,44 @@ OrderedSet(String){
 [e.getConstructorInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @AnonymousClass conditions /]
+[query private getAnonymousClassConditions(anonymousClass: AnonymousClass, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = anonymousClass.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  anonymousClass.writeAnonymousClassTypecheckCondition(varname, typecheck),
+  anonymousClass.writeTypeCondition(completeVarname)
+ }->addAll(anonymousClass.getExpressionConditions(completeVarname, false, concreteMetaclass))
+->addAll(anonymousClass.getComplexTypeConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: AnonymousClass, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getAnonymousClassConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @Access conditions /]
+[query private getAccessConditions(access: Access, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+OrderedSet(String){
+  access.writeFromCondition(varname, metaclass)
+ }->addAll(access.getExpressionConditions(varname, false, metaclass))
+/]
+[template public writeElementConditions(e: Access, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getAccessConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @VariableAccess conditions /]
+[query private getVariableAccessConditions(varAccess: VariableAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = varAccess.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  varAccess.writeVariableAccessTypecheckCondition(varname, typecheck),
+  varAccess.writeVariableCondition(completeVarname, concreteMetaclass)
+ }->addAll(varAccess.getAccessConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: VariableAccess, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getVariableAccessConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 [comment Statement package /]
 
 [comment Write @Statement conditions /]
