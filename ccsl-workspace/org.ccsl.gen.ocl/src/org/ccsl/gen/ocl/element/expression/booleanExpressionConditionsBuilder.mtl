@@ -1,0 +1,59 @@
+[comment encoding = UTF-8 /]
+[module booleanExpressionConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+
+[template public writeBooleanExpressionTypecheckCondition(exp: BooleanExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::ANY)]
+if [varname /].oclIsKindOf(InfixExpression) then
+  OrderedSet(InfixExpressionKind){
+    InfixExpressionKind::LESS,
+    InfixExpressionKind::GREATER,
+    InfixExpressionKind::LESS_EQUALS,
+    InfixExpressionKind::GREATER_EQUALS,
+    InfixExpressionKind::EQUALS,
+    InfixExpressionKind::NOT_EQUALS,
+    InfixExpressionKind::CONDITIONAL_AND,
+    InfixExpressionKind::CONDITIONAL_OR
+  }->includes([varname /].oclAsType(InfixExpression).operator)
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::NOT
+  }->includes([varname /].oclAsType(PrefixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template public writeBooleanExpressionTypecheckCondition(exp: BooleanExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::INFIX)]
+if [varname /].oclIsKindOf(InfixExpression) then
+  OrderedSet(InfixExpressionKind){
+    InfixExpressionKind::LESS,
+    InfixExpressionKind::GREATER,
+    InfixExpressionKind::LESS_EQUALS,
+    InfixExpressionKind::GREATER_EQUALS,
+    InfixExpressionKind::EQUALS,
+    InfixExpressionKind::NOT_EQUALS,
+    InfixExpressionKind::CONDITIONAL_AND,
+    InfixExpressionKind::CONDITIONAL_OR
+  }->includes([varname /].oclAsType(InfixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template public writeBooleanExpressionTypecheckCondition(exp: BooleanExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::UNARY)]
+if [varname /].oclIsKindOf(PrefixExpression) then
+  OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::NOT
+  }->includes([varname /].oclAsType(PrefixExpression).operator)
+else
+  false
+endif
+[/template]
+

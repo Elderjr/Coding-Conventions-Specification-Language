@@ -1,0 +1,41 @@
+let violations: Set(ASTNode) = PrefixExpression.allInstances()->union(InfixExpression.allInstances())->select(booleanExpression_1: ASTNode |
+  if booleanExpression_1.oclIsKindOf(InfixExpression) then
+    OrderedSet(InfixExpressionKind){
+      InfixExpressionKind::LESS,
+      InfixExpressionKind::GREATER,
+      InfixExpressionKind::LESS_EQUALS,
+      InfixExpressionKind::GREATER_EQUALS,
+      InfixExpressionKind::EQUALS,
+      InfixExpressionKind::NOT_EQUALS,
+      InfixExpressionKind::CONDITIONAL_AND,
+      InfixExpressionKind::CONDITIONAL_OR
+    }->includes(booleanExpression_1.oclAsType(InfixExpression).operator)
+  elseif booleanExpression_1.oclIsKindOf(PrefixExpression) then
+    OrderedSet(PrefixExpressionKind){
+      PrefixExpressionKind::NOT
+    }->includes(booleanExpression_1.oclAsType(PrefixExpression).operator)
+  else
+    false
+  endif and
+  let booleanExpression_1_operands: OrderedSet(ASTNode) = if booleanExpression_1.oclIsKindOf(InfixExpression) then
+    booleanExpression_1.oclAsType(InfixExpression).leftOperand->asOrderedSet()->including(booleanExpression_1.oclAsType(InfixExpression).rightOperand)->union(booleanExpression_1.oclAsType(InfixExpression).extendedOperands)
+  elseif booleanExpression_1.oclIsKindOf(PrefixExpression) then
+    booleanExpression_1.oclAsType(PrefixExpression).operand->asOrderedSet()
+  else
+    null
+  endif in booleanExpression_1_operands <> null and
+  let booleanExpression_1_operands: OrderedSet(ASTNode) = booleanExpression_1_operands->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  booleanExpression_1_operands->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -240,6 +240,10 @@ dataTypeAccess
 [template public getBaseName(e: OperandExpression)]
 operandExpression
 [/template]
+
+[template public getBaseName(e: BooleanExpression)]
+booleanExpression
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt
