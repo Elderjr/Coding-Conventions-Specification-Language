@@ -204,6 +204,10 @@ nullLiteral
 [template public getBaseName(e: StringLiteral)]
 strLiteral
 [/template]
+
+[template public getBaseName(e: SimpleAssignment)]
+simpleAssignment
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

@@ -1,0 +1,55 @@
+[comment encoding = UTF-8 /]
+[module simpleAssignmentConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeSimpleAssignmentTypecheckCondition(assignment: SimpleAssignment, varname: String, typecheck: Boolean) ? (typecheck)]
+if [varname /].oclIsKindOf(Assignment) then
+  true
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::INCREMENT,
+    PrefixExpressionKind::DECREMENT
+  }->includes([varname /].oclAsType(PrefixExpression).operator)
+elseif [varname /].oclIsKindOf(PostfixExpression) then
+  OrderedSet(PostfixExpressionKind){
+    PostfixExpressionKind::INCREMENT,
+    PostfixExpressionKind::DECREMENT
+  }->includes([varname /].oclAsType(PostfixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template public writeOperandCondition(assignment: SimpleAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
+let [assignment.operand.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(Assignment) then
+  [varname /].oclAsType(Assignment).leftHandSide
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression).operand
+elseif [varname /].oclIsKindOf(PostfixExpression) then
+  [varname /].oclAsType(PostfixExpression).operand
+else
+  null
+endif in
+let [assignment.operand.getFieldName() /]: ASTNode = [assignment.operand.getFieldName() /]->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[assignment.generatesFieldCondition(assignment.operand, assignment.operand.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeOperandCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
+
+
+[/template]
+
+[template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
+
+
+[/template]
+

@@ -224,6 +224,9 @@ NullLiteral
 StringLiteral
 [/template]
 
+[template public writeElementMatchingJavaMetaclasses(e: SimpleAssignment)]
+Assignment,PrefixExpression,PostfixExpression
+[/template]
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration
