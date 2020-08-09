@@ -1,0 +1,60 @@
+[comment encoding = UTF-8 /]
+[module arithmeticExpressionConditionsBuilder('http://www.example.org/ccsl')]
+
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringConcatenationChecker /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+
+[template public writeArithmeticExpressionTypecheckCondition(exp: ArithmeticExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::ANY)]
+if [varname /].oclIsKindOf(InfixExpression) and [varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS then
+  not(
+    [exp.writeStringConcatenationChecker(varname) /]
+  )
+elseif [varname /].oclIsKindOf(InfixExpression) and [varname /].oclAsType(InfixExpression).operator <> InfixExpressionKind::PLUS then
+  OrderedSet(InfixExpressionKind){
+    InfixExpressionKind::TIMES,
+    InfixExpressionKind::DIVIDE,
+    InfixExpressionKind::REMAINDER,
+    InfixExpressionKind::PLUS,
+    InfixExpressionKind::MINUS
+  }->includes([varname /].oclAsType(InfixExpression).operator)
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::PLUS,
+    PrefixExpressionKind::MINUS
+  }->includes([varname /].oclAsType(PrefixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template public writeArithmeticExpressionTypecheckCondition(exp: ArithmeticExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::INFIX)]
+if [varname /].oclIsKindOf(InfixExpression) and [varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS then
+  not(
+    [exp.writeStringConcatenationChecker(varname) /]
+  )
+elseif [varname /].oclIsKindOf(InfixExpression) and [varname /].oclAsType(InfixExpression).operator <> InfixExpressionKind::PLUS then
+  OrderedSet(InfixExpressionKind){
+    InfixExpressionKind::TIMES,
+    InfixExpressionKind::DIVIDE,
+    InfixExpressionKind::REMAINDER,
+    InfixExpressionKind::PLUS,
+    InfixExpressionKind::MINUS
+  }->includes([varname /].oclAsType(InfixExpression).operator)
+else
+  false
+endif
+[/template]
+
+[template public writeArithmeticExpressionTypecheckCondition(exp: ArithmeticExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::UNARY)]
+if [varname /].oclIsKindOf(PrefixExpression) then
+  OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::PLUS,
+    PrefixExpressionKind::MINUS
+  }->includes([varname /].oclAsType(PrefixExpression).operator)
+else
+  false
+endif
+[/template]

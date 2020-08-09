@@ -244,6 +244,18 @@ operandExpression
 [template public getBaseName(e: BooleanExpression)]
 booleanExpression
 [/template]
+
+[template public getBaseName(e: BinaryExpression)]
+binaryExpression
+[/template]
+
+[template public getBaseName(e: StringConcatenation)]
+strConcat
+[/template]
+
+[template public getBaseName(e: ArithmeticExpression)]
+arithmeticExpression
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

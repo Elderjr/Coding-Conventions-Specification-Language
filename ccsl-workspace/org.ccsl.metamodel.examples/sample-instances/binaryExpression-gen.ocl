@@ -1,0 +1,38 @@
+let violations: Set(ASTNode) = PrefixExpression.allInstances()->union(InfixExpression.allInstances())->select(binaryExpression_1: ASTNode |
+  if binaryExpression_1.oclIsKindOf(InfixExpression) then
+    OrderedSet(InfixExpressionKind){
+      InfixExpressionKind::LEFT_SHIFT,
+      InfixExpressionKind::RIGHT_SHIFT_SIGNED,
+      InfixExpressionKind::XOR,
+      InfixExpressionKind::AND,
+      InfixExpressionKind::OR
+    }->includes(binaryExpression_1.oclAsType(InfixExpression).operator)
+  elseif binaryExpression_1.oclIsKindOf(PrefixExpression) then
+    OrderedSet(PrefixExpressionKind){
+      PrefixExpressionKind::COMPLEMENT
+    }->includes(binaryExpression_1.oclAsType(PrefixExpression).operator)
+  else
+    false
+  endif and
+  let binaryExpression_1_operands: OrderedSet(ASTNode) = if binaryExpression_1.oclIsKindOf(InfixExpression) then
+    binaryExpression_1.oclAsType(InfixExpression).leftOperand->asOrderedSet()->including(binaryExpression_1.oclAsType(InfixExpression).rightOperand)->union(binaryExpression_1.oclAsType(InfixExpression).extendedOperands)
+  elseif binaryExpression_1.oclIsKindOf(PrefixExpression) then
+    binaryExpression_1.oclAsType(PrefixExpression).operand->asOrderedSet()
+  else
+    null
+  endif in binaryExpression_1_operands <> null and
+  let binaryExpression_1_operands: OrderedSet(ASTNode) = binaryExpression_1_operands->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  binaryExpression_1_operands->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

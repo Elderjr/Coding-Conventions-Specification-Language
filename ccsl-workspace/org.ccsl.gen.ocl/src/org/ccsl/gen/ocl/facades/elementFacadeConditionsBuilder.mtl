@@ -80,6 +80,9 @@
 [import org::ccsl::gen::ocl::element::expression::dataTypeAccessConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::operandsExpressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::booleanExpressionConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::binaryExpressionConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::stringConcatenationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::arithmeticExpressionConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -940,7 +943,7 @@ OrderedSet(String){
 [e.getOperandExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-[comment Write @OperandExpression conditions /]
+[comment Write @BooleanExpression conditions /]
 [query private getBooleanExpressionConditions(exp: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
@@ -951,6 +954,45 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getBooleanExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @BinaryExpression conditions /]
+[query private getBinaryExpressionConditions(exp: BinaryExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  exp.writeBinaryExpressionTypecheckCondition(varname, typecheck)
+ }->addAll(exp.getOperandExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: BinaryExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getBinaryExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @StringConcatenation conditions /]
+[query private getStringConcatenationConditions(exp: StringConcatenation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  exp.writeStringConcatenationTypecheckCondition(varname, typecheck)
+ }->addAll(exp.getOperandExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: StringConcatenation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getStringConcatenationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ArithmeticExpression conditions /]
+[query private getArithmeticExpressionConditions(exp: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  exp.writeArithmeticExpressionTypecheckCondition(varname, typecheck)
+ }->addAll(exp.getOperandExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ArithmeticExpression, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getArithmeticExpressionConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 

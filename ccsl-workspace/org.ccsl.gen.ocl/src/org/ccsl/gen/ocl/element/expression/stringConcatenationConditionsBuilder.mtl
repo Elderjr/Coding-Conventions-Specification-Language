@@ -1,0 +1,17 @@
+[comment encoding = UTF-8 /]
+[module stringConcatenationConditionsBuilder('http://www.example.org/ccsl')]
+
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::stringConcatenationChecker /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+
+
+[template public writeStringConcatenationTypecheckCondition(strConcat: StringConcatenation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(InfixExpression) and
+[varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS and
+[strConcat.writeStringConcatenationChecker(varname) /]
+[/template]
+
+
