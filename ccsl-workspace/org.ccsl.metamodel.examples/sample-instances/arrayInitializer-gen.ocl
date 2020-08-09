@@ -1,0 +1,16 @@
+let violations: Set(ASTNode) = ArrayInitializer.allInstances()->select(arrayInitializer_1: ArrayInitializer |
+  let arrayInitializer_1_values: OrderedSet(ASTNode) = arrayInitializer_1.expressions->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  arrayInitializer_1_values->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

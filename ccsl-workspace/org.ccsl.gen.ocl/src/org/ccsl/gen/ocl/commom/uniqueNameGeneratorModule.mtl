@@ -216,6 +216,14 @@ unaryAssignment
 [template public getBaseName(e: Assignment)]
 Assignment
 [/template]
+
+[template public getBaseName(e: ArrayInitializer)]
+arrayInitializer
+[/template]
+
+[template public getBaseName(e: ArrayCreation)]
+arrayCreation
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

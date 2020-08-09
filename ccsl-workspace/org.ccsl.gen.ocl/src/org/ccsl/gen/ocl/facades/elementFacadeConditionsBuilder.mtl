@@ -73,6 +73,8 @@
 [import org::ccsl::gen::ocl::element::expression::simpleAssignmentConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::unaryAssignmentConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::assignmentConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::arrayInitializerConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::arrayCreationOperations /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -841,6 +843,36 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: Assignment, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getAssignmentConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ArrayInitializer conditions /]
+[query private getArrayInitializerConditions(arrInit: ArrayInitializer, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = arrInit.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  arrInit.writeArrayInitializerTypecheckCondition(varname, typecheck),
+  arrInit.writeValuesCondition(completeVarname)
+ }->addAll(arrInit.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ArrayInitializer, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getArrayInitializerConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ArrayCreation conditions /]
+[query private getArrayCreationConditions(arrCreation: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = arrCreation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  arrCreation.writeArrayCreationTypecheckCondition(varname, typecheck),
+  arrCreation.writeTypeCondition(completeVarname),
+  arrCreation.writeInitializerCondition(completeVarname),
+  arrCreation.writeDimensionsCondition(completeVarname)
+ }->addAll(arrCreation.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getArrayCreationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 

@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module arrayInitializerConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeArrayInitializerTypecheckCondition(arrInitializer: ArrayInitializer, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayInitializer)
+[/template]
+
+[template public writeValuesCondition(arrInitializer: ArrayInitializer, varname: String) ? (arrInitializer.mustWriteConditionFor('values'))
+{
+  values: String = arrInitializer.getUniqueOclName().concat('_values');
+}
+]
+let [values /]: OrderedSet(ASTNode) = [varname /].expressions->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[arrInitializer.writeSetConditions(values, arrInitializer.values, 'ASTNode', CollectionKind::ANY) /]
+[/template]

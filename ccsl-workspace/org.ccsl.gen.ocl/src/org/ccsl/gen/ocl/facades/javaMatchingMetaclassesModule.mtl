@@ -228,6 +228,10 @@ StringLiteral
 Assignment,PrefixExpression,PostfixExpression
 [/template]
 
+[template public writeElementMatchingJavaMetaclasses(e: ArrayInitializer)]
+ArrayInitializer
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: UnaryAssignment)]
 [if e.kind = UnaryAssignmentKind::PRE]
 PrefixExpression[elseif e.kind = UnaryAssignmentKind::POST]
@@ -239,6 +243,9 @@ PrefixExpression,PostfixExpression[/if]
 Assignment
 [/template]
 
+[template public writeElementMatchingJavaMetaclasses(e: ArrayCreation)]
+ArrayCreation
+[/template]
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

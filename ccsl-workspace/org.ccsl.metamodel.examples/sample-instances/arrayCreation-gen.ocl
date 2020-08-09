@@ -1,0 +1,19 @@
+let violations: Set(ASTNode) = ArrayCreation.allInstances()->select(arrayCreation_1: ArrayCreation |
+  let arrayType_1: ASTNode = arrayCreation_1.type.type in
+  arrayType_1 <> null and
+  arrayType_1.oclIsKindOf(ArrayType) and
+  let arrayCreation_1_dimensions: OrderedSet(ASTNode) = arrayCreation_1.dimensions->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  arrayCreation_1_dimensions->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

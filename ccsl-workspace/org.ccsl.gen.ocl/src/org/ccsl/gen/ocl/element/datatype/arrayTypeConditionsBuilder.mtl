@@ -15,6 +15,6 @@ let [arrayType.type.getFieldName() /]: ASTNode = [varname /].elementType.type in
 [arrayType.generatesFieldCondition(arrayType.type, arrayType.type.getFieldName(), 'ASTNode') /]
 [/template]
 
-[template public writeDimensionsCondition(arrayType: ArrayType, varname: String) ? ((not arrayType.dimensions.oclIsUndefined()) or arrayType.dimensions > 0)]
+[template public writeDimensionsCondition(arrayType: ArrayType, varname: String) ? ((not arrayType.dimensions.oclIsUndefined()) and arrayType.dimensions > 0)]
 [varname /].dimensions = [arrayType.dimensions /]
 [/template]

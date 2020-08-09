@@ -1,0 +1,37 @@
+[comment encoding = UTF-8 /]
+[module arrayCreationOperations('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+[template public writeArrayCreationTypecheckCondition(arrCreation: ArrayCreation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayCreation)
+[/template]
+
+[template public writeTypeCondition(arrCreation: ArrayCreation, varname: String) ? (arrCreation.mustWriteConditionFor('type'))]
+let [arrCreation.type.getFieldName() /]: ASTNode = [varname /].type.type in
+[arrCreation.generatesFieldCondition(arrCreation.type, arrCreation.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeDimensionsCondition(arrCreation: ArrayCreation, varname: String) ? (arrCreation.mustWriteConditionFor('dimensions'))
+{
+  dimensions: String = arrCreation.getUniqueOclName().concat('_dimensions');
+}]
+let [dimensions /]: OrderedSet(ASTNode) = [varname /].dimensions->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[arrCreation.writeSetConditions(dimensions, arrCreation.dimensions, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[template public writeInitializerCondition(arrCreation: ArrayCreation, varname: String) ? (arrCreation.mustWriteConditionFor('initializer'))]
+let [arrCreation.initializer.getFieldName() /]: ASTNode = [varname /].initializer in
+[arrCreation.generatesFieldCondition(arrCreation.initializer, arrCreation.initializer.getFieldName(), 'ASTNode') /]
+[/template]
+
