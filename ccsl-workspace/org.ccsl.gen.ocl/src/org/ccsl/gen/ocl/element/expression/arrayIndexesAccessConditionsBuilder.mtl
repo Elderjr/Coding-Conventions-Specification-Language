@@ -1,0 +1,27 @@
+[comment encoding = UTF-8 /]
+[module arrayIndexesAccessConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+[template public writeArrayIndexesAccessTypecheckCondition(arrIndex: ArrayIndexesAccess, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ArrayAccess)
+[/template]
+
+[template public writeIndexesCondition(arrIndex: ArrayIndexesAccess, varname: String) ? (arrIndex.mustWriteConditionFor('indexes')){
+  indexes: String = arrIndex.getUniqueOclName().concat('_indexes');
+}]
+let [indexes /]: OrderedSet(ASTNode) = [varname /]->asOrderedSet()->closure(v: ASTNode |
+  if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  elseif v.oclIsKindOf(ArrayAccess) then
+    v.oclAsType(ArrayAccess).array
+  else
+    null
+  endif
+)->select(v | v <> null and v.oclIsKindOf(ArrayAccess)) in
+[arrIndex.writeSetConditions(indexes, arrIndex.indexes, 'ASTNode', arrIndex.indexesKind) /]
+[/template]

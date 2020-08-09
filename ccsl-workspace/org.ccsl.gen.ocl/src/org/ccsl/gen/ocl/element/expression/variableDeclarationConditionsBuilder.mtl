@@ -1,0 +1,15 @@
+[comment encoding = UTF-8 /]
+[module variableDeclarationConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeVariableDeclarationTypecheckCondition(varDecl: VarDeclaration, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(VariableDeclarationFragment)
+[/template]
+
+[template public writeVariableCondition(varDecl: VarDeclaration, varname: String) ? (varDecl.mustWriteConditionFor('variable'))]
+let [varDecl.variable.getFieldName() /]: ASTNode = [varname /] in
+[varDecl.generatesFieldCondition(varDecl.variable, varDecl.variable.getFieldName(), 'ASTNode') /]
+[/template]

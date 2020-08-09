@@ -1,0 +1,7 @@
+let violations: Set(ASTNode) = TypeAccess.allInstances()->select(dataTypeAccess_1: TypeAccess |
+  let dataType_1: ASTNode = dataTypeAccess_1.type in
+  dataType_1 <> null and
+  dataType_1.oclIsKindOf(Type)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -246,6 +246,19 @@ Assignment
 [template public writeElementMatchingJavaMetaclasses(e: ArrayCreation)]
 ArrayCreation
 [/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: VarDeclaration)]
+VariableDeclarationFragment
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: ArrayIndexesAccess)]
+ArrayAccess
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: DataTypeAccess)]
+TypeAccess
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

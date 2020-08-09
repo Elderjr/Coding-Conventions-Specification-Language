@@ -1,0 +1,21 @@
+let violations: Set(ASTNode) = ArrayAccess.allInstances()->select(arrAccess_1: ArrayAccess |
+  let arrAccess_1_indexes: OrderedSet(ASTNode) = arrAccess_1->asOrderedSet()->closure(v: ASTNode |
+    if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    elseif v.oclIsKindOf(ArrayAccess) then
+      v.oclAsType(ArrayAccess).array
+    else
+      null
+    endif
+  )->select(v | v <> null and v.oclIsKindOf(ArrayAccess)) in
+  arrAccess_1_indexes->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression) and 
+  arrAccess_1_indexes->exists(expression_2: ASTNode | expression_2 <> expression_1 and 
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression)
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

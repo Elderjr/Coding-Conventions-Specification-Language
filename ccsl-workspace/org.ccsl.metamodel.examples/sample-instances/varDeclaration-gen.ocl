@@ -1,0 +1,10 @@
+let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(varDecl_1: VariableDeclarationFragment |
+  let var_1: ASTNode = varDecl_1 in
+  var_1 <> null and
+  (
+    var_1.oclIsKindOf(VariableDeclarationFragment) or 
+    var_1.oclIsKindOf(SingleVariableDeclaration)
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

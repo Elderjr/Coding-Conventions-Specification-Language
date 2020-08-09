@@ -107,20 +107,20 @@ else
 [template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String)  ? (element.getElementsNotInClosureRelation(fields)->size() > 0)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /][/for][/let]
+[setOclName /]->[field.generatesExistsDeclaration(fields, mappedFieldMetaclass) /][/for][/let]
 [/template]
 
 [template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? (element.getElementsNotInClosureRelation(fields)->size() > 0 and collectionKind = CollectionKind::ANY)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /][/for][/let]
+[setOclName /]->[field.generatesExistsDeclaration(fields, mappedFieldMetaclass) /][/for][/let]
 [/template]
 
 
 [template public generatesSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? ((fields->size() = 0 or element.getElementsNotInClosureRelation(fields)->size() > 0) and collectionKind = CollectionKind::EXACT)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[setOclName /]->[field.generatesExistsDeclaration(mappedFieldMetaclass) /][/for] [if tmpFields->size() > 0] and [/if]
+[setOclName /]->[field.generatesExistsDeclaration(fields, mappedFieldMetaclass) /][/for] [if tmpFields->size() > 0] and [/if]
 [setOclName /]->size() = [tmpFields->size() /][/let]
 [/template]
 
@@ -128,29 +128,42 @@ else
 
 
 [comment write field exists condition /]
-[template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
+
+
+
+[template private generatesExistsDeclaration(field: Element, fields: OrderedSet(Element), mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
 [let fieldName: String = field.getFieldName()]
 exists([fieldName /] | [field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /])[/let]
 [/template]
 
-[template private generatesExistsDeclaration(field: Element, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]
+[template private generatesExistsDeclaration(field: Element, fields: OrderedSet(Element), mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field)) {
+  addElementExistsDeclaration: OclVoid = field.addElementExistsDeclaration();
+}]
 [let fieldName: String = field.getUniqueOclName()]
 [let fieldCondition: String = field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass)]
-exists([fieldName /] | [field.addElementExistsDeclaration() /] 
+exists([fieldName /] | [field.writeNotSameReferenceCondition(fields) /]
 [if not fieldCondition.isEmpty()]
   [fieldCondition.writeStr() /][else]
   true[/if][/let][/let]
 [/template]
 
-[template private writeFieldExistsCondition(element: Element, field: Element, setOclName: String, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
+[template private writeNotSameReferenceCondition(e: Element, elements: OrderedSet(Element))]
+[for (eTmp: Element | elements) separator('\n')]
+[e.getUniqueOclName() /] <> [eTmp.getUniqueOclName() /] and[/for]
+[/template]
+
+[template private writeFieldExistsCondition(element: Element, field: Element, fields: OrderedSet(Element), setOclName: String, mappedFieldMetaclass: String) ? (getElementsVisited()->includes(field))]
 [let fieldName: String = field.getFieldName()]
 [setOclName /]->exists([fieldName /] | [element.generatesFieldCondition(field, fieldName, mappedFieldMetaclass) /])[/let]
 [/template]
 
-[template private writeFieldExistsCondition(element: Element, field: Element, setOclName: String, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))]
+[template private writeFieldExistsCondition(element: Element, field: Element, fields: OrderedSet(Element), setOclName: String, mappedFieldMetaclass: String) ? (not getElementsVisited()->includes(field))
+{
+  addElementExistsDeclaration: OclVoid = field.addElementExistsDeclaration();
+}]
 [let fieldName: String = field.getUniqueOclName()]
 [let fieldCondition: String = field.generatesFieldCondition(field, fieldName, mappedFieldMetaclass)]
-[setOclName /]->exists([fieldName /]: [mappedFieldMetaclass /] | [field.addElementExistsDeclaration() /] 
+[setOclName /]->exists([fieldName /]: [mappedFieldMetaclass /] | [field.writeNotSameReferenceCondition(fields->select(f | f <> field and getElementsVisited()->includes(f))) /] 
 [if not fieldCondition.isEmpty()]
 [fieldCondition.writeStr() /][else]
 true[/if][/let][/let]
@@ -162,14 +175,14 @@ true[/if][/let][/let]
 [template public writeSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? ((element.getElementsNotInClosureRelation(fields)->size() > 0) and collectionKind = CollectionKind::ANY)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[element.writeFieldExistsCondition(field, setOclName, mappedFieldMetaclass) /][/for][/let]
+[element.writeFieldExistsCondition(field, tmpFields, setOclName, mappedFieldMetaclass) /][/for][/let]
 [/template]
 
 [comment write EXACT set Conditions /]
 [template public writeSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? ((fields->size() = 0 or element.getElementsNotInClosureRelation(fields)->size() > 0) and collectionKind = CollectionKind::EXACT)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[element.writeFieldExistsCondition(field, setOclName, mappedFieldMetaclass) /][/for][if tmpFields->size() > 0]
+[element.writeFieldExistsCondition(field, tmpFields, setOclName, mappedFieldMetaclass) /][/for][if tmpFields->size() > 0]
  and
 [/if][setOclName /]->size() = [fields->size() /][/let]
 [/template]
@@ -186,7 +199,7 @@ endif
 [template public writeSetConditions(element: Element,  setOclName: String, fields: OrderedSet(Element), mappedFieldMetaclass: String, collectionKind: CollectionKind)  ? (element.getElementsNotInClosureRelation(fields)->size() > 0 and collectionKind = CollectionKind::IMMEDIATE)]
 [let tmpFields: OrderedSet(Element) = fields->select(field: Element | not element.isClosureRelation(field))]
 [for (field: Element | tmpFields) separator(' and \n')]
-[element.writeFieldExistsCondition(field, setOclName, mappedFieldMetaclass) /] and
+[element.writeFieldExistsCondition(field, fields, setOclName, mappedFieldMetaclass) /] and
 [field.writeFieldIndexDeclaration(setOclName, tmpFields) /] [if i <> 1]
   and
 [field.writeFieldIndexCondition(setOclName, tmpFields) /][/if][/for][/let]

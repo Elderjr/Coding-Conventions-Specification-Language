@@ -224,6 +224,18 @@ arrayInitializer
 [template public getBaseName(e: ArrayCreation)]
 arrayCreation
 [/template]
+
+[template public getBaseName(e: VarDeclaration)]
+varDecl
+[/template]
+
+[template public getBaseName(e: ArrayIndexesAccess)]
+arrAccess
+[/template]
+
+[template public getBaseName(e: DataTypeAccess)]
+dataTypeAccess
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

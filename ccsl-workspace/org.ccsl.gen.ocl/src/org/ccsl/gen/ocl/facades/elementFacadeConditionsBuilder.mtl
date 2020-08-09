@@ -75,6 +75,9 @@
 [import org::ccsl::gen::ocl::element::expression::assignmentConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::arrayInitializerConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::arrayCreationOperations /]
+[import org::ccsl::gen::ocl::element::expression::variableDeclarationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::arrayIndexesAccessConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::dataTypeAccessConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -639,6 +642,9 @@ OrderedSet(String){
 
 [comment write @Expression conditions/]
 [query private getExpressionConditions(exp: Expression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   exp.writeExpressionTypecheckCondition(varname, typecheck)
 }->addAll(exp.getElementConditions(varname, false, metaclass))
@@ -859,6 +865,21 @@ OrderedSet(String){
 [e.getArrayInitializerConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @ArrayIndexesAccess conditions /]
+[query private getArrayIndexesAccessConditions(arrAccess: ArrayIndexesAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = arrAccess.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  arrAccess.writeArrayIndexesAccessTypecheckCondition(varname, typecheck),
+  arrAccess.writeIndexesCondition(completeVarname)
+ }->addAll(arrAccess.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ArrayIndexesAccess, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getArrayIndexesAccessConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+
 [comment Write @ArrayCreation conditions /]
 [query private getArrayCreationConditions(arrCreation: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = arrCreation.visitElement(varname, metaclass) in
@@ -873,6 +894,34 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: ArrayCreation, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getArrayCreationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @VarDecl conditions /]
+[query private getVariableDeclarationConditions(varDecl: VarDeclaration, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = varDecl.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  varDecl.writeVariableDeclarationTypecheckCondition(varname, typecheck),
+  varDecl.writeVariableCondition(completeVarname)
+ }->addAll(varDecl.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: VarDeclaration, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getVariableDeclarationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @DataTypeAccess conditions /]
+[query private getDataTypeAccessConditions(typeAccess: DataTypeAccess, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = typeAccess.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  typeAccess.writeDataTypeAccessTypecheckCondition(varname, typecheck),
+  typeAccess.writeTypeCondition(completeVarname)
+ }->addAll(typeAccess.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: DataTypeAccess, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getDataTypeAccessConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 
