@@ -1,0 +1,32 @@
+[comment encoding = UTF-8 /]
+[module assignmentConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeAssignmentTypecheckCondition(assignment: Assignment, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(Assignment)
+[/template]
+
+
+[template public writeOperatorCondition(assignment: Assignment, varname: String) ? (assignment.operator <> AssignmentOperator::ANY)]
+[varname /].operator = [assignment.operator.writeAssignmentOperator() /]
+[/template]
+
+
+[template public writeValueCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('value'))]
+let [assignment.value.getFieldName() /]: ASTNode = [varname /].rightHandSide->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[assignment.generatesFieldCondition(assignment.value, assignment.value.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeAssignmentOperator(op: AssignmentOperator) ? (op = AssignmentOperator::PLUS_ASSIGN)]
+AssignmentOperator::PLUS_ASSIGN
+[/template]
+

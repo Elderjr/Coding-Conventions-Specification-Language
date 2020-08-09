@@ -213,6 +213,9 @@ simpleAssignment
 unaryAssignment
 [/template]
 
+[template public getBaseName(e: Assignment)]
+Assignment
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

@@ -1,0 +1,23 @@
+let violations: Set(ASTNode) = Assignment.allInstances()->select(Assignment_1: Assignment |
+  Assignment_1.oclIsKindOf(Assignment) and
+  let expression_1: ASTNode = Assignment_1.rightHandSide->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression) and
+  let expression_2: ASTNode = Assignment_1.leftHandSide->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

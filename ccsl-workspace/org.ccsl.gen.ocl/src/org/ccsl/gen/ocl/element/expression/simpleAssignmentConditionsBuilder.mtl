@@ -44,8 +44,14 @@ let [assignment.operand.getFieldName() /]: ASTNode = [assignment.operand.getFiel
 [/template]
 
 [template public writeOperandCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
-
-
+let [assignment.operand.getFieldName() /]: ASTNode = [varname /].leftHandSide->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[assignment.generatesFieldCondition(assignment.operand, assignment.operand.getFieldName(), 'ASTNode') /]
 [/template]
 
 [template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand') and assignment.kind = UnaryAssignmentKind::ANY)]

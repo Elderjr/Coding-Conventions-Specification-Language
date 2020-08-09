@@ -72,6 +72,7 @@
 [import org::ccsl::gen::ocl::element::expression::literalValueConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::simpleAssignmentConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::unaryAssignmentConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::assignmentConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -825,6 +826,21 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: UnaryAssignment, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getUnaryAssignmentConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @Assignment conditions /]
+[query private getAssignmentConditions(assignment: Assignment, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = assignment.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  assignment.writeAssignmentTypecheckCondition(varname, typecheck),
+  assignment.writeValueCondition(completeVarname),
+  assignment.writeOperatorCondition(completeVarname)
+ }->addAll(assignment.getSimpleAssignmentConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: Assignment, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getAssignmentConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 

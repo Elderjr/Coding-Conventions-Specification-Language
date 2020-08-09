@@ -234,6 +234,11 @@ PrefixExpression[elseif e.kind = UnaryAssignmentKind::POST]
 PostfixExpression[else]
 PrefixExpression,PostfixExpression[/if]
 [/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: Assignment)]
+Assignment
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration
