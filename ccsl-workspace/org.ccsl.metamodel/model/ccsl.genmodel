@@ -397,6 +397,7 @@
           <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/expressions/assignment/UnaryAssignmentKind">
             <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/assignment/UnaryAssignmentKind/POST"/>
             <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/assignment/UnaryAssignmentKind/PRE"/>
+            <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/assignment/UnaryAssignmentKind/ANY"/>
           </genEnums>
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/assignment/SimpleAssignment">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/assignment/SimpleAssignment/operand"/>

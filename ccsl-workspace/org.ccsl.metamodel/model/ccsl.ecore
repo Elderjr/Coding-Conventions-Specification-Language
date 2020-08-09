@@ -502,7 +502,8 @@
               containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="UnaryAssignment" eSuperTypes="#//elements/expressions/assignment/SimpleAssignment">
-          <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//elements/expressions/assignment/UnaryAssignmentKind"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//elements/expressions/assignment/UnaryAssignmentKind"
+              defaultValueLiteral="ANY"/>
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/expressions/assignment/UnaryAssignmentOperator"
               defaultValueLiteral="ANY"/>
         </eClassifiers>
@@ -514,6 +515,7 @@
         <eClassifiers xsi:type="ecore:EEnum" name="UnaryAssignmentKind">
           <eLiterals name="POST"/>
           <eLiterals name="PRE" value="1"/>
+          <eLiterals name="ANY" value="2"/>
         </eClassifiers>
       </eSubpackages>
       <eSubpackages name="literals" nsURI="http://www.example.org/ccsl/elements/statements/literals"
