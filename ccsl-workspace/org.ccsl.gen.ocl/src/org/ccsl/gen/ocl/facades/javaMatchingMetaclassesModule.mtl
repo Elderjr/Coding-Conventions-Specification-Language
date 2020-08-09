@@ -259,6 +259,14 @@ ArrayAccess
 TypeAccess
 [/template]
 
+
+[template public writeElementMatchingJavaMetaclasses(e: OperandExpression)]
+[if e.kind = ExpressionKind::UNARY]
+PrefixExpression[elseif e.kind = ExpressionKind::INFIX]
+InfixExpression[else]
+PrefixExpression,InfixExpression[/if]
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

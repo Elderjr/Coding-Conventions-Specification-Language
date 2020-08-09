@@ -17,7 +17,8 @@
   e.oclIsTypeOf(ConstructComplexTypeDeclaration) or
   e.oclIsTypeOf(MethodInvocation) or
   e.oclIsTypeOf(SimpleAssignment) or
-  e.oclIsTypeOf(UnaryAssignment)
+  e.oclIsTypeOf(UnaryAssignment) or
+  e.oclIsKindOf(OperandExpression)
 /]
 [query public isTemplateElementShouldBeChecked(f: Filter, element: Element, templ: Element): Boolean =
   if element.eClass() = templ.eClass() then

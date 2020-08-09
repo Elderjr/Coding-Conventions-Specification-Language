@@ -1,0 +1,85 @@
+[comment encoding = UTF-8 /]
+[module operandsExpressionConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+
+[template public writeOperandExpressionTypecheckCondition(exp: OperandExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::ANY)]
+if [varname /].oclIsKindOf(InfixExpression) then
+  true
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  (not OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::INCREMENT,
+    PrefixExpressionKind::DECREMENT
+  }->includes([varname /].oclAsType(PrefixExpression).operator))
+else
+  false
+endif
+[/template]
+
+[template public writeOperandExpressionTypecheckCondition(exp: OperandExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::INFIX)]
+[varname /].oclIsKindOf(InfixExpression)
+[/template]
+
+[template public writeOperandExpressionTypecheckCondition(exp: OperandExpression, varname: String, typecheck: Boolean) ? (typecheck and exp.kind = ExpressionKind::UNARY)]
+if [varname /].oclIsKindOf(PrefixExpression) then
+  (not OrderedSet(PrefixExpressionKind){
+    PrefixExpressionKind::INCREMENT,
+    PrefixExpressionKind::DECREMENT
+  }->includes([varname /].oclAsType(PrefixExpression).operator))
+else
+  false
+endif
+[/template]
+
+[template public writeOperandsCondition(exp: OperandExpression, varname: String) ? (exp.mustWriteConditionFor('operands') and exp.kind = ExpressionKind::ANY) {
+  operands: String = exp.getUniqueOclName().concat('_operands');
+}]
+let [operands /]: OrderedSet(ASTNode) = if [varname /].oclIsKindOf(InfixExpression) then
+  [varname /].oclAsType(InfixExpression).leftOperand->asOrderedSet()->including([varname /].oclAsType(InfixExpression).rightOperand)->union([varname /].oclAsType(InfixExpression).extendedOperands)
+elseif [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression).operand->asOrderedSet()
+else
+  null
+endif in [operands /] <> null and
+let [operands /]: OrderedSet(ASTNode) = [operands /]->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[exp.writeSetConditions(operands, exp.operands, 'ASTNode', exp.operandsKind) /]
+[/template]
+
+[template public writeOperandsCondition(exp: OperandExpression, varname: String) ? (exp.mustWriteConditionFor('operands') and exp.kind = ExpressionKind::INFIX) {
+  operands: String = exp.getUniqueOclName().concat('_operands');
+}]
+let [operands /]: OrderedSet(ASTNode) = [varname /].leftOperand->asOrderedSet()->including([varname /].rightOperand)->union([varname /].extendedOperands)->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[exp.writeSetConditions(operands, exp.operands, 'ASTNode', exp.operandsKind) /]
+[/template]
+
+
+[template public writeOperandsCondition(exp: OperandExpression, varname: String) ? (exp.mustWriteConditionFor('operands') and exp.kind = ExpressionKind::UNARY) {
+  operands: String = exp.getUniqueOclName().concat('_operands');
+}]
+let [operands /]: OrderedSet(ASTNode) = [varname /].operand->asOrderedSet()->collect(arg: ASTNode |
+  arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+    v.oclAsType(ParenthesizedExpression).expression
+  else
+    v
+  endif)
+) in
+[exp.writeSetConditions(operands, exp.operands, 'ASTNode', exp.operandsKind) /]
+[/template]

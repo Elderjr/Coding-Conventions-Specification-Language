@@ -236,6 +236,10 @@ arrAccess
 [template public getBaseName(e: DataTypeAccess)]
 dataTypeAccess
 [/template]
+
+[template public getBaseName(e: OperandExpression)]
+operandExpression
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

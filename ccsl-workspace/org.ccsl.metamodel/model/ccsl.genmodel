@@ -314,26 +314,19 @@
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/InstanceofExpression/objectExpression"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/expressions/ArithmeticExpression">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/ArithmeticExpression/operands"/>
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/ArithmeticExpression/arithmeticKind"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/ArithmeticExpression/operator"/>
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/ArithmeticExpression/operandsKind"/>
         </genClasses>
-        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/StringConcatenation">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/StringConcatenation/operands"/>
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/StringConcatenation/operandsKind"/>
-        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/StringConcatenation"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/expressions/BooleanExpression">
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BooleanExpression/operandsKind"/>
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BooleanExpression/kind"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/BooleanExpression/operands"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BooleanExpression/operator"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/expressions/BinaryExpression">
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/kind"/>
           <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/operator"/>
-          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/BinaryExpression/operandsKind"/>
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/BinaryExpression/operands"/>
+        </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/expressions/OperandExpression">
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/OperandExpression/operands"/>
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/OperandExpression/kind"/>
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/expressions/OperandExpression/operandsKind"/>
         </genClasses>
         <nestedGenPackages prefix="Invocations" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/expressions/invocations">
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/invocations/MethodInvocation">

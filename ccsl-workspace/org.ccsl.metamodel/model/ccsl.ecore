@@ -365,14 +365,8 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="objectExpression" eType="#//elements/expressions/Expression"
             unsettable="true" containment="true"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpression" eSuperTypes="#//elements/expressions/Expression">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-            eType="#//elements/expressions/Expression" unsettable="true" containment="true"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="arithmeticKind" eType="#//elements/expressions/ExpressionKind"
-            defaultValueLiteral="ANY"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpression" eSuperTypes="#//elements/expressions/OperandExpression">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/expressions/ArithmeticOperator"
-            defaultValueLiteral="ANY"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operandsKind" eType="#//CollectionKind"
             defaultValueLiteral="ANY"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EEnum" name="ExpressionKind">
@@ -387,30 +381,13 @@
         <eLiterals name="SUBTRACT" value="3"/>
         <eLiterals name="ANY" value="4"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/expressions/Expression">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-            eType="#//elements/expressions/Expression" unsettable="true" containment="true"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operandsKind" eType="#//CollectionKind"
-            defaultValueLiteral="ANY"/>
-      </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//elements/expressions/Expression">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operandsKind" eType="#//CollectionKind"
-            defaultValueLiteral="ANY"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//elements/expressions/ExpressionKind"
-            defaultValueLiteral="ANY"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-            eType="#//elements/expressions/Expression" containment="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StringConcatenation" eSuperTypes="#//elements/expressions/OperandExpression"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//elements/expressions/OperandExpression">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/expressions/BooleanOperator"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//elements/expressions/Expression">
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//elements/expressions/ExpressionKind"
-            defaultValueLiteral="ANY"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//elements/expressions/OperandExpression">
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//elements/expressions/BinaryOperator"
             defaultValueLiteral="ANY"/>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operandsKind" eType="#//CollectionKind"
-            defaultValueLiteral="ANY"/>
-        <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
-            eType="#//elements/expressions/Expression" unsettable="true" containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EEnum" name="BooleanOperator">
         <eLiterals name="AND"/>
@@ -425,6 +402,14 @@
         <eLiterals name="UNSIGNED_RIGHT_SHIFT" value="3"/>
         <eLiterals name="COMPLEMENT" value="4"/>
         <eLiterals name="ANY" value="5"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OperandExpression" eSuperTypes="#//elements/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+            eType="#//elements/expressions/Expression" unsettable="true" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//elements/expressions/ExpressionKind"
+            defaultValueLiteral="ANY"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operandsKind" eType="#//CollectionKind"
+            defaultValueLiteral="ANY"/>
       </eClassifiers>
       <eSubpackages name="invocations" nsURI="http://www.example.org/ccsl/elements/expressions/invocations"
           nsPrefix="invocations">

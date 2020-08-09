@@ -1,0 +1,36 @@
+let violations: Set(ASTNode) = PrefixExpression.allInstances()->union(InfixExpression.allInstances())->select(operandExpression_1: ASTNode |
+  if operandExpression_1.oclIsKindOf(InfixExpression) then
+    true
+  elseif operandExpression_1.oclIsKindOf(PrefixExpression) then
+    (not OrderedSet(PrefixExpressionKind){
+      PrefixExpressionKind::INCREMENT,
+      PrefixExpressionKind::DECREMENT
+    }->includes(operandExpression_1.oclAsType(PrefixExpression).operator))
+  else
+    false
+  endif and
+  let operandExpression_1_operands: OrderedSet(ASTNode) = if operandExpression_1.oclIsKindOf(InfixExpression) then
+    operandExpression_1.oclAsType(InfixExpression).leftOperand->asOrderedSet()->including(operandExpression_1.oclAsType(InfixExpression).rightOperand)->union(operandExpression_1.oclAsType(InfixExpression).extendedOperands)
+  elseif operandExpression_1.oclIsKindOf(PrefixExpression) then
+    operandExpression_1.oclAsType(PrefixExpression).operand->asOrderedSet()
+  else
+    null
+  endif in operandExpression_1_operands <> null and
+  let operandExpression_1_operands: OrderedSet(ASTNode) = operandExpression_1_operands->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  operandExpression_1_operands->exists(expression_1: ASTNode |  
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression) and 
+  operandExpression_1_operands->exists(expression_2: ASTNode | expression_2 <> expression_1 and 
+  expression_2 <> null and
+  expression_2.oclIsKindOf(Expression)
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
