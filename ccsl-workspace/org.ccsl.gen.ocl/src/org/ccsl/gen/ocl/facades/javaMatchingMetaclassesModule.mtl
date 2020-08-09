@@ -227,6 +227,13 @@ StringLiteral
 [template public writeElementMatchingJavaMetaclasses(e: SimpleAssignment)]
 Assignment,PrefixExpression,PostfixExpression
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: UnaryAssignment)]
+[if e.kind = UnaryAssignmentKind::PRE]
+PrefixExpression[elseif e.kind = UnaryAssignmentKind::POST]
+PostfixExpression[else]
+PrefixExpression,PostfixExpression[/if]
+[/template]
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

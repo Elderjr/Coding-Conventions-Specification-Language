@@ -208,6 +208,11 @@ strLiteral
 [template public getBaseName(e: SimpleAssignment)]
 simpleAssignment
 [/template]
+
+[template public getBaseName(e: UnaryAssignment)]
+unaryAssignment
+[/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt

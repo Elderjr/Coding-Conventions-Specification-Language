@@ -48,8 +48,32 @@ let [assignment.operand.getFieldName() /]: ASTNode = [assignment.operand.getFiel
 
 [/template]
 
-[template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
+[template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand') and assignment.kind = UnaryAssignmentKind::ANY)]
+let [assignment.operand.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(PrefixExpression) then
+  [varname /].oclAsType(PrefixExpression).operand
+elseif [varname /].oclIsKindOf(PostfixExpression) then
+  [varname /].oclAsType(PostfixExpression).operand
+else
+  null
+endif in
+let [assignment.operand.getFieldName() /]: ASTNode = [assignment.operand.getFieldName() /]->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[assignment.generatesFieldCondition(assignment.operand, assignment.operand.getFieldName(), 'ASTNode') /]
+[/template]
 
-
+[template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand') and assignment.kind <> UnaryAssignmentKind::ANY)]
+let [assignment.operand.getFieldName() /]: ASTNode = [varname /].operand->asOrderedSet()->closure(x: ASTNode |
+  if x.oclIsKindOf(ParenthesizedExpression) then
+    x.oclAsType(ParenthesizedExpression).expression
+  else
+    x
+  endif
+)->last() in
+[assignment.generatesFieldCondition(assignment.operand, assignment.operand.getFieldName(), 'ASTNode') /]
 [/template]
 

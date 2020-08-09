@@ -1,0 +1,33 @@
+let violations: Set(ASTNode) = PrefixExpression.allInstances()->union(PostfixExpression.allInstances())->select(unaryAssignment_1: ASTNode |
+  if unaryAssignment_1.oclIsKindOf(PrefixExpression) then
+    OrderedSet(PrefixExpressionKind){
+      PrefixExpressionKind::INCREMENT,
+      PrefixExpressionKind::DECREMENT
+    }->includes(unaryAssignment_1.oclAsType(PrefixExpression).operator)
+  elseif unaryAssignment_1.oclIsKindOf(PostfixExpression) then
+    OrderedSet(PostfixExpressionKind){
+      PostfixExpressionKind::INCREMENT,
+      PostfixExpressionKind::DECREMENT
+    }->includes(unaryAssignment_1.oclAsType(PostfixExpression).operator)
+  else
+    false
+  endif and
+  let expression_1: ASTNode = if unaryAssignment_1.oclIsKindOf(PrefixExpression) then
+    unaryAssignment_1.oclAsType(PrefixExpression).operand
+  elseif unaryAssignment_1.oclIsKindOf(PostfixExpression) then
+    unaryAssignment_1.oclAsType(PostfixExpression).operand
+  else
+    null
+  endif in
+  let expression_1: ASTNode = expression_1->asOrderedSet()->closure(x: ASTNode |
+    if x.oclIsKindOf(ParenthesizedExpression) then
+      x.oclAsType(ParenthesizedExpression).expression
+    else
+      x
+    endif
+  )->last() in
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

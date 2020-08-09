@@ -29,9 +29,7 @@ endif
 
 
 [template public writeUnaryAssignmentTypecheckCondition(assignment: UnaryAssignment, varname: String, typecheck: Boolean) ? (typecheck and assignment.kind = UnaryAssignmentKind::ANY)]
-if [varname /].oclIsKindOf(Assignment) then
-  true
-elseif [varname /].oclIsKindOf(PrefixExpression) then
+if [varname /].oclIsKindOf(PrefixExpression) then
   OrderedSet(PrefixExpressionKind){
     PrefixExpressionKind::INCREMENT,
     PrefixExpressionKind::DECREMENT
@@ -44,35 +42,5 @@ elseif [varname /].oclIsKindOf(PostfixExpression) then
 else
   false
 endif
-[/template]
-
-[template public writeOperandCondition(assignment: SimpleAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
-let [assignment.operand.getFieldName() /]: ASTNode = if [varname /].oclIsKindOf(Assignment) then
-  [varname /].oclAsType(Assignment).leftHandSide
-elseif [varname /].oclIsKindOf(PrefixExpression) then
-  [varname /].oclAsType(PrefixExpression).operand
-elseif [varname /].oclIsKindOf(PostfixExpression) then
-  [varname /].oclAsType(PostfixExpression).operand
-else
-  null
-endif in
-let [assignment.operand.getFieldName() /]: ASTNode = [assignment.operand.getFieldName() /]->asOrderedSet()->closure(x: ASTNode |
-  if x.oclIsKindOf(ParenthesizedExpression) then
-    x.oclAsType(ParenthesizedExpression).expression
-  else
-    x
-  endif
-)->last() in
-[assignment.generatesFieldCondition(assignment.operand, assignment.operand.getFieldName(), 'ASTNode') /]
-[/template]
-
-[template public writeOperandCondition(assignment: Assignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
-
-
-[/template]
-
-[template public writeOperandCondition(assignment: UnaryAssignment, varname: String) ? (assignment.mustWriteConditionFor('operand'))]
-
-
 [/template]
 
