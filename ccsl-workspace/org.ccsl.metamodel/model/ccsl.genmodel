@@ -556,13 +556,13 @@
                 ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter/from"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/FromClosureFilter/context"/>
           </genClasses>
-          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/SuperClassClosureFilter">
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/HasSuperClassFilter">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
-                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SuperClassClosureFilter/superClass"/>
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/HasSuperClassFilter/superClass"/>
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
-                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SuperClassClosureFilter/subClass"/>
-            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/SuperClassClosureFilter/includesSubClass"/>
-            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/SuperClassClosureFilter/context"/>
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/HasSuperClassFilter/subClass"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/HasSuperClassFilter/includesTarget"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/HasSuperClassFilter/context"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/BlockLastStatementFilter">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"

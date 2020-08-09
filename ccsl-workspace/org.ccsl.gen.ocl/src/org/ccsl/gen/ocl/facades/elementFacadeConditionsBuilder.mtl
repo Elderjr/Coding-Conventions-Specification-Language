@@ -69,6 +69,7 @@
 [import org::ccsl::gen::ocl::element::expression::anonymousClassConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::accessConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::variableAccessConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::literalValueConditionsBuilder /]
 
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
@@ -781,6 +782,20 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: VariableAccess, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getVariableAccessConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @LiteralValue conditions /]
+[query private getLiteralValueConditions(lit: LiteralValue, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = lit.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  lit.writeLiteralValueTypecheckCondition(varname, typecheck),
+  lit.writeValueCondition(completeVarname)
+ }->addAll(lit.getExpressionConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: LiteralValue, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getLiteralValueConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 [comment Statement package /]
 

@@ -691,11 +691,10 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//context/Context"
               containment="true"/>
         </eClassifiers>
-        <eClassifiers xsi:type="ecore:EClass" name="SuperClassClosureFilter" eSuperTypes="#//functions/booleanFunctions/filters/AtomicFilter">
+        <eClassifiers xsi:type="ecore:EClass" name="HasSuperClassFilter" eSuperTypes="#//functions/booleanFunctions/filters/AtomicFilter">
           <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" eType="#//elements/namedElements/complexType/JClass"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="subClass" eType="#//elements/namedElements/complexType/JClass"/>
-          <eStructuralFeatures xsi:type="ecore:EAttribute" name="includesSubClass"
-              eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="includesTarget" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
               defaultValueLiteral="true"/>
           <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//context/Context"
               containment="true"/>

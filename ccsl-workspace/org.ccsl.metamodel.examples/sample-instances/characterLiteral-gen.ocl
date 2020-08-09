@@ -1,0 +1,5 @@
+let violations: Set(ASTNode) = CharacterLiteral.allInstances()->select(characterLiteral_1: CharacterLiteral |
+  characterLiteral_1.escapedValue = '\'l\''
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

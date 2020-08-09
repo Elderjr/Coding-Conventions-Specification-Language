@@ -1,0 +1,77 @@
+[comment encoding = UTF-8 /]
+[module literalValueConditionsBuilder('http://www.example.org/ccsl')]
+
+
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+
+
+[template public writeLiteralValueTypecheckCondition(literal: LiteralValue, varname: String, typecheck: Boolean) ? (typecheck)]
+(
+  [varname /].oclIsKindOf(BooleanLiteral) or
+  [varname /].oclIsKindOf(CharacterLiteral) or
+  [varname /].oclIsKindOf(NumberLiteral) or
+  [varname /].oclIsKindOf(NullLiteral) or
+  [varname /].oclIsKindOf(StringLiteral)  
+)
+[/template]
+
+[template public writeLiteralValueTypecheckCondition(literal: BooleanLiteral, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(BooleanLiteral)
+[/template]
+
+[template public writeLiteralValueTypecheckCondition(literal: CharacterLiteral, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(CharacterLiteral)
+[/template]
+
+[template public writeLiteralValueTypecheckCondition(literal: NumberLiteral, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(NumberLiteral)
+[/template]
+
+[template public writeLiteralValueTypecheckCondition(literal: NullLiteral, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(NullLiteral)
+[/template]
+
+[template public writeLiteralValueTypecheckCondition(literal: StringLiteral, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(StringLiteral)
+[/template]
+
+
+[template public writeValueCondition(literal: LiteralValue, varname: String) ? (not literal.value.oclIsUndefined())]
+if [varname /].oclIsKindOf(BooleanLiteral) then
+  [varname /].oclAsType(BooleanLiteral).value.toString() = '[literal.value /]'
+elseif [varname /].oclIsKindOf(CharacterLiteral) then
+  [varname /].oclAsType(CharacterLiteral).escapedValue = '\'[literal.value /]\''
+elseif [varname /].oclIsKindOf(NumberLiteral) then
+  [varname /].oclAsType(NumberLiteral).tokenValue = '[literal.value /]'
+elseif [varname /].oclIsKindOf(NullLiteral) then
+  true
+elseif [varname /].oclIsKindOf(StringLiteral) then
+  [varname /].oclAsType(StringLiteral).escapedValue = '"[literal.value /]"'
+else
+  false
+endif
+[/template]
+
+[template public writeValueCondition(literal: BooleanLiteral, varname: String) ? (not literal.value.oclIsUndefined())]
+[varname /].value.toString() = '[literal.value /]'
+[/template]
+
+[template public writeValueCondition(literal: CharacterLiteral, varname: String) ? (not literal.value.oclIsUndefined())]
+[varname /].escapedValue = '\'[literal.value /]\''
+[/template]
+
+[template public writeValueCondition(literal: NumberLiteral, varname: String) ? (not literal.value.oclIsUndefined())]
+[varname /].tokenValue = '[literal.value /]'
+[/template]
+
+[template public writeValueCondition(literal: NullLiteral, varname: String) ? (not literal.value.oclIsUndefined())]
+true
+[/template]
+
+[template public writeValueCondition(literal: StringLiteral, varname: String) ? (not literal.value.oclIsUndefined())]
+[varname /].escapedValue = '"[literal.value /]"'
+[/template]
+
+

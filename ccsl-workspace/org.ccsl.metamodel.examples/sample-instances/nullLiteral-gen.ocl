@@ -1,0 +1,5 @@
+let violations: Set(ASTNode) = NullLiteral.allInstances()->select(nullLiteral_1: NullLiteral |
+  true
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -12,7 +12,7 @@ import ccsl.elements.Element;
 
 public class WalkHelper {
 
-	private static int uniqueId = 1;
+	private static final Map<Class, Integer> uniqueId = new HashMap<>();
 	private static final Map<Context, Integer> totalExistsDeclarations = new HashMap<>();
 	private static final Map<Element, String> uniqueNamesMap = new HashMap<>();
 	private static final Set<Element> elementsVisited = new HashSet<Element>();
@@ -22,7 +22,7 @@ public class WalkHelper {
 		uniqueNamesMap.clear();
 		elementsVisited.clear();
 		declaredElementMetaclass.clear();
-		uniqueId = 1;
+		uniqueId.clear();
 	}
 
 	public static String getUniqueName(Element element, String baseName) {
@@ -36,13 +36,13 @@ public class WalkHelper {
 	}
 
 	private static String generatesUniqueName(Element element, String baseName) {
-		if (element.getUniqueName() != null) {
-			return element.getUniqueName();
-		} else {
-			String uniqueName = baseName + "_" + uniqueId;
-			uniqueId++;
-			return uniqueName;
+		Integer id = uniqueId.get(element.getClass());
+		if(id == null) {
+			id = 1;
 		}
+		String uniqueName = baseName + "_" + id;
+		uniqueId.put(element.getClass(), id + 1);
+		return uniqueName;
 	}
 
 	public static void addElementAsVisited(Element element) {

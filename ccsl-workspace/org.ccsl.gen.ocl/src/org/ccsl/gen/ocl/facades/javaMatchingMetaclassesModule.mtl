@@ -200,6 +200,30 @@ AnonymousClassDeclaration
 SingleVariableAccess,FieldAccess,SuperFieldAccess[else]SingleVariableAccess[/if]
 [/template]
 
+[template public writeElementMatchingJavaMetaclasses(e: LiteralValue)]
+BooleanLiteral,CharacterLiteral,NumberLiteral,NullLiteral,StringLiteral
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: BooleanLiteral)]
+BooleanLiteral
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: CharacterLiteral)]
+CharacterLiteral
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: NumberLiteral)]
+NumberLiteral
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: NullLiteral)]
+NullLiteral
+[/template]
+
+[template public writeElementMatchingJavaMetaclasses(e: StringLiteral)]
+StringLiteral
+[/template]
+
 [comment Statement package /]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration

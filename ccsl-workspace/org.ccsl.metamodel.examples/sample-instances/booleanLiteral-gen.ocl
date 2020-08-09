@@ -1,0 +1,5 @@
+let violations: Set(ASTNode) = BooleanLiteral.allInstances()->select(booleanLiteral_1: BooleanLiteral |
+  booleanLiteral_1.value.toString() = 'true'
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

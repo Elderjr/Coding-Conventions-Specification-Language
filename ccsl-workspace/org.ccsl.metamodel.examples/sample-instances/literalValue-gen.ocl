@@ -1,0 +1,17 @@
+let violations: Set(ASTNode) = BooleanLiteral.allInstances()->union(CharacterLiteral.allInstances())->union(NumberLiteral.allInstances())->union(NullLiteral.allInstances())->union(StringLiteral.allInstances())->select(literalValue_1: ASTNode |
+  if literalValue_1.oclIsKindOf(BooleanLiteral) then
+    literalValue_1.oclAsType(BooleanLiteral).value.toString() = 'l'
+  elseif literalValue_1.oclIsKindOf(CharacterLiteral) then
+    literalValue_1.oclAsType(CharacterLiteral).escapedValue = '\'l\''
+  elseif literalValue_1.oclIsKindOf(NumberLiteral) then
+    literalValue_1.oclAsType(NumberLiteral).tokenValue = 'l'
+  elseif literalValue_1.oclIsKindOf(NullLiteral) then
+    true
+  elseif literalValue_1.oclIsKindOf(StringLiteral) then
+    literalValue_1.oclAsType(StringLiteral).escapedValue = '"l"'
+  else
+    false
+  endif
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

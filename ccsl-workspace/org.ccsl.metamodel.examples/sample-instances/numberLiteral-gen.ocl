@@ -1,0 +1,5 @@
+let violations: Set(ASTNode) = NumberLiteral.allInstances()->select(numberLiteral_1: NumberLiteral |
+  numberLiteral_1.tokenValue = '42'
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

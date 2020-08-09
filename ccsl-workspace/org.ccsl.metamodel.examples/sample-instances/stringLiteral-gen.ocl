@@ -1,0 +1,5 @@
+let violations: Set(ASTNode) = StringLiteral.allInstances()->select(strLiteral_1: StringLiteral |
+  strLiteral_1.escapedValue = '""'
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

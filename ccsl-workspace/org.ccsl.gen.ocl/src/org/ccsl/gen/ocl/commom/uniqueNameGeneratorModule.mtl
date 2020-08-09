@@ -181,6 +181,29 @@ anonymousClass
 varAccess
 [/template]
 
+[template public getBaseName(e: LiteralValue)]
+literalValue
+[/template]
+
+[template public getBaseName(e: BooleanLiteral)]
+booleanLiteral
+[/template]
+
+[template public getBaseName(e: CharacterLiteral)]
+characterLiteral
+[/template]
+
+[template public getBaseName(e: NumberLiteral)]
+numberLiteral
+[/template]
+
+[template public getBaseName(e: NullLiteral)]
+nullLiteral
+[/template]
+
+[template public getBaseName(e: StringLiteral)]
+strLiteral
+[/template]
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt
