@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:statements="http://www.example.org/ccsl/elements/statements">
+  <context>
+    <contextElements xsi:type="statements:ThrowStatement"/>
+  </context>
+</ccsl:AtomicRule>

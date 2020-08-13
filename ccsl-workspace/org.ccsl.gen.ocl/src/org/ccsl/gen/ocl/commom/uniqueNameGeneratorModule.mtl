@@ -297,3 +297,7 @@ blockStmt
 [template private getBaseName(e: TryStatement)]
 tryStmt
 [/template]
+
+[template private getBaseName(e: ThrowStatement)]
+throwStmt
+[/template]

@@ -307,3 +307,7 @@ Block
 [template private writeElementMatchingJavaMetaclasses(e: TryStatement)]
 TryStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ThrowStatement)]
+ThrowStatement
+[/template]
