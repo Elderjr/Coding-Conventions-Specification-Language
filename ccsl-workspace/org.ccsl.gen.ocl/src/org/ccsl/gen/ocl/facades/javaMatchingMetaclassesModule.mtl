@@ -283,3 +283,7 @@ BreakStatement
 [template private writeElementMatchingJavaMetaclasses(e: ContinueStatement)]
 ContinueStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ReturnStatement)]
+ReturnStatement
+[/template]

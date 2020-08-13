@@ -273,3 +273,7 @@ breakStmt
 [template public getBaseName(e: ContinueStatement)]
 continueStmt
 [/template]
+
+[template public getBaseName(e: ReturnStatement)]
+returnStmt
+[/template]

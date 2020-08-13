@@ -9,14 +9,14 @@
 [varname /].oclIsKindOf(ReturnStatement)
 [/template]
 
-[template public writeStatementCondition(returnStatement: ReturnStatement, varname: String) ? (returnStatement.mustWriteConditionFor('statement'))]
-let [returnStatement.statement.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(p: ASTNode |
+[template public writeExpressionCondition(returnStatement: ReturnStatement, varname: String) ? (returnStatement.mustWriteConditionFor('expression'))]
+let [returnStatement.expression.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(p: ASTNode |
   if (p.oclIsKindOf(ParenthesizedExpression)) then
     p.oclAsType(ParenthesizedExpression).expression
   else
     p
   endif
 )->last() in
-[returnStatement.generatesFieldCondition(returnStatement.statement, returnStatement.statement.getFieldName(), 'ASTNode') /]
+[returnStatement.generatesFieldCondition(returnStatement.expression, returnStatement.expression.getFieldName(), 'ASTNode') /]
 [/template]
 

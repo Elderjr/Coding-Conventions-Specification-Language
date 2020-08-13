@@ -89,6 +89,7 @@
 [import org::ccsl::gen::ocl::element::statement::assertStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::breakStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::continueConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::returnStatementConditionsBuilder /]
 
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
@@ -1059,4 +1060,18 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: ContinueStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getContinueConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ReturnStatement conditions /]
+[query private getReturnStatementConditions(returnStmt: ReturnStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = returnStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  returnStmt.writeReturnStatementTypecheckCondition(varname, typecheck),
+  returnStmt.writeExpressionCondition(completeVarname)
+ }->addAll(returnStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ReturnStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getReturnStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
