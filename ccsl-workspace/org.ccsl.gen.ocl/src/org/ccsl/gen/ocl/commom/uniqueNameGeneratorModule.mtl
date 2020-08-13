@@ -265,3 +265,7 @@ importStmt
 [template public getBaseName(e: AssertStatement)]
 assertStmt
 [/template]
+
+[template public getBaseName(e: BreakStatement)]
+breakStmt
+[/template]

@@ -275,3 +275,7 @@ ImportDeclaration
 [template private writeElementMatchingJavaMetaclasses(e: AssertStatement)]
 AssertStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: BreakStatement)]
+BreakStatement
+[/template]

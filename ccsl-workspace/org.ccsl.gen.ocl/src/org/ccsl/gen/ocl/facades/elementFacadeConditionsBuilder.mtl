@@ -1032,3 +1032,16 @@ OrderedSet(String){
 [template public writeElementConditions(e: AssertStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getAssertStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @AssertStatement conditions /]
+[query private getBreakStatementConditions(breakStmt: BreakStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = breakStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  breakStmt.writeBreakTypecheckCondition(varname, typecheck)
+ }->addAll(assert.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: BreakStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getBreakStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
