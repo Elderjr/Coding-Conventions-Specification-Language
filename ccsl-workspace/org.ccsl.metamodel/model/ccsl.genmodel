@@ -216,6 +216,7 @@
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/tryCatch/TryStatement/catchClausesKind"/>
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/tryCatch/TryStatement/resources"/>
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/tryCatch/TryStatement/resourcesKind"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/tryCatch/TryStatement/tryBlock"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/tryCatch/CatchClause">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/tryCatch/CatchClause/body"/>
