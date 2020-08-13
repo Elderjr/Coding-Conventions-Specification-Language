@@ -279,3 +279,7 @@ AssertStatement
 [template private writeElementMatchingJavaMetaclasses(e: BreakStatement)]
 BreakStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ContinueStatement)]
+ContinueStatement
+[/template]

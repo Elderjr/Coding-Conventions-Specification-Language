@@ -87,6 +87,8 @@
 [comment Statement package /]
 [import org::ccsl::gen::ocl::element::statement::importStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::assertStatementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::breakStatementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::continueConditionsBuilder /]
 
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
@@ -1033,15 +1035,28 @@ OrderedSet(String){
 [e.getAssertStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
-[comment Write @AssertStatement conditions /]
+[comment Write @BreakStatement conditions /]
 [query private getBreakStatementConditions(breakStmt: BreakStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
 let tuple: OrderedSet(String) = breakStmt.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
-  breakStmt.writeBreakTypecheckCondition(varname, typecheck)
- }->addAll(assert.getStatementConditions(completeVarname, false, concreteMetaclass))
+  breakStmt.writeBreakStatementTypecheckCondition(varname, typecheck)
+ }->addAll(breakStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(e: BreakStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getBreakStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @ContinueStatement conditions /]
+[query private getContinueConditions(continueStmt: ContinueStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = continueStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  continueStmt.writeContinueStatementTypecheckCondition(varname, typecheck)
+ }->addAll(continueStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ContinueStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getContinueConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]

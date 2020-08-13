@@ -269,3 +269,7 @@ assertStmt
 [template public getBaseName(e: BreakStatement)]
 breakStmt
 [/template]
+
+[template public getBaseName(e: ContinueStatement)]
+continueStmt
+[/template]
