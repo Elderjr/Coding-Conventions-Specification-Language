@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module emptyStatementModule('http://www.example.org/ccsl')]
+[module emptyStatementConditionsBuilder('http://www.example.org/ccsl')]
 
 
 

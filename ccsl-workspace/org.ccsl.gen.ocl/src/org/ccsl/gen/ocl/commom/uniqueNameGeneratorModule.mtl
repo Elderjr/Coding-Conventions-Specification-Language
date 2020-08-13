@@ -277,3 +277,7 @@ continueStmt
 [template public getBaseName(e: ReturnStatement)]
 returnStmt
 [/template]
+
+[template private getBaseName(e: EmptyStatement)]
+emptyStmt
+[/template]

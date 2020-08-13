@@ -287,3 +287,7 @@ ContinueStatement
 [template private writeElementMatchingJavaMetaclasses(e: ReturnStatement)]
 ReturnStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: EmptyStatement)]
+EmptyStatement
+[/template]
