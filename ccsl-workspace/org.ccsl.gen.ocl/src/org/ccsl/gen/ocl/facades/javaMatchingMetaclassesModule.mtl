@@ -291,3 +291,7 @@ ReturnStatement
 [template private writeElementMatchingJavaMetaclasses(e: EmptyStatement)]
 EmptyStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ImportableElement)]
+NamedElement
+[/template]

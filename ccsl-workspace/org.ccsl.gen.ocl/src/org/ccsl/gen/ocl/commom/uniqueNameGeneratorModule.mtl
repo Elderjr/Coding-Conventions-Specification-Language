@@ -281,3 +281,7 @@ returnStmt
 [template private getBaseName(e: EmptyStatement)]
 emptyStmt
 [/template]
+
+[template private getBaseName(e: ImportableElement)]
+importableElement
+[/template]

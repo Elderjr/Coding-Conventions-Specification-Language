@@ -13,7 +13,11 @@
 
 
 [template public writeImportedElementCondition(importStmt: ImportStatement, varname: String) ? (importStmt.mustWriteConditionFor('importedElement'))]
-[let importedElementFieldName: String = importStmt.importedElement.getUniqueOclName()]
-let [importedElementFieldName /]: ASTNode = [varname /].importedElement in
-[importStmt.generatesFieldCondition(importStmt.importedElement, importedElementFieldName, 'ASTNode') /][/let]
+let [importStmt.importedElement.getFieldName() /]: ASTNode = [varname /].importedElement in
+[importStmt.generatesFieldCondition(importStmt.importedElement, importStmt.importedElement.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeStaticCondition(importStmt: ImportStatement, varname: String) ? (not importStmt._static.oclIsUndefined())]
+[if importStmt._static]
+[varname /].static[else] (not [varname /].static)[/if]
 [/template]

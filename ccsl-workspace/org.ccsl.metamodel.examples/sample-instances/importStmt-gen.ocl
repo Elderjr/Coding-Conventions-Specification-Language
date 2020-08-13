@@ -1,0 +1,8 @@
+let violations: Set(ASTNode) = ImportDeclaration.allInstances()->select(importStmt_1: ImportDeclaration |
+  importStmt_1.static and
+  let importableElement_1: ASTNode = importStmt_1.importedElement in
+  importableElement_1 <> null and
+  importableElement_1.oclIsKindOf(NamedElement)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

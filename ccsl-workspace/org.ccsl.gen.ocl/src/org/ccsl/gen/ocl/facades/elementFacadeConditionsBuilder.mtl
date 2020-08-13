@@ -10,6 +10,7 @@
 [comment Element package /]
 [import org::ccsl::gen::ocl::element::annotableElementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::controlledAccessElementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::importableElementConditionsBuilder /]
 
 [comment Datatype package /]
 [import org::ccsl::gen::ocl::element::datatype::dataTypeConditionsBuilder /]
@@ -92,6 +93,7 @@
 [import org::ccsl::gen::ocl::element::statement::returnStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::emptyStatementConditionsBuilder /]
 
+
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
 [if conditionsNotBlank->size() > 0]
@@ -136,6 +138,19 @@ OrderedSet(String){
   element.writeVisibilityCondition(varname)
 }
 /]
+
+[comment Write @ImportableElement conditions /]
+[query private getImportableElementConditions(e: ImportableElement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = e.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  e.writeImportableElementTypecheckCondition(varname, typecheck)
+ }->addAll(e.getElementConditions(varname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: ImportableElement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getImportableElementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 
 [comment DataType Package /]
 
@@ -1015,7 +1030,9 @@ let tuple: OrderedSet(String) = importStmt.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
-  importStmt.writeImportStatementTypecheckCondition(varname, typecheck)
+  importStmt.writeImportStatementTypecheckCondition(varname, typecheck),
+  importStmt.writeStaticCondition(completeVarname),
+  importStmt.writeImportedElementCondition(completeVarname)
  }->addAll(importStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(e: ImportStatement, varname: String, typecheck: Boolean, metaclass: String)]
