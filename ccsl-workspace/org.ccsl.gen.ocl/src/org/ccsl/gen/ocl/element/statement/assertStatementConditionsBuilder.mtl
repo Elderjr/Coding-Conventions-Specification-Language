@@ -1,0 +1,34 @@
+[comment encoding = UTF-8 /]
+[module assertStatementConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+
+[template public writeAssertTypecheckCondition(assert: AssertStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AssertStatement)
+
+[/template]
+
+[template public writeMessageCondition(assert: AssertStatement, varname: String) ? (assert.mustWriteConditionFor('message'))]
+let [assert.message.getFieldName() /]: ASTNode = [varname /].message->asOrderedSet()->closure(p: ASTNode |
+  if (p.oclIsKindOf(ParenthesizedExpression)) then
+    p.oclAsType(ParenthesizedExpression).expression
+  else
+    p
+  endif
+)->last() in
+[assert.generatesFieldCondition(assert.message, assert.message.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeExpressionCondition(assert: AssertStatement, varname: String) ? (assert.mustWriteConditionFor('expression'))]
+let [assert.expression.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(p: ASTNode |
+  if (p.oclIsKindOf(ParenthesizedExpression)) then
+    p.oclAsType(ParenthesizedExpression).expression
+  else
+    p
+  endif
+)->last() in
+[assert.generatesFieldCondition(assert.expression, assert.expression.getFieldName(), 'ASTNode') /]
+[/template]
+

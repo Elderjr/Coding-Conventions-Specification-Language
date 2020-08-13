@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module continueStatementModule('http://www.example.org/ccsl')]
+[module continueConditionsBuilder('http://www.example.org/ccsl')]
 
 
 

@@ -271,3 +271,7 @@ PrefixExpression,InfixExpression[/if]
 [template private writeElementMatchingJavaMetaclasses(e: ImportStatement)]
 ImportDeclaration
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: AssertStatement)]
+AssertStatement
+[/template]

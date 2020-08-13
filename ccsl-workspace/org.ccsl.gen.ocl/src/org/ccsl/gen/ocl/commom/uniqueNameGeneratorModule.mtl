@@ -256,7 +256,12 @@ strConcat
 [template public getBaseName(e: ArithmeticExpression)]
 arithmeticExpression
 [/template]
+
 [comment Statement Package /]
 [template public getBaseName(e: ImportStatement)]
 importStmt
+[/template]
+
+[template public getBaseName(e: AssertStatement)]
+assertStmt
 [/template]
