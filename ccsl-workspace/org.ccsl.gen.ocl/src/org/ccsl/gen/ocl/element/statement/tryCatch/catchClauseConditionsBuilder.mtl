@@ -1,0 +1,26 @@
+[comment encoding = UTF-8 /]
+[module catchClauseConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+
+[template public writeCatchClauseTypecheckCondition(catch: CatchClause, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(CatchClause)
+[/template]
+
+[template public writeCatchBlockCondition(catch: CatchClause, varname: String) ? (catch.mustWriteConditionFor('body'))]
+let [catch._body.getFieldName() /]: Block = [varname /].body in
+[catch.generatesFieldCondition(catch._body, catch._body.getFieldName(), 'Block') /]
+[/template]
+
+[template public writeHandledExceptionsCondition(catch: CatchClause, varname: String) ? (catch.mustWriteConditionFor('handledExceptions')){
+  handledExceptions: String = catch.getUniqueOclName().concat('_handledException');
+}]
+let [handledExceptions /]: OrderedSet(ASTNode) = [varname /].exception.type.type->asOrderedSet() in
+[catch.writeSetConditions(handledExceptions, catch.handledExceptions, 'ASTNode', CollectionKind::ANY) /]
+[/template]
+
+[template public writeVariableCondition(catch: CatchClause, varname: String) ? (catch.mustWriteConditionFor('variable'))]
+let [catch.variable.getFieldName() /]: SingleVariableDeclaration = [varname /].exception in
+[catch.generatesFieldCondition(catch.variable, catch.variable.getFieldName(), 'SingleVariableDeclaration') /]
+[/template]

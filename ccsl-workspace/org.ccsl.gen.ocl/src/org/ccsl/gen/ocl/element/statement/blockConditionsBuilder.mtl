@@ -1,10 +1,10 @@
 [comment encoding = UTF-8 /]
-[module blockOperations('http://www.example.org/ccsl')]
+[module blockConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 
-[template public generatesBlockTypecheckConditions(block: Block, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeBlockTypecheckCondition(block: Block, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(Block)
 [/template]
 

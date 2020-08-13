@@ -285,3 +285,11 @@ emptyStmt
 [template private getBaseName(e: ImportableElement)]
 importableElement
 [/template]
+
+[template private getBaseName(e: CatchClause)]
+catchClause
+[/template]
+
+[template private getBaseName(e: Block)]
+blockStmt
+[/template]

@@ -295,3 +295,11 @@ EmptyStatement
 [template private writeElementMatchingJavaMetaclasses(e: ImportableElement)]
 NamedElement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: CatchClause)]
+CatchClause
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: Block)]
+Block
+[/template]
