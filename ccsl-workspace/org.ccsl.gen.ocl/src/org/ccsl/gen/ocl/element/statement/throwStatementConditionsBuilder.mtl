@@ -1,5 +1,5 @@
 [comment encoding = UTF-8 /]
-[module throwStatementModule('http://www.example.org/ccsl')]
+[module throwStatementConditionsBuilder('http://www.example.org/ccsl')]
 
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
@@ -10,12 +10,12 @@
 
 
 [template public writeExpressionCondition(throwStmt: ThrowStatement, varname: String) ? (throwStmt.mustWriteConditionFor('expression'))]
-let [throwStmt.expression.getFieldName() /]: ASTNode = [varname /]->asOrderedSet()->closure(p: ASTNode |
+let [throwStmt.expression.getFieldName() /]: ASTNode = [varname /].expression->asOrderedSet()->closure(p: ASTNode |
   if (p.oclIsKindOf(ParenthesizedExpression)) then
     p.oclAsType(ParenthesizedExpression).expression
   else
     p
   endif
-)->last() in in
+)->last() in
 [throwStmt.generatesFieldCondition(throwStmt.expression, throwStmt.expression.getFieldName(), 'ASTNode') /]
 [/template]

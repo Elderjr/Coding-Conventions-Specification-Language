@@ -1,0 +1,13 @@
+let violations: Set(ASTNode) = ThrowStatement.allInstances()->select(throwStmt_1: ThrowStatement |
+  let expression_1: ASTNode = throwStmt_1.expression->asOrderedSet()->closure(p: ASTNode |
+    if (p.oclIsKindOf(ParenthesizedExpression)) then
+      p.oclAsType(ParenthesizedExpression).expression
+    else
+      p
+    endif
+  )->last() in
+  expression_1 <> null and
+  expression_1.oclIsKindOf(Expression)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
