@@ -9,6 +9,12 @@
 [/template]
 
 
+[template public writeTryBlockCondition(tryStmt: TryStatement, varname: String) ? (tryStmt.mustWriteConditionFor('tryBlock'))]
+[let tryBlockName: String = tryStmt.tryBlock.getFieldName()]
+let [tryBlockName /]: Block = [varname /].body in
+[tryStmt.generatesFieldCondition(tryStmt.tryBlock, tryBlockName, 'Block') /][/let]
+[/template]
+
 [template public writeCatchClausesCondition(tryStmt: TryStatement, varname: String) ? (tryStmt.mustWriteConditionFor('catchClauses')){
   catchClauses: String = tryStmt.getUniqueOclName().concat('_catchClauses');
 }]

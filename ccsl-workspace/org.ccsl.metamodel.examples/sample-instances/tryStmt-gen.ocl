@@ -1,0 +1,16 @@
+let violations: Set(ASTNode) = TryStatement.allInstances()->select(tryStmt_1: TryStatement |
+  let blockStmt_1: Block = tryStmt_1.body in
+  blockStmt_1 <> null and
+  true and
+  let blockStmt_2: Block = tryStmt_1.finally in
+  blockStmt_2 <> null and
+  true and
+  let tryStmt_1_catchClauses: OrderedSet(CatchClause) = tryStmt_1.catchClauses in
+  tryStmt_1_catchClauses->exists(catchClause_1: CatchClause |  
+  catchClause_1 <> null and
+  true
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

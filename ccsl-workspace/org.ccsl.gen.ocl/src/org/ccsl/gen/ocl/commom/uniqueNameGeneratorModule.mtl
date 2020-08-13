@@ -293,3 +293,7 @@ catchClause
 [template private getBaseName(e: Block)]
 blockStmt
 [/template]
+
+[template private getBaseName(e: TryStatement)]
+tryStmt
+[/template]

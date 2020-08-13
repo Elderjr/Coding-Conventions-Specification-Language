@@ -94,6 +94,7 @@
 [import org::ccsl::gen::ocl::element::statement::emptyStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::tryCatch::catchClauseConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::blockConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::tryCatch::tryStatementConditionsBuilder /]
 
 
 [template private writeConditions(conditions: OrderedSet(String))]
@@ -1125,3 +1126,18 @@ OrderedSet(String){
 [e.getCatchClauseConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @CatchClause conditions /]
+[query private getTryStatementConditions(tryStmt: TryStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = tryStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  tryStmt.writeTryStatementTypecheckCondition(varname, typecheck),
+  tryStmt.writeTryBlockCondition(completeVarname),
+  tryStmt.writeFinallyBlockCondition(completeVarname),
+  tryStmt.writeCatchClausesCondition(completeVarname)
+ }->addAll(tryStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: TryStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getTryStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]

@@ -303,3 +303,7 @@ CatchClause
 [template private writeElementMatchingJavaMetaclasses(e: Block)]
 Block
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: TryStatement)]
+TryStatement
+[/template]

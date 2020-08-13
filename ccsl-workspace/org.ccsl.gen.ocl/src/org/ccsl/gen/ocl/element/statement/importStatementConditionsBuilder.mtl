@@ -15,7 +15,7 @@
 [template public writeImportedElementCondition(importStmt: ImportStatement, varname: String) ? (importStmt.mustWriteConditionFor('importedElement'))]
 let [importStmt.importedElement.getFieldName() /]: ASTNode = [varname /].importedElement in
 [importStmt.generatesFieldCondition(importStmt.importedElement, importStmt.importedElement.getFieldName(), 'ASTNode') /]
-[/template]
+[/template]]
 
 [template public writeStaticCondition(importStmt: ImportStatement, varname: String) ? (not importStmt._static.oclIsUndefined())]
 [if importStmt._static]
