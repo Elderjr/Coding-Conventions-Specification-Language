@@ -1,7 +1,15 @@
 [comment encoding = UTF-8 /]
 [module throwStatementModule('http://www.example.org/ccsl')]
 
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 
-[template public writeThrowStatementTypechecker(throwStmt: ThrowStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[template public writeThrowStatementTypecheckeCondition(throwStmt: ThrowStatement, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(ThrowStatement)
+[/template]
+
+
+[template public writeExpressionCondition(throwStmt: ThrowStatement, varname: String) ? (throwStmt.mustWriteConditionFor('expression'))]
+let [throwStmt.expression.getFieldName() /]: ASTNode = [varname /] in
+
 [/template]
