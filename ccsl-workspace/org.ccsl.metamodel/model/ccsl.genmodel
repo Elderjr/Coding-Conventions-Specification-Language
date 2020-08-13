@@ -166,7 +166,7 @@
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/EmptyStatement"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ReturnStatement">
-          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ReturnStatement/statement"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ReturnStatement/expression"/>
         </genClasses>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/BreakStatement"/>
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ContinueStatement"/>

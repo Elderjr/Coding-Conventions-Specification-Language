@@ -19811,8 +19811,8 @@
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DEdge" uid="_1CMcYINOEeqAW7WKZk3jhQ" name="[0..1] statement" sourceNode="_0Sh6AINOEeqAW7WKZk3jhQ" targetNode="_zJ6sIINOEeqAW7WKZk3jhQ">
-      <target xmi:type="ecore:EReference" href="ccsl.ecore#//elements/statements/ReturnStatement/statement"/>
-      <semanticElements xmi:type="ecore:EReference" href="ccsl.ecore#//elements/statements/ReturnStatement/statement"/>
+      <target xmi:type="ecore:EReference" href="ccsl.ecore#//elements/statements/ReturnStatement/expression"/>
+      <semanticElements xmi:type="ecore:EReference" href="ccsl.ecore#//elements/statements/ReturnStatement/expression"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" uid="_1CMcZINOEeqAW7WKZk3jhQ" description="_1CMcYYNOEeqAW7WKZk3jhQ" sourceArrow="FillDiamond" routingStyle="manhattan" strokeColor="0,0,0">
         <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_1CMcZoNOEeqAW7WKZk3jhQ" showIcon="false">
           <customFeatures>labelSize</customFeatures>

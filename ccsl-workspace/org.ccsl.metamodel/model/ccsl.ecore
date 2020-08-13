@@ -213,7 +213,7 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="EmptyStatement" eSuperTypes="#//elements/statements/Statement"/>
       <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" eSuperTypes="#//elements/statements/Statement">
-        <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//elements/statements/Statement"
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//elements/expressions/Expression"
             containment="true"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="BreakStatement" eSuperTypes="#//elements/statements/Statement"/>
