@@ -1,9 +1,0 @@
-rule: {
-    elements:{
-        v:Variable{
-            properties: Property {
-                name: "volatile"
-            }
-        }
-    }
-}

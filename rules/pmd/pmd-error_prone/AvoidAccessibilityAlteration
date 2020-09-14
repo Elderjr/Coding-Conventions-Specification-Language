@@ -1,9 +1,0 @@
-AtomicRule {
-    elements: [m:Method{}, inv:MethodInvocation{elementAccessed: m}]
-    filters: {
-        EqualsNameWithLiteralFilter {
-            target: m,
-            equals: ["getDeclaredConstructors", "getDeclaredConstructor", "setAccessible"]
-        }
-    }
-}

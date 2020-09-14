@@ -1,6 +1,0 @@
-AtomicRule {
-    InfixExp {
-        operator: "==",
-        left: VariableAccess{Variable{name: "NaN"}}
-    }
-}

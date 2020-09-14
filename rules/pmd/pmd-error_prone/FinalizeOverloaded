@@ -1,9 +1,0 @@
-AtomicRule {
-    elements: [
-        //método finalize com pelo menos um parâmetro
-        Method {
-            name: "finalize"
-            params:[Variable{}]
-        }
-    ]
-}

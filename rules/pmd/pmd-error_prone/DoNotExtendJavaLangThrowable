@@ -1,3 +1,0 @@
-AtomicRule{
-    elements:[ComplexType{superTypes:[ComplexType{name:"Throwable"}]}]
-}

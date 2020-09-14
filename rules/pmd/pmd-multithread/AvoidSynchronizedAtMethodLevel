@@ -1,9 +1,0 @@
-rule: AtomicRule{
-    elements: {
-        m: Method {
-            property: Property {
-                name: "syncronized"
-            }
-        }
-    }
-}

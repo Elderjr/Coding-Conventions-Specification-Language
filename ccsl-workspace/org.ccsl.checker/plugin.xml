@@ -10,7 +10,7 @@
       </category>
       <command
             categoryId="org.ccsl.checker.commands.category"
-            name="Sample Command"
+            name="Run CCSL Checker"
             id="org.ccsl.checker.commands.sampleCommand">
       </command>
    </extension>
@@ -36,7 +36,7 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="org.ccsl.checker.menus.sampleMenu"
-               label="Sample Menu"
+               label="CCSL"
                mnemonic="M">
             <command
                   commandId="org.ccsl.checker.commands.sampleCommand"

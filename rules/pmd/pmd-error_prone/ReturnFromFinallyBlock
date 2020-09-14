@@ -1,7 +1,0 @@
-AtomicRule {
-    elements: [
-        JTryCatch{
-            finallyStatements: [JReturnStatement{}]
-        }
-    ]
-}

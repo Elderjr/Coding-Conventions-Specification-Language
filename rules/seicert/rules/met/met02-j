@@ -1,9 +1,0 @@
-Rule: AtomicRule {
-    elements {
-        m: Method {
-            annotations: Annotation {
-                name: "Deprecated"
-            }
-        }
-    }
-}

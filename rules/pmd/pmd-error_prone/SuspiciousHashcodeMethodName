@@ -1,3 +1,0 @@
-AtomicRule{
-    elements: [Method{name:"hashcode"}]
-}

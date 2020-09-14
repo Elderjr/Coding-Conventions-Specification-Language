@@ -1,7 +1,0 @@
-Rule: AtomicRule {
-    elements {
-        c: Constructor {
-            throws: Class {}
-        }
-    }
-}

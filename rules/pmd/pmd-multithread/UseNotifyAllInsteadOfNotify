@@ -1,9 +1,0 @@
-rule:{
-    elements{
-        m: MethodInvocation{
-            to: Method {
-                name: "notify"
-            }
-        }
-    }
-}

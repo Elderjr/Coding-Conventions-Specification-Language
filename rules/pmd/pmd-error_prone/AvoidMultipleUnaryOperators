@@ -1,3 +1,0 @@
-AtomicRule {
-    elements: [PrefixExp{operand: PrefixExp{}}]
-}

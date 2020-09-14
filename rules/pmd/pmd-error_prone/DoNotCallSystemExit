@@ -1,3 +1,0 @@
-AtomicRule{
-    elements:[MethodInvocation{elementAccessed:Method{name:"exit"}}]
-}

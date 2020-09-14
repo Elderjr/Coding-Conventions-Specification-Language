@@ -16,8 +16,9 @@ public class FileUtils {
 	}
 	
 	public static String getFileNameWithoutExtension(File f) {
-		if(f.getName().indexOf('.') != -1) {
-			return f.getName().substring(0, f.getName().indexOf('.'));
+		int extensionStartIndex = f.getName().lastIndexOf('.');
+		if(extensionStartIndex != -1) {
+			return f.getName().substring(0, extensionStartIndex);
 		}
 		return null;
 	}

@@ -1,9 +1,0 @@
-AtomicRule {
-    elements: [
-        MethodInvocation {
-            elementAccessed: Method {
-                name: "finalize"
-            }
-        }
-    ]
-}
