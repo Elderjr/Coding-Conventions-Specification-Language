@@ -3,9 +3,9 @@ package org.ccsl.checker.modisco;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.gmt.modisco.java.ASTNode;
-import org.eclipse.gmt.modisco.java.CompilationUnit;
-import org.eclipse.gmt.modisco.java.Model;
+import org.eclipse.modisco.java.ASTNode;
+import org.eclipse.modisco.java.CompilationUnit;
+import org.eclipse.modisco.java.Model;
 import org.eclipse.modisco.kdm.source.extension.ASTNodeSourceRegion;
 
 public class ModiscoJavaModel {

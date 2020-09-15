@@ -1,6 +1,6 @@
 package org.ccsl.checker.ccslChecker;
 
-import org.eclipse.gmt.modisco.java.ASTNode;
+import org.eclipse.modisco.java.ASTNode;
 
 public class Violation {
 
