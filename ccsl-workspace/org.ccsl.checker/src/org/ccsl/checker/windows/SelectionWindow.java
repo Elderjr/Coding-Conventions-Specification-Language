@@ -75,6 +75,7 @@ public class SelectionWindow {
 	}
 
 	private final void setLookAndFeel() {
+		/*
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException e) {
@@ -89,7 +90,7 @@ public class SelectionWindow {
 		} catch (UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	private final void fillTargetProjectComboBox(Collection<IJavaProject> javaProjects) {
@@ -163,7 +164,7 @@ public class SelectionWindow {
 	private void initialize() {
 		frmCcslChecker = new JFrame();
 		frmCcslChecker.setTitle("Ccsl Checker");
-		frmCcslChecker.setBounds(100, 100, 347, 471);
+		frmCcslChecker.setBounds(100, 100, 512, 474);
 		frmCcslChecker.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel targetProjectsPanel = new JPanel();
@@ -171,11 +172,14 @@ public class SelectionWindow {
 				new TitledBorder(null, "Target Projects", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		cbTargetProjects = new JComboBox<>();
+		cbTargetProjects.setBounds(17, 22, 285, 24);
 		defaultComboBoxModelTargetProjets = new DefaultComboBoxModel<>();
 		cbTargetProjects.setModel(defaultComboBoxModelTargetProjets);
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(17, 59, 431, 75);
 
 		JButton btAddTarget = new JButton("Add Project");
+		btAddTarget.setBounds(314, 22, 134, 25);
 		btAddTarget.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addTargetProject();
@@ -184,31 +188,7 @@ public class SelectionWindow {
 		btAddTarget.setIcon(null);
 
 		JLabel lblNewLabel = new JLabel("*Press delete key to remove a selected project from the list");
-		GroupLayout gl_targetProjectsPanel = new GroupLayout(targetProjectsPanel);
-		gl_targetProjectsPanel.setHorizontalGroup(gl_targetProjectsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_targetProjectsPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_targetProjectsPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-								.addGroup(gl_targetProjectsPanel.createSequentialGroup().addGroup(gl_targetProjectsPanel
-										.createParallelGroup(Alignment.TRAILING)
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 276,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(Alignment.LEADING, gl_targetProjectsPanel.createSequentialGroup()
-												.addComponent(cbTargetProjects, GroupLayout.PREFERRED_SIZE, 176,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(btAddTarget,
-														GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)))
-										.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))));
-		gl_targetProjectsPanel.setVerticalGroup(gl_targetProjectsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_targetProjectsPanel.createSequentialGroup().addGap(5)
-						.addGroup(gl_targetProjectsPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(cbTargetProjects, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(btAddTarget))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel)
-						.addContainerGap(20, Short.MAX_VALUE)));
+		lblNewLabel.setBounds(17, 140, 463, 15);
 
 		jListJavaProjects = new JList<>();
 		defaultListModelJavaProjects = new DefaultListModel<>();
@@ -221,7 +201,6 @@ public class SelectionWindow {
 			}
 		});
 		scrollPane.setViewportView(jListJavaProjects);
-		targetProjectsPanel.setLayout(gl_targetProjectsPanel);
 
 		JPanel ccslRulesPanel = new JPanel();
 		ccslRulesPanel.setBorder(new TitledBorder(
@@ -229,6 +208,7 @@ public class SelectionWindow {
 				"Ccsl Rules (*.ccsl, *.ocl)", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 
 		JButton btRemoveCcslRule = new JButton("-");
+		btRemoveCcslRule.setBounds(399, 65, 51, 33);
 		btRemoveCcslRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeRule();
@@ -236,6 +216,7 @@ public class SelectionWindow {
 		});
 
 		JButton btAddCcslRule = new JButton("+");
+		btAddCcslRule.setBounds(399, 20, 51, 33);
 		btAddCcslRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addRule();
@@ -243,112 +224,94 @@ public class SelectionWindow {
 		});
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		GroupLayout gl_ccslRulesPanel = new GroupLayout(ccslRulesPanel);
-		gl_ccslRulesPanel
-				.setHorizontalGroup(gl_ccslRulesPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_ccslRulesPanel.createSequentialGroup().addContainerGap()
-								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_ccslRulesPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(btAddCcslRule, GroupLayout.PREFERRED_SIZE, 51,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btRemoveCcslRule, GroupLayout.PREFERRED_SIZE, 51,
-												GroupLayout.PREFERRED_SIZE))
-								.addContainerGap(46, Short.MAX_VALUE)));
-		gl_ccslRulesPanel
-				.setVerticalGroup(gl_ccslRulesPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_ccslRulesPanel.createSequentialGroup()
-								.addComponent(btAddCcslRule, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-								.addComponent(btRemoveCcslRule, GroupLayout.PREFERRED_SIZE, 33,
-										GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(16, Short.MAX_VALUE))
-						.addGroup(gl_ccslRulesPanel.createSequentialGroup()
-								.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-								.addContainerGap()));
+		scrollPane_1.setBounds(18, 17, 369, 81);
 
 		jListRules = new JList<File>();
 		defaultListModelRules = new DefaultListModel<File>();
 		jListRules.setModel(defaultListModelRules);
 		scrollPane_1.setViewportView(jListRules);
-		ccslRulesPanel.setLayout(gl_ccslRulesPanel);
 
 		JPanel outputSettingsPanel = new JPanel();
 		outputSettingsPanel.setBorder(
 				new TitledBorder(null, "Output Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		JLabel lblOutputFolder = new JLabel("Output folder:");
+		lblOutputFolder.setBounds(12, 22, 101, 24);
 
 		tfOutputFolder = new JTextField();
+		tfOutputFolder.setBounds(119, 23, 326, 24);
 		tfOutputFolder.setColumns(10);
 
 		JButton btChooseOutputFolder = new JButton("Choose...");
+		btChooseOutputFolder.setBounds(328, 49, 117, 25);
 		btChooseOutputFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				chooseOutputFolder();
 			}
 		});
-		GroupLayout gl_outputSettingsPanel = new GroupLayout(outputSettingsPanel);
-		gl_outputSettingsPanel.setHorizontalGroup(gl_outputSettingsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_outputSettingsPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_outputSettingsPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_outputSettingsPanel.createSequentialGroup().addComponent(lblOutputFolder)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(tfOutputFolder, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
-								.addComponent(btChooseOutputFolder, Alignment.TRAILING))
-						.addContainerGap()));
-		gl_outputSettingsPanel.setVerticalGroup(gl_outputSettingsPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_outputSettingsPanel.createSequentialGroup().addGap(6)
-						.addGroup(gl_outputSettingsPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tfOutputFolder, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblOutputFolder))
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(btChooseOutputFolder)
-						.addContainerGap(27, Short.MAX_VALUE)));
-		outputSettingsPanel.setLayout(gl_outputSettingsPanel);
-
-		JButton btRunCcslChecker = new JButton("Run Ccsl checkers");
-		btRunCcslChecker.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				runChecker();
-			}
-		});
-
-		JButton btCancel = new JButton("Cancel");
-		btCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		
+		JPanel confirmButtonsLayout = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(frmCcslChecker.getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(outputSettingsPanel, Alignment.LEADING,
-														GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-												.addComponent(ccslRulesPanel, Alignment.LEADING,
-														GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-												.addComponent(targetProjectsPanel, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-										.addGap(15))
-								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-										.addComponent(btRunCcslChecker, GroupLayout.PREFERRED_SIZE, 124,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(btCancel,
-												GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-										.addGap(14)))));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup().addGap(14)
-						.addComponent(targetProjectsPanel, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(ccslRulesPanel, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(outputSettingsPanel, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-						.addGap(18).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btRunCcslChecker).addComponent(btCancel))
-						.addContainerGap(20, Short.MAX_VALUE)));
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(confirmButtonsLayout, GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+							.addGap(24))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(outputSettingsPanel, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+								.addComponent(ccslRulesPanel, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+								.addComponent(targetProjectsPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE))
+							.addContainerGap())))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(14)
+					.addComponent(targetProjectsPanel, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(ccslRulesPanel, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(outputSettingsPanel, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(confirmButtonsLayout, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+				confirmButtonsLayout.setLayout(null);
+		
+				JButton btRunCcslChecker = new JButton("Run Ccsl checkers");
+				btRunCcslChecker.setBounds(210, 5, 160, 25);
+				confirmButtonsLayout.add(btRunCcslChecker);
+				
+						JButton btCancel = new JButton("Cancel");
+						btCancel.setBounds(382, 5, 81, 25);
+						confirmButtonsLayout.add(btCancel);
+						btCancel.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								cancel();
+							}
+						});
+				btRunCcslChecker.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						runChecker();
+					}
+				});
+		outputSettingsPanel.setLayout(null);
+		outputSettingsPanel.add(lblOutputFolder);
+		outputSettingsPanel.add(tfOutputFolder);
+		outputSettingsPanel.add(btChooseOutputFolder);
+		targetProjectsPanel.setLayout(null);
+		targetProjectsPanel.add(lblNewLabel);
+		targetProjectsPanel.add(scrollPane);
+		targetProjectsPanel.add(cbTargetProjects);
+		targetProjectsPanel.add(btAddTarget);
+		ccslRulesPanel.setLayout(null);
+		ccslRulesPanel.add(scrollPane_1);
+		ccslRulesPanel.add(btAddCcslRule);
+		ccslRulesPanel.add(btRemoveCcslRule);
 		frmCcslChecker.getContentPane().setLayout(groupLayout);
 
 	}
