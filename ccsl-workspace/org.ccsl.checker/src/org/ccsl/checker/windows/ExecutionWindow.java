@@ -144,11 +144,11 @@ public class ExecutionWindow {
 				progressBarValue = 0;
 				setMinAndMaxProgressBar(0, ruleViolations.size());
 				for(Entry<String, Set<Violation>> entry : ruleViolations.entrySet()) {
-					updateProgress("Saving violations of rule " + ruleViolations.size(), progressBarValue);
+					updateProgress("Saving violations of rule " + entry.getKey() + " (" + progressBarValue + " / " + ruleViolations.size() + ")", progressBarValue);
 					File dest = new File(outputFolder.getAbsolutePath().replace("\\", "/") + "/" + entry.getKey() + "-ccsl-violations.txt");
 					try {
 						CcslCheckerReportWritter.writeRuleViolations(dest, entry.getValue());
-						addLog("Violations of the rule " + entry.getKey() + " was successfully saved on file " + dest.getName());
+						addLog("Violations of the rule " + entry.getKey() + " were successfully saved on file " + dest.getName());
 					} catch (IOException e) {
 						addLog("Can not save violations of the rule " + entry.getKey() + " on file " + dest.getName() +": " + e.getMessage());
 					}
@@ -191,7 +191,7 @@ public class ExecutionWindow {
 		frame.setBounds(100, 100, 444, 343);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		lblExecutingRuleR = new JLabel("Executing rule r in project p (x / t)");
+		lblExecutingRuleR = new JLabel("Executing rule r in project p (x / t) ");
 
 		progressBar = new JProgressBar();
 
@@ -216,19 +216,19 @@ public class ExecutionWindow {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-								.addComponent(lblExecutingRuleR, GroupLayout.PREFERRED_SIZE, 393, GroupLayout.PREFERRED_SIZE))
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
 							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
 							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-							.addGap(168))))
+							.addGap(168))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblExecutingRuleR, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 408, Short.MAX_VALUE)
+								.addComponent(progressBar, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+							.addContainerGap())))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -243,7 +243,7 @@ public class ExecutionWindow {
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnCancelar)
-					.addContainerGap(15, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
