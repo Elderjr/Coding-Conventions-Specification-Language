@@ -145,7 +145,7 @@ public class ExecutionWindow {
 				setMinAndMaxProgressBar(0, ruleViolations.size());
 				for(Entry<String, Set<Violation>> entry : ruleViolations.entrySet()) {
 					updateProgress("Saving violations of rule " + ruleViolations.size(), progressBarValue);
-					File dest = new File(outputFolder.getAbsolutePath() + "\\" + entry.getKey() + "-ccsl-violations.txt");
+					File dest = new File(outputFolder.getAbsolutePath().replace("\\", "/") + "/" + entry.getKey() + "-ccsl-violations.txt");
 					try {
 						CcslCheckerReportWritter.writeRuleViolations(dest, entry.getValue());
 						addLog("Violations of the rule " + entry.getKey() + " was successfully saved on file " + dest.getName());
