@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="invocations:MethodInvocation" method="//@context/@contextElements.1/@methods.0"/>
+    <contextElements xsi:type="complexType:JClass">
+      <methods/>
+    </contextElements>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="java\\.lang\\.(Runtime|System)"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1/@methods.0" regex="(runFinalization|gc)"/>
+  </context>
+</ccsl:AtomicRule>
