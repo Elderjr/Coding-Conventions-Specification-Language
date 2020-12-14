@@ -1,21 +1,12 @@
 [comment encoding = UTF-8 /]
 [module filterConditionsGeneratorDispatcher('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-[import org::ccsl::gen::ocl::filters::regexFilterOperations /]
-[import org::ccsl::gen::ocl::filters::countFilterModule /]
-[import org::ccsl::gen::ocl::filters::sameNameFilterModule /]
-[import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
-[import org::ccsl::gen::ocl::filters::isTypeOfFilterModule /]
-[import org::ccsl::gen::ocl::filters::isStringFilterModule /]
-[import org::ccsl::gen::ocl::filters::superClassClosureFilterModule /]
-[import org::ccsl::gen::ocl::filters::superMethodClosureFilterModule /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
-[import org::ccsl::gen::ocl::filters::blockLastStatementFilterModule /]
-[import org::ccsl::gen::ocl::filters::hasSameReferenceFilterModule /]
+[import org::ccsl::gen::ocl::filters::regexFilterOperations /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
-[import org::ccsl::gen::ocl::filters::childComplexTypeFilter /]
+
 
 [template private oclOperator(op: LogicOperator)]
 [if op = LogicOperator::AND] and [elseif(op = LogicOperator::OR)] or [else] implies [/if]
@@ -63,63 +54,13 @@ not (
 [atomicFilter.generatesSpecificFilterConditions(target) /][/for]
 [/template]
 
-[template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (atomicFilter.negated)]
-not (
-  [atomicFilter.writeSameNameFilterConditions() /]
-)
-[/template]
-
-[template public generatesFilterConditions(atomicFilter : SameNameFilter) ? (not atomicFilter.negated)]
-[atomicFilter.writeSameNameFilterConditions() /]
-[/template]
-
-[template public generatesFilterConditions(atomicFilter : HasSameReferenceFilter)]
-[atomicFilter.writeHasSameReferenceFilterConditions() /]
-[/template]
-
 [comment dispatchers /]
-[template public generatesSpecificFilterConditions(atomicFilter: AtomicFilter, target: Element)]
-[atomicFilter.eClass() /] dispatcher not implemented
-[/template]
-
-[template public generatesSpecificFilterConditions(regexFilter: RegexMatch, target: Element)]
-[regexFilter.generatesRegexFilterConditions(target) /]
-[/template]
+[template public generatesSpecificFilterConditions(templFilter: Filter, target: Element) /]
 
 [template public generatesSpecificFilterConditions(templFilter: TemplateFilter, target: Element)]
 [templFilter.writeTemplateFilterCondition(target) /]
 [/template]
 
-
-
-[template public generatesSpecificFilterConditions(isKindOfFilter: IsKindOfFilter, target: Element)]
-[isKindOfFilter.writeIsKindOfFilterCondition(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(isTypeOfFilter: IsTypeOfFilter, target: Element)]
-[isTypeOfFilter.writeIsTypeOfFilterCondition(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(isStringFilter: IsStringFilter, target: Element)]
-[isStringFilter.writeIsStringFilterCondition(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(superMethodClosureFilter: SuperMethodClosureFilter, target: Element)]
-[superMethodClosureFilter.writeSuperMethodClosureFilterModule(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(f: ChildClosureComplexTypeFilter, target: Element)]
-[f.writeChildComplexTypeFilter(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(f: CountFilter, target: Element)]
-[f.writeCountFilterCondition(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(f: SuperClassClosureFilter, target: Element)]
-[f.writeSuperClassClosureFilterModule(target) /]
-[/template]
-
-[template public generatesSpecificFilterConditions(f: BlockLastStatementFilter, target: Element)]
-[f.writeBlockLastStatementFilterCondition(target) /]
+[template public generatesSpecificFilterConditions(regexFilter: RegexMatch, target: Element)]
+[regexFilter.generatesRegexFilterConditions(target) /]
 [/template]

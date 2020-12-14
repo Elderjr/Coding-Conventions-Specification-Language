@@ -8,6 +8,7 @@
 [import org::ccsl::gen::ocl::commom::elementUtils /]
 
 [comment Element package /]
+[import org::ccsl::gen::ocl::element::ancestorModule /]
 [import org::ccsl::gen::ocl::element::annotableElementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::controlledAccessElementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::importableElementConditionsBuilder /]
@@ -125,7 +126,9 @@ OrderedSet(String){completeVarname, concreteMetaclass}
 
 [comment write @Element conditions/]
 [query private getElementConditions(element: Element, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
-OrderedSet(String){}
+OrderedSet(String){
+  element.writeAncestorCondition(varname, metaclass)
+}
 /]
 [template public writeElementConditions(e: Element, varname: String, typecheck: Boolean, metaclass: String)]
 
