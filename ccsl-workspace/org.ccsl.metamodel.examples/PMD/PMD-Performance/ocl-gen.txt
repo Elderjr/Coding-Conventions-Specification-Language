@@ -1,0 +1,32 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv_1: ASTNode |
+  (methodInv_1.oclIsKindOf(MethodInvocation) or methodInv_1.oclIsKindOf(SuperMethodInvocation)) and
+  let method_1: ASTNode = methodInv_1.oclAsType(AbstractMethodInvocation).method in 
+  method_1 <> null and
+  method_1.oclIsKindOf(MethodDeclaration) and
+  let clazz_1 : OclAny = method_1.oclAsType(MethodDeclaration).oclContainer() in clazz_1 <> null and
+  clazz_1.oclIsKindOf(ClassDeclaration) and
+  let clazz_1_methods: OrderedSet(MethodDeclaration) = clazz_1.oclAsType(ClassDeclaration).oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  clazz_1_methods->exists(methodTmp | methodTmp = method_1)  and 
+  let className: String = if clazz_1.oclIsKindOf(ClassDeclaration) then
+    clazz_1.oclAsType(ClassDeclaration).name
+  else if clazz_1.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz_1.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if clazz_1.oclIsKindOf(ClassDeclaration) then
+    clazz_1.oclAsType(ClassDeclaration).package
+  else if clazz_1.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz_1.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className).matches('java\\.lang\\.(Runtime|System)') and
+  method_1.oclAsType(NamedElement).name.matches('(runFinalization|gc)') 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

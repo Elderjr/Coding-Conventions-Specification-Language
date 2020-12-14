@@ -55,11 +55,12 @@ e.isTypecheckAlwaysNeeded()
     typecheck: Boolean = rule.subject.isSubjectNeedsTypecheckOnStart();
     subjectConditions: String = rule.subject.writeElementConditions(rule.subject.getUniqueOclName(), typecheck, subjectMetaclass);
     filtersConditions: String = rule._context.filters->writeFiltersConditions();
+	allConditions: Set(String) = subjectConditions->asOrderedSet()->append(filtersConditions)->select(s: String | s.isNotEmpty())
   }
 ]
 [allInstances /]->select([subjectVarname /]: [subjectMetaclass /] |
-[for (condition: String | subjectConditions->asOrderedSet()->including(filtersConditions)->select(s: String | s.isNotEmpty())) separator(' and\n')]
-  [condition.writeStr() /]
+[for (condition: String | allConditions)]
+  [condition.writeStr() /] [if i <> allConditions->size()] and [/if]
 [/for]
 [if rule._context.getTotalElementsDeclaredInExists() > 0]
 --Close exists declarations

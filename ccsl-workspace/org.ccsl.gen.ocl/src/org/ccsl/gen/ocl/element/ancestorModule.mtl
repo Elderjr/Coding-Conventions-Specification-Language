@@ -8,17 +8,25 @@
 
 [comment conditions for the ancestor /]
 [query private isAncestorNotRegistered(element: Element): Boolean = 
-  (not element.eContainer().oclIsUndefined()) and 
-  (element.eContainer().oclIsKindOf(Element)) and 
+  element.isAncestorNotNull() and 
   (not getElementsVisited()->includes(element.eContainer().oclAsType(Element)))
 /]
 
+[query private isAncestorNotNull(element: Element): Boolean = 
+  (not element.eContainer().oclIsUndefined()) and 
+  (element.eContainer().oclIsKindOf(Element))
+/]
 [template public writeAncestorCondition(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
 [let ancestorVarname: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
 [let ancestorCondition: String = element.eContainer().oclAsType(Element).writeElementConditions(ancestorVarname, true, 'OclAny')]
 let [ancestorVarname /] : OclAny = [element.writeGetAncestorExpression(varname, metaclass) /] in [ancestorVarname /] <> null [if not ancestorCondition.isEmpty()]
 and
 [ancestorCondition.writeStr() /][/if][/let][/let]
+[/template]
+
+[template public writeAncestorCondition(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotNull() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
+let [element.getUniqueOclName() /]_container = [element.writeGetAncestorExpression(varname, metaclass) /] in
+[element.getUniqueOclName() /]_container = [element.eContainer().oclAsType(Element).getUniqueOclName() /]
 [/template]
 
 [comment get ancestor ocl expression/]
