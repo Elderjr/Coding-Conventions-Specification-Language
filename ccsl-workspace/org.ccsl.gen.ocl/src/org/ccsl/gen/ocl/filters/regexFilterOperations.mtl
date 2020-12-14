@@ -1,7 +1,6 @@
 [comment encoding = UTF-8 /]
 [module regexFilterOperations('http://www.example.org/ccsl')]
 [import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
-[import org::ccsl::gen::ocl::element::statement::literalValueOperations /]
 [import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 
@@ -54,16 +53,6 @@ if([target.getUniqueOclName() /].oclIsKindOf(AnnotationTypeDeclaration)) then
 else
   [target.getUniqueOclName() /].oclAsType(NamedElement).name.matches('[regexFilter.regex /]')
 endif
-[/template]
-
-[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() > 1)]
-[target.generatesLetStatementToGetLiteralValue(target.getUniqueOclName(), 'literalNameRegex') /]
-literalNameRegex.matches('[regexFilter.regex /]')
-[/template]
-
-[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue) ? (target.getLiteralMatchingMetaclasses()->size() = 1)]
-[let matchingMetaclass: String = target.getLiteralMatchingMetaclasses()->first()]
-[target.getUniqueOclName().printWithCast(matchingMetaclass) /].[target.getLiteralValueMatchingFieldByJavaMetaclass(matchingMetaclass) /].matches('[if target.isStringLiteral()]"[/if][regexFilter.regex /][if target.isStringLiteral()]"[/if]')[/let]
 [/template]
 
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: PrimitiveType)]
