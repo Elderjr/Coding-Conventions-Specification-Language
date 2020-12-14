@@ -20,7 +20,11 @@
 [/template]
 
 [template public writeTypeCondition(annotation: Annotation, varname: String) ? (annotation.mustWriteConditionFor('type'))]
-let [annotation.type.getFieldName() /]: ASTNode = [varname /].type.type in 
+let [annotation.type.getFieldName() /]: ASTNode = if [varname /].type <> null then
+  [varname /].type.type
+else
+  null
+endif in  
 [annotation.generatesFieldCondition(annotation.type, annotation.type.getFieldName(), 'ASTNode') /]
 [/template]
 

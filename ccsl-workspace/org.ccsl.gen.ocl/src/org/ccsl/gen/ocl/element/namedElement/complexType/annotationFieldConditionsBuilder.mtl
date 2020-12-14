@@ -24,7 +24,11 @@ let [field.default.getFieldName() /]: ASTNode = [varname /].default in
 [/template]
 
 [template public writeTypeCondition(field: AnnotationField, varname: String) ? (field.mustWriteConditionFor('type'))]
-let [field.type.getFieldName() /]: ASTNode = [varname /].type.type in
+let [field.type.getFieldName() /]: ASTNode = if [varname /].type <> null then
+  [varname /].type.type
+else
+  null
+endif in
 [field.generatesFieldCondition(field.type, field.type.getFieldName(), 'ASTNode') /]
 [/template]
 
