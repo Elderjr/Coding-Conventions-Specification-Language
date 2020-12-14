@@ -1,0 +1,54 @@
+let violations: Set(ASTNode) = (
+  SingleVariableDeclaration.allInstances()->union(VariableDeclarationFragment.allInstances())->select(var_1: ASTNode |
+    let shortPrimitive_1: ASTNode = if var_1.oclIsKindOf(SingleVariableDeclaration) and var_1.oclAsType(SingleVariableDeclaration).type <> null then
+      var_1.oclAsType(SingleVariableDeclaration).type.type
+    elseif var_1.oclIsKindOf(VariableDeclarationFragment) and var_1.oclAsType(VariableDeclarationFragment).variablesContainer <> null and  
+        var_1.oclAsType(VariableDeclarationFragment).variablesContainer.type <> null then
+      var_1.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+    else
+      null
+    endif in
+    shortPrimitive_1 <> null and
+    shortPrimitive_1.oclIsKindOf(PrimitiveTypeShort) 
+  )->union(
+    AnnotationTypeMemberDeclaration.allInstances()->select(annotationField_1: AnnotationTypeMemberDeclaration |
+    let shortPrimitive_1: ASTNode = if annotationField_1.type <> null then
+      annotationField_1.type.type
+    else
+      null
+    endif in
+    shortPrimitive_1 <> null and
+    shortPrimitive_1.oclIsKindOf(PrimitiveTypeShort) 
+  ))->union(
+    MethodDeclaration.allInstances()->select(method_1: MethodDeclaration |
+    (not method_1.returnType.oclIsUndefined()) and
+    let shortPrimitive_1: ASTNode = method_1.returnType.type in
+    shortPrimitive_1 <> null and
+    shortPrimitive_1.oclIsKindOf(PrimitiveTypeShort)  and 
+    not (
+      let method_2: MethodDeclaration = method_1 in 
+      let method_2_annotations: OrderedSet(ASTNode) = method_2.annotations in 
+      method_2_annotations <> null and
+      method_2_annotations->exists(annotation_1: ASTNode |  
+      annotation_1 <> null and
+      annotation_1.oclIsKindOf(Annotation) and
+      let annotationType_1: ASTNode = if annotation_1.oclAsType(Annotation).type <> null then
+        annotation_1.oclAsType(Annotation).type.type
+      else
+        null
+      endif in  
+      annotationType_1 <> null and
+      if annotationType_1.oclIsKindOf(AnnotationTypeDeclaration) then
+        true
+      elseif annotationType_1.oclIsKindOf(UnresolvedTypeDeclaration) then
+        annotationType_1.oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+          ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+      else
+        false
+      endif and
+      annotationType_1.oclAsType(AnnotationTypeDeclaration).oclAsType(NamedElement).name = 'Override')
+    ) 
+  ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

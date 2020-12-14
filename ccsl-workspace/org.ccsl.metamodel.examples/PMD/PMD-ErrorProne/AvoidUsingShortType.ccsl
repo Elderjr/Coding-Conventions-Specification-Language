@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:datatype="http://www.example.org/ccsl/elements/datatype" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" xmlns:variable="http://www.example.org/ccsl/elements/namedElements/variable" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule" subject="variable">
+    <context>
+      <contextElements xsi:type="variable:Variable" uniqueName="variable" type="variableShortPrimitiveType"/>
+      <contextElements xsi:type="datatype:ShortPrimitiveType" uniqueName="variableShortPrimitiveType"/>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="annotationField">
+    <context>
+      <contextElements xsi:type="complexType:AnnotationField" uniqueName="annotationField" type="annotationShortPrimitiveType"/>
+      <contextElements xsi:type="datatype:ShortPrimitiveType" uniqueName="annotationShortPrimitiveType"/>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.2/@context/@contextElements.0">
+    <context>
+      <contextElements xsi:type="method:Method" returnType="methodShortPrimtiveType"/>
+      <contextElements xsi:type="datatype:ShortPrimitiveType" uniqueName="methodShortPrimtiveType"/>
+      <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@rules.2/@context/@contextElements.0" targetTemplate="//@rules.2/@context/@filters.0/@context/@contextElements.0">
+        <context>
+          <contextElements xsi:type="method:Method">
+            <annotations type="overrideAnnotation"/>
+          </contextElements>
+          <contextElements xsi:type="complexType:AnnotationType" uniqueName="overrideAnnotation" name="Override"/>
+        </context>
+      </filters>
+    </context>
+  </rules>
+</ccsl:CompositeRule>
