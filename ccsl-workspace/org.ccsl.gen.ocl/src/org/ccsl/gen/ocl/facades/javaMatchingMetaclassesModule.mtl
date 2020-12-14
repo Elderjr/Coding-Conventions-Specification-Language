@@ -167,6 +167,10 @@ Expression
 Annotation
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: AnnotationFieldValue)]
+AnnotationMemberValuePair
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: InstanceofExpression)]
 InstanceofExpression
 [/template]

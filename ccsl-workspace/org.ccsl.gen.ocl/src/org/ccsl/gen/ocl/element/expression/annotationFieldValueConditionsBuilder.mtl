@@ -1,0 +1,17 @@
+[comment encoding = UTF-8 /]
+[module annotationFieldValueConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+
+
+[comment Modisco map:
+	*AnnotationMemberValuePair
+/]
+
+
+[template public writeAnnotationFieldValueTypecheckCondition(annotationFieldValue: AnnotationFieldValue, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(AnnotationMemberValuePair)
+[/template]

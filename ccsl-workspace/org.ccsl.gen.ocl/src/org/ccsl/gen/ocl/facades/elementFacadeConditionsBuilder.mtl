@@ -61,6 +61,7 @@
 [comment Expression package /]
 [import org::ccsl::gen::ocl::element::expression::expressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::annotationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::annotationFieldValueConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::instanceofConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::castExpressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::ternaryExpressionConditionsBuilder /]
@@ -688,13 +689,27 @@ let tuple: OrderedSet(String) = annotation.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
-  annotation.writeAnnotationTypecheckCondition(varname, typecheck)
+  annotation.writeAnnotationTypecheckCondition(varname, typecheck),
+  annotation.writeTypeCondition(completeVarname),
+  annotation.writeValuesCondition(completeVarname)
  }->addAll(annotation.getExpressionConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(e: Annotation, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getAnnotationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
+[comment Write @Annotation conditions /]
+[query private getAnnotationFieldValueConditions(annotationFieldValue: AnnotationFieldValue, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = annotationFieldValue.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  annotationFieldValue.writeAnnotationFieldValueTypecheckCondition(varname, typecheck)
+ }->addAll(annotationFieldValue.getElementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: AnnotationFieldValue, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getAnnotationFieldValueConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
 
 [comment Write @InstanceofExpression conditions /]
 [query private getInstanceofExpressionConditions(instanceof: InstanceofExpression, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =

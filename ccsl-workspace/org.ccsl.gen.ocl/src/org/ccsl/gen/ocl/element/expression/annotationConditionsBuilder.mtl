@@ -1,10 +1,32 @@
 [comment encoding = UTF-8 /]
 [module annotationConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[comment Annotation attributes:
+  *type: AnnotationType
+  *values: OrderedSet(AnnotationFieldValue)
+/]
 
 [comment Modisco map:
 	*Annotation
 /]
 
+
 [template public writeAnnotationTypecheckCondition(annotation: Annotation, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(Annotation)
+[/template]
+
+[template public writeTypeCondition(annotation: Annotation, varname: String) ? (annotation.mustWriteConditionFor('type'))]
+let [annotation.type.getFieldName() /]: ASTNode = [varname /].type.type in 
+[annotation.generatesFieldCondition(annotation.type, annotation.type.getFieldName(), 'ASTNode') /]
+[/template]
+
+[template public writeValuesCondition(annotation: Annotation, varname: String) ? (annotation.mustWriteConditionFor('values')){
+  args: String = annotation.getUniqueOclName().concat('_values');
+}]
+let [args /]: OrderedSet(ASTNode) = [varname /].values in
+[annotation.writeSetConditions(args, annotation.values, 'AnnotationMemberValuePair', annotation.valuesKind) /]
 [/template]
