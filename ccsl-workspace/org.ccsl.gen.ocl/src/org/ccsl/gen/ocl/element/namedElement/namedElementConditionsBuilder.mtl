@@ -24,7 +24,7 @@
 [/template]
 
 [template public writeAvaliableInSourceCode(namedElement: NamedElement, varname: String) ? (not namedElement.availableInSourceCode.oclIsUndefined())]
-[varname /].proxy = [namedElement.availableInSourceCode /]
+[varname /].proxy = [if namedElement.availableInSourceCode]false[else]true[/if]
 [/template]
 
 

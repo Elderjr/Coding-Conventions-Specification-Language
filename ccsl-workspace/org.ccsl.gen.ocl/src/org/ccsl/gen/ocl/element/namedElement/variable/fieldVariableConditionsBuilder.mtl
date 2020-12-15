@@ -27,3 +27,10 @@ let [modifier /]: Modifier = [varname /].oclContainer().oclAsType(FieldDeclarati
 [if (var._static = false)](not [/if][modifier /].static[if (var._static = false)])[/if]
 [/template]
 
+[template public writeVolatileCondition(var: FieldVariable, varname: String)? (not var.volatile.oclIsUndefined()){
+  modifier: String = var.getUniqueOclName().concat('_modifier');
+}]
+let [modifier /]: Modifier = [varname /].oclContainer().oclAsType(FieldDeclaration).modifier in
+[modifier /] <> null and
+[if (var.volatile = false)](not [/if][modifier /].volatile[if (var.volatile = false)])[/if]
+[/template]
