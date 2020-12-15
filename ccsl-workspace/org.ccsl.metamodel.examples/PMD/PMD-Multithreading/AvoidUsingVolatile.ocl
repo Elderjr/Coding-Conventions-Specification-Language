@@ -1,0 +1,8 @@
+let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(var_1: VariableDeclarationFragment |
+  var_1.oclIsKindOf(VariableDeclarationFragment) and var_1.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let var_1_modifier: Modifier = var_1.oclContainer().oclAsType(FieldDeclaration).modifier in
+  var_1_modifier <> null and
+  var_1_modifier.volatile 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
