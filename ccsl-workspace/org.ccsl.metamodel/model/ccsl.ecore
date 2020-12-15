@@ -68,8 +68,7 @@
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
             unsettable="true"/>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="availableInSourceCode"
-            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-            defaultValueLiteral="true"/>
+            eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//BooleanObject"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//elements/namedElements/NamedElement #//elements/statements/import/ImportableElement">
         <eStructuralFeatures xsi:type="ecore:EReference" name="declaredTypes" upperBound="-1"
@@ -91,6 +90,7 @@
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="FieldVariable" eSuperTypes="#//elements/namedElements/variable/InitializableVariable #//elements/ControlledAccessElement">
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//BooleanObject"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="volatile" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//BooleanObject"/>
         </eClassifiers>
       </eSubpackages>
       <eSubpackages name="complexType" nsURI="http://www.example.org/ccsl/elements/namedElements/complexType"

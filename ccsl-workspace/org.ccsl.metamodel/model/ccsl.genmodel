@@ -80,6 +80,7 @@
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/variable/FieldVariable">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/variable/FieldVariable/static"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/variable/FieldVariable/volatile"/>
           </genClasses>
         </nestedGenPackages>
         <nestedGenPackages prefix="ComplexType" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/namedElements/complexType">
