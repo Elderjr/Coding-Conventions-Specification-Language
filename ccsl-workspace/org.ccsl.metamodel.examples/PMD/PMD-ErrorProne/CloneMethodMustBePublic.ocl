@@ -1,0 +1,17 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method_1: MethodDeclaration |
+  let clazz_1 : OclAny = method_1.oclContainer() in clazz_1 <> null and
+  clazz_1.oclIsKindOf(ClassDeclaration) and
+  let clazz_1_methods: OrderedSet(MethodDeclaration) = clazz_1.oclAsType(ClassDeclaration).oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  clazz_1_methods->exists(methodTmp | methodTmp = method_1) and
+  method_1.oclAsType(NamedElement).name = 'clone' and
+  method_1.proxy = false  and 
+  not (
+    let method_2: MethodDeclaration = method_1 in
+    method_2.modifier <> null and
+    method_2.modifier.visibility = VisibilityKind::public
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
