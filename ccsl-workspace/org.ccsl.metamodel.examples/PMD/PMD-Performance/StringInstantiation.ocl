@@ -1,0 +1,46 @@
+let violations: Set(ASTNode) = (
+  ClassInstanceCreation.allInstances()->union(ConstructorInvocation.allInstances())->union(SuperConstructorInvocation.allInstances())->select(constructorInv_1: ASTNode |
+    let constructor_1: ASTNode = constructorInv_1.oclAsType(AbstractMethodInvocation).method in 
+    constructor_1 <> null and
+    constructor_1.oclIsKindOf(ConstructorDeclaration) and
+    let constructor_1_parameters: OrderedSet(SingleVariableDeclaration) = constructor_1.oclAsType(ConstructorDeclaration).parameters in 
+    constructor_1_parameters <> null and
+    constructor_1_parameters->exists(var_1: SingleVariableDeclaration |  
+    var_1 <> null and
+    var_1.type <> null and
+    let clazz_1: ASTNode = var_1.type.type in
+    clazz_1 <> null and
+    clazz_1.oclIsKindOf(ClassDeclaration) and
+    let clazz_1_constructors: OrderedSet(ASTNode) = clazz_1.oclAsType(ClassDeclaration).bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+    clazz_1_constructors->exists(constructorTmp | constructorTmp = constructor_1) and
+    clazz_1.oclAsType(ClassDeclaration).oclAsType(NamedElement).name = 'String' and
+    let var_1_container = if (var_1.oclContainer() <> null and (not var_1.oclIsKindOf(SingleVariableDeclaration))) then
+      var_1.oclContainer().oclContainer()
+    elseif (var_1.oclContainer() <> null) then
+      var_1.oclContainer()
+    else
+     null
+    endif in
+    var_1_container = constructor_1 and
+    constructor_1_parameters->size() = 1 and
+    let constructor_1_container = constructor_1.oclAsType(ConstructorDeclaration).oclContainer() in
+    constructor_1_container = clazz_1 
+  --Close exists declarations
+  )
+  )->union(
+    ClassInstanceCreation.allInstances()->union(ConstructorInvocation.allInstances())->union(SuperConstructorInvocation.allInstances())->select(constructorInv_1: ASTNode |
+    let constructor_1: ASTNode = constructorInv_1.oclAsType(AbstractMethodInvocation).method in 
+    constructor_1 <> null and
+    constructor_1.oclIsKindOf(ConstructorDeclaration) and
+    let constructor_1_parameters: OrderedSet(SingleVariableDeclaration) = constructor_1.oclAsType(ConstructorDeclaration).parameters in 
+    constructor_1_parameters <> null and
+    constructor_1_parameters->size() = 0 and
+    let clazz_1 : OclAny = constructor_1.oclAsType(ConstructorDeclaration).oclContainer() in clazz_1 <> null and
+    clazz_1.oclIsKindOf(ClassDeclaration) and
+    let clazz_1_constructors: OrderedSet(ASTNode) = clazz_1.oclAsType(ClassDeclaration).bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+    clazz_1_constructors->exists(constructorTmp | constructorTmp = constructor_1) and
+    clazz_1.oclAsType(ClassDeclaration).oclAsType(NamedElement).name = 'String' 
+  ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
