@@ -697,6 +697,13 @@
               containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="HasSameReferenceFilter" eSuperTypes="#//functions/booleanFunctions/filters/AtomicFilter"/>
+        <eClassifiers xsi:type="ecore:EClass" name="IsEmptyBlockFilter" eSuperTypes="#//functions/booleanFunctions/filters/AtomicFilter">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowEmptyStatement"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
+              defaultValueLiteral="false"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowComments" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
+              defaultValueLiteral="false"/>
+        </eClassifiers>
       </eSubpackages>
     </eSubpackages>
     <eSubpackages name="numberFunctions" nsURI="http://www.example.org/ccsl/functions/numberFunctions"

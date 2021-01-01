@@ -99,6 +99,8 @@
 [import org::ccsl::gen::ocl::element::statement::tryCatch::tryStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::throwStatementConditionsBuilder /]
 
+[comment Control-flow package /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::whileStatementConditionsBuilder /]
 
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
@@ -1176,4 +1178,18 @@ OrderedSet(String){
 /]
 [template public writeElementConditions(e: ThrowStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getThrowStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+
+[comment Write @WhileStatement conditions /]
+[query private getWhileStatementConditions(whileStmt: WhileStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = whileStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  whileStmt.writeWhileStatementTypecheckCondition(varname, typecheck)
+ }->addAll(whileStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: WhileStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getWhileStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]

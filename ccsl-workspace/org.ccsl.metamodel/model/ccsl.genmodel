@@ -568,6 +568,10 @@
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/BlockLastStatementFilter/context"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/HasSameReferenceFilter"/>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter">
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter/allowEmptyStatement"/>
+            <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter/allowComments"/>
+          </genClasses>
         </nestedGenPackages>
       </nestedGenPackages>
       <nestedGenPackages prefix="NumberFunctions" disposableProviderFactory="true"

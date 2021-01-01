@@ -1,0 +1,10 @@
+[comment encoding = UTF-8 /]
+[module whileStatementConditionsBuilder('http://www.example.org/ccsl')]
+
+
+
+[template public writeWhileStatementTypecheckCondition(whileStmt: WhileStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(WhileStatement)
+[/template]
+
+

@@ -315,3 +315,7 @@ TryStatement
 [template private writeElementMatchingJavaMetaclasses(e: ThrowStatement)]
 ThrowStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: WhileStatement)]
+WhileStatement
+[/template]

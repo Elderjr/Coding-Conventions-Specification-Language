@@ -301,3 +301,7 @@ tryStmt
 [template private getBaseName(e: ThrowStatement)]
 throwStmt
 [/template]
+
+[template private getBaseName(e: WhileStatement)]
+whileStmt
+[/template]

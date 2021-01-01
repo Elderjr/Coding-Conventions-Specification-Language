@@ -1,0 +1,33 @@
+[comment encoding = UTF-8 /]
+[module isEmptyBlockFilter('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+
+
+
+[template public writeIsEmptyBlockFilterCondition(filter: IsEmptyBlockFilter, target: Element)]
+let block: Statement = [filter.writeGetBlock(target) /] in
+if(block = null or block.oclIsKindOf(EmptyStatement)) then
+  true
+elseif block.oclIsKindOf(Block) then
+  [filter.writeBlockStatementsCondition() /] [if filter.allowComments]and block.oclAsType(Block).comments->isEmpty() [/if]
+else
+  false
+endif
+[/template]
+
+[template private writeGetBlock(filter: IsEmptyBlockFilter, target: Element) /]
+
+[template private writeGetBlock(filter: IsEmptyBlockFilter, target: WhileStatement)]
+[target.getUniqueOclName() /].body
+[/template]
+
+[template private writeBlockStatementsCondition(filter: IsEmptyBlockFilter) ? (not filter.allowEmptyStatement)]
+block.oclAsType(Block).statements->select(stmt | not stmt.oclIsKindOf(EmptyStatement))->isEmpty()
+[/template]
+
+[template private writeBlockStatementsCondition(filter: IsEmptyBlockFilter) ? (filter.allowEmptyStatement)]
+block.oclAsType(Block).statements->isEmpty()
+[/template]
