@@ -1,0 +1,29 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method_1: MethodDeclaration |
+  let method_1_parameters: OrderedSet(SingleVariableDeclaration) = method_1.parameters in 
+  method_1_parameters <> null and
+  method_1_parameters->size() = 0 and
+  method_1.oclAsType(NamedElement).name = 'clone' and
+  method_1.proxy = false  and 
+  not (
+    let method_2: MethodDeclaration = method_1 in 
+    let clazz_1 : OclAny = method_2.oclContainer() in clazz_1 <> null and
+    clazz_1.oclIsKindOf(ClassDeclaration) and
+    let clazz_1_methods: OrderedSet(MethodDeclaration) = clazz_1.oclAsType(ClassDeclaration).oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+      m.oclIsKindOf(MethodDeclaration)
+    ) in
+    clazz_1_methods->exists(methodTmp | methodTmp = method_2) and
+    clazz_1.oclAsType(ClassDeclaration).modifier <> null and
+    clazz_1.oclAsType(ClassDeclaration).modifier.inheritance = InheritanceKind::final
+  ) and
+  not (
+    let method_3: MethodDeclaration = method_1 in 
+    let method_3_thrownExceptions: OrderedSet(SingleVariableDeclaration) = method_3.thrownExceptions->collect(type) in 
+    method_3_thrownExceptions <> null and
+    method_3_thrownExceptions->exists(clazz_2: ASTNode |  
+    clazz_2 <> null and
+    clazz_2.oclIsKindOf(ClassDeclaration) and
+    clazz_2.oclAsType(ClassDeclaration).oclAsType(NamedElement).name = 'CloneNotSupportedException')
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

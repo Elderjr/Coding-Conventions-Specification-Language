@@ -1,0 +1,36 @@
+let violations: Set(ASTNode) = AbstractTypeDeclaration.allInstances()->select(complexTypeDecl_1: AbstractTypeDeclaration |
+  (complexTypeDecl_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexTypeDecl_1.oclIsKindOf(AnnotationTypeDeclaration))) and
+  let complexTypeDecl_1_methods: OrderedSet(MethodDeclaration) = complexTypeDecl_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  complexTypeDecl_1_methods->exists(method_1: MethodDeclaration |  
+  method_1 <> null and
+  let method_1_parameters: OrderedSet(SingleVariableDeclaration) = method_1.parameters in 
+  method_1_parameters <> null and
+  method_1_parameters->size() = 0 and
+  let method_1_container = method_1.oclContainer() in
+  method_1_container = complexTypeDecl_1 and
+  method_1.oclAsType(NamedElement).name = 'clone'  and 
+  not (
+    let allSuperTypes: OrderedSet(Type) = complexTypeDecl_1->asOrderedSet()->closure(type: Type |
+    	if type.oclIsKindOf(ClassDeclaration) and type.oclAsType(ClassDeclaration).superClass <> null then
+    		type.oclAsType(ClassDeclaration).superInterfaces->append(type.oclAsType(ClassDeclaration).superClass)
+    			->collect(type)
+    	elseif type.oclIsKindOf(ParameterizedType) and type.oclAsType(ParameterizedType).type.type.oclIsKindOf(AbstractTypeDeclaration) then
+    		type.oclAsType(ParameterizedType).type.type
+    	elseif type.oclIsKindOf(AbstractTypeDeclaration) then
+    		type.oclAsType(AbstractTypeDeclaration).superInterfaces->collect(type)
+    	else
+    		OrderedSet(Type){}
+    	endif
+    ) in
+    allSuperTypes->exists(interface_1 |
+      interface_1.oclIsKindOf(InterfaceDeclaration) and
+      interface_1.oclAsType(InterfaceDeclaration).oclAsType(NamedElement).name = 'Cloneable'
+    )
+  ) 
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

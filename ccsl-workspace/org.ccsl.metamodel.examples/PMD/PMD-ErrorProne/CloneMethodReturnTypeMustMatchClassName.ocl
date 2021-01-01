@@ -1,0 +1,21 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method_1: MethodDeclaration |
+  let method_1_parameters: OrderedSet(SingleVariableDeclaration) = method_1.parameters in 
+  method_1_parameters <> null and
+  method_1_parameters->size() = 0 and
+  let complexTypeDecl_1 : OclAny = method_1.oclContainer() in complexTypeDecl_1 <> null and
+  (complexTypeDecl_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexTypeDecl_1.oclIsKindOf(AnnotationTypeDeclaration))) and
+  let complexTypeDecl_1_methods: OrderedSet(MethodDeclaration) = complexTypeDecl_1.oclAsType(AbstractTypeDeclaration).oclAsType(AbstractTypeDeclaration).bodyDeclarations->select(m: ASTNode | 
+    m.oclIsKindOf(MethodDeclaration)
+  ) in
+  complexTypeDecl_1_methods->exists(methodTmp | methodTmp = method_1) and
+  method_1.oclAsType(NamedElement).name = 'clone' and
+  method_1.proxy = false  and 
+  not (
+    let method_2: MethodDeclaration = method_1 in 
+    (not method_2.returnType.oclIsUndefined()) and
+    let complexTypeDeclTmp: ASTNode = method_2.returnType.type in
+    complexTypeDeclTmp = complexTypeDecl_1
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
