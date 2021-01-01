@@ -1,0 +1,13 @@
+let violations: Set(ASTNode) = WhileStatement.allInstances()->select(whileStmt_1: WhileStatement |
+  true  and 
+  let block: Statement = whileStmt_1.body in
+  if(block = null or block.oclIsKindOf(EmptyStatement)) then
+    true
+  elseif block.oclIsKindOf(Block) then
+    block.oclAsType(Block).statements->select(stmt | not stmt.oclIsKindOf(EmptyStatement))->isEmpty() 
+  else
+    false
+  endif 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
