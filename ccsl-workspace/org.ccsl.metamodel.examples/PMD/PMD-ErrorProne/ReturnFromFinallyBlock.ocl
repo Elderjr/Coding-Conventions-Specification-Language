@@ -1,0 +1,25 @@
+let violations: Set(ASTNode) = ReturnStatement.allInstances()->select(returnStmt_1: ReturnStatement |
+  true  and 
+  let implicitContainerSet: OrderedSet(ASTNode) = 
+    if returnStmt_1.oclContainer() <> null and returnStmt_1.oclContainer().oclIsKindOf(ASTNode) then
+      returnStmt_1.oclContainer().oclAsType(ASTNode)->asOrderedSet()->closure(node: ASTNode |
+  	  if node.oclContainer() <> null and node.oclContainer().oclIsKindOf(ASTNode) then
+  	    node.oclContainer().oclAsType(ASTNode)
+  	  else
+  	    null
+  	  endif
+      )->select(node | node <> null)
+    else
+      OrderedSet(ASTNode){}
+    endif
+  in
+  implicitContainerSet->exists(blockStmt_1 |
+    blockStmt_1.oclIsKindOf(Block) and
+    let tryStmt_1 : OclAny = blockStmt_1.oclAsType(Block).oclContainer() in tryStmt_1 <> null and
+    tryStmt_1.oclIsKindOf(TryStatement) and
+    let blockStmtTmp: Block = tryStmt_1.oclAsType(TryStatement).finally in
+    blockStmtTmp = blockStmt_1
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
