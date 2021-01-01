@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" subject="//@context/@contextElements.0/@methods.0">
+  <context>
+    <contextElements xsi:type="complexType:ComplexTypeDeclaration">
+      <methods name="clone" availableInSourceCode="true" params="" paramsKind="EXACT"/>
+    </contextElements>
+    <filters xsi:type="filters:TemplateFilter" negated="true" targets="//@context/@contextElements.0/@methods.0" targetTemplate="//@context/@filters.0/@context/@contextElements.0">
+      <context>
+        <contextElements xsi:type="method:Method" returnType="//@context/@contextElements.0"/>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>
