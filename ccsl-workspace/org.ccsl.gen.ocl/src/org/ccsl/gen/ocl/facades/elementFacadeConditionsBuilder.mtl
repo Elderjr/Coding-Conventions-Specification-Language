@@ -484,7 +484,8 @@ let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   method.writeSimpleMethodTypecheckCondition(varname, typecheck),
-  method.writeParamsCondition(completeVarname)
+  method.writeParamsCondition(completeVarname),
+  method.writeThrownExceptionsCondition(completeVarname)
 }->addAll(method.getElementConditions(completeVarname, false, concreteMetaclass))
 ->addAll(method.getAnnotableConditions(completeVarname, concreteMetaclass))
 ->addAll(method.getVisibilityConditions(completeVarname, concreteMetaclass))

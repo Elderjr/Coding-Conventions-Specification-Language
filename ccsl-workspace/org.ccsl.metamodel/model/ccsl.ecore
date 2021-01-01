@@ -172,6 +172,9 @@
               containment="true"/>
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="paramsKind" eType="#//CollectionKind"
               defaultValueLiteral="ANY"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="thrownExceptions"
+              upperBound="-1" eType="#//elements/namedElements/complexType/JClass"
+              unsettable="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//elements/namedElements/NamedElement #//elements/namedElements/method/SimpleMethod">
           <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//elements/datatype/DataType"/>

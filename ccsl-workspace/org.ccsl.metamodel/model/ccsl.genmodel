@@ -135,6 +135,8 @@
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/SimpleMethod">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/params"/>
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/SimpleMethod/paramsKind"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/thrownExceptions"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Method">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"

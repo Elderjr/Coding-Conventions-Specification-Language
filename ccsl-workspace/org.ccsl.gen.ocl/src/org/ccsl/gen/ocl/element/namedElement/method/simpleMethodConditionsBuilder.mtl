@@ -19,4 +19,10 @@ let [parameters /]: OrderedSet(SingleVariableDeclaration) = [varname /].paramete
 [m.writeSetConditions(parameters, m.params, 'SingleVariableDeclaration', m.paramsKind) /]
 [/template]
 
-
+[template public writeThrownExceptionsCondition(m: SimpleMethod, varname: String) ? (m.mustWriteConditionFor('thrownExceptions')){
+  parameters: String = m.getUniqueOclName().concat('_thrownExceptions');
+}]
+let [parameters /]: OrderedSet(SingleVariableDeclaration) = [varname /].thrownExceptions->collect(type) in 
+[parameters /] <> null and
+[m.writeSetConditions(parameters, m.thrownExceptions, 'ASTNode', CollectionKind::ANY) /]
+[/template]
