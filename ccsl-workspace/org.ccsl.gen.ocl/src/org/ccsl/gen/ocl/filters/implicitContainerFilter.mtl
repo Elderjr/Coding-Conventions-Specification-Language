@@ -1,0 +1,36 @@
+[comment encoding = UTF-8 /]
+[module implicitContainerFilter('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+
+
+[template public writeImplicitContainerFilterCondition(filter: ImplicityContainerFilter, target: Element) ? (filter.implicityField = target)]
+[filter.writeImplicitContainerSet() /]
+[filter.writeImplicitContainerCondition() /]
+[/template]
+
+[template private writeImplicitContainerSet(filter: ImplicityContainerFilter)]
+let implicitContainerSet: OrderedSet(ASTNode) = 
+  if [filter.implicityField.getUniqueOclName() /].oclContainer() <> null and [filter.implicityField.getUniqueOclName() /].oclContainer().oclIsKindOf(ASTNode) then
+    [filter.implicityField.getUniqueOclName() /].oclContainer().oclAsType(ASTNode)->asOrderedSet()->closure(node: ASTNode |
+	  if node.oclContainer() <> null and node.oclContainer().oclIsKindOf(ASTNode) then
+	    node.oclContainer().oclAsType(ASTNode)
+	  else
+	    null
+	  endif
+    )->select(node | node <> null)
+  else
+    OrderedSet(ASTNode){}
+  endif
+in
+[/template]
+
+[template private writeImplicitContainerCondition(filter: ImplicityContainerFilter)]
+implicitContainerSet->exists([filter.implicityContainer.getUniqueOclName() /] |
+  [filter.implicityContainer.writeElementConditions(filter.implicityContainer.getUniqueOclName(), true, 'ASTNode').writeStr() /]
+)
+[/template]

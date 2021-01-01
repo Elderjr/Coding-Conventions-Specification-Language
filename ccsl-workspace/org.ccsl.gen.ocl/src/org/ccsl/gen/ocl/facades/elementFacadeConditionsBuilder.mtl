@@ -1193,3 +1193,17 @@ OrderedSet(String) {
 [template public writeElementConditions(e: WhileStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getWhileStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @Block conditions /]
+[query private getBlockConditions(block: Block, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = block.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  block.writeBlockTypecheckCondition(varname, typecheck),
+  block.writeStatementsCondition(completeVarname)
+ }->addAll(block.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: Block, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getBlockConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]

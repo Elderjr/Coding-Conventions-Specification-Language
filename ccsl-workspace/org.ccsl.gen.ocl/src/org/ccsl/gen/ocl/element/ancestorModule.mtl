@@ -19,7 +19,7 @@
 [template public writeAncestorCondition(element: Element, varname: String, metaclass: String) ? (element.isAncestorNotRegistered() and not element.isClosureRelation(element.eContainer().oclAsType(Element)))]
 [let ancestorVarname: String = element.eContainer().oclAsType(Element).getUniqueOclName()]
 [let ancestorCondition: String = element.eContainer().oclAsType(Element).writeElementConditions(ancestorVarname, true, 'OclAny')]
-let [ancestorVarname /] : OclAny = [element.writeGetAncestorExpression(varname, metaclass) /] in [ancestorVarname /] <> null [if not ancestorCondition.isEmpty()]
+let [ancestorVarname /] : OclAny = [element.writeGetAncestorExpression(varname, metaclass) /] in [ancestorVarname.writeStr() /] <> null [if not ancestorCondition.isEmpty()]
 and
 [ancestorCondition.writeStr() /][/if][/let][/let]
 [/template]
@@ -46,6 +46,10 @@ endif)->last()
 
 [template public writeGetAncestorExpression(stmt: Statement, varname: String, metaclass: String)]
 [stmt.writeGetAncestorExpressionSkippingParanthesis(varname, metaclass) /]
+[/template]
+
+[template public writeGetAncestorExpression(element: Block, varname: String, metaclass: String)]
+[varname /].oclContainer()
 [/template]
 
 [template public writeGetAncestorExpression(stmt: ImportStatement, varname: String, metaclass: String)]
