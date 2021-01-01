@@ -3,6 +3,7 @@
 [import org::ccsl::gen::ocl::commom::stringUtils /]
 [import org::ccsl::gen::ocl::filters::templateFilterOperations /]
 [import org::ccsl::gen::ocl::filters::regexFilterOperations /]
+[import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
@@ -63,4 +64,8 @@ not (
 
 [template public generatesSpecificFilterConditions(regexFilter: RegexMatch, target: Element)]
 [regexFilter.generatesRegexFilterConditions(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(isKindOfFilter: IsKindOfFilter, target: Element)]
+[isKindOfFilter.writeIsKindOfFilterCondition(target) /]
 [/template]

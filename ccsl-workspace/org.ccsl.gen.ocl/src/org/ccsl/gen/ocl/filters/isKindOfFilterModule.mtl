@@ -1,0 +1,30 @@
+[comment encoding = UTF-8 /]
+[module isKindOfFilterModule('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+
+
+
+[template public writeIsKindOfFilterCondition(filter: IsKindOfFilter, target: Element)]
+[filter.writeAllSuperTypesSet(target) /]
+allSuperTypes->exists([filter.type.getUniqueOclName() /] |
+  [filter.type.writeElementConditions(filter.type.getUniqueOclName(), true, 'ASTNode') /]
+)
+[/template]
+
+[template private writeAllSuperTypesSet(filter: IsKindOfFilter, target: Element)]
+let allSuperTypes: OrderedSet(Type) = [target.getUniqueOclName() /]->asOrderedSet()->closure(type: Type |
+	if type.oclIsKindOf(ClassDeclaration) and type.oclAsType(ClassDeclaration).superClass <> null then
+		type.oclAsType(ClassDeclaration).superInterfaces->append(type.oclAsType(ClassDeclaration).superClass)
+			->collect(type)
+	elseif type.oclIsKindOf(ParameterizedType) and type.oclAsType(ParameterizedType).type.type.oclIsKindOf(AbstractTypeDeclaration) then
+		type.oclAsType(ParameterizedType).type.type
+	elseif type.oclIsKindOf(AbstractTypeDeclaration) then
+		type.oclAsType(AbstractTypeDeclaration).superInterfaces->collect(type)
+	else
+		OrderedSet(Type){}
+	endif
+) in
+[/template]
