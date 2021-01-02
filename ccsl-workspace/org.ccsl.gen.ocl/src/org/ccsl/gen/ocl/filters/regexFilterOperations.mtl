@@ -58,3 +58,11 @@ endif
 [template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: PrimitiveType)]
 [target.getUniqueOclName() /].oclAsType(PrimitiveType).name.matches('[regexFilter.regex /]')
 [/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: StringLiteral)]
+let stringLiteralValue: String = if [target.getUniqueOclName() /].escapedValue.size() <= 2 then
+  ''
+else
+  [target.getUniqueOclName() /].escapedValue.substring(2, [target.getUniqueOclName() /].escapedValue.size() - 1)
+endif in stringLiteralValue.matches('[regexFilter.regex /]')
+[/template]
