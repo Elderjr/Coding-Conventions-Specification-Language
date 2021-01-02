@@ -1,0 +1,14 @@
+[comment encoding = UTF-8 /]
+[module expressionStatementConditionsBuilder('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+
+[template public writeExpressionStatementTypecheckCondition(stmt: ExpressionStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(ExpressionStatement)
+[/template]
+
+[template public writeExpressionCondition(stmt: ExpressionStatement, varname: String) ? (stmt.mustWriteConditionFor('expression'))]
+let [stmt.expression.getFieldName() /]: ASTNode = [varname /].expression in
+[stmt.generatesFieldCondition(stmt.expression, stmt.expression.getFieldName(), 'ASTNode') /]
+[/template]

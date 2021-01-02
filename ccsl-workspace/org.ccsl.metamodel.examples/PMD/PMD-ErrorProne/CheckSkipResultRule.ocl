@@ -1,0 +1,18 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv_1: ASTNode |
+  (methodInv_1.oclIsKindOf(MethodInvocation) or methodInv_1.oclIsKindOf(SuperMethodInvocation)) and
+  let method_1: ASTNode = methodInv_1.oclAsType(AbstractMethodInvocation).method in 
+  method_1 <> null and
+  method_1.oclIsKindOf(MethodDeclaration) and
+  method_1.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'skip' and
+  let expStmt_1 : OclAny = methodInv_1.oclContainer() in expStmt_1 <> null and
+  expStmt_1.oclIsKindOf(ExpressionStatement) and
+  let methodInvTmp: ASTNode = expStmt_1.oclAsType(ExpressionStatement).expression in
+  let methodInvTmp: ASTNode = if methodInvTmp <> null and methodInvTmp.oclIsKindOf(ExpressionStatement) then
+    methodInvTmp.oclAsType(ExpressionStatement).expression
+  else
+    methodInvTmp
+  endif in
+  methodInvTmp = methodInv_1 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

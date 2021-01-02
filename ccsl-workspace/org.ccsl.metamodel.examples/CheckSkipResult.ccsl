@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0/@expression">
+  <context>
+    <contextElements xsi:type="statements:ExpressionStatement">
+      <expression xsi:type="invocations:MethodInvocation" method="//@context/@contextElements.1"/>
+    </contextElements>
+    <contextElements xsi:type="method:Method" name="skip"/>
+  </context>
+</ccsl:AtomicRule>
