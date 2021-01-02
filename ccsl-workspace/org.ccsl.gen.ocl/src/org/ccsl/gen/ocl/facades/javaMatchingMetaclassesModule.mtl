@@ -319,3 +319,7 @@ ThrowStatement
 [template private writeElementMatchingJavaMetaclasses(e: WhileStatement)]
 WhileStatement
 [/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: ExpressionStatement)]
+ExpressionStatement
+[/template]

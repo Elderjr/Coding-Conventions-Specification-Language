@@ -30,7 +30,7 @@ let [element.getUniqueOclName() /]_container = [element.writeGetAncestorExpressi
 [/template]
 
 [comment get ancestor ocl expression/]
-[template private writeGetAncestorExpressionSkippingParanthesis(element: Element, varname: String, metaclass: String)]
+[template private writeGetAncestorExpressionSkippingParanthesis(element: Element, varname: String)]
 [varname /].oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
   container.oclAsType(ASTNode).oclContainer()
 elseif container <> null and container.oclIsKindOf(ASTNode) then
@@ -45,7 +45,7 @@ endif)->last()
 [/template]
 
 [template public writeGetAncestorExpression(stmt: Statement, varname: String, metaclass: String)]
-[stmt.writeGetAncestorExpressionSkippingParanthesis(varname, metaclass) /]
+[stmt.writeGetAncestorExpressionSkippingParanthesis(varname) /]
 [/template]
 
 [template public writeGetAncestorExpression(element: Block, varname: String, metaclass: String)]
@@ -66,10 +66,14 @@ else
 endif
 [/template]
 
-[template public writeGetAncestorExpression(methodInv: MethodInvocation, varname: String, metaclass: String)]
-if [varname /].oclContainer() <> null and [varname /].oclContainer().oclIsKindOf(ExpressionStatement) then
-  [varname /].oclContainer().oclContainer()
+[template public writeGetAncestorExpression(methodInv: MethodInvocation, varname: String, metaclass: String) ? (methodInv.eContainer().oclIsKindOf(ExpressionStatement))]
+[varname /].oclContainer()
+[/template]
+
+[template public writeGetAncestorExpression(methodInv: MethodInvocation, varname: String, metaclass: String) ? (not methodInv.eContainer().oclIsKindOf(ExpressionStatement))]
+if [varname /].oclContainer().oclIsKindOf(ExpressionStatement) then
+  [methodInv.writeGetAncestorExpressionSkippingParanthesis(varname.concat('.oclContainer()')) /]
 else
-  [varname /].oclContainer()
+  [methodInv.writeGetAncestorExpressionSkippingParanthesis(varname) /]
 endif
 [/template]

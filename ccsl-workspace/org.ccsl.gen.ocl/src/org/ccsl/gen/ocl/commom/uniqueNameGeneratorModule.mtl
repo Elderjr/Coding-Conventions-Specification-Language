@@ -305,3 +305,7 @@ throwStmt
 [template private getBaseName(e: WhileStatement)]
 whileStmt
 [/template]
+
+[template private getBaseName(e: ExpressionStatement)]
+expStmt
+[/template]
