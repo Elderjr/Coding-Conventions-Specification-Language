@@ -1,0 +1,10 @@
+let violations: Set(ASTNode) = StringLiteral.allInstances()->select(strLiteral_1: StringLiteral |
+  true  and 
+  let stringLiteralValue: String = if strLiteral_1.escapedValue.size() <= 2 then
+    ''
+  else
+    strLiteral_1.escapedValue.substring(2, strLiteral_1.escapedValue.size() - 1)
+  endif in stringLiteralValue.matches('/sdcard(.)*') 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
