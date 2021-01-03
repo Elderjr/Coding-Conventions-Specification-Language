@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="method:Method" name="clone" params="" paramsKind="EXACT">
+      <body/>
+    </contextElements>
+    <filters xsi:type="filters:ImplicitContentsFilter" negated="true" targets="//@context/@contextElements.0/@body" implicitField="//@context/@filters.0/@context/@contextElements.0" implicitContainer="//@context/@contextElements.0/@body">
+      <context>
+        <contextElements xsi:type="invocations:SuperMethodInvocation" method="//@context/@filters.0/@context/@contextElements.1"/>
+        <contextElements xsi:type="method:Method" name="clone" params="" paramsKind="EXACT"/>
+      </context>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

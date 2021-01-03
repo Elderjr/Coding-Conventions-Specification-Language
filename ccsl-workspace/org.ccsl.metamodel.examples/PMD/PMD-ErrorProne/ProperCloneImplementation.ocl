@@ -1,0 +1,32 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method_1: MethodDeclaration |
+  let blockStmt_1: Block = method_1.body in
+  blockStmt_1 <> null and
+  blockStmt_1.oclIsKindOf(Block) and
+  let blockStmt_1_container = blockStmt_1.oclAsType(Block).oclContainer() in
+  blockStmt_1_container = method_1 and
+  let method_1_parameters: OrderedSet(SingleVariableDeclaration) = method_1.parameters in 
+  method_1_parameters <> null and
+  method_1_parameters->size() = 0 and
+  method_1.oclAsType(NamedElement).name = 'clone'  and 
+  not (
+    let implicitContentsSet: OrderedSet(ASTNode) = blockStmt_1.oclContents()->closure(node: OclAny |
+      if node <> null and node.oclIsKindOf(ASTNode) then
+        node.oclAsType(ASTNode).oclContents()
+      else
+        null
+      endif
+    ) in
+    implicitContentsSet->exists(superMethodInv_1 |
+      superMethodInv_1.oclIsKindOf(SuperMethodInvocation) and
+        let method_2: ASTNode = superMethodInv_1.oclAsType(SuperMethodInvocation).oclAsType(AbstractMethodInvocation).method in 
+        method_2 <> null and
+        method_2.oclIsKindOf(MethodDeclaration) and
+        let method_2_parameters: OrderedSet(SingleVariableDeclaration) = method_2.oclAsType(MethodDeclaration).parameters in 
+        method_2_parameters <> null and
+        method_2_parameters->size() = 0 and
+        method_2.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'clone'
+    )
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
