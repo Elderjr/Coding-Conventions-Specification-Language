@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="controlFlow:SwitchStatement">
+      <cases uniqueName="mainSwitchCase">
+        <statements/>
+      </cases>
+    </contextElements>
+    <filters xsi:type="filters:CompositeFilter" operator="OR">
+      <filters xsi:type="filters:ImplicitContentsFilter" negated="true" targets="mainSwitchCase" implicitField="//@context/@filters.0/@filters.0/@context/@contextElements.0" implicitContainer="mainSwitchCase">
+        <context>
+          <contextElements xsi:type="statements:Statement"/>
+          <filters xsi:type="filters:CompositeFilter" operator="OR">
+            <filters xsi:type="filters:TemplateFilter" targets="//@context/@filters.0/@filters.0/@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.0/@context/@filters.0/@filters.0/@context/@contextElements.0">
+              <context>
+                <contextElements xsi:type="statements:ThrowStatement"/>
+              </context>
+            </filters>
+            <filters xsi:type="filters:TemplateFilter" targets="//@context/@filters.0/@filters.0/@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.0/@context/@filters.0/@filters.1/@context/@contextElements.0">
+              <context>
+                <contextElements xsi:type="statements:ReturnStatement"/>
+              </context>
+            </filters>
+            <filters xsi:type="filters:TemplateFilter" targets="//@context/@filters.0/@filters.0/@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.0/@context/@filters.0/@filters.2/@context/@contextElements.0">
+              <context>
+                <contextElements xsi:type="statements:ContinueStatement"/>
+              </context>
+            </filters>
+            <filters xsi:type="filters:TemplateFilter" targets="//@context/@filters.0/@filters.0/@context/@contextElements.0" targetTemplate="//@context/@filters.0/@filters.0/@context/@filters.0/@filters.3/@context/@contextElements.0">
+              <context>
+                <contextElements xsi:type="statements:BreakStatement"/>
+              </context>
+            </filters>
+          </filters>
+        </context>
+      </filters>
+    </filters>
+  </context>
+</ccsl:AtomicRule>

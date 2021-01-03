@@ -1,0 +1,75 @@
+let violations: Set(ASTNode) = SwitchStatement.allInstances()->select(switchStmt_1: SwitchStatement |
+  let switchStmt_1_cases: OrderedSet(OrderedSet(Statement)) = switchStmt_1.statements->select(stmt | stmt.oclIsKindOf(SwitchCase)) in
+  switchStmt_1_cases->exists(caseStmt_1: ASTNode |  
+  caseStmt_1 <> null and
+  caseStmt_1.oclIsKindOf(SwitchCase) and
+  let caseStatementIndex: Integer = caseStmt_1.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(caseStmt_1.oclAsType(SwitchCase)) in
+  let caseStmt_1_statements: OrderedSet(Statement) = caseStmt_1.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->iterate(stmt: Statement; acc: OrderedSet(Statement) = OrderedSet(Statement){} |
+  	if acc->size() > 0 and acc->last().oclIsKindOf(SwitchCase) then
+  	  acc
+  	elseif caseStmt_1.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(stmt) > caseStatementIndex then
+  	  acc->append(stmt)
+  	else
+  	  acc
+  	endif
+  )->select(stmt | not stmt.oclIsKindOf(SwitchCase)) in
+  caseStmt_1_statements->exists(e_1: ASTNode |  
+  e_1 <> null and
+  true and
+  let caseStmt_1_container = caseStmt_1.oclAsType(SwitchCase).oclContainer() in
+  caseStmt_1_container = switchStmt_1  and 
+  (
+    -- Composite Filter (OR)
+    (
+      not (
+        let implicitContentsSet: OrderedSet(ASTNode) = caseStmt_1->closure(node: OclAny |
+          if node <> null and node.oclIsKindOf(ASTNode) and (not node.oclIsKindOf(SwitchCase)) then
+            node.oclAsType(ASTNode).oclContents()
+          elseif node <> null and node.oclIsKindOf(SwitchCase) then
+            let caseStatementIndex: Integer = node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(node) in
+            let caseStatements: OrderedSet(Statement) = node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->iterate(stmt: Statement; acc: OrderedSet(Statement) = OrderedSet(Statement){} |
+        	  if acc->size() > 0 and acc->last().oclIsKindOf(SwitchCase) then
+        	    acc
+        	  elseif node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(stmt) > caseStatementIndex then
+        	    acc->append(stmt)
+        	  else
+        	    acc
+        	  endif
+            )->select(stmt | not stmt.oclIsKindOf(SwitchCase)) in caseStatements
+          else
+            null
+          endif
+        )->excluding(caseStmt_1) in 
+        implicitContentsSet->exists(e_2 |
+          true  and
+        (
+          -- Composite Filter (OR)
+          (
+            let throwStmt_1: ASTNode = e_2 in 
+            throwStmt_1.oclIsKindOf(ThrowStatement)
+          ) or 
+          (
+            let returnStmt_1: ASTNode = e_2 in 
+            returnStmt_1.oclIsKindOf(ReturnStatement)
+          ) or 
+          (
+            let continueStmt_1: ASTNode = e_2 in 
+            continueStmt_1.oclIsKindOf(ContinueStatement)
+          ) or 
+          (
+            let breakStmt_1: ASTNode = e_2 in 
+            breakStmt_1.oclIsKindOf(BreakStatement)
+          )
+          -- End Composite Filter (OR)
+        ) 
+        
+        )
+      )
+    )
+    -- End Composite Filter (OR)
+  )  
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
