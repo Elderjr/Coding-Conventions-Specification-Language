@@ -1,0 +1,66 @@
+let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(var_1: VariableDeclarationFragment |
+  var_1.oclIsKindOf(VariableDeclarationFragment) and var_1.oclContainer().oclIsKindOf(FieldDeclaration) and
+  var_1.variablesContainer <> null and
+  var_1.variablesContainer.type <> null and
+  let complexTypeDecl_1: ASTNode = var_1.variablesContainer.type.type in
+  complexTypeDecl_1 <> null and
+  (complexTypeDecl_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexTypeDecl_1.oclIsKindOf(AnnotationTypeDeclaration)))  and 
+  (
+    -- Composite Filter (AND)
+    (
+      complexTypeDecl_1.oclAsType(NamedElement).name.matches('((.)*\\.)?(Log)')
+    ) and 
+    (
+      (
+        -- Composite Filter (OR)
+        (
+          let var_2: VariableDeclarationFragment = var_1 in 
+          let var_2_modifier: Modifier = var_2.variablesContainer.oclAsType(FieldDeclaration).modifier in 
+          var_2_modifier <> null and 
+          var_2_modifier.inheritance <> InheritanceKind::final
+        ) or 
+        (
+          not (
+            let var_3: VariableDeclarationFragment = var_1 in 
+            let var_3_modifier: Modifier = var_3.oclContainer().oclAsType(FieldDeclaration).modifier in
+            var_3_modifier <> null and
+            var_3_modifier.visibility = VisibilityKind::private
+          )
+        ) or 
+        (
+          let var_4: VariableDeclarationFragment = var_1 in 
+          let var_4_modifier: Modifier = var_4.oclContainer().oclAsType(FieldDeclaration).modifier in
+          var_4_modifier <> null and
+          (not var_4_modifier.static) and
+          let initializerTmp: ASTNode = if not var_4.oclAsType(VariableDeclarationFragment).variablesContainer.fragments->oclIsUndefined() then
+            var_4.oclAsType(VariableDeclarationFragment).variablesContainer.fragments->asOrderedSet()->last().initializer
+          else
+            null
+          endif in
+          let expression_1: ASTNode = if initializerTmp <> null then
+            initializerTmp->asOrderedSet()->closure(v: ASTNode | 
+              if v.oclIsKindOf(ParenthesizedExpression) then 
+                v.oclAsType(ParenthesizedExpression).expression 
+              else 
+                v 
+              endif
+            )->last()
+          else
+            null
+          endif in
+          expression_1 <> null and
+          expression_1.oclIsKindOf(Expression) and
+          let expression_1_container = expression_1.oclContainer() in
+          expression_1_container = var_4 and
+          let var_4_modifier: Modifier = var_4.variablesContainer.oclAsType(FieldDeclaration).modifier in 
+          var_4_modifier <> null and 
+          var_4_modifier.inheritance = InheritanceKind::final
+        )
+        -- End Composite Filter (OR)
+      ) 
+    )
+    -- End Composite Filter (AND)
+  )  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:complexType="http://www.example.org/ccsl/elements/namedElements/complexType" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:variable="http://www.example.org/ccsl/elements/namedElements/variable" subject="subjectField">
+  <context>
+    <contextElements xsi:type="variable:FieldVariable" uniqueName="subjectField" type="//@context/@contextElements.1"/>
+    <contextElements xsi:type="complexType:ComplexTypeDeclaration"/>
+    <filters xsi:type="filters:CompositeFilter">
+      <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="((.)*\\.)?(Log)"/>
+      <filters xsi:type="filters:CompositeFilter" operator="OR">
+        <filters xsi:type="filters:TemplateFilter" targets="subjectField" targetTemplate="notFinalField">
+          <context>
+            <contextElements xsi:type="variable:FieldVariable" uniqueName="notFinalField" final="false"/>
+          </context>
+        </filters>
+        <filters xsi:type="filters:TemplateFilter" negated="true" targets="subjectField" targetTemplate="notPrivateField">
+          <context>
+            <contextElements xsi:type="variable:FieldVariable" uniqueName="notPrivateField" visibility="PRIVATE">
+              <final xsi:nil="true"/>
+            </contextElements>
+          </context>
+        </filters>
+        <filters xsi:type="filters:TemplateFilter" targets="subjectField" targetTemplate="finalFieldWIthInitNull">
+          <context>
+            <contextElements xsi:type="variable:FieldVariable" uniqueName="finalFieldWIthInitNull" final="true" static="false">
+              <initialValue/>
+            </contextElements>
+          </context>
+        </filters>
+      </filters>
+    </filters>
+  </context>
+</ccsl:AtomicRule>
