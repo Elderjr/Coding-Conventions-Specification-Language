@@ -5,26 +5,41 @@
 [import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
 [import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
 [import org::ccsl::gen::ocl::commom::stringUtils /]
-
+[import org::ccsl::gen::ocl::commom::filterUtils /]
+[import org::ccsl::gen::ocl::rule::context::contextModule /]
 
 
 [template public writeImplicitContentsFilterCondition(filter: ImplicitContentsFilter, target: Element) ? (filter.implicitContainer = target)]
-[filter.writeImplicitContentsSet() /]
+[filter.writeImplicitContentsSet(filter.implicitContainer) /]
 [filter.writeImplicitContentsCondition() /]
 [/template]
 
-[template private writeImplicitContentsSet(filter: ImplicitContentsFilter)]
-let implicitContentsSet: OrderedSet(ASTNode) = [filter.implicitContainer.getUniqueOclName() /].oclContents()->closure(node: OclAny |
-  if node <> null and node.oclIsKindOf(ASTNode) then
+[template private writeImplicitContentsSet(filter: ImplicitContentsFilter, implicitContainer: Element)]
+let implicitContentsSet: OrderedSet(ASTNode) = [implicitContainer.getUniqueOclName() /]->closure(node: OclAny |
+  if node <> null and node.oclIsKindOf(ASTNode) and (not node.oclIsKindOf(SwitchCase)) then
     node.oclAsType(ASTNode).oclContents()
+  elseif node <> null and node.oclIsKindOf(SwitchCase) then
+    let caseStatementIndex: Integer = node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(node) in
+    let caseStatements: OrderedSet(Statement) = node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->iterate(stmt: Statement; acc: OrderedSet(Statement) = OrderedSet(Statement){} |
+	  if acc->size() > 0 and acc->last().oclIsKindOf(SwitchCase) then
+	    acc
+	  elseif node.oclAsType(SwitchCase).oclContainer().oclAsType(SwitchStatement).statements->indexOf(stmt) > caseStatementIndex then
+	    acc->append(stmt)
+	  else
+	    acc
+	  endif
+    )->select(stmt | not stmt.oclIsKindOf(SwitchCase)) in caseStatements
   else
     null
   endif
-) in
+)->excluding([implicitContainer.getUniqueOclName() /]) in 
 [/template]
 
 [template private writeImplicitContentsCondition(filter: ImplicitContentsFilter)]
 implicitContentsSet->exists([filter.implicitField.getUniqueOclName() /] |
-  [filter.implicitField.writeElementConditions(filter.implicitField.getUniqueOclName(), true, 'ASTNode').writeStr() /]
+  [filter.implicitField.writeElementConditions(filter.implicitField.getUniqueOclName(), true, 'ASTNode').writeStr() /] [if filter._context.filters->size() > 0]
+  and
+[filter._context.filters->writeFiltersConditions() /]
+[/if][filter._context.writeCloseParenthesis() /]
 )
 [/template]

@@ -103,6 +103,8 @@
 
 [comment Control-flow package /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::whileStatementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchStatementModule /]
+[import org::ccsl::gen::ocl::element::statement::controlFlow::switchCaseConditionsBuilder /]
 
 [template private writeConditions(conditions: OrderedSet(String))]
 [let conditionsNotBlank: OrderedSet(String) =  conditions->select(s | s.isNotEmpty())]
@@ -1209,6 +1211,34 @@ OrderedSet(String) {
 /]
 [template public writeElementConditions(e: WhileStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getWhileStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @SwitchStatement conditions /]
+[query private getSwitchStatementConditions(switchStmt: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = switchStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  switchStmt.writeSwitchStatementTypecheckCondition(varname, typecheck),
+  switchStmt.writeCasesCondition(completeVarname)
+ }->addAll(switchStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getSwitchStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @SwitchCase conditions /]
+[query private getSwitchCaseConditions(caseBlock: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = caseBlock.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  caseBlock.writeSwitchCaseTypecheckCondition(varname, typecheck),
+  caseBlock.writeStatementsCondition(completeVarname)
+ }->addAll(caseBlock.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: SwitchCaseBlock, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getSwitchCaseConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
 
 [comment Write @Block conditions /]

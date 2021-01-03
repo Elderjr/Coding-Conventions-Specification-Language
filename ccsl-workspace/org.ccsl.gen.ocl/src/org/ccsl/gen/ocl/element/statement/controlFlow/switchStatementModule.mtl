@@ -9,20 +9,15 @@
 
 
 
-[template public writeSwitchStatementTypecheckCondition(switchStmt: SwitchStatement, varname: String, typecheck: Boolean, metaclass: String) ? (typecheck)]
+[template public writeSwitchStatementTypecheckCondition(switchStmt: SwitchStatement, varname: String, typecheck: Boolean) ? (typecheck)]
 [varname /].oclIsKindOf(SwitchStatement)
 [/template]
 
 
-[template public writeCasesCondition(switchStmt: SwitchStatement, varname: String, metaclass: String) ? (switchStmt.mustWriteConditionFor('cases'))]
-let casesBlocks: OrderedSet(OrderedSet(Statement)) = [varname /].statements->iterate(tmpStmt: Statement; acc: OrderedSet(OrderedSet(Statement)) = OrderedSet(OrderedSet(Statement)){} |
-	if(tmpStmt.oclIsKindOf(SwitchCase)) then
-	  acc->append(OrderedSet(Statement){tmpStmt})
-	else 
-	  let lastSetAcc: OrderedSet(Statement) = acc->last()->append(tmpStmt) in
-	  acc->excluding(acc->last())->including(lastSetAcc)
-	endif
-) in casesBlocks->size() > 1 and
-[switchStmt.generatesSetConditions('casesBlocks', switchStmt.cases, 'OrderedSet(Statement)') /]
+[template public writeCasesCondition(switchStmt: SwitchStatement, varname: String) ? (switchStmt.mustWriteConditionFor('cases')) {
+  cases: String = switchStmt.getUniqueOclName().concat('_cases');
+}]
+let [cases /]: OrderedSet(OrderedSet(Statement)) = [varname /].statements->select(stmt | stmt.oclIsKindOf(SwitchCase)) in
+[switchStmt.writeSetConditions(cases, switchStmt.cases, 'ASTNode', CollectionKind::ANY) /]
 [/template]
 

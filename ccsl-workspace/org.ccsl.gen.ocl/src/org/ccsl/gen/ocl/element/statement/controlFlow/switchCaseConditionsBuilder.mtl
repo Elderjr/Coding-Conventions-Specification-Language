@@ -1,0 +1,29 @@
+[comment encoding = UTF-8 /]
+[module switchCaseConditionsBuilder('http://www.example.org/ccsl')]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+[import org::ccsl::gen::ocl::commom::elementUtils /]
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::commom::fieldWritterConditionsModule /]
+[import org::ccsl::gen::ocl::commom::walkHelperModule /]
+
+
+[template public writeSwitchCaseTypecheckCondition(caseBlock: SwitchCaseBlock, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(SwitchCase)
+[/template]
+
+
+[template public writeStatementsCondition(caseBlock: SwitchCaseBlock, varname: String) ? (caseBlock.mustWriteConditionFor('statements')) {
+	statements: String = caseBlock.getUniqueOclName().concat('_statements');
+}]
+let caseStatementIndex: Integer = [varname /].oclContainer().oclAsType(SwitchStatement).statements->indexOf([varname /]) in
+let [statements /]: OrderedSet(Statement) = [varname /].oclContainer().oclAsType(SwitchStatement).statements->iterate(stmt: Statement; acc: OrderedSet(Statement) = OrderedSet(Statement){} |
+	if acc->size() > 0 and acc->last().oclIsKindOf(SwitchCase) then
+	  acc
+	elseif [varname /].oclContainer().oclAsType(SwitchStatement).statements->indexOf(stmt) > caseStatementIndex then
+	  acc->append(stmt)
+	else
+	  acc
+	endif
+)->select(stmt | not stmt.oclIsKindOf(SwitchCase)) in
+[caseBlock.writeSetConditions(statements, caseBlock.statements, 'ASTNode', caseBlock.statementsKind) /]
+[/template]

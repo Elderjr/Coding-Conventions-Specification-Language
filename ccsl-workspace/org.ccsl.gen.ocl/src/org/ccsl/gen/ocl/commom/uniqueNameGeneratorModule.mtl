@@ -310,6 +310,14 @@ throwStmt
 whileStmt
 [/template]
 
+[template private getBaseName(e: SwitchStatement)]
+switchStmt
+[/template]
+
+[template private getBaseName(e: SwitchCaseBlock)]
+caseStmt
+[/template]
+
 [template private getBaseName(e: ExpressionStatement)]
 expStmt
 [/template]

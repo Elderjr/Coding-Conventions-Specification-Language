@@ -29,6 +29,9 @@ let [element.getUniqueOclName() /]_container = [element.writeGetAncestorExpressi
 [element.getUniqueOclName() /]_container = [element.eContainer().oclAsType(Element).getUniqueOclName() /]
 [/template]
 
+[template public writeAncestorCondition(stmt: Statement, varname: String, metaclass: String) ? (stmt.eContainer().oclIsKindOf(SwitchCaseBlock))][/template]
+
+
 [comment get ancestor ocl expression/]
 [template private writeGetAncestorExpressionSkippingParanthesis(element: Element, varname: String)]
 [varname /].oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then

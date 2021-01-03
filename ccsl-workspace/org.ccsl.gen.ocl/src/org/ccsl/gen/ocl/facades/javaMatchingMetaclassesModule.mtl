@@ -324,6 +324,14 @@ ThrowStatement
 WhileStatement
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: SwitchStatement)]
+SwitchStatement
+[/template]
+
+[template private writeElementMatchingJavaMetaclasses(e: SwitchCaseBlock)]
+SwitchCase
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: ExpressionStatement)]
 ExpressionStatement
 [/template]
