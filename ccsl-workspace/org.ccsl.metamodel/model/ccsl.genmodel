@@ -137,6 +137,7 @@
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/namedElements/method/SimpleMethod/paramsKind"/>
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/thrownExceptions"/>
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/namedElements/method/SimpleMethod/body"/>
           </genClasses>
           <genClasses ecoreClass="ccsl.ecore#//elements/namedElements/method/Method">
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -349,6 +350,7 @@
             <genFeatures notify="false" createChild="false" propertySortChoices="true"
                 ecoreFeature="ecore:EReference ccsl.ecore#//elements/expressions/invocations/ConstructorInvocation/constructor"/>
           </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//elements/expressions/invocations/SuperMethodInvocation"/>
         </nestedGenPackages>
         <nestedGenPackages prefix="Accesses" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/expressions/accesses">
           <genClasses ecoreClass="ccsl.ecore#//elements/expressions/accesses/VariableAccess">
@@ -571,6 +573,13 @@
           <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter">
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter/allowEmptyStatement"/>
             <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//functions/booleanFunctions/filters/IsEmptyBlockFilter/allowComments"/>
+          </genClasses>
+          <genClasses ecoreClass="ccsl.ecore#//functions/booleanFunctions/filters/ImplicitContentsFilter">
+            <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicitContentsFilter/context"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicitContentsFilter/implicitField"/>
+            <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                ecoreFeature="ecore:EReference ccsl.ecore#//functions/booleanFunctions/filters/ImplicitContentsFilter/implicitContainer"/>
           </genClasses>
         </nestedGenPackages>
       </nestedGenPackages>

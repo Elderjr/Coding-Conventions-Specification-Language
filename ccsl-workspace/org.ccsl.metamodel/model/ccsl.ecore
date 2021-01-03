@@ -175,6 +175,8 @@
           <eStructuralFeatures xsi:type="ecore:EReference" name="thrownExceptions"
               upperBound="-1" eType="#//elements/namedElements/complexType/JClass"
               unsettable="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//elements/statements/Block"
+              unsettable="true" containment="true"/>
         </eClassifiers>
         <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//elements/namedElements/NamedElement #//elements/namedElements/method/SimpleMethod">
           <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//elements/datatype/DataType"/>
@@ -436,6 +438,7 @@
         <eClassifiers xsi:type="ecore:EClass" name="ConstructorInvocation" eSuperTypes="#//elements/expressions/invocations/Invocation">
           <eStructuralFeatures xsi:type="ecore:EReference" name="constructor" eType="#//elements/namedElements/method/Constructor"/>
         </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="SuperMethodInvocation" eSuperTypes="#//elements/expressions/invocations/MethodInvocation"/>
       </eSubpackages>
       <eSubpackages name="accesses" nsURI="http://www.example.org/ccsl/elements/expressions/accesses"
           nsPrefix="accesses">
@@ -703,6 +706,13 @@
               defaultValueLiteral="false"/>
           <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowComments" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
               defaultValueLiteral="false"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ImplicitContentsFilter" eSuperTypes="#//functions/booleanFunctions/filters/AtomicFilter">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//context/Context"
+              containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="implicitField" eType="#//elements/Element"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="implicitContainer"
+              eType="#//elements/Element"/>
         </eClassifiers>
       </eSubpackages>
     </eSubpackages>
