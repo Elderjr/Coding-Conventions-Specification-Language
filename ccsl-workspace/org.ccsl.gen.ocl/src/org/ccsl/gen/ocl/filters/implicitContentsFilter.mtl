@@ -1,0 +1,30 @@
+[comment encoding = UTF-8 /]
+[module implicitContentsFilter('http://www.example.org/ccsl')]
+
+[import org::ccsl::gen::ocl::commom::uniqueNameGeneratorModule /]
+[import org::ccsl::gen::ocl::facades::javaMatchingMetaclassesModule /]
+[import org::ccsl::gen::ocl::facades::elementFacadeConditionsBuilder /]
+[import org::ccsl::gen::ocl::commom::stringUtils /]
+
+
+
+[template public writeImplicitContentsFilterCondition(filter: ImplicitContentsFilter, target: Element) ? (filter.implicitContainer = target)]
+[filter.writeImplicitContentsSet() /]
+[filter.writeImplicitContentsCondition() /]
+[/template]
+
+[template private writeImplicitContentsSet(filter: ImplicitContentsFilter)]
+let implicitContentsSet: OrderedSet(ASTNode) = [filter.implicitContainer.getUniqueOclName() /].oclContents()->closure(node: OclAny |
+  if node <> null and node.oclIsKindOf(ASTNode) then
+    node.oclAsType(ASTNode).oclContents()
+  else
+    null
+  endif
+) in
+[/template]
+
+[template private writeImplicitContentsCondition(filter: ImplicitContentsFilter)]
+implicitContentsSet->exists([filter.implicitField.getUniqueOclName() /] |
+  [filter.implicitField.writeElementConditions(filter.implicitField.getUniqueOclName(), true, 'ASTNode').writeStr() /]
+)
+[/template]

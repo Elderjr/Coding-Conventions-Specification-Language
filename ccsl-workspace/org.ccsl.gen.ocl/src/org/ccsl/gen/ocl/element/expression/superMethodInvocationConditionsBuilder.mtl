@@ -1,0 +1,7 @@
+[comment encoding = UTF-8 /]
+[module superMethodInvocationConditionsBuilder('http://www.example.org/ccsl')]
+
+
+[template public writeSuperMethodInvocationTypecheckCondition(invocation: SuperMethodInvocation, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(SuperMethodInvocation)
+[/template]

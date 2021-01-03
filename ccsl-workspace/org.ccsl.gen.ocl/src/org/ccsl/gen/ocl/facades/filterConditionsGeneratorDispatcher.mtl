@@ -6,6 +6,7 @@
 [import org::ccsl::gen::ocl::filters::isKindOfFilterModule /]
 [import org::ccsl::gen::ocl::filters::isEmptyBlockFilter /]
 [import org::ccsl::gen::ocl::filters::implicitContainerFilter /]
+[import org::ccsl::gen::ocl::filters::implicitContentsFilter /]
 
 [comment filters related to closure /]
 [comment complex type closure filters /]
@@ -74,4 +75,8 @@ not (
 
 [template public generatesSpecificFilterConditions(implicitContainerFilter: ImplicityContainerFilter , target: Element)]
 [implicitContainerFilter.writeImplicitContainerFilterCondition(target) /]
+[/template]
+
+[template public generatesSpecificFilterConditions(implicitContentsFilter: ImplicitContentsFilter , target: Element)]
+[implicitContentsFilter.writeImplicitContentsFilterCondition(target) /]
 [/template]

@@ -68,6 +68,7 @@
 [import org::ccsl::gen::ocl::element::expression::ternaryExpressionConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::invocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::methodInvocationConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::expression::superMethodInvocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::constructorInvocationConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::anonymousClassConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::expression::accessConditionsBuilder /]
@@ -518,6 +519,7 @@ let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
   method.writeMethodTypecheckCondition(varname, typecheck),
   method.writeReturnTypeCondition(completeVarname),
+  method.writeBodyCondition(completeVarname),
   method.writeInheritanceCondition(completeVarname),
   method.writeStaticCondition(completeVarname)
 }
@@ -795,6 +797,20 @@ OrderedSet(String){
 [template public writeElementConditions(e: MethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getMethodInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]
+
+[comment Write @MethodInvocation conditions /]
+[query private getSuperMethodInvocationConditions(invocation: SuperMethodInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = invocation.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String){
+  invocation.writeSuperMethodInvocationTypecheckCondition(varname, typecheck)
+ }->addAll(invocation.getMethodInvocationConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: SuperMethodInvocation, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getSuperMethodInvocationConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
 
 [comment Write @ConstructorInvocation conditions /]
 [query private getConstructorInvocationConditions(invocation: ConstructorInvocation, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =

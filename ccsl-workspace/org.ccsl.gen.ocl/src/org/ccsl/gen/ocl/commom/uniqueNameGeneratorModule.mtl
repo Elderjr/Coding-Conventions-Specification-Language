@@ -169,6 +169,10 @@ inv
 methodInv
 [/template]
 
+[template public getBaseName(e: SuperMethodInvocation)]
+superMethodInv
+[/template]
+
 [template public getBaseName(e: ConstructorInvocation)]
 constructorInv
 [/template]

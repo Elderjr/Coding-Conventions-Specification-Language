@@ -25,6 +25,11 @@ let [method.returnType.getFieldName() /]: ASTNode = [varname /].returnType.type 
 [method.generatesFieldCondition(method.returnType, method.returnType.getFieldName(), 'ASTNode') /]
 [/template]
 
+[template public writeBodyCondition(method: Method, varname: String) ? (method.mustWriteConditionFor('body'))]
+let [method._body.getFieldName() /]: Block = [varname /].body in
+[method.generatesFieldCondition(method._body, method._body.getFieldName(), 'ASTNode') /]
+[/template]
+
 [template public writeInheritanceCondition(method: Method, varname: String) ? (method.inheritance <> Inheritance::ANY)]
 [varname /].modifier <> null and
 [varname /].modifier.inheritance = [method.inheritance.writeInheritance() /]

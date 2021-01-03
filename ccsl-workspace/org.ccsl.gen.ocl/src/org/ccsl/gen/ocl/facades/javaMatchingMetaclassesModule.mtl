@@ -191,6 +191,10 @@ AbstractMethodInvocation
 MethodInvocation,SuperMethodInvocation
 [/template]
 
+[template private writeElementMatchingJavaMetaclasses(e: SuperMethodInvocation)]
+SuperMethodInvocation
+[/template]
+
 [template private writeElementMatchingJavaMetaclasses(e: ConstructorInvocation)]
 ClassInstanceCreation,ConstructorInvocation,SuperConstructorInvocation
 [/template]
