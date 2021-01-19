@@ -1,0 +1,45 @@
+let violations: Set(ASTNode) = ClassDeclaration.allInstances()->select(clazz_1: ClassDeclaration |
+  let clazz_1_fields: OrderedSet(VariableDeclarationFragment) = clazz_1.oclAsType(AbstractTypeDeclaration).bodyDeclarations->collect(field: ASTNode | 
+    if field.oclIsKindOf(FieldDeclaration) then
+      field.oclAsType(FieldDeclaration).fragments
+    else
+      null
+    endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  clazz_1_fields->exists(var_1: VariableDeclarationFragment |  
+  var_1 <> null and
+  var_1.oclIsKindOf(VariableDeclarationFragment) and var_1.oclContainer().oclIsKindOf(FieldDeclaration) and
+  var_1.variablesContainer <> null and
+  var_1.variablesContainer.type <> null and
+  let complexTypeDecl_1: ASTNode = var_1.variablesContainer.type.type in
+  complexTypeDecl_1 <> null and
+  (complexTypeDecl_1.oclIsKindOf(AbstractTypeDeclaration) and (not complexTypeDecl_1.oclIsKindOf(AnnotationTypeDeclaration))) and
+  complexTypeDecl_1.oclAsType(AbstractTypeDeclaration).oclAsType(NamedElement).name = 'Logger' and
+  let var_1_container = if (var_1.oclContainer() <> null and (not var_1.oclIsKindOf(SingleVariableDeclaration))) then
+    var_1.oclContainer().oclContainer()
+  elseif (var_1.oclContainer() <> null) then
+    var_1.oclContainer()
+  else
+   null
+  endif in
+  var_1_container = clazz_1 and 
+  clazz_1_fields->exists(var_2: VariableDeclarationFragment | var_2 <> var_1 and 
+  var_2 <> null and
+  var_2.oclIsKindOf(VariableDeclarationFragment) and var_2.oclContainer().oclIsKindOf(FieldDeclaration) and
+  var_2.variablesContainer <> null and
+  var_2.variablesContainer.type <> null and
+  let complexTypeDeclTmp: ASTNode = var_2.variablesContainer.type.type in
+  complexTypeDeclTmp = complexTypeDecl_1 and
+  let var_2_container = if (var_2.oclContainer() <> null and (not var_2.oclIsKindOf(SingleVariableDeclaration))) then
+    var_2.oclContainer().oclContainer()
+  elseif (var_2.oclContainer() <> null) then
+    var_2.oclContainer()
+  else
+   null
+  endif in
+  var_2_container = clazz_1 
+--Close exists declarations
+))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
