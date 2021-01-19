@@ -1,0 +1,24 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv_1: ASTNode |
+  (methodInv_1.oclIsKindOf(MethodInvocation) or methodInv_1.oclIsKindOf(SuperMethodInvocation)) and
+  let methodInv_1_args: OrderedSet(ASTNode) = methodInv_1.oclAsType(AbstractMethodInvocation).arguments->collect(arg: ASTNode |
+    arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+      v.oclAsType(ParenthesizedExpression).expression
+    else
+      v
+    endif)
+  ) in
+  methodInv_1_args->exists(booleanLiteral_1: ASTNode |  
+  booleanLiteral_1 <> null and
+  booleanLiteral_1.oclIsKindOf(BooleanLiteral) and
+  let booleanLiteral_1_container = booleanLiteral_1.oclAsType(BooleanLiteral).oclContainer() in
+  booleanLiteral_1_container = methodInv_1 and
+  methodInv_1_args->size() = 1 and
+  let method_1: ASTNode = methodInv_1.oclAsType(AbstractMethodInvocation).method in 
+  method_1 <> null and
+  method_1.oclIsKindOf(MethodDeclaration)  and 
+  method_1.oclAsType(NamedElement).name.matches('assert(True|False)') 
+--Close exists declarations
+)
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

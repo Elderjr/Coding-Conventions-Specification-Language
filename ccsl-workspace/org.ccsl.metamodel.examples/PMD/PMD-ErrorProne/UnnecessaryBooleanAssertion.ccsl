@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:filters="http://www.example.org/ccsl/filters" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" xmlns:literals="http://www.example.org/ccsl/elements/statements/literals" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" subject="//@context/@contextElements.0">
+  <context>
+    <contextElements xsi:type="invocations:MethodInvocation" argsKind="EXACT" method="//@context/@contextElements.1">
+      <args xsi:type="literals:BooleanLiteral"/>
+    </contextElements>
+    <contextElements xsi:type="method:Method"/>
+    <filters xsi:type="filters:RegexMatch" targets="//@context/@contextElements.1" regex="assert(True|False)"/>
+  </context>
+</ccsl:AtomicRule>
