@@ -1,9 +1,0 @@
-ClassInstanceCreation.allInstances()->select(mInv1 |
-  --Scope Conditions
-  (not mInv1.originalCompilationUnit.oclIsUndefined()) and
-  let c2: OclAny = mInv1.type.type in (not c2.oclIsUndefined()) and
-  c2.oclIsKindOf(ClassDeclaration) and
-  c2.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
-    fullName.concat(p.name).concat('.')
-  ).concat(c2.oclAsType(ClassDeclaration).name) = 'java.lang.Integer'
-)

@@ -1,0 +1,12 @@
+let violations: Set(ASTNode) = ClassInstanceCreation.allInstances()->union(ConstructorInvocation.allInstances())->union(SuperConstructorInvocation.allInstances())->select(constructorInv_1: ASTNode |
+  let constructor_1: ASTNode = constructorInv_1.oclAsType(AbstractMethodInvocation).method in 
+  constructor_1 <> null and
+  constructor_1.oclIsKindOf(ConstructorDeclaration) and
+  let clazz_1 : OclAny = constructor_1.oclAsType(ConstructorDeclaration).oclContainer() in clazz_1 <> null and
+  clazz_1.oclIsKindOf(ClassDeclaration) and
+  let clazz_1_constructors: OrderedSet(ASTNode) = clazz_1.oclAsType(ClassDeclaration).bodyDeclarations->select(c | c.oclIsKindOf(ConstructorDeclaration)) in
+  clazz_1_constructors->exists(constructorTmp | constructorTmp = constructor_1) and
+  clazz_1.oclAsType(ClassDeclaration).oclAsType(NamedElement).name = 'Integer' 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -66,3 +66,19 @@ else
   [target.getUniqueOclName() /].escapedValue.substring(2, [target.getUniqueOclName() /].escapedValue.size() - 1)
 endif in stringLiteralValue.matches('[regexFilter.regex /]')
 [/template]
+
+[template public generatesRegexFilterConditions(regexFilter: RegexMatch, target: LiteralValue)]
+if [target.getUniqueOclName() /].oclIsKindOf(BooleanLiteral) then
+  [target.getUniqueOclName() /].oclAsType(BooleanLiteral).value.toString().matches('[regexFilter.regex /]')
+elseif [target.getUniqueOclName() /].oclIsKindOf(CharacterLiteral) then
+  [target.getUniqueOclName() /].oclAsType(CharacterLiteral).escapedValue.substring(2, [target.getUniqueOclName() /].oclAsType(CharacterLiteral).escapedValue.size() - 1).matches('[regexFilter.regex /]')
+elseif [target.getUniqueOclName() /].oclIsKindOf(NumberLiteral) then
+  [target.getUniqueOclName() /].oclAsType(NumberLiteral).tokenValue.matches('[regexFilter.regex /]')
+elseif [target.getUniqueOclName() /].oclIsKindOf(NullLiteral) then
+  'null'.matches('[regexFilter.regex /]')
+elseif [target.getUniqueOclName() /].oclIsKindOf(StringLiteral) then
+  [target.getUniqueOclName() /].oclAsType(StringLiteral).escapedValue.substring(2, [target.getUniqueOclName() /].oclAsType(StringLiteral).escapedValue.size() - 1).matches('[regexFilter.regex /]')
+else
+  false
+endif
+[/template]
