@@ -60,7 +60,6 @@ endif)->last()
 [/template]
 
 [template public writeGetAncestorExpression(stmt: Statement, varname: String, metaclass: String)]
-bla
 [stmt.writeGetAncestorExpressionSkippingParanthesis(varname) /]
 [/template]
 

@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:statements="http://www.example.org/ccsl/elements/statements" subject="//@context/@contextElements.0/@statements.0">
-  <context>
-    <contextElements xsi:type="controlFlow:SwitchCaseBlock">
-      <statements xsi:type="statements:LabelStatement"/>
-    </contextElements>
-  </context>
-</ccsl:AtomicRule>
+<ccsl:CompositeRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ccsl="http://www.example.org/ccsl" xmlns:controlFlow="http://www.example.org/ccsl/elements/statements/controlFlow" xmlns:statements="http://www.example.org/ccsl/elements/statements" operator="OR">
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.0/@context/@contextElements.0/@statements.0">
+    <context>
+      <contextElements xsi:type="controlFlow:SwitchCaseBlock">
+        <statements xsi:type="statements:LabelStatement"/>
+      </contextElements>
+    </context>
+  </rules>
+  <rules xsi:type="ccsl:AtomicRule" subject="//@rules.1/@context/@contextElements.0/@statements.0/@statements.0">
+    <context>
+      <contextElements xsi:type="controlFlow:SwitchCaseBlock">
+        <statements xsi:type="statements:Block">
+          <statements xsi:type="statements:LabelStatement"/>
+        </statements>
+      </contextElements>
+    </context>
+  </rules>
+</ccsl:CompositeRule>
