@@ -100,6 +100,7 @@
 [import org::ccsl::gen::ocl::element::statement::tryCatch::tryStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::throwStatementConditionsBuilder /]
 [import org::ccsl::gen::ocl::element::statement::expressionStatementConditionsBuilder /]
+[import org::ccsl::gen::ocl::element::statement::labelStatementConditionsBuilder /]
 
 [comment Control-flow package /]
 [import org::ccsl::gen::ocl::element::statement::controlFlow::whileStatementConditionsBuilder /]
@@ -1267,4 +1268,17 @@ OrderedSet(String) {
 /]
 [template public writeElementConditions(e: ExpressionStatement, varname: String, typecheck: Boolean, metaclass: String)]
 [e.getExpressionStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
+[/template]
+
+[comment Write @LabelStatement conditions /]
+[query private getLabelStatementConditions(labelStmt: LabelStatement, varname: String, typecheck: Boolean, metaclass: String): OrderedSet(String) =
+let tuple: OrderedSet(String) = labelStmt.visitElement(varname, metaclass) in
+let completeVarname: String = tuple->at(1) in
+let concreteMetaclass: String = tuple->at(2) in
+OrderedSet(String) {
+  labelStmt.writeLabelStatementTypecheckCondition(varname, typecheck)
+}->addAll(labelStmt.getStatementConditions(completeVarname, false, concreteMetaclass))
+/]
+[template public writeElementConditions(e: LabelStatement, varname: String, typecheck: Boolean, metaclass: String)]
+[e.getLabelStatementConditions(varname, typecheck, metaclass)->writeConditions() /]
 [/template]

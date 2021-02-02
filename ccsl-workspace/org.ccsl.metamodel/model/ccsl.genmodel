@@ -181,6 +181,10 @@
         <genClasses ecoreClass="ccsl.ecore#//elements/statements/ExpressionStatement">
           <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/ExpressionStatement/expression"/>
         </genClasses>
+        <genClasses ecoreClass="ccsl.ecore#//elements/statements/LabelStatement">
+          <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ccsl.ecore#//elements/statements/LabelStatement/name"/>
+          <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/LabelStatement/body"/>
+        </genClasses>
         <nestedGenPackages prefix="ControlFlow" disposableProviderFactory="true" ecorePackage="ccsl.ecore#//elements/statements/controlFlow">
           <genClasses ecoreClass="ccsl.ecore#//elements/statements/controlFlow/SwitchStatement">
             <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ccsl.ecore#//elements/statements/controlFlow/SwitchStatement/cases"/>

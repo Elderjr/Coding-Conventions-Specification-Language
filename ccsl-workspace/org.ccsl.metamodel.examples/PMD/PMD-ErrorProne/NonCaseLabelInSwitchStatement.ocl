@@ -1,0 +1,21 @@
+let violations: Set(ASTNode) = LabeledStatement.allInstances()->select(labelStmt_1: LabeledStatement |
+  labelStmt_1.oclContainer().oclIsKindOf(SwitchStatement) and
+  let labelStmt_1_switchStmt: SwitchStatement = labelStmt_1.oclContainer().oclAsType(SwitchStatement) in
+  let labelStmt_1_cases: OrderedSet(SwitchCase) = labelStmt_1_switchStmt.statements->select(stmt | stmt.oclIsKindOf(SwitchCase)).oclAsType(SwitchCase) in
+  labelStmt_1_cases->exists( caseStmt_1 |
+  caseStmt_1.oclIsKindOf(SwitchCase) and
+  let caseStatementIndex: Integer = caseStmt_1.oclContainer().oclAsType(SwitchStatement).statements->indexOf(caseStmt_1) in
+  let caseStmt_1_statements: OrderedSet(Statement) = caseStmt_1.oclContainer().oclAsType(SwitchStatement).statements->iterate(stmt: Statement; acc: OrderedSet(Statement) = OrderedSet(Statement){} |
+  	if acc->size() > 0 and acc->last().oclIsKindOf(SwitchCase) then
+  	  acc
+  	elseif caseStmt_1.oclContainer().oclAsType(SwitchStatement).statements->indexOf(stmt) > caseStatementIndex then
+  	  acc->append(stmt)
+  	else
+  	  acc
+  	endif
+  )->select(stmt | not stmt.oclIsKindOf(SwitchCase)) in
+  caseStmt_1_statements->exists(labelStmtTmp | labelStmtTmp = labelStmt_1)
+  ) 
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

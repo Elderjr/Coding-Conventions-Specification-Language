@@ -321,3 +321,7 @@ caseStmt
 [template private getBaseName(e: ExpressionStatement)]
 expStmt
 [/template]
+
+[template private getBaseName(e: LabelStatement)]
+labelStmt
+[/template]

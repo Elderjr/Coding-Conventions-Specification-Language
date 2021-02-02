@@ -233,6 +233,11 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//elements/expressions/Expression"
             containment="true"/>
       </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="LabelStatement" eSuperTypes="#//elements/statements/Statement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//elements/statements/Statement"
+            containment="true"/>
+      </eClassifiers>
       <eSubpackages name="controlFlow" nsURI="http://www.example.org/ccsl/elements/statements/controlFlow"
           nsPrefix="controlFlow">
         <eClassifiers xsi:type="ecore:EClass" name="SwitchStatement" eSuperTypes="#//elements/statements/controlFlow/ConditionalControlFlowStatement">

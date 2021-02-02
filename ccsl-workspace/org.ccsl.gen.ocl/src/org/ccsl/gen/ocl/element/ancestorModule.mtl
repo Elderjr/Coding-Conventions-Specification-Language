@@ -29,7 +29,19 @@ let [element.getUniqueOclName() /]_container = [element.writeGetAncestorExpressi
 [element.getUniqueOclName() /]_container = [element.eContainer().oclAsType(Element).getUniqueOclName() /]
 [/template]
 
-[template public writeAncestorCondition(stmt: Statement, varname: String, metaclass: String) ? (stmt.eContainer().oclIsKindOf(SwitchCaseBlock))][/template]
+[template public writeAncestorCondition(stmt: Statement, varname: String, metaclass: String) ? (stmt.eContainer().oclIsKindOf(SwitchCaseBlock) and (stmt.isAncestorNotRegistered() and not stmt.isClosureRelation(stmt.eContainer().oclAsType(Element))))
+{
+  switchStmtVarname: String = stmt.getUniqueOclName().concat('_switchStmt');
+  casesVarname: String = stmt.getUniqueOclName().concat('_cases');
+}
+]
+[varname /].oclContainer().oclIsKindOf(SwitchStatement) and
+let [switchStmtVarname /]: SwitchStatement = [varname /].oclContainer().oclAsType(SwitchStatement) in
+let [casesVarname /]: OrderedSet(SwitchCase) = [switchStmtVarname /].statements->select(stmt | stmt.oclIsKindOf(SwitchCase)).oclAsType(SwitchCase) in
+[casesVarname /]->exists( [stmt.eContainer().oclAsType(SwitchCaseBlock).getUniqueOclName() /] |
+[stmt.eContainer().oclAsType(SwitchCaseBlock).writeElementConditions(stmt.eContainer().oclAsType(SwitchCaseBlock).getUniqueOclName(), true, 'SwitchCase') /]
+)
+[/template]
 
 
 [comment get ancestor ocl expression/]
@@ -48,6 +60,7 @@ endif)->last()
 [/template]
 
 [template public writeGetAncestorExpression(stmt: Statement, varname: String, metaclass: String)]
+bla
 [stmt.writeGetAncestorExpressionSkippingParanthesis(varname) /]
 [/template]
 

@@ -1,0 +1,11 @@
+[comment encoding = UTF-8 /]
+[module labelStatementConditionsBuilder('http://www.example.org/ccsl')]
+
+
+
+
+[template public writeLabelStatementTypecheckCondition(labelStmt: LabelStatement, varname: String, typecheck: Boolean) ? (typecheck)]
+[varname /].oclIsKindOf(LabeledStatement)
+[/template]
+
+
