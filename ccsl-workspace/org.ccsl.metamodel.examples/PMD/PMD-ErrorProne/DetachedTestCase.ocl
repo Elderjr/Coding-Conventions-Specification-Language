@@ -1,0 +1,67 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method1: MethodDeclaration |
+  (not method1.returnType.oclIsUndefined()) and
+  let primitiveType2: OclAny = method1.returnType.type in
+  primitiveType2 <> null and
+    primitiveType2.oclIsKindOf(PrimitiveTypeVoid) and
+  (method1.modifier <> null and not method1.modifier.static) and
+  let parameters: OrderedSet(SingleVariableDeclaration) = method1.parameters in
+    parameters->size() = 0 and
+  let clazz3 : OclAny = method1.oclContainer() in clazz3 <> null and
+    clazz3.oclIsKindOf(ClassDeclaration) and
+    let bodyDeclarations: OrderedSet(ASTNode) = clazz3.oclAsType(ClassDeclaration).bodyDeclarations in bodyDeclarations <> null and
+    let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+    methods->exists(method4 |  
+      method4 <> null and
+        let annotations: OrderedSet(Annotation) = method4.annotations in
+        annotations->exists(stmt5: Annotation |  
+          stmt5 <> null and
+            let e6: ASTNode = stmt5.type.type in
+            e6 <> null and
+              if e6.oclIsKindOf(AnnotationTypeDeclaration) then
+                true
+              elseif e6.oclIsKindOf(UnresolvedTypeDeclaration) then
+                e6.oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+                  ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+              else
+                false
+              endif and
+              e6.oclAsType(NamedElement).name = 'Test' and 
+    methods->exists(methodTmp | methodTmp = method1) and
+  let annotations: OrderedSet(Annotation) = method1.annotations in
+              annotations->size() = 0 and
+  (
+                -- Composite Filter (OR)
+                (
+                  let method7: MethodDeclaration = method1 in 
+                  (method7.modifier <> null and method7.modifier.visibility = VisibilityKind::public)
+                ) or 
+                (
+                  let method8: MethodDeclaration = method1 in 
+                  (method8.modifier <> null and method8.modifier.visibility = VisibilityKind::none)
+                )
+                -- End Composite Filter (OR)
+              ) ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

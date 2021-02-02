@@ -1,0 +1,94 @@
+let violations: Set(ASTNode) = InfixExpression.allInstances()->union(PrefixExpression.allInstances())->select(stmt1: ASTNode |
+  if stmt1.oclIsKindOf(InfixExpression) then
+    let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+      InfixExpressionKind::LESS,
+      InfixExpressionKind::GREATER,
+      InfixExpressionKind::LESS_EQUALS,
+      InfixExpressionKind::GREATER_EQUALS,
+      InfixExpressionKind::EQUALS,
+      InfixExpressionKind::NOT_EQUALS,
+      InfixExpressionKind::CONDITIONAL_AND,
+      InfixExpressionKind::CONDITIONAL_OR
+    } in booleanInfixExpressionOperators->exists(op | op = stmt1.oclAsType(InfixExpression).operator)
+  else if stmt1.oclIsKindOf(PrefixExpression) then
+    stmt1.oclAsType(PrefixExpression).operator = PrefixExpressionKind::NOT
+  else
+    false
+  endif endif and
+  let operands: OrderedSet(ASTNode) =  if stmt1.oclIsKindOf(PrefixExpression) then
+    stmt1.oclAsType(PrefixExpression).operand->asOrderedSet()
+  elseif stmt1.oclIsKindOf(PostfixExpression) then
+    stmt1.oclAsType(PostfixExpression).operand->asOrderedSet()
+  elseif stmt1.oclIsKindOf(InfixExpression) then
+    stmt1.oclAsType(InfixExpression).extendedOperands->append(stmt1.oclAsType(InfixExpression).leftOperand)->append(stmt1.oclAsType(InfixExpression).rightOperand)
+  else
+    null
+  endif in operands <> null and
+  operands->exists(literal2 |  
+    literal2 <> null and
+      (literal2.oclIsKindOf(StringLiteral)) and
+  (
+    -- Composite Filter (OR)
+    (
+      let stmt3: ASTNode = stmt1 in 
+      if stmt3.oclIsKindOf(InfixExpression) then
+        let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+          InfixExpressionKind::LESS,
+          InfixExpressionKind::GREATER,
+          InfixExpressionKind::LESS_EQUALS,
+          InfixExpressionKind::GREATER_EQUALS,
+          InfixExpressionKind::EQUALS,
+          InfixExpressionKind::NOT_EQUALS,
+          InfixExpressionKind::CONDITIONAL_AND,
+          InfixExpressionKind::CONDITIONAL_OR
+        } in booleanInfixExpressionOperators->exists(op | op = stmt3.oclAsType(InfixExpression).operator)
+      else
+        false
+      endif and
+      stmt3.oclAsType(InfixExpression).operator = InfixExpressionKind::EQUALS
+    ) or 
+    (
+      let stmt4: ASTNode = stmt1 in 
+      if stmt4.oclIsKindOf(InfixExpression) then
+        let booleanInfixExpressionOperators: Set(InfixExpressionKind) = Set(InfixExpressionKind){
+          InfixExpressionKind::LESS,
+          InfixExpressionKind::GREATER,
+          InfixExpressionKind::LESS_EQUALS,
+          InfixExpressionKind::GREATER_EQUALS,
+          InfixExpressionKind::EQUALS,
+          InfixExpressionKind::NOT_EQUALS,
+          InfixExpressionKind::CONDITIONAL_AND,
+          InfixExpressionKind::CONDITIONAL_OR
+        } in booleanInfixExpressionOperators->exists(op | op = stmt4.oclAsType(InfixExpression).operator)
+      else
+        false
+      endif and
+      stmt4.oclAsType(InfixExpression).operator = InfixExpressionKind::NOT_EQUALS
+    )
+    -- End Composite Filter (OR)
+  ) 
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

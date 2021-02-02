@@ -1,0 +1,120 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv1: ASTNode |
+  (methodInv1.oclIsKindOf(MethodInvocation) or methodInv1.oclIsKindOf(SuperMethodInvocation)) and
+  let method2: MethodDeclaration = if methodInv1.oclIsKindOf(MethodInvocation) then
+    methodInv1.oclAsType(MethodInvocation).method
+  elseif methodInv1.oclIsKindOf(SuperMethodInvocation) then
+    methodInv1.oclAsType(SuperMethodInvocation).method
+  else
+    null
+  endif in 
+  method2 <> null and
+    method2.oclAsType(NamedElement).name = 'append' and
+    let clazz3 : OclAny = method2.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in clazz3 <> null and
+    (clazz3.oclIsKindOf(ClassDeclaration) or clazz3.oclIsKindOf(AnonymousClassDeclaration)) and
+    let bodyDeclarations: OrderedSet(ASTNode) = if clazz3.oclIsKindOf(AbstractTypeDeclaration) then
+      clazz3.oclAsType(AbstractTypeDeclaration).bodyDeclarations
+    else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+      clazz3.oclAsType(AnonymousClassDeclaration).bodyDeclarations
+    else
+      null
+    endif endif in (not bodyDeclarations->oclIsUndefined()) and
+    let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+    methods->exists(methodTmp | methodTmp = method2) and
+  let block4 : OclAny = if methodInv1.oclContainer() <> null and methodInv1.oclContainer().oclIsKindOf(ExpressionStatement) then
+      methodInv1.oclContainer().oclContainer()
+    else
+      methodInv1.oclContainer()
+    endif in block4 <> null and
+    block4.oclIsKindOf(Block) and
+    let blockStatements: OrderedSet(Statement) = block4.oclAsType(Block).statements in
+    blockStatements->exists(methodInvTmp | let methodInvTmp: Statement = if methodInvTmp <> null and methodInvTmp.oclIsKindOf(ExpressionStatement) then
+      methodInvTmp.oclAsType(ExpressionStatement).expression
+    else
+      methodInvTmp
+    endif in
+    methodInvTmp = methodInv1) and
+    let methodInvExpression: ASTNode = if methodInv1.oclContainer().oclIsKindOf(ExpressionStatement) then
+      methodInv1.oclContainer().oclAsType(ExpressionStatement)
+    else
+      methodInv1
+    endif in
+    let methodInv1Index: Integer = if blockStatements->includes(methodInvExpression) then
+      blockStatements->indexOf(methodInvExpression)
+    else
+      -1
+    endif in methodInv1Index <> - 1 and 
+    blockStatements->exists(methodInv5: Statement |  
+      let methodInv5: Statement = if methodInv5 <> null and methodInv5.oclIsKindOf(ExpressionStatement) then
+        methodInv5.oclAsType(ExpressionStatement).expression
+      else
+        methodInv5
+      endif in
+      methodInv5 <> null and
+        (methodInv5.oclIsKindOf(MethodInvocation) or methodInv5.oclIsKindOf(SuperMethodInvocation)) and
+        let methodTmp: MethodDeclaration = if methodInv5.oclIsKindOf(MethodInvocation) then
+          methodInv5.oclAsType(MethodInvocation).method
+        elseif methodInv5.oclIsKindOf(SuperMethodInvocation) then
+          methodInv5.oclAsType(SuperMethodInvocation).method
+        else
+          null
+        endif in 
+        methodTmp = method2 and
+    let methodInvExpression: ASTNode = if methodInv5.oclContainer().oclIsKindOf(ExpressionStatement) then
+      methodInv5.oclContainer().oclAsType(ExpressionStatement)
+    else
+      methodInv5
+    endif in
+    let methodInv5Index: Integer = if blockStatements->includes(methodInvExpression) then
+      blockStatements->indexOf(methodInvExpression)
+    else
+      -1
+    endif in methodInv5Index <> - 1  and
+    methodInv5Index = methodInv1Index + 1 and
+  let className: String = if clazz3.oclIsKindOf(ClassDeclaration) then
+    clazz3.oclAsType(ClassDeclaration).name
+  else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if clazz3.oclIsKindOf(ClassDeclaration) then
+    clazz3.oclAsType(ClassDeclaration).package
+  else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className).matches('java\\.lang\\.String(Builder|Buffer)')
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

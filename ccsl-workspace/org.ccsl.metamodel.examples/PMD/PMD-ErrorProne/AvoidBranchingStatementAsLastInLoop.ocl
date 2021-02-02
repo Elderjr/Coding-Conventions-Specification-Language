@@ -1,0 +1,70 @@
+let violations: Set(ASTNode) = EnhancedForStatement.allInstances()->union(ForStatement.allInstances())->union(WhileStatement.allInstances())->union(DoStatement.allInstances())->select(stmt1: ASTNode |
+  (stmt1.oclIsKindOf(EnhancedForStatement) or stmt1.oclIsKindOf(ForStatement) or stmt1.oclIsKindOf(WhileStatement) or stmt1.oclIsKindOf(DoStatement))  and
+  let block2: ASTNode = if stmt1.oclIsKindOf(EnhancedForStatement) then
+    stmt1.oclAsType(EnhancedForStatement).body
+  elseif stmt1.oclIsKindOf(ForStatement) then
+    stmt1.oclAsType(ForStatement).body
+  elseif stmt1.oclIsKindOf(WhileStatement) then
+    stmt1.oclAsType(WhileStatement).body
+  elseif stmt1.oclIsKindOf(DoStatement) then
+    stmt1.oclAsType(DoStatement).body
+  else
+    null
+  endif in block2 <> null and
+    block2.oclIsKindOf(Block) and
+  (
+    -- Composite Filter (OR)
+    (
+      let stmt3: ASTNode = if block2.oclIsKindOf(Block) and block2.oclAsType(Block).statements <> null and
+            block2.oclAsType(Block).statements->size() > 0 then
+        block2.oclAsType(Block).statements->last()
+      else
+        null
+      endif in
+      stmt3.oclIsKindOf(BreakStatement)
+    ) or 
+    (
+      let stmt4: ASTNode = if block2.oclIsKindOf(Block) and block2.oclAsType(Block).statements <> null and
+            block2.oclAsType(Block).statements->size() > 0 then
+        block2.oclAsType(Block).statements->last()
+      else
+        null
+      endif in
+      stmt4.oclIsKindOf(ReturnStatement)
+    ) or 
+    (
+      let stmt5: ASTNode = if block2.oclIsKindOf(Block) and block2.oclAsType(Block).statements <> null and
+            block2.oclAsType(Block).statements->size() > 0 then
+        block2.oclAsType(Block).statements->last()
+      else
+        null
+      endif in
+      stmt5.oclIsKindOf(ContinueStatement)
+    )
+    -- End Composite Filter (OR)
+  ) 
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

@@ -1,0 +1,48 @@
+let violations: Set(ASTNode) = Assignment.allInstances()->select(stmt1: Assignment |
+  stmt1.oclIsKindOf(Assignment) and
+  let literal2: ASTNode = stmt1.rightHandSide in
+  literal2 <> null and
+    (literal2.oclIsKindOf(NullLiteral)) and
+  not (
+    let stmt3: ASTNode = stmt1 in 
+    let varAccess4: ASTNode = stmt3.oclAsType(Assignment).leftHandSide in
+    varAccess4 <> null and
+      (varAccess4.oclIsKindOf(SingleVariableAccess) or varAccess4.oclIsKindOf(FieldAccess) or varAccess4.oclIsKindOf(SuperFieldAccess))   and
+      let var5: ASTNode = if varAccess4.oclIsKindOf(SingleVariableAccess) then
+        varAccess4.oclAsType(SingleVariableAccess).variable
+      else if varAccess4.oclIsKindOf(FieldAccess) then
+        varAccess4.oclAsType(FieldAccess).field.variable
+      else if varAccess4.oclIsKindOf(SuperFieldAccess) then
+        varAccess4.oclAsType(SuperFieldAccess).field.variable
+      else
+        null
+      endif endif endif in
+      var5 <> null and
+        var5.oclIsKindOf(VariableDeclarationFragment) and (not var5.oclIsKindOf(UnresolvedItem)) and var5.oclContainer().oclIsKindOf(FieldDeclaration) and
+        var5.oclAsType(VariableDeclarationFragment).oclContainer().oclAsType(FieldDeclaration).modifier.inheritance = InheritanceKind::final
+  )
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

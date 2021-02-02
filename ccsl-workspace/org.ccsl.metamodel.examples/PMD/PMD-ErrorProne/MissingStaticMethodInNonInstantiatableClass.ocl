@@ -1,0 +1,102 @@
+let violations: Set(ASTNode) = ClassDeclaration.allInstances()->select(clazz1: ClassDeclaration |
+  let constructors: OrderedSet(ConstructorDeclaration) = clazz1.bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+  constructors->exists(constructor2: ConstructorDeclaration |  
+    constructor2 <> null and
+      (not constructor2.proxy) and
+      (constructor2.modifier <> null and constructor2.modifier.visibility = VisibilityKind::private) and
+  let bodyDeclarations: OrderedSet(ASTNode) = clazz1.bodyDeclarations in bodyDeclarations <> null and
+  (
+        -- Composite Filter (AND)
+        (
+          not (
+            let clazz3: ClassDeclaration = clazz1 in 
+            let constructors: OrderedSet(ConstructorDeclaration) = clazz3.bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+            constructors->exists(constructor4: ConstructorDeclaration |  
+              constructor4 <> null and
+                (constructor4.modifier <> null and constructor4.modifier.visibility = VisibilityKind::none) and
+            let bodyDeclarations: OrderedSet(ASTNode) = clazz3.bodyDeclarations in bodyDeclarations <> null)
+          )
+        ) and 
+        (
+          not (
+            let clazz5: ClassDeclaration = clazz1 in 
+            let constructors: OrderedSet(ConstructorDeclaration) = clazz5.bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+            constructors->exists(constructor6: ConstructorDeclaration |  
+              constructor6 <> null and
+                (constructor6.modifier <> null and constructor6.modifier.visibility = VisibilityKind::public) and
+            let bodyDeclarations: OrderedSet(ASTNode) = clazz5.bodyDeclarations in bodyDeclarations <> null)
+          )
+        ) and 
+        (
+          not (
+            let clazz7: ClassDeclaration = clazz1 in 
+            let constructors: OrderedSet(ConstructorDeclaration) = clazz7.bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+            constructors->exists(constructor8: ConstructorDeclaration |  
+              constructor8 <> null and
+                (constructor8.modifier <> null and constructor8.modifier.visibility = VisibilityKind::protected) and
+            let bodyDeclarations: OrderedSet(ASTNode) = clazz7.bodyDeclarations in bodyDeclarations <> null)
+          )
+        )
+        -- End Composite Filter (AND)
+      )  and
+      not (
+        let clazz9: ClassDeclaration = clazz1 in 
+        let constructors: OrderedSet(ConstructorDeclaration) = clazz9.bodyDeclarations->select(c: ASTNode | c.oclIsKindOf(ConstructorDeclaration)) in
+        constructors->exists(constructor10: ConstructorDeclaration |  
+          constructor10 <> null and
+            let annotations: OrderedSet(Annotation) = constructor10.annotations in
+            annotations->exists(stmt11: Annotation |  
+              stmt11 <> null and
+                true and
+        let bodyDeclarations: OrderedSet(ASTNode) = clazz9.bodyDeclarations in bodyDeclarations <> null))
+      ) and
+      not (
+        let clazz12: ClassDeclaration = clazz1 in 
+        let bodyDeclarations: OrderedSet(ASTNode) = clazz12.bodyDeclarations in bodyDeclarations <> null and
+        let fields: OrderedSet(VariableDeclarationFragment) = bodyDeclarations->collect(field: ASTNode | if field.oclIsKindOf(FieldDeclaration) then
+          field.oclAsType(FieldDeclaration).fragments
+        else
+          null
+        endif
+        )->select(field: ASTNode | field <> null)->flatten() in
+        fields->exists(var13 |  
+          var13 <> null and
+            (var13.oclContainer().oclAsType(FieldDeclaration).modifier <> null and var13.oclContainer().oclAsType(FieldDeclaration).modifier.static))
+      ) and
+      not (
+        let clazz14: ClassDeclaration = clazz1 in 
+        let bodyDeclarations: OrderedSet(ASTNode) = clazz14.bodyDeclarations in bodyDeclarations <> null and
+        let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+        methods->exists(method15 |  
+          method15 <> null and
+            (method15.modifier <> null and method15.modifier.static))
+      ) and
+      not (
+        let clazz16: ClassDeclaration = clazz1 in 
+        let e17 : OclAny = clazz16.oclContainer() in e17 <> null and
+        (e17.oclIsKindOf(ClassDeclaration) or e17.oclIsKindOf(InterfaceDeclaration))
+      ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

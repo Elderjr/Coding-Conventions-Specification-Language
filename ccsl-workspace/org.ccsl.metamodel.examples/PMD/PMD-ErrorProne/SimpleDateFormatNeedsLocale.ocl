@@ -1,0 +1,52 @@
+let violations: Set(ASTNode) = ClassInstanceCreation.allInstances()->select(stmt1: ClassInstanceCreation |
+  let e2: ConstructorDeclaration = stmt1.method in
+  e2 <> null and
+    let clazz3 : OclAny = e2.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in clazz3 <> null and
+    clazz3.oclIsKindOf(ClassDeclaration) and
+    clazz3.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+      fullName.concat(p.name).concat('.')
+    ).concat(clazz3.oclAsType(ClassDeclaration).name) = 'java.text.SimpleDateFormat' and
+  not (
+    let e4: ConstructorDeclaration = e2 in 
+    let parameters: OrderedSet(SingleVariableDeclaration) = e4.parameters in
+    parameters->exists(var5: SingleVariableDeclaration |  
+      var5 <> null and
+        var5.type <> null and
+        let clazz6: ASTNode = var5.type.type in
+        clazz6 <> null and
+          clazz6.oclIsKindOf(ClassDeclaration) and
+          clazz6.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+            fullName.concat(p.name).concat('.')
+          ).concat(clazz6.oclAsType(ClassDeclaration).name) = 'java.util.Locale')
+  )
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

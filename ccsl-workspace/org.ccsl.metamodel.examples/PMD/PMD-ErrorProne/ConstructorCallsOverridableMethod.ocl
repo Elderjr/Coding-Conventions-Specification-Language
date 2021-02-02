@@ -1,0 +1,140 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(stmt1: ASTNode |
+  (stmt1.oclIsKindOf(MethodInvocation) or stmt1.oclIsKindOf(SuperMethodInvocation)) and
+  let method2: MethodDeclaration = if stmt1.oclIsKindOf(MethodInvocation) then
+    stmt1.oclAsType(MethodInvocation).method 
+  elseif stmt1.oclIsKindOf(SuperMethodInvocation) then
+    stmt1.oclAsType(SuperMethodInvocation).method
+  else
+    null
+  endif in
+  method2 <> null and
+    let clazz3 : OclAny = method2.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in clazz3 <> null and
+    clazz3.oclIsKindOf(ClassDeclaration) and
+    let bodyDeclarations: OrderedSet(ASTNode) = clazz3.oclAsType(ClassDeclaration).bodyDeclarations in bodyDeclarations <> null and
+    let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+    methods->exists(methodTmp | methodTmp = method2) and
+    method2.proxy = false and
+  (
+    -- Composite Filter (OR)
+    not (
+      (
+        let method4: MethodDeclaration = method2 in 
+        (method4.modifier <> null and method4.modifier.static)
+      ) or 
+      (
+        let method5: MethodDeclaration = method2 in 
+        (method5.modifier <> null and method5.modifier.visibility = VisibilityKind::private)
+      ) or 
+      (
+        let method6: MethodDeclaration = method2 in 
+        (method6.modifier <> null and method6.modifier.inheritance = InheritanceKind::final)
+      ) or 
+      (
+        let clazz7: OclAny = clazz3 in 
+        (clazz7.oclAsType(ClassDeclaration).modifier <> null and clazz7.oclAsType(ClassDeclaration).modifier.inheritance = InheritanceKind::final)
+      )  
+    )
+    -- End Composite Filter (OR)
+  ) and
+  
+  let implicityContainerSet: OrderedSet(ASTNode) = stmt1->asOrderedSet()->closure(node: ASTNode |
+    let container: OclAny = node.oclContainer() in  
+    if container <> null and container.oclIsKindOf(ASTNode) then
+      container
+    else
+      null
+    endif
+  )->select(node: ASTNode | node <> null) in
+  implicityContainerSet->exists(e8: ASTNode |
+    e8.oclIsKindOf(ConstructorDeclaration) and
+    let clazz9 : OclAny = e8.oclAsType(ConstructorDeclaration).oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in clazz9 <> null and
+    clazz9.oclIsKindOf(ClassDeclaration)  and
+  
+  let superClassesClosureSet: OrderedSet(ClassDeclaration) = clazz9->asOrderedSet()->closure(superClass: ASTNode |
+    if (superClass.oclIsKindOf(ClassDeclaration) and superClass.oclAsType(ClassDeclaration).superClass <> null) then
+      superClass.oclAsType(ClassDeclaration).superClass.type
+    else
+      null
+    endif
+  )->select(class: ASTNode | class <> null and class.oclIsKindOf(ClassDeclaration)) in
+  superClassesClosureSet->exists(tmp: ClassDeclaration | tmp = clazz3)) and
+  (
+    -- Composite Filter (OR)
+    (
+      let stmt10: ASTNode = stmt1 in 
+      stmt10.oclIsKindOf(SuperMethodInvocation)
+    ) or 
+    (
+      let methodInv11: ASTNode = stmt1 in 
+      methodInv11.oclIsKindOf(MethodInvocation) and
+      let fromSet: OrderedSet(ASTNode) = methodInv11.oclAsType(MethodInvocation).expression->asOrderedSet()->closure(p: ASTNode | 
+        if p.oclIsKindOf(ParenthesizedExpression) then
+          p.oclAsType(ParenthesizedExpression).expression
+        else
+          p
+        endif
+      ) in
+      let stmt12: ASTNode = if fromSet->size() > 0 then
+        fromSet->last()
+      else
+        null
+      endif in
+      stmt12 <> null and
+        stmt12.oclIsKindOf(ThisExpression)
+    ) or 
+    (
+      let methodInv13: ASTNode = stmt1 in 
+      methodInv13.oclIsKindOf(MethodInvocation) and
+      let fromSet: OrderedSet(ASTNode) = methodInv13.oclAsType(MethodInvocation).expression->asOrderedSet()->closure(p: ASTNode | 
+        if p.oclIsKindOf(ParenthesizedExpression) then
+          p.oclAsType(ParenthesizedExpression).expression
+        else
+          p
+        endif
+      ) in
+      let nullTmp: ASTNode = if fromSet->size() > 0 then
+        fromSet->last()
+      else
+        null
+      endif in
+      nullTmp = null
+    )
+    -- End Composite Filter (OR)
+  ) 
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

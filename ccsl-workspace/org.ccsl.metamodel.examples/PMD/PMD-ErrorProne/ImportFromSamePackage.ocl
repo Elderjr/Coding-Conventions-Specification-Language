@@ -1,0 +1,66 @@
+let violations: Set(ASTNode) = (
+  ImportDeclaration.allInstances()->select(stmt1: ImportDeclaration |
+    let e2: ASTNode = stmt1.importedElement in
+    e2 <> null and
+      e2.oclIsKindOf(Package) and
+      let declaredTypes: OrderedSet(ASTNode) = e2.oclAsType(Package).ownedElements in
+      declaredTypes->exists(complexType3: ASTNode |  
+        complexType3 <> null and
+          (complexType3.oclIsKindOf(ClassDeclaration) or complexType3.oclIsKindOf(InterfaceDeclaration)) and
+          let importedList: OrderedSet(ImportDeclaration) = 
+            let matchedCompilationUnit: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(unit: CompilationUnit | unit.types->includes(complexType3)) in
+            if matchedCompilationUnit->size() > 0 then
+              matchedCompilationUnit->asOrderedSet()->first().imports
+            else
+              null
+            endif
+          in importedList <> null and
+          importedList->exists(stmtTmp | stmtTmp = stmt1)
+    )
+  )->union(
+    ImportDeclaration.allInstances()->select(stmt1: ImportDeclaration |
+    let complexType2: ASTNode = stmt1.importedElement in
+    complexType2 <> null and
+      (complexType2.oclIsKindOf(ClassDeclaration) or complexType2.oclIsKindOf(InterfaceDeclaration)) and
+      let e3 : OclAny = complexType2.oclContainer() in e3 <> null and
+      e3.oclIsKindOf(Package) and
+      let declaredTypes: OrderedSet(ASTNode) = e3.oclAsType(Package).ownedElements in
+      declaredTypes->exists(complexType4: ASTNode |  
+        complexType4 <> null and
+          (complexType4.oclIsKindOf(ClassDeclaration) or complexType4.oclIsKindOf(InterfaceDeclaration)) and
+          let importedList: OrderedSet(ImportDeclaration) = 
+            let matchedCompilationUnit: OrderedSet(CompilationUnit) = CompilationUnit.allInstances()->select(unit: CompilationUnit | unit.types->includes(complexType4)) in
+            if matchedCompilationUnit->size() > 0 then
+              matchedCompilationUnit->asOrderedSet()->first().imports
+            else
+              null
+            endif
+          in importedList <> null and
+          importedList->exists(stmtTmp | stmtTmp = stmt1) and 
+      declaredTypes->exists(complexTypeTmp | complexTypeTmp = complexType2)
+    )
+  ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

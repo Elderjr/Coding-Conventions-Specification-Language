@@ -1,0 +1,142 @@
+let violations: Set(ASTNode) = (
+  IfStatement.allInstances()->select(ifStmt1: IfStatement |
+    let stmt2: ASTNode = ifStmt1.expression->asOrderedSet()->closure(cond: ASTNode | 
+      if cond.oclIsKindOf(ParenthesizedExpression) then 
+        cond.oclAsType(ParenthesizedExpression).expression 
+      else 
+        cond 
+      endif
+    )->last() in
+    stmt2 <> null and
+      (stmt2.oclIsKindOf(InfixExpression) or stmt2.oclIsKindOf(PrefixExpression))  and
+      let operands: OrderedSet(ASTNode) =  if stmt2.oclIsKindOf(PrefixExpression) then
+        stmt2.oclAsType(PrefixExpression).operand->asOrderedSet()
+      elseif stmt2.oclIsKindOf(PostfixExpression) then
+        stmt2.oclAsType(PostfixExpression).operand->asOrderedSet()
+      elseif stmt2.oclIsKindOf(InfixExpression) then
+        stmt2.oclAsType(InfixExpression).extendedOperands->append(stmt2.oclAsType(InfixExpression).leftOperand)->append(stmt2.oclAsType(InfixExpression).rightOperand)
+      else
+        null
+      endif in operands <> null and
+      operands->exists(literal3 |  
+        literal3 <> null and
+          (literal3.oclIsKindOf(StringLiteral) or literal3.oclIsKindOf(CharacterLiteral) or literal3.oclIsKindOf(NumberLiteral) or literal3.oclIsKindOf(BooleanLiteral) or literal3.oclIsKindOf(NullLiteral)) and
+    not (
+      let literal4: ASTNode = literal3 in 
+      (literal4.oclIsKindOf(NumberLiteral)) and
+      literal4.oclAsType(NumberLiteral).tokenValue = '0'
+    ) and
+    not (
+      let literal5: ASTNode = literal3 in 
+      (literal5.oclIsKindOf(NumberLiteral)) and
+      (literal5.oclContainer().oclIsKindOf(PrefixExpression) and literal5.oclContainer().oclAsType(PrefixExpression).operator = PrefixExpressionKind::MINUS) and
+      literal5.oclAsType(NumberLiteral).tokenValue = '1'
+    ) and
+    not (
+      let literal6: ASTNode = literal3 in 
+      (literal6.oclIsKindOf(NullLiteral))
+    ) and
+    not (
+      let literal7: ASTNode = literal3 in 
+      (literal7.oclIsKindOf(BooleanLiteral))
+    )
+    )
+  )->union(
+    IfStatement.allInstances()->select(ifStmt1: IfStatement |
+    let stmt2: ASTNode = ifStmt1.expression->asOrderedSet()->closure(cond: ASTNode | 
+      if cond.oclIsKindOf(ParenthesizedExpression) then 
+        cond.oclAsType(ParenthesizedExpression).expression 
+      else 
+        cond 
+      endif
+    )->last() in
+    stmt2 <> null and
+      (stmt2.oclIsKindOf(InfixExpression) or stmt2.oclIsKindOf(PrefixExpression))  and
+      let operands: OrderedSet(ASTNode) =  if stmt2.oclIsKindOf(PrefixExpression) then
+        stmt2.oclAsType(PrefixExpression).operand->asOrderedSet()
+      elseif stmt2.oclIsKindOf(PostfixExpression) then
+        stmt2.oclAsType(PostfixExpression).operand->asOrderedSet()
+      elseif stmt2.oclIsKindOf(InfixExpression) then
+        stmt2.oclAsType(InfixExpression).extendedOperands->append(stmt2.oclAsType(InfixExpression).leftOperand)->append(stmt2.oclAsType(InfixExpression).rightOperand)
+      else
+        null
+      endif in operands <> null and
+      operands->exists(methodInv3 |  
+        let methodInv3: ASTNode = if methodInv3 <> null and methodInv3.oclIsKindOf(ExpressionStatement) then
+          methodInv3.oclAsType(ExpressionStatement).expression
+        else
+          methodInv3
+        endif in
+        methodInv3 <> null and
+          methodInv3.oclIsKindOf(MethodInvocation) and
+          let fromSet: OrderedSet(ASTNode) = methodInv3.oclAsType(MethodInvocation).expression->asOrderedSet()->closure(p: ASTNode | 
+            if p.oclIsKindOf(ParenthesizedExpression) then
+              p.oclAsType(ParenthesizedExpression).expression
+            else
+              p
+            endif
+          ) in
+          let literal4: ASTNode = if fromSet->size() > 0 then
+            fromSet->last()
+          else
+            null
+          endif in
+          literal4 <> null and
+            (literal4.oclIsKindOf(StringLiteral))
+    )
+  ))->union(
+    IfStatement.allInstances()->select(ifStmt1: IfStatement |
+    let methodInv2: ASTNode = ifStmt1.expression->asOrderedSet()->closure(cond: ASTNode | 
+      if cond.oclIsKindOf(ParenthesizedExpression) then 
+        cond.oclAsType(ParenthesizedExpression).expression 
+      else 
+        cond 
+      endif
+    )->last() in
+    let methodInv2: ASTNode = if methodInv2 <> null and methodInv2.oclIsKindOf(ExpressionStatement) then
+      methodInv2.oclAsType(ExpressionStatement).expression
+    else
+      methodInv2
+    endif in
+    methodInv2 <> null and
+      methodInv2.oclIsKindOf(MethodInvocation) and
+      let fromSet: OrderedSet(ASTNode) = methodInv2.oclAsType(MethodInvocation).expression->asOrderedSet()->closure(p: ASTNode | 
+        if p.oclIsKindOf(ParenthesizedExpression) then
+          p.oclAsType(ParenthesizedExpression).expression
+        else
+          p
+        endif
+      ) in
+      let literal3: ASTNode = if fromSet->size() > 0 then
+        fromSet->last()
+      else
+        null
+      endif in
+      literal3 <> null and
+        (literal3.oclIsKindOf(StringLiteral))
+    
+  ))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

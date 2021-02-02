@@ -1,0 +1,49 @@
+let violations: Set(ASTNode) = EmptyStatement.allInstances()->select(stmt1: EmptyStatement |
+  true and
+  not (
+    let stmt2: ASTNode = stmt1 in 
+    let stmt3 : OclAny = stmt2.oclAsType(EmptyStatement).oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in stmt3 <> null and
+    stmt3.oclIsKindOf(EnhancedForStatement) or stmt3.oclIsKindOf(ForStatement) or stmt3.oclIsKindOf(WhileStatement) or stmt3.oclIsKindOf(DoStatement)  and
+    let stmtTmp: ASTNode = if stmt3.oclIsKindOf(EnhancedForStatement) then
+      stmt3.oclAsType(EnhancedForStatement).body
+    elseif stmt3.oclIsKindOf(ForStatement) then
+      stmt3.oclAsType(ForStatement).body
+    elseif stmt3.oclIsKindOf(WhileStatement) then
+      stmt3.oclAsType(WhileStatement).body
+    elseif stmt3.oclIsKindOf(DoStatement) then
+      stmt3.oclAsType(DoStatement).body
+    else
+      null
+    endif in stmtTmp = stmt2
+  )
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

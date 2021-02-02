@@ -1,0 +1,172 @@
+let violations: Set(ASTNode) = (
+  VariableDeclarationFragment.allInstances()->select(var1 |
+    --AtomicRule Context Conditions
+    (not var1.oclIsKindOf(UnresolvedItem)) and
+    var1.variablesContainer.type <> null and
+    let parameterizedMap: ASTNode = var1.variablesContainer.type.type in
+    parameterizedMap <> null and
+      parameterizedMap.oclIsKindOf(ParameterizedType) and
+      let mapInterface: ASTNode = parameterizedMap.oclAsType(ParameterizedType).type.type in
+      mapInterface <> null and
+        (mapInterface.oclIsKindOf(InterfaceDeclaration)) and
+        mapInterface.oclAsType(InterfaceDeclaration).oclAsType(InterfaceDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+          fullName.concat(p.name).concat('.')
+        ).concat(mapInterface.oclAsType(InterfaceDeclaration).oclAsType(NamedElement).name) = 'java.util.Map' and
+    let stmt2: ASTNode = if not var1.variablesContainer.fragments->oclIsUndefined() then
+          var1.variablesContainer.fragments->asOrderedSet()->last().initializer
+        else
+          null
+        endif in
+        let stmt2: ASTNode = if stmt2 <> null then
+          stmt2->asOrderedSet()->closure(v: ASTNode | 
+            if v.oclIsKindOf(ParenthesizedExpression) then 
+              v.oclAsType(ParenthesizedExpression).expression 
+            else 
+              v 
+            endif
+          )->last()
+        else
+          null
+        endif in
+        stmt2 <> null and
+          (stmt2.oclIsKindOf(Statement) or stmt2.oclIsKindOf(Expression)) and
+    --Statement Type Getter
+    let hashMapParameterized: ASTNode = 
+      let stmtToAnalyze: ASTNode = stmt2->asOrderedSet()->closure(x |
+        if x.oclIsKindOf(ParenthesizedExpression) then 
+          x.oclAsType(ParenthesizedExpression).expression 
+        elseif x.oclIsKindOf(Assignment) then 
+          x.oclAsType(Assignment).leftHandSide
+        else
+          x
+        endif
+      )->last() in
+      let accessesClosure: OrderedSet(ASTNode) = stmtToAnalyze->asOrderedSet()->closure(v: ASTNode | 
+        if v.oclIsKindOf(ArrayAccess) then
+          v.oclAsType(ArrayAccess).array
+        else
+          v
+        endif
+      ) in
+      let totalAccesses: Integer = accessesClosure->select(v: ASTNode | v.oclIsKindOf(ArrayAccess))->size() in
+      let baseNode: ASTNode = accessesClosure->last() in
+      let baseNode: ASTNode = if baseNode.oclIsKindOf(SingleVariableAccess) then
+        baseNode.oclAsType(SingleVariableAccess).variable
+      elseif baseNode.oclIsKindOf(FieldAccess) then
+        baseNode.oclAsType(FieldAccess).field.variable
+      else
+        baseNode
+      endif in
+      let baseNodeType: ASTNode = if baseNode.oclIsKindOf(VariableDeclarationFragment) then
+        baseNode.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+      elseif baseNode.oclIsKindOf(SingleVariableDeclaration) then
+        baseNode.oclAsType(SingleVariableDeclaration).type.type
+      elseif baseNode.oclIsKindOf(MethodInvocation) and baseNode.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+        (not baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+        baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+      elseif baseNode.oclIsKindOf(SuperMethodInvocation) and baseNode.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+        (not baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+        baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+      elseif baseNode.oclIsKindOf(ClassInstanceCreation) then
+        baseNode.oclAsType(ClassInstanceCreation).type.type
+      elseif baseNode.oclIsKindOf(AnonymousClassDeclaration) then
+        baseNode.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type
+      else
+        null
+      endif in
+      let baseNodeTypeDimensions: Integer = if baseNodeType.oclIsKindOf(ArrayType) then
+        baseNodeType.oclAsType(ArrayType).dimensions
+      else
+        0
+      endif in
+      let baseNodeDimensions: Integer = if baseNode.oclIsKindOf(VariableDeclaration) then
+        baseNode.oclAsType(VariableDeclaration).extraArrayDimensions
+      else
+        0
+      endif in
+      let dimensions: Integer = if baseNodeTypeDimensions > baseNodeDimensions then
+        baseNodeTypeDimensions
+      else
+        baseNodeDimensions
+      endif in if stmtToAnalyze.oclIsKindOf(ArrayAccess) and totalAccesses = dimensions then
+        baseNodeType->asOrderedSet()->closure(v: ASTNode |
+          if v.oclIsKindOf(ArrayType) then
+            v.oclAsType(ArrayType).elementType.type
+          else
+            v
+          endif
+        )->last()
+      elseif not stmtToAnalyze.oclIsKindOf(ArrayAccess) then
+        baseNodeType
+      else
+        null
+      endif
+    in hashMapParameterized <> null and
+    hashMapParameterized.oclIsKindOf(ParameterizedType) and
+    let hashMapClass: ASTNode = hashMapParameterized.oclAsType(ParameterizedType).type.type in
+    hashMapClass <> null and
+      (hashMapClass.oclIsKindOf(ClassDeclaration) or hashMapClass.oclIsKindOf(AnonymousClassDeclaration)) and
+      let className: String = if hashMapClass.oclIsKindOf(ClassDeclaration) then
+        hashMapClass.oclAsType(ClassDeclaration).name
+      else if hashMapClass.oclIsKindOf(AnonymousClassDeclaration) then
+        hashMapClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+      else
+        null
+      endif endif in (not className.oclIsUndefined()) and
+      let classPackage: Package = if hashMapClass.oclIsKindOf(ClassDeclaration) then
+        hashMapClass.oclAsType(ClassDeclaration).package
+      else if hashMapClass.oclIsKindOf(AnonymousClassDeclaration) then
+        hashMapClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+      else
+        null
+      endif endif in (not className.oclIsUndefined()) and
+      classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(className) = 'java.util.HashMap' and
+    not (
+        let var3: VariableDeclarationFragment = var1 in
+        --TemplateFilter Context Conditions
+        (not var3.oclIsKindOf(UnresolvedItem)) and
+        let literal4: ASTNode = if not var3.variablesContainer.fragments->oclIsUndefined() then
+          var3.variablesContainer.fragments->asOrderedSet()->last().initializer
+        else
+          null
+        endif in
+        let literal4: ASTNode = if literal4 <> null then
+          literal4->asOrderedSet()->closure(v: ASTNode | 
+            if v.oclIsKindOf(ParenthesizedExpression) then 
+              v.oclAsType(ParenthesizedExpression).expression 
+            else 
+              v 
+            endif
+          )->last()
+        else
+          null
+        endif in
+        literal4 <> null and
+          (literal4.oclIsKindOf(NullLiteral))
+      )
+  )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null)
+) in violations

@@ -1,0 +1,64 @@
+let violations: Set(ASTNode) = ClassDeclaration.allInstances()->select(clazz1: ClassDeclaration |
+  true and
+  let className: String = if clazz1.oclIsKindOf(ClassDeclaration) then
+    clazz1.oclAsType(ClassDeclaration).name
+  else if clazz1.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz1.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if clazz1.oclIsKindOf(ClassDeclaration) then
+    clazz1.oclAsType(ClassDeclaration).package
+  else if clazz1.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz1.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className).matches('(.)*Test') and
+  not (
+    let clazz2: ClassDeclaration = clazz1 in 
+    let bodyDeclarations: OrderedSet(ASTNode) = clazz2.bodyDeclarations in bodyDeclarations <> null and
+    let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+    methods->exists(method3 |  
+      method3 <> null and
+        let annotations: OrderedSet(Annotation) = method3.annotations in
+        annotations->exists(stmt4: Annotation |  
+          stmt4 <> null and
+            let e5: ASTNode = stmt4.type.type in
+            e5 <> null and
+              if e5.oclIsKindOf(AnnotationTypeDeclaration) then
+                true
+              elseif e5.oclIsKindOf(UnresolvedTypeDeclaration) then
+                e5.oclAsType(UnresolvedTypeDeclaration).usagesInTypeAccess
+                  ->exists(typeAccess: TypeAccess | typeAccess.oclContainer().oclIsKindOf(Annotation))
+              else
+                false
+              endif and
+              e5.oclAsType(NamedElement).name = 'Test'))
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

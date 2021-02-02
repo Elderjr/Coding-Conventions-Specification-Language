@@ -1,0 +1,88 @@
+let violations: Set(ASTNode) = MethodInvocation.allInstances()->union(SuperMethodInvocation.allInstances())->select(methodInv1 |
+  --AtomicRule Context Conditions
+  let method2: MethodDeclaration = if methodInv1.oclIsKindOf(MethodInvocation) then
+    methodInv1.oclAsType(MethodInvocation).method
+  else if methodInv1.oclIsKindOf(SuperMethodInvocation) then
+    methodInv1.oclAsType(SuperMethodInvocation).method
+  else
+    null
+  endif endif in
+  method2 <> null and
+    method2.oclAsType(NamedElement).name = 'append' and
+    let clazz3 : OclAny = method2.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+      container.oclAsType(ASTNode).oclContainer()
+    elseif container <> null and container.oclIsKindOf(ASTNode) then
+      container.oclAsType(ASTNode)
+    else
+     null
+    endif)->last() in clazz3 <> null and
+    (clazz3.oclIsKindOf(ClassDeclaration) or clazz3.oclIsKindOf(AnonymousClassDeclaration)) and
+    let bodyDeclarations: OrderedSet(ASTNode) = if clazz3.oclIsKindOf(AbstractTypeDeclaration) then
+      clazz3.oclAsType(AbstractTypeDeclaration).bodyDeclarations
+    else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+      clazz3.oclAsType(AnonymousClassDeclaration).bodyDeclarations
+    else
+      null
+    endif endif in (not bodyDeclarations->oclIsUndefined()) and
+    let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+    methods->exists(methodTmp | methodTmp = method2) and
+  let args: OrderedSet(ASTNode) = if methodInv1.oclIsKindOf(MethodInvocation) then
+      methodInv1.oclAsType(MethodInvocation).arguments
+    elseif methodInv1.oclIsKindOf(SuperMethodInvocation) then
+      methodInv1.oclAsType(SuperMethodInvocation).arguments
+    else
+      null
+    endif in (not args->oclIsUndefined()) and
+    let args: OrderedSet(ASTNode) = args->collect(arg: ASTNode |
+      arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+        v.oclAsType(ParenthesizedExpression).expression
+      else
+        v
+      endif)
+    ) in
+    args->exists(literal4 |  
+      literal4 <> null and
+        (literal4.oclIsKindOf(StringLiteral)) and
+  literal4.oclAsType(StringLiteral).escapedValue.matches('"(.|(\\\\).)"') and
+  let className: String = if clazz3.oclIsKindOf(ClassDeclaration) then
+    clazz3.oclAsType(ClassDeclaration).name
+  else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  let classPackage: Package = if clazz3.oclIsKindOf(ClassDeclaration) then
+    clazz3.oclAsType(ClassDeclaration).package
+  else if clazz3.oclIsKindOf(AnonymousClassDeclaration) then
+    clazz3.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+  else
+    null
+  endif endif in (not className.oclIsUndefined()) and
+  classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+    fullName.concat(p.name).concat('.')
+  ).concat(className).matches('java\\.lang\\.String(Builder|Buffer)')
+  )
+)
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

@@ -1,0 +1,50 @@
+let violations: Set(ASTNode) = ReturnStatement.allInstances()->select(stmt1: ReturnStatement |
+  let literal2: ASTNode = stmt1.expression->asOrderedSet()->closure(p: ASTNode |
+    if (p.oclIsKindOf(ParenthesizedExpression)) then
+      p.oclAsType(ParenthesizedExpression).expression
+    else
+      p
+    endif
+  )->last() in
+  literal2 <> null and
+    (literal2.oclIsKindOf(NullLiteral)) and
+  let implicityContainerSet: OrderedSet(ASTNode) = stmt1->asOrderedSet()->closure(node: ASTNode |
+    let container: OclAny = node.oclContainer() in  
+    if container <> null and container.oclIsKindOf(ASTNode) then
+      container
+    else
+      null
+    endif
+  ) in
+  implicityContainerSet->exists(method3: ASTNode |
+    method3.oclIsKindOf(MethodDeclaration) and
+    (not method3.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) and
+    let e4: OclAny = method3.oclAsType(MethodDeclaration).returnType.type in
+    e4 <> null and
+      e4.oclIsKindOf(ArrayType)
+  )
+  
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

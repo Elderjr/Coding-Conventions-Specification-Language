@@ -1,0 +1,31 @@
+let violations: Set(ASTNode) = MethodDeclaration.allInstances()->select(method1 |
+  --AtomicRule Context Conditions
+  let method1Modifier: Modifier = if method1.oclIsKindOf(BodyDeclaration) then
+    method1.oclAsType(BodyDeclaration).modifier
+  else
+    null
+  endif in (not method1Modifier.oclIsUndefined()) and
+  method1Modifier.synchronized
+)
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in violations

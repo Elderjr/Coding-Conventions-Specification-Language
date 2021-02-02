@@ -1,0 +1,413 @@
+let violations: Set(ASTNode) = (
+  Assignment.allInstances()->select(stmt1: Assignment |
+    stmt1.oclIsKindOf(Assignment) and
+    stmt1.operator = AssignmentKind::PLUS_ASSIGN and
+    let stmt2: ASTNode = stmt1.leftHandSide in
+    stmt2 <> null and
+      stmt2.oclIsKindOf(Statement) or stmt2.oclIsKindOf(Expression) and
+    let closureIteration: OrderedSet(ASTNode) = stmt2->asOrderedSet()->closure(v: ASTNode |
+      if v.oclIsKindOf(InfixExpression) then
+        v.oclAsType(InfixExpression).extendedOperands
+          ->append(v.oclAsType(InfixExpression).leftOperand)
+          ->append(v.oclAsType(InfixExpression).rightOperand)
+      elseif v.oclIsKindOf(Assignment) then
+        v.oclAsType(Assignment).leftHandSide->asOrderedSet()->append(v.oclAsType(Assignment).rightHandSide)
+      elseif v.oclIsKindOf(ParenthesizedExpression) then
+        v.oclAsType(ParenthesizedExpression).expression
+      else
+        v
+      endif
+    ) in
+    closureIteration->exists(v: ASTNode |
+      if v.oclIsKindOf(StringLiteral) then
+        true
+      elseif v.oclIsKindOf(MethodInvocation) and v.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+        v.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).name = 'toString' then
+        true
+      elseif v.oclIsKindOf(SuperMethodInvocation) and v.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+        v.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).name = 'toString' then
+        true
+      elseif v.oclIsKindOf(ClassInstanceCreation) and v.oclAsType(ClassInstanceCreation).type.type.oclIsKindOf(ClassDeclaration) and
+        v.oclAsType(ClassInstanceCreation).type.type.oclAsType(ClassDeclaration).name = 'String' then
+        true
+      else
+        let accessesClosure: OrderedSet(ASTNode) = v->asOrderedSet()->closure(v: ASTNode | 
+          if v.oclIsKindOf(ArrayAccess) then
+            v.oclAsType(ArrayAccess).array
+          else
+            v
+          endif
+        ) in
+        let totalAccesses: Integer = accessesClosure->select(v: ASTNode | v.oclIsKindOf(ArrayAccess))->size() in
+        let baseNode: ASTNode = accessesClosure->last() in
+        let baseNode: ASTNode = if baseNode.oclIsKindOf(SingleVariableAccess) then
+          baseNode.oclAsType(SingleVariableAccess).variable
+        elseif baseNode.oclIsKindOf(FieldAccess) then
+          baseNode.oclAsType(FieldAccess).field.variable
+        else
+          baseNode
+        endif in
+        let baseNodeType: ASTNode = if baseNode.oclIsKindOf(VariableDeclarationFragment) then
+          baseNode.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+        elseif baseNode.oclIsKindOf(SingleVariableDeclaration) then
+          baseNode.oclAsType(SingleVariableDeclaration).type.type
+        elseif baseNode.oclIsKindOf(MethodInvocation) and baseNode.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+          (not baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+          baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+        elseif baseNode.oclIsKindOf(SuperMethodInvocation) and baseNode.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+          (not baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+          baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+        else
+          null
+        endif in (not baseNodeType.oclIsUndefined()) and
+        let baseNodeTypeDimensions: Integer = if baseNodeType.oclIsKindOf(ArrayType) then
+          baseNodeType.oclAsType(ArrayType).dimensions
+        else
+          0
+        endif in
+        let baseNodeDimensions: Integer = if baseNode.oclIsKindOf(VariableDeclaration) then
+          baseNode.oclAsType(VariableDeclaration).extraArrayDimensions
+        else
+          0
+        endif in
+        let dimensions: Integer = if baseNodeTypeDimensions > baseNodeDimensions then
+          baseNodeTypeDimensions
+        else
+          baseNodeDimensions
+        endif in
+        let baseNodeType: ASTNode = baseNodeType->asOrderedSet()->closure(v: ASTNode |
+          if v.oclIsKindOf(ArrayType) then
+            v.oclAsType(ArrayType).elementType.type
+          else
+            v
+          endif
+        )->last() in baseNodeType.oclIsKindOf(ClassDeclaration) and baseNodeType.oclAsType(ClassDeclaration).name = 'String' and
+        dimensions = totalAccesses
+      endif
+    )
+    )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null)->union(
+    Assignment.allInstances()->select(stmt1: Assignment |
+    stmt1.oclIsKindOf(Assignment) and
+    stmt1.operator = AssignmentKind::ASSIGN and
+    let varAccess2: ASTNode = stmt1.leftHandSide in
+    varAccess2 <> null and
+      (varAccess2.oclIsKindOf(SingleVariableAccess) or varAccess2.oclIsKindOf(FieldAccess) or varAccess2.oclIsKindOf(SuperFieldAccess))   and
+      let var3: ASTNode = if varAccess2.oclIsKindOf(SingleVariableAccess) then
+        varAccess2.oclAsType(SingleVariableAccess).variable
+      else if varAccess2.oclIsKindOf(FieldAccess) then
+        varAccess2.oclAsType(FieldAccess).field.variable
+      else if varAccess2.oclIsKindOf(SuperFieldAccess) then
+        varAccess2.oclAsType(SuperFieldAccess).field.variable
+      else
+        null
+      endif endif endif in
+      var3 <> null and
+        (var3.oclIsKindOf(SingleVariableDeclaration) or var3.oclIsKindOf(VariableDeclarationFragment)) and
+        (not var3.oclIsKindOf(UnresolvedItem)) and
+        let clazz4: ASTNode = if var3.oclIsKindOf(SingleVariableDeclaration) and var3.oclAsType(SingleVariableDeclaration).type <> null then
+          var3.oclAsType(SingleVariableDeclaration).type.type
+        elseif var3.oclIsKindOf(VariableDeclarationFragment) and var3.oclAsType(VariableDeclarationFragment).variablesContainer.type <> null then
+          var3.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+        else
+          null
+        endif in
+        clazz4 <> null and
+          (clazz4.oclIsKindOf(ClassDeclaration) or clazz4.oclIsKindOf(AnonymousClassDeclaration)) and
+          let className: String = if clazz4.oclIsKindOf(ClassDeclaration) then
+            clazz4.oclAsType(ClassDeclaration).name
+          else if clazz4.oclIsKindOf(AnonymousClassDeclaration) then
+            clazz4.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+          else
+            null
+          endif endif in (not className.oclIsUndefined()) and
+          let classPackage: Package = if clazz4.oclIsKindOf(ClassDeclaration) then
+            clazz4.oclAsType(ClassDeclaration).package
+          else if clazz4.oclIsKindOf(AnonymousClassDeclaration) then
+            clazz4.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+          else
+            null
+          endif endif in (not className.oclIsUndefined()) and
+          classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+            fullName.concat(p.name).concat('.')
+          ).concat(className) = 'java.lang.String' and
+    let strConcat5: ASTNode = stmt1.rightHandSide in
+          strConcat5 <> null and
+            let canBeStringConcatenation: Boolean = if strConcat5.oclIsKindOf(InfixExpression) then
+              strConcat5.oclAsType(InfixExpression).operator = InfixExpressionKind::PLUS
+            elseif strConcat5.oclIsKindOf(Assignment) then
+              strConcat5.oclAsType(Assignment).operator = AssignmentKind::PLUS_ASSIGN
+            else
+              false
+            endif in canBeStringConcatenation and
+            (
+              -- String concat checker
+              (
+                -- Approach A
+                let closureIteration: OrderedSet(ASTNode) = strConcat5->asOrderedSet()->closure(v: ASTNode |
+                  if v.oclIsKindOf(InfixExpression) then
+                    v.oclAsType(InfixExpression).extendedOperands
+                      ->append(v.oclAsType(InfixExpression).leftOperand)
+                      ->append(v.oclAsType(InfixExpression).rightOperand)
+                  elseif v.oclIsKindOf(Assignment) then
+                    v.oclAsType(Assignment).leftHandSide->asOrderedSet()->append(v.oclAsType(Assignment).rightHandSide)
+                  elseif v.oclIsKindOf(ParenthesizedExpression) then
+                    v.oclAsType(ParenthesizedExpression).expression
+                  else
+                    v
+                  endif
+                ) in
+                closureIteration->exists(v: ASTNode |
+                  if v.oclIsKindOf(StringLiteral) then
+                    true
+                  elseif v.oclIsKindOf(MethodInvocation) and v.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                    v.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).name = 'toString' then
+                    true
+                  elseif v.oclIsKindOf(SuperMethodInvocation) and v.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                    v.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).name = 'toString' then
+                    true
+                  elseif v.oclIsKindOf(ClassInstanceCreation) and v.oclAsType(ClassInstanceCreation).type.type.oclIsKindOf(ClassDeclaration) and
+                    v.oclAsType(ClassInstanceCreation).type.type.oclAsType(ClassDeclaration).name = 'String' then
+                    true
+                  else
+                    let accessesClosure: OrderedSet(ASTNode) = v->asOrderedSet()->closure(v: ASTNode | 
+                      if v.oclIsKindOf(ArrayAccess) then
+                        v.oclAsType(ArrayAccess).array
+                      else
+                        v
+                      endif
+                    ) in
+                    let totalAccesses: Integer = accessesClosure->select(v: ASTNode | v.oclIsKindOf(ArrayAccess))->size() in
+                    let baseNode: ASTNode = accessesClosure->last() in
+                    let baseNode: ASTNode = if baseNode.oclIsKindOf(SingleVariableAccess) then
+                      baseNode.oclAsType(SingleVariableAccess).variable
+                    elseif baseNode.oclIsKindOf(FieldAccess) then
+                      baseNode.oclAsType(FieldAccess).field.variable
+                    else
+                      baseNode
+                    endif in
+                    let baseNodeType: ASTNode = if baseNode.oclIsKindOf(VariableDeclarationFragment) then
+                      baseNode.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+                    elseif baseNode.oclIsKindOf(SingleVariableDeclaration) then
+                      baseNode.oclAsType(SingleVariableDeclaration).type.type
+                    elseif baseNode.oclIsKindOf(MethodInvocation) and baseNode.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                      (not baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+                      baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+                    elseif baseNode.oclIsKindOf(SuperMethodInvocation) and baseNode.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                      (not baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+                      baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+                    else
+                      null
+                    endif in (not baseNodeType.oclIsUndefined()) and
+                    let baseNodeTypeDimensions: Integer = if baseNodeType.oclIsKindOf(ArrayType) then
+                      baseNodeType.oclAsType(ArrayType).dimensions
+                    else
+                      0
+                    endif in
+                    let baseNodeDimensions: Integer = if baseNode.oclIsKindOf(VariableDeclaration) then
+                      baseNode.oclAsType(VariableDeclaration).extraArrayDimensions
+                    else
+                      0
+                    endif in
+                    let dimensions: Integer = if baseNodeTypeDimensions > baseNodeDimensions then
+                      baseNodeTypeDimensions
+                    else
+                      baseNodeDimensions
+                    endif in
+                    let baseNodeType: ASTNode = baseNodeType->asOrderedSet()->closure(v: ASTNode |
+                      if v.oclIsKindOf(ArrayType) then
+                        v.oclAsType(ArrayType).elementType.type
+                      else
+                        v
+                      endif
+                    )->last() in baseNodeType.oclIsKindOf(ClassDeclaration) and baseNodeType.oclAsType(ClassDeclaration).name = 'String' and
+                    dimensions = totalAccesses
+                  endif
+                )
+              ) or
+              (
+                -- Approach B
+                let closureIteration: OrderedSet(ASTNode) = strConcat5->asOrderedSet()->closure(v: ASTNode |
+                  if v.oclContainer() <> null and (v.oclContainer().oclIsKindOf(MethodInvocation) or 
+                     v.oclContainer().oclIsKindOf(SuperMethodInvocation) or
+                     v.oclContainer().oclIsKindOf(ClassInstanceCreation) or
+                     v.oclContainer().oclIsKindOf(SuperConstructorInvocation)) then
+                    v
+                  elseif v.oclIsKindOf(VariableDeclarationFragment) or
+                         v.oclIsKindOf(Assignment) then
+                    v
+                  else
+                    v.oclContainer()
+                  endif
+                ) in closureIteration->size() > 0 and
+                let lastClosure: ASTNode = closureIteration->last() in 
+                let parameterIndex: Integer = if lastClosure.oclContainer() <> null then
+                  if lastClosure.oclContainer().oclIsKindOf(MethodInvocation) then
+                    lastClosure.oclContainer().oclAsType(MethodInvocation).arguments->indexOf(lastClosure)
+                  elseif lastClosure.oclContainer().oclIsKindOf(SuperMethodInvocation) then
+                    lastClosure.oclContainer().oclAsType(SuperMethodInvocation).arguments->indexOf(lastClosure)
+                  elseif lastClosure.oclContainer().oclIsKindOf(ClassInstanceCreation) then
+                    lastClosure.oclContainer().oclAsType(ClassInstanceCreation).arguments->indexOf(lastClosure)
+                  elseif lastClosure.oclContainer().oclIsKindOf(SuperConstructorInvocation) then
+                    lastClosure.oclContainer().oclAsType(SuperConstructorInvocation).arguments->indexOf(lastClosure)
+                  else
+                    null
+                  endif
+                else
+                  null
+                endif in
+                let parameters: OrderedSet(ASTNode) = if lastClosure.oclContainer() <> null then
+                  if lastClosure.oclContainer().oclIsKindOf(MethodInvocation) then
+                    lastClosure.oclContainer().oclAsType(MethodInvocation).method.parameters
+                  elseif lastClosure.oclContainer().oclIsKindOf(SuperMethodInvocation) then
+                    lastClosure.oclContainer().oclAsType(SuperMethodInvocation).method.parameters
+                  elseif lastClosure.oclContainer().oclIsKindOf(ClassInstanceCreation) then
+                    lastClosure.oclContainer().oclAsType(ClassInstanceCreation).method.parameters
+                  elseif lastClosure.oclContainer().oclIsKindOf(SuperConstructorInvocation) then
+                    lastClosure.oclContainer().oclAsType(SuperConstructorInvocation).method.parameters
+                  else
+                    null
+                  endif
+                else
+                  null
+                endif in
+                let baseNode: ASTNode = if lastClosure.oclIsKindOf(Assignment) then
+                  lastClosure.oclAsType(Assignment).leftHandSide
+                else
+                  lastClosure
+                endif in
+                let accessesClosure: OrderedSet(ASTNode) = baseNode->asOrderedSet()->closure(v: ASTNode | 
+                  if v.oclIsKindOf(ArrayAccess) then
+                    v.oclAsType(ArrayAccess).array
+                  else
+                    v
+                  endif
+                ) in
+                let totalAccesses: Integer = accessesClosure->select(v: ASTNode | v.oclIsKindOf(ArrayAccess))->size() in
+                let baseNode: ASTNode = if parameterIndex <> null then
+                  parameters->at(parameterIndex)
+                else
+                  accessesClosure->last()
+                endif in
+                let baseNode: ASTNode = if baseNode.oclIsKindOf(SingleVariableAccess) then
+                  baseNode.oclAsType(SingleVariableAccess).variable
+                elseif baseNode.oclIsKindOf(FieldAccess) then
+                  baseNode.oclAsType(FieldAccess).field.variable
+                else
+                  baseNode
+                endif in
+                let baseNodeType: ASTNode = if baseNode.oclIsKindOf(VariableDeclarationFragment) then
+                  baseNode.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+                elseif baseNode.oclIsKindOf(SingleVariableDeclaration) then
+                  baseNode.oclAsType(SingleVariableDeclaration).type.type
+                elseif baseNode.oclIsKindOf(MethodInvocation) and baseNode.oclAsType(MethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                  (not baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+                  baseNode.oclAsType(MethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+                elseif baseNode.oclIsKindOf(SuperMethodInvocation) and baseNode.oclAsType(SuperMethodInvocation).method.oclIsKindOf(MethodDeclaration) and
+                  (not baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.oclIsUndefined()) then
+                  baseNode.oclAsType(SuperMethodInvocation).method.oclAsType(MethodDeclaration).returnType.type
+                else
+                  null
+                endif in (not baseNodeType.oclIsUndefined()) and
+                let baseNodeTypeDimensions: Integer = if baseNodeType.oclIsKindOf(ArrayType) then
+                  baseNodeType.oclAsType(ArrayType).dimensions
+                else
+                  0
+                endif in
+                let baseNodeDimensions: Integer = if baseNode.oclIsKindOf(VariableDeclaration) then
+                  baseNode.oclAsType(VariableDeclaration).extraArrayDimensions
+                else
+                  0
+                endif in
+                let dimensions: Integer = if baseNodeTypeDimensions > baseNodeDimensions then
+                  baseNodeTypeDimensions
+                else
+                  baseNodeDimensions
+                endif in
+                let baseNodeType: ASTNode = baseNodeType->asOrderedSet()->closure(v: ASTNode |
+                  if v.oclIsKindOf(ArrayType) then
+                    v.oclAsType(ArrayType).elementType.type
+                  else
+                    v
+                  endif
+                )->last() in baseNodeType.oclIsKindOf(ClassDeclaration) and baseNodeType.oclAsType(ClassDeclaration).name = 'String' and
+                  dimensions = totalAccesses
+              )
+            ) and
+    let operands: OrderedSet(ASTNode) = if strConcat5.oclIsKindOf(Assignment) then
+      strConcat5.oclAsType(Assignment).rightHandSide->asOrderedSet()
+    else if strConcat5.oclIsKindOf(InfixExpression) then
+      strConcat5.oclAsType(InfixExpression).extendedOperands->append(strConcat5.oclAsType(InfixExpression).leftOperand)->append(strConcat5.oclAsType(InfixExpression).rightOperand)
+    else
+      null
+    endif endif in
+    let implicityOperandSet: OrderedSet(ASTNode) = operands->closure(n: ASTNode |
+      if n.oclIsKindOf(InfixExpression) then
+        n.oclAsType(InfixExpression).extendedOperands->append(n.oclAsType(InfixExpression).leftOperand)->append(n.oclAsType(InfixExpression).rightOperand)
+      elseif n.oclIsKindOf(PrefixExpression) then
+        n.oclAsType(PrefixExpression).operand
+      elseif n.oclIsKindOf(ParenthesizedExpression) then
+        n.oclAsType(ParenthesizedExpression).expression
+      else
+        n
+      endif
+    )->excluding(strConcat5) in
+    implicityOperandSet->exists(varAccess6: ASTNode |
+      (varAccess6.oclIsKindOf(SingleVariableAccess) or varAccess6.oclIsKindOf(FieldAccess) or varAccess6.oclIsKindOf(SuperFieldAccess))   and
+      let varTmp: ASTNode = if varAccess6.oclIsKindOf(SingleVariableAccess) then
+        varAccess6.oclAsType(SingleVariableAccess).variable
+      else if varAccess6.oclIsKindOf(FieldAccess) then
+        varAccess6.oclAsType(FieldAccess).field.variable
+      else if varAccess6.oclIsKindOf(SuperFieldAccess) then
+        varAccess6.oclAsType(SuperFieldAccess).field.variable
+      else
+        null
+      endif endif endif in
+      varTmp = var3
+    )
+    )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null))
+) in
+violations

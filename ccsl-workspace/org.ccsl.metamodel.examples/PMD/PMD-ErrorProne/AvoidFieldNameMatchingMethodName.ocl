@@ -1,0 +1,55 @@
+let violations: Set(ASTNode) = VariableDeclarationFragment.allInstances()->select(var1: VariableDeclarationFragment |
+  var1.oclIsKindOf(VariableDeclarationFragment) and (not var1.oclIsKindOf(UnresolvedItem)) and var1.oclContainer().oclIsKindOf(FieldDeclaration) and
+  let complexType2 : OclAny = if (var1.oclContainer() <> null and (not var1.oclIsKindOf(SingleVariableDeclaration))) then
+    var1.oclContainer().oclContainer()
+  elseif (var1.oclContainer() <> null) then
+    var1.oclContainer()
+  else
+   null
+  endif in complexType2 <> null and
+  (complexType2.oclIsKindOf(ClassDeclaration) or complexType2.oclIsKindOf(InterfaceDeclaration)) and
+  let bodyDeclarations: OrderedSet(ASTNode) = if complexType2.oclIsKindOf(AbstractTypeDeclaration) then
+    complexType2.oclAsType(AbstractTypeDeclaration).bodyDeclarations
+  elseif complexType2.oclIsKindOf(AnonymousClassDeclaration) then
+    complexType2.oclAsType(AnonymousClassDeclaration).bodyDeclarations
+  else
+    null
+  endif in bodyDeclarations <> null and
+  let fields: OrderedSet(VariableDeclarationFragment) = bodyDeclarations->collect(field: ASTNode | if field.oclIsKindOf(FieldDeclaration) then
+    field.oclAsType(FieldDeclaration).fragments
+  else
+    null
+  endif
+  )->select(field: ASTNode | field <> null)->flatten() in
+  fields->exists(varTmp | varTmp = var1) and
+  let methods: OrderedSet(MethodDeclaration) = bodyDeclarations->select(method: ASTNode | method.oclIsKindOf(MethodDeclaration)) in
+  methods->exists(method3 |  
+    method3 <> null and
+      true and
+  let name: String = var1.oclAsType(NamedElement).name in
+  method3.oclAsType(NamedElement).name.equalsIgnoreCase(name)
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

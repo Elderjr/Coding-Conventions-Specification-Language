@@ -1,0 +1,33 @@
+let violations: Set(ASTNode) = CatchClause.allInstances()->select(stmt1: CatchClause |
+  let handledExceptions: OrderedSet(ASTNode) = stmt1.exception.type.type->asOrderedSet() in
+  handledExceptions->exists(clazz2: ASTNode |  
+    clazz2 <> null and
+      clazz2.oclIsKindOf(ClassDeclaration) and
+      clazz2.oclAsType(ClassDeclaration).package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(clazz2.oclAsType(ClassDeclaration).name) = 'java.lang.Throwable'
+  )
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+->collect(node: ASTNode |
+  if node.originalCompilationUnit <> null then
+    node
+  else
+    let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+  	  if n.originalCompilationUnit <> null then 
+        n 
+      elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+        n.oclContainer().oclAsType(ASTNode) 
+      else 
+        null 
+      endif
+    )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+    if nodesWithOriginalCompilationUnit->size() > 0 then 
+      nodesWithOriginalCompilationUnit->first() 
+    else 
+      null 
+    endif
+  endif
+)
+->select(node: ASTNode | node <> null) in
+violations

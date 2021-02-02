@@ -1,0 +1,18 @@
+let violations: Set(ASTNode) = InstanceofExpression.allInstances()->select(instanceofExp_1: InstanceofExpression |
+let varAccess_1: ASTNode = instanceofExp_1.leftOperand->asOrderedSet()->closure( v: ASTNode |
+    if v.oclIsKindOf(ParenthesizedExpression) then 
+      v.oclAsType(ParenthesizedExpression).expression    
+    else      
+      v    
+    endif 
+  )->last() in varAccess_1 <> null and
+  varAccess_1.oclIsKindOf(SingleVariableAccess) and
+  let paramVar_1: ASTNode = varAccess_1.oclAsType(SingleVariableAccess).variable in
+  paramVar_1 <> null and
+  paramVar_1.oclIsKindOf(SingleVariableDeclaration) and
+  let catchClause_1: OclAny = paramVar_1.oclContainer() in catchClause_1 <> null and
+  catchClause_1.oclIsKindOf(CatchClause) and
+  catchClause_1.oclAsType(CatchClause).exception = paramVar_1
+)
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations

@@ -1,0 +1,224 @@
+let violations: Set(ASTNode) = (
+  TypeAccess.allInstances()->select(threadOrThreadChildClassAccess |
+    --AtomicRule Context Conditions
+    let typesAccessed: OrderedSet(ASTNode) = threadOrThreadChildClassAccess->asOrderedSet()->closure(type |
+      if type.oclIsKindOf(ArrayType) then
+        type.oclAsType(ArrayType).elementType.type
+      elseif type.oclIsKindOf(TypeAccess) then
+        type.oclAsType(TypeAccess).type
+      else
+        type
+      endif
+    )->select(type | type <> null) in
+    typesAccessed->exists(threadOrThreadChildClass |  
+      threadOrThreadChildClass <> null and
+        (threadOrThreadChildClass.oclIsKindOf(ClassDeclaration) or threadOrThreadChildClass.oclIsKindOf(AnonymousClassDeclaration)) and
+    let allSuperTypes: OrderedSet(ASTNode) = threadOrThreadChildClass->asOrderedSet()->closure(superType |
+      let superTypeAccesses: OrderedSet(TypeAccess) = if superType.oclIsKindOf(ClassDeclaration) then
+        superType.oclAsType(ClassDeclaration).superInterfaces->append(superType.oclAsType(ClassDeclaration).superClass)
+      elseif superType.oclIsKindOf(InterfaceDeclaration) then
+        superType.oclAsType(InterfaceDeclaration).superInterfaces
+      else
+        OrderedSet(TypeAccess){}
+      endif in superTypeAccesses
+    	         ->collect(typeAccess: TypeAccess | if typeAccess <> null then typeAccess.type else null endif)
+    	         ->select(type | type <> null)
+    ) in
+    allSuperTypes->exists(threadClass |
+      --IsKindOfFilter Context Conditions
+      (threadClass.oclIsKindOf(ClassDeclaration) or threadClass.oclIsKindOf(AnonymousClassDeclaration)) and
+      let className: String = if threadClass.oclIsKindOf(ClassDeclaration) then
+        threadClass.oclAsType(ClassDeclaration).name
+      else if threadClass.oclIsKindOf(AnonymousClassDeclaration) then
+        threadClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).name
+      else
+        null
+      endif endif in (not className.oclIsUndefined()) and
+      let classPackage: Package = if threadClass.oclIsKindOf(ClassDeclaration) then
+        threadClass.oclAsType(ClassDeclaration).package
+      else if threadClass.oclIsKindOf(AnonymousClassDeclaration) then
+        threadClass.oclAsType(AnonymousClassDeclaration).classInstanceCreation.type.type.oclAsType(AbstractTypeDeclaration).package
+      else
+        null
+      endif endif in (not className.oclIsUndefined()) and
+      classPackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(className) = 'java.lang.Thread'
+    ) and
+    not (
+      let templateDataTypeAccess: TypeAccess = threadOrThreadChildClassAccess in
+      --TemplateFilter Context Conditions
+      let methodInv1 : OclAny = templateDataTypeAccess.oclContainer()->asOrderedSet()->closure(container: OclAny | if container <> null and container.oclIsKindOf(ParenthesizedExpression) then
+        container.oclAsType(ASTNode).oclContainer()
+      elseif container <> null and container.oclIsKindOf(ASTNode) then
+        container.oclAsType(ASTNode)
+      else
+       null
+      endif)->last() in methodInv1 <> null and
+      (methodInv1.oclIsKindOf(MethodInvocation)) and
+      let stmtTmp: ASTNode = if methodInv1.oclAsType(MethodInvocation).oclIsKindOf(MethodInvocation) then
+        methodInv1.oclAsType(MethodInvocation).oclAsType(MethodInvocation).expression
+      else
+        null
+      endif in
+      stmtTmp = templateDataTypeAccess
+    )
+    )
+  )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null)->union(
+    TypeAccess.allInstances()->select(executorServiceInterfaceOrChildAccess |
+    --AtomicRule Context Conditions
+    let typesAccessed: OrderedSet(ASTNode) = executorServiceInterfaceOrChildAccess->asOrderedSet()->closure(type |
+      if type.oclIsKindOf(ArrayType) then
+        type.oclAsType(ArrayType).elementType.type
+      elseif type.oclIsKindOf(TypeAccess) then
+        type.oclAsType(TypeAccess).type
+      else
+        type
+      endif
+    )->select(type | type <> null) in
+    typesAccessed->exists(executorServiceInterfaceOrChild |  
+      executorServiceInterfaceOrChild <> null and
+        (executorServiceInterfaceOrChild.oclIsKindOf(ClassDeclaration) or executorServiceInterfaceOrChild.oclIsKindOf(InterfaceDeclaration) or executorServiceInterfaceOrChild.oclIsKindOf(AnonymousClassDeclaration)) and
+    let allSuperTypes: OrderedSet(ASTNode) = executorServiceInterfaceOrChild->asOrderedSet()->closure(superType |
+      let superTypeAccesses: OrderedSet(TypeAccess) = if superType.oclIsKindOf(ClassDeclaration) then
+        superType.oclAsType(ClassDeclaration).superInterfaces->append(superType.oclAsType(ClassDeclaration).superClass)
+      elseif superType.oclIsKindOf(InterfaceDeclaration) then
+        superType.oclAsType(InterfaceDeclaration).superInterfaces
+      else
+        OrderedSet(TypeAccess){}
+      endif in superTypeAccesses
+    	         ->collect(typeAccess: TypeAccess | if typeAccess <> null then typeAccess.type else null endif)
+    	         ->select(type | type <> null)
+    ) in
+    allSuperTypes->exists(executorService |
+      --IsKindOfFilter Context Conditions
+      (executorService.oclIsKindOf(ClassDeclaration) or executorService.oclIsKindOf(InterfaceDeclaration) or executorService.oclIsKindOf(AnonymousClassDeclaration)) and
+      let executorServicePackage: Package = if executorService.oclIsKindOf(ClassDeclaration) then
+        executorService.oclAsType(ClassDeclaration).package
+      else if executorService.oclIsKindOf(InterfaceDeclaration) then
+        executorService.oclAsType(InterfaceDeclaration).package
+      else
+        null
+      endif endif in (not executorServicePackage.oclIsUndefined()) and
+      executorServicePackage->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(executorService.oclAsType(NamedElement).name).matches('(java\\.util\\.concurrent\\.(Executors|ExecutorService))')
+    )
+    )
+  )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null))->union(
+    SingleVariableAccess.allInstances()->union(FieldAccess.allInstances())->union(SuperFieldAccess.allInstances())->select(varAccess1 |
+    --AtomicRule Context Conditions
+    let var2: ASTNode = if varAccess1.oclIsKindOf(SingleVariableAccess) then
+      varAccess1.oclAsType(SingleVariableAccess).variable
+    else if varAccess1.oclIsKindOf(FieldAccess) then
+      varAccess1.oclAsType(FieldAccess).field.variable
+    else if varAccess1.oclIsKindOf(SuperFieldAccess) then
+      varAccess1.oclAsType(SuperFieldAccess).field.variable
+    else
+      null
+    endif endif endif in
+    var2 <> null and
+      (var2.oclIsKindOf(SingleVariableDeclaration) or var2.oclIsKindOf(VariableDeclarationFragment)) and
+      (not var2.oclIsKindOf(UnresolvedItem)) and
+      let complexType3: ASTNode = if var2.oclIsKindOf(SingleVariableDeclaration) and var2.oclAsType(SingleVariableDeclaration).type <> null then
+        var2.oclAsType(SingleVariableDeclaration).type.type
+      elseif var2.oclIsKindOf(VariableDeclarationFragment) and var2.oclAsType(VariableDeclarationFragment).variablesContainer.type <> null then
+        var2.oclAsType(VariableDeclarationFragment).variablesContainer.type.type
+      else
+        null
+      endif in
+      complexType3 <> null and
+        (complexType3.oclIsKindOf(ClassDeclaration) or complexType3.oclIsKindOf(InterfaceDeclaration) or complexType3.oclIsKindOf(AnonymousClassDeclaration)) and
+    let allSuperTypes: OrderedSet(ASTNode) = complexType3->asOrderedSet()->closure(superType |
+      let superTypeAccesses: OrderedSet(TypeAccess) = if superType.oclIsKindOf(ClassDeclaration) then
+        superType.oclAsType(ClassDeclaration).superInterfaces->append(superType.oclAsType(ClassDeclaration).superClass)
+      elseif superType.oclIsKindOf(InterfaceDeclaration) then
+        superType.oclAsType(InterfaceDeclaration).superInterfaces
+      else
+        OrderedSet(TypeAccess){}
+      endif in superTypeAccesses
+    	         ->collect(typeAccess: TypeAccess | if typeAccess <> null then typeAccess.type else null endif)
+    	         ->select(type | type <> null)
+    ) in
+    allSuperTypes->exists(complexType4 |
+      --IsKindOfFilter Context Conditions
+      (complexType4.oclIsKindOf(ClassDeclaration) or complexType4.oclIsKindOf(InterfaceDeclaration) or complexType4.oclIsKindOf(AnonymousClassDeclaration)) and
+      let complexType4Package: Package = if complexType4.oclIsKindOf(ClassDeclaration) then
+        complexType4.oclAsType(ClassDeclaration).package
+      else if complexType4.oclIsKindOf(InterfaceDeclaration) then
+        complexType4.oclAsType(InterfaceDeclaration).package
+      else
+        null
+      endif endif in (not complexType4Package.oclIsUndefined()) and
+      complexType4Package->asOrderedSet()->closure(package)->reverse()->iterate(p: Package; fullName: String = '' |
+        fullName.concat(p.name).concat('.')
+      ).concat(complexType4.oclAsType(NamedElement).name).matches('(java\\.util\\.concurrent\\.(Executors|ExecutorService))')
+    )
+  )
+  ->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc)))
+  ->collect(node: ASTNode |
+    if node.originalCompilationUnit <> null then
+      node
+    else
+      let nodesWithOriginalCompilationUnit: OrderedSet(ASTNode) = node->asOrderedSet()->closure(n: ASTNode | 
+    	  if n.originalCompilationUnit <> null then 
+          n 
+        elseif n.oclContainer().oclIsKindOf(ASTNode) then 
+          n.oclContainer().oclAsType(ASTNode) 
+        else 
+          null 
+        endif
+      )->select(n | n <> null and not n.originalCompilationUnit.oclIsUndefined()) in 
+      if nodesWithOriginalCompilationUnit->size() > 0 then 
+        nodesWithOriginalCompilationUnit->first() 
+      else 
+        null 
+      endif
+    endif
+  )
+  ->select(node: ASTNode | node <> null))
+) in violations
