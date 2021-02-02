@@ -406,6 +406,7 @@
         <eLiterals name="OR" value="1"/>
         <eLiterals name="NEGATED" value="2"/>
         <eLiterals name="ANY" value="3"/>
+        <eLiterals name="NOT_EQUALS" value="4"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
         <eLiterals name="LEFT_SHIFT"/>

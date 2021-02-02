@@ -57,3 +57,13 @@ else
 endif
 [/template]
 
+[template public writeOperatorCondition(exp: BooleanExpression, varname: String) ? (exp.operator <> BooleanOperator::ANY)]
+[if (exp.operator = BooleanOperator::AND)]
+[varname /].oclIsKindOf(InfixExpression) and
+[varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::CONDITIONAL_AND
+[elseif(exp.operator = BooleanOperator::NOT_EQUALS)]
+[varname /].oclIsKindOf(InfixExpression) and
+[varname /].oclAsType(InfixExpression).operator = InfixExpressionKind::NOT_EQUALS
+[/if]
+[/template]
+

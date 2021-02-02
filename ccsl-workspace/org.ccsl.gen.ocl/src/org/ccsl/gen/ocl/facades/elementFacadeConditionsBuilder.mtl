@@ -1016,7 +1016,8 @@ let tuple: OrderedSet(String) = exp.visitElement(varname, metaclass) in
 let completeVarname: String = tuple->at(1) in
 let concreteMetaclass: String = tuple->at(2) in
 OrderedSet(String){
-  exp.writeBooleanExpressionTypecheckCondition(varname, typecheck)
+  exp.writeBooleanExpressionTypecheckCondition(varname, typecheck),
+  exp.writeOperatorCondition(varname)
  }->addAll(exp.getOperandExpressionConditions(completeVarname, false, concreteMetaclass))
 /]
 [template public writeElementConditions(e: BooleanExpression, varname: String, typecheck: Boolean, metaclass: String)]

@@ -294,6 +294,7 @@
           <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/BooleanOperator/OR"/>
           <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/BooleanOperator/NEGATED"/>
           <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/BooleanOperator/ANY"/>
+          <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/BooleanOperator/NOT_EQUALS"/>
         </genEnums>
         <genEnums typeSafeEnumCompatible="false" ecoreEnum="ccsl.ecore#//elements/expressions/BinaryOperator">
           <genEnumLiterals ecoreEnumLiteral="ccsl.ecore#//elements/expressions/BinaryOperator/LEFT_SHIFT"/>

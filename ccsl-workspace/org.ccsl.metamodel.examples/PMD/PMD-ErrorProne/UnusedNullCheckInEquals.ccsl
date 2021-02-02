@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ccsl:AtomicRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesses="http://www.example.org/ccsl/elements/expressions/accesses" xmlns:ccsl="http://www.example.org/ccsl" xmlns:expressions="http://www.example.org/ccsl/elements/expressions" xmlns:invocations="http://www.example.org/ccsl/elements/expressions/invocations" xmlns:literals="http://www.example.org/ccsl/elements/statements/literals" xmlns:method="http://www.example.org/ccsl/elements/namedElements/method" xmlns:variable="http://www.example.org/ccsl/elements/namedElements/variable" subject="//@context/@contextElements.1">
+  <context>
+    <contextElements xsi:type="variable:Variable"/>
+    <contextElements xsi:type="expressions:BooleanExpression">
+      <operands xsi:type="expressions:BooleanExpression" operator="NOT_EQUALS">
+        <operands xsi:type="accesses:VariableAccess" variable="//@context/@contextElements.0"/>
+        <operands xsi:type="literals:NullLiteral"/>
+      </operands>
+      <operands xsi:type="invocations:Invocation" method="//@context/@contextElements.2">
+        <args xsi:type="accesses:VariableAccess" variable="//@context/@contextElements.0"/>
+      </operands>
+    </contextElements>
+    <contextElements xsi:type="method:Method" name="equals"/>
+  </context>
+</ccsl:AtomicRule>

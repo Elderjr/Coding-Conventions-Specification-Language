@@ -1,0 +1,143 @@
+let violations: Set(ASTNode) = PrefixExpression.allInstances()->union(InfixExpression.allInstances())->select(booleanExpression_1: ASTNode |
+  if booleanExpression_1.oclIsKindOf(InfixExpression) then
+    OrderedSet(InfixExpressionKind){
+      InfixExpressionKind::LESS,
+      InfixExpressionKind::GREATER,
+      InfixExpressionKind::LESS_EQUALS,
+      InfixExpressionKind::GREATER_EQUALS,
+      InfixExpressionKind::EQUALS,
+      InfixExpressionKind::NOT_EQUALS,
+      InfixExpressionKind::CONDITIONAL_AND,
+      InfixExpressionKind::CONDITIONAL_OR
+    }->includes(booleanExpression_1.oclAsType(InfixExpression).operator)
+  elseif booleanExpression_1.oclIsKindOf(PrefixExpression) then
+    OrderedSet(PrefixExpressionKind){
+      PrefixExpressionKind::NOT
+    }->includes(booleanExpression_1.oclAsType(PrefixExpression).operator)
+  else
+    false
+  endif and
+  booleanExpression_1.oclIsKindOf(InfixExpression) and
+  booleanExpression_1.oclAsType(InfixExpression).operator = InfixExpressionKind::CONDITIONAL_AND
+   and
+  let booleanExpression_1_operands: OrderedSet(ASTNode) = if booleanExpression_1.oclIsKindOf(InfixExpression) then
+     booleanExpression_1.oclAsType(InfixExpression).leftOperand->asOrderedSet()->including(booleanExpression_1.oclAsType(InfixExpression).rightOperand)->union(booleanExpression_1.oclAsType(InfixExpression).extendedOperands)
+   elseif booleanExpression_1.oclIsKindOf(PrefixExpression) then
+     booleanExpression_1.oclAsType(PrefixExpression).operand->asOrderedSet()
+   else
+     null
+   endif in booleanExpression_1_operands <> null and
+   let booleanExpression_1_operands: OrderedSet(ASTNode) = booleanExpression_1_operands->collect(arg: ASTNode |
+     arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+       v.oclAsType(ParenthesizedExpression).expression
+     else
+       v
+     endif)
+   ) in
+   booleanExpression_1_operands->exists(booleanExpression_2: ASTNode |  
+   booleanExpression_2 <> null and
+   if booleanExpression_2.oclIsKindOf(InfixExpression) then
+     OrderedSet(InfixExpressionKind){
+       InfixExpressionKind::LESS,
+       InfixExpressionKind::GREATER,
+       InfixExpressionKind::LESS_EQUALS,
+       InfixExpressionKind::GREATER_EQUALS,
+       InfixExpressionKind::EQUALS,
+       InfixExpressionKind::NOT_EQUALS,
+       InfixExpressionKind::CONDITIONAL_AND,
+       InfixExpressionKind::CONDITIONAL_OR
+     }->includes(booleanExpression_2.oclAsType(InfixExpression).operator)
+   elseif booleanExpression_2.oclIsKindOf(PrefixExpression) then
+     OrderedSet(PrefixExpressionKind){
+       PrefixExpressionKind::NOT
+     }->includes(booleanExpression_2.oclAsType(PrefixExpression).operator)
+   else
+     false
+   endif and
+   booleanExpression_2.oclIsKindOf(InfixExpression) and
+   booleanExpression_2.oclAsType(InfixExpression).operator = InfixExpressionKind::NOT_EQUALS
+    and
+   let booleanExpression_2_operands: OrderedSet(ASTNode) = if booleanExpression_2.oclIsKindOf(InfixExpression) then
+      booleanExpression_2.oclAsType(InfixExpression).leftOperand->asOrderedSet()->including(booleanExpression_2.oclAsType(InfixExpression).rightOperand)->union(booleanExpression_2.oclAsType(InfixExpression).extendedOperands)
+    elseif booleanExpression_2.oclIsKindOf(PrefixExpression) then
+      booleanExpression_2.oclAsType(PrefixExpression).operand->asOrderedSet()
+    else
+      null
+    endif in booleanExpression_2_operands <> null and
+    let booleanExpression_2_operands: OrderedSet(ASTNode) = booleanExpression_2_operands->collect(arg: ASTNode |
+      arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+        v.oclAsType(ParenthesizedExpression).expression
+      else
+        v
+      endif)
+    ) in
+    booleanExpression_2_operands->exists(varAccess_1: ASTNode |  
+    varAccess_1 <> null and
+    (
+      varAccess_1.oclIsKindOf(SingleVariableAccess) or 
+      varAccess_1.oclIsKindOf(FieldAccess) or 
+      varAccess_1.oclIsKindOf(SuperFieldAccess)
+    )   and
+    let var_1: ASTNode = if varAccess_1.oclIsKindOf(SingleVariableAccess) then
+      varAccess_1.oclAsType(SingleVariableAccess).variable
+    elseif varAccess_1.oclIsKindOf(FieldAccess) then
+      varAccess_1.oclAsType(FieldAccess).field.variable
+    elseif varAccess_1.oclIsKindOf(SuperFieldAccess) then
+      varAccess_1.oclAsType(SuperFieldAccess).field.variable
+    else
+      null
+    endif in
+    var_1 <> null and
+    (
+      var_1.oclIsKindOf(VariableDeclarationFragment) or 
+      var_1.oclIsKindOf(SingleVariableDeclaration)
+    ) and
+    let varAccess_1_container = varAccess_1.oclContainer() in
+    varAccess_1_container = booleanExpression_2 and 
+    booleanExpression_2_operands->exists(nullLiteral_1: ASTNode | nullLiteral_1 <> varAccess_1 and 
+    nullLiteral_1 <> null and
+    nullLiteral_1.oclIsKindOf(NullLiteral) and
+    let nullLiteral_1_container = nullLiteral_1.oclAsType(NullLiteral).oclContainer() in
+    nullLiteral_1_container = booleanExpression_2 and
+   let booleanExpression_2_container = booleanExpression_2.oclContainer() in
+    booleanExpression_2_container = booleanExpression_1 and 
+   booleanExpression_1_operands->exists(inv_1: ASTNode | inv_1 <> booleanExpression_2 and 
+    inv_1 <> null and
+    inv_1.oclIsKindOf(AbstractMethodInvocation) and
+    let inv_1_args: OrderedSet(ASTNode) = inv_1.oclAsType(AbstractMethodInvocation).oclAsType(AbstractMethodInvocation).arguments->collect(arg: ASTNode |
+      arg->closure(v: ASTNode | if v.oclIsKindOf(ParenthesizedExpression) then
+        v.oclAsType(ParenthesizedExpression).expression
+      else
+        v
+      endif)
+    ) in
+    inv_1_args->exists(varAccess_2: ASTNode |  
+    varAccess_2 <> null and
+    (
+      varAccess_2.oclIsKindOf(SingleVariableAccess) or 
+      varAccess_2.oclIsKindOf(FieldAccess) or 
+      varAccess_2.oclIsKindOf(SuperFieldAccess)
+    )   and
+    let varTmp: ASTNode = if varAccess_2.oclIsKindOf(SingleVariableAccess) then
+      varAccess_2.oclAsType(SingleVariableAccess).variable
+    elseif varAccess_2.oclIsKindOf(FieldAccess) then
+      varAccess_2.oclAsType(FieldAccess).field.variable
+    elseif varAccess_2.oclIsKindOf(SuperFieldAccess) then
+      varAccess_2.oclAsType(SuperFieldAccess).field.variable
+    else
+      null
+    endif in
+    varTmp = var_1 and
+    let varAccess_2_container = varAccess_2.oclContainer() in
+    varAccess_2_container = inv_1 and
+    let method_1: ASTNode = inv_1.oclAsType(AbstractMethodInvocation).oclAsType(AbstractMethodInvocation).method in 
+    method_1 <> null and
+    method_1.oclIsKindOf(MethodDeclaration) and
+    method_1.oclAsType(MethodDeclaration).oclAsType(NamedElement).name = 'equals' and
+    let inv_1_container = inv_1.oclAsType(AbstractMethodInvocation).oclContainer() in
+    inv_1_container = booleanExpression_1 
+--Close exists declarations
+)))))
+) 
+->reject(node: ASTNode | node->closure(oclContainer())->exists(oclIsKindOf(Javadoc))) in
+violations
