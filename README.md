@@ -10,3 +10,6 @@ CCSL was evaluated using two popular coding conventions set for the Java languag
 Each rule in the selected subsets was manually analyzed and a specification using CCSL was attempted. Whether a rule can be formalized or not is somehow subjective, as it depends also on the skill of the modeler.
 Each of the analyzed coding rules has been classified in one of three groups: exact (it was possible to represent the original rule),
 partial (it was needed to change the original rule) or difficult (it was not possible to formalize the rule using the current state of CCSL). The classifications and formalizations can be cheked in [rules folder](https://github.com/Elderjr/Coding-Conventions-Specification-Language/tree/master/rules).
+
+## Documentation
+A full list of the CSSL metaclasses is available [here](ccsl-workspace/org.ccsl.metamodel/Metaclasses.md).
