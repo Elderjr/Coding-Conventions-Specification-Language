@@ -1,191 +1,212 @@
-"Rule"
-"CompositeRule"
-"AtomicRule"
-"Root"
-"FaultTypeDescription"
-name="elements"
-"Element">
-"ControlledAccessElement"
-"Annotable"
-name="namedElements"
-"NamedElement"
-"Package"
-name="variable"
-"Variable"
-"ParameterVariable"
-"LocalVariable"
-"InitializableVariable"
-"FieldVariable"
+# List of CCSL Metaclasses
 
-name="complexType"
-"JInterface"
-"AnonymousClass"
-"JClass"
-"TypeDeclaration"
-"ComplexType"
-"AnnotationType"
-"AnnotationField"
-"JEnum"
-"ComplexTypeDeclaration"
-"ConstructComplexTypeDeclaration"
-"EnumConstant"
+This document lists all the metaclasses currently available in the CCSL metamodel. They are organized both by _logical_ packages as defiend in the pappers (bigger labels) and by implementation pacakges of their Ecore realization (smaller labels).
 
-name="method"
-"Constructor"
-"SimpleMethod"
-"Method"
+# Core Package
 
+## Core
+- Rule
+- CompositeRule
+- AtomicRule
+- Root
+- FaultTypeDescription
 
-name="statements"
-"Statement"
-"ControlFlowStatement"
-"Block"
-"InstanceCreation"
-"SynchronizedBlock"
-"ThrowStatement"
-"EmptyStatement"
-"ReturnStatement"
-"BreakStatement"
-"ContinueStatement"
-"AssertStatement"
-"ExpressionStatement"
-"LabelStatement"
-name="controlFlow"
-"SwitchStatement"
-"SwitchCaseBlock"
-"IfStatement"
-"LoopStatement"
-"WhileStatement"
-"DoStatement"
-"ForStatement"
-"ForEachStatement"
-"ConditionalControlFlowStatement"
+## Elements
+- Element
+- ControlledAccessElement
+- Annotable
 
-name="tryCatch"
-"TryStatement"
-"CatchClause"
+## Context
+- Context
 
-name="import"
-"ImportableElement"
-"ImportStatement"
+# NamedElements package
 
+## Elements / NamedElements
+- NamedElement
+- Package
 
-name="datatype"
-"DataType"
-"PrimitiveType"
-"BooleanPrimitiveType"
-"ShortPrimitiveType"
-"ObjectType"
-"ParameterizedType"
-"IntPrimitiveType"
-"ArrayType"
-"VoidType"
-"TypeParameter"
-"WildCardType"
-"BytePrimitiveType"
-"CharPrimitiveType"
-"DoublePrimitiveType"
-"FloatPrimitiveType"
-"LongPrimitiveType"
+## Elements / NamedElements / Variable
+- Variable
+- ParameterVariable
+- LocalVariable
+- InitializableVariable
+- FieldVariable
 
-name="expressions"
-"Expression"
-"VarDeclaration"
-"CastExpression"
-"TernaryExpression"
-"InstanceofExpression"
-"ArithmeticExpression"
-"StringConcatenation"
-"BooleanExpression"
-"BinaryExpression"
-"OperandExpression"
-name="invocations"
-"MethodInvocation"
-"Invocation"
-"ConstructorInvocation"
-"SuperMethodInvocation"
+## Elements / NamedElements / ComplexType
+- JInterface
+- AnonymousClass
+- JClass
+- TypeDeclaration
+- ComplexType
+- AnnotationType
+- AnnotationField
+- JEnum
+- ComplexTypeDeclaration
+- ConstructComplexTypeDeclaration
+- EnumConstant
 
-name="accesses"
-"VariableAccess"
-"DataTypeAccess"
-"Access"
+## Elements / NamedElements / Method
+- Constructor
+- SimpleMethod
+- Method
 
-name="arrays"
-"ArrayCreation"
-"ArrayIndexesAccess"
-"ArrayInitializer"
+# Statements package
 
-name="assignment"
-"SimpleAssignment"
-"Assignment"
-"UnaryAssignment"
+## Elements / Statements
+- Statement
+- ControlFlowStatement
+- Block
+- InstanceCreation
+- SynchronizedBlock
+- ThrowStatement
+- EmptyStatement
+- ReturnStatement
+- BreakStatement
+- ContinueStatement
+- AssertStatement
+- ExpressionStatement
+- LabelStatement
 
-name="literals"
-"LiteralValue"
-"NullLiteral"
-"CharacterLiteral"
-"StringLiteral"
-"NumberLiteral"
-"BooleanLiteral"
+## Elements / Statements / ControlFlow
+- SwitchStatement
+- SwitchCaseBlock
+- IfStatement
+- LoopStatement
+- WhileStatement
+- DoStatement
+- ForStatement
+- ForEachStatement
+- ConditionalControlFlowStatement
 
-name="annotation"
-"Annotation"
-"AnnotationFieldValue"
+## Elements / Statements / TryCatch
+- TryStatement
+- CatchClause
 
+## Elements / Statements / Import
+- ImportableElement
+- ImportStatement
 
+# DataType package
 
-name="context"
-"Context">
+## Elements / DataType
+- DataType
+- PrimitiveType
+- BooleanPrimitiveType
+- ShortPrimitiveType
+- ObjectType
+- ParameterizedType
+- IntPrimitiveType
+- ArrayType
+- VoidType
+- TypeParameter
+- WildCardType
+- BytePrimitiveType
+- CharPrimitiveType
+- DoublePrimitiveType
+- FloatPrimitiveType
+- LongPrimitiveType
 
-name="faultTypeDescription"
-"InjectionAction"
-"InjectionStrategy"
-name="action"
-"DeleteAction"
-"MoveScopeUpAction"
-"DeleteInfixOperatorAction"
-"ChangeLiteralValueAction"
-"DeleteRandomStatementAction"
-"ReplaceVariableAccessAction"
-"ReplaceArithmeticOperatorAction"
-"ArithmeticOperatorMap">
+# Expressions package
 
-name="strategy"
-"AllStrategy"
+## Elements / Expressions
+- Expression
+- VarDeclaration
+- CastExpression
+- TernaryExpression
+- InstanceofExpression
+- ArithmeticExpression
+- StringConcatenation
+- BooleanExpression
+- BinaryExpression
+- OperandExpression
 
+## Elements / Expressions / Invocations
+- MethodInvocation
+- Invocation
+- ConstructorInvocation
+- SuperMethodInvocation
 
-name="functions"
-"CcslFunction"
-name="booleanFunctions"
-"CcslBooleanFunction"
-name="filters"
-"Filter"
-"AtomicFilter"
-"CompositeFilter"
-"PropertyFilter"
-"TemplateFilter"
-"SameNameFilter"
-"CountFilter"
-"RegexMatch"
-"ImplicityOperandFilter"
-"ImplicityContainerFilter"
-"IsKindOfFilter"
-"SuperMethodClosureFilter"
-"IsTypeOfFilter"
-"ChildClosureComplexTypeFilter"
-"IsStringFilter"
-"EquationFilter">
-"FromClosureFilter"
-"HasSuperClassFilter"
-"BlockLastStatementFilter"
-"HasSameReferenceFilter"
-"IsEmptyBlockFilter"
-"ImplicitContentsFilter"
+## Elements / Expressions / Accesses
+- VariableAccess
+- DataTypeAccess
+- Access
 
+## Elements / Expressions / Arrays
+- ArrayCreation
+- ArrayIndexesAccess
+- ArrayInitializer
 
-name="numberFunctions"
-"CcslNumberFunction"
-"CcslIntegerLiteral"
-"GetIndexOf"
+## Elements / Expressions / Assignment
+- SimpleAssignment
+- Assignment
+- UnaryAssignment
 
+## Elements / Expressions / Literals
+- LiteralValue
+- NullLiteral
+- CharacterLiteral
+- StringLiteral
+- NumberLiteral
+- BooleanLiteral
 
+## Elements / Expressions / Annotation
+- Annotation
+- AnnotationFieldValue
+
+# Filters package
+
+## Functions
+- CcslFunction
+
+## Functions / BooleanFunctions
+- CcslBooleanFunction
+
+## Functions / BooleanFunctions / Filters
+- Filter
+- AtomicFilter
+- CompositeFilter
+- PropertyFilter
+- TemplateFilter
+- SameNameFilter
+- CountFilter
+- RegexMatch
+- ImplicityOperandFilter
+- ImplicityContainerFilter
+- IsKindOfFilter
+- SuperMethodClosureFilter
+- IsTypeOfFilter
+- ChildClosureComplexTypeFilter
+- IsStringFilter
+- EquationFilter
+- FromClosureFilter
+- HasSuperClassFilter
+- BlockLastStatementFilter
+- HasSameReferenceFilter
+- IsEmptyBlockFilter
+- ImplicitContentsFilter
+
+## Functions / NumberFunctions
+- CcslNumberFunction
+- CcslIntegerLiteral
+- GetIndexOf
+
+# FaultTypeDescription package
+
+This package contains extensions that enable the usage of CCSL for model-driven fault injection. In this case, CCSL is used to specify faults to be injected in a Java software. Please [see our paper at ISSRE 2020](https://ieeexplore.ieee.org/document/9251070) for further details on this package.
+
+## FaultTypeDescription
+- InjectionAction
+- InjectionStrategy
+
+## FaultTypeDescription / Action
+- DeleteAction
+- MoveScopeUpAction
+- DeleteInfixOperatorAction
+- ChangeLiteralValueAction
+- DeleteRandomStatementAction
+- ReplaceVariableAccessAction
+- ReplaceArithmeticOperatorAction
+- ArithmeticOperatorMap
+
+## FaultTypeDescription / Strategy
+- AllStrategy
